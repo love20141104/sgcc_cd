@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="amqp-service" />
+        <module name="cache-service" />
+        <module name="dto-model" />
+        <module name="exception" />
+        <module name="test-service" />
+        <module name="utils" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="amqp-service" target="1.8" />
+      <module name="cache-service" target="1.8" />
+      <module name="demo" target="1.8" />
+      <module name="demo2" target="1.8" />
+      <module name="dto-model" target="1.8" />
+      <module name="exception" target="1.8" />
+      <module name="sgcc_cd" target="1.8" />
+      <module name="test-service" target="1.8" />
+      <module name="utils" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
