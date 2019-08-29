@@ -19,4 +19,12 @@ public class TestCacheQueryEntity {
     public List<TestRedisDao> findTestRedisDaosByAge(int age){
         return testRedisRepository.findAllByAge(age);
     }
+
+    /**
+     * 测试redis查询TestRedisDao
+     *
+     */
+    public TestRedisDao findTestRedisDaoById(String id){
+        return testRedisRepository.findById(id).get();
+    }
 }

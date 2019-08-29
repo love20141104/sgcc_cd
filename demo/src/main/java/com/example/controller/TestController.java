@@ -51,5 +51,15 @@ public class TestController {
         return testService.findInRedis(ids);
     }
 
+    /**
+     * 测试数据库连接,从mysql中查找user
+     * @return Result
+     */
+    @ApiOperation(value = "testmq", notes = "")
+    @PostMapping(value = "/testmq")
+    public Result testMq(@RequestBody TestRedisDTO testRedisDTO) {
+        return testService.saveUser(testRedisDTO);
+    }
+
 
 }

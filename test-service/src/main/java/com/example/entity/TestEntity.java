@@ -19,4 +19,8 @@ public class TestEntity {
         List<TestRedisDTO> redisDTOS = testRepository.findAllUesrs();
         return redisDTOS;
     }
+
+    public void saveUesr(TestRedisDTO testRedisDTO){
+        testRepository.saveUser(testRedisDTO);
+    }
 }
