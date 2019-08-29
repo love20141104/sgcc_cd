@@ -27,6 +27,7 @@
         <module>dependency-package/dto-model</module>
         <module>cache-service</module>
         <module>test-service</module>
+        <module>wechat-service</module>
 
     </modules>
 

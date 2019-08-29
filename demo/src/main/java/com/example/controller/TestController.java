@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.result.Result;
 
 import com.example.service.TestService;
+import com.example.service.WeChatService;
 import com.example.test.TestRedisDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,8 @@ public class TestController {
 
     @Autowired
     private TestService testService;
+    @Autowired
+    private WeChatService weChatService;
     /**
      * 测试数据库连接,从mysql中查找user
      * @return Result
@@ -59,6 +62,15 @@ public class TestController {
     @PostMapping(value = "/testmq")
     public Result testMq(@RequestBody TestRedisDTO testRedisDTO) {
         return testService.saveUser(testRedisDTO);
+    }
+
+    /**
+     * 测试调用微信api
+     */
+    @ApiOperation(value = "testmq", notes = "")
+    @GetMapping(value = "/testwechatapi")
+    public Result testMq() {
+        return weChatService.getAccessToken();
     }
 
 
