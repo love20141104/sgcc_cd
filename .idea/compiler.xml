@@ -17,10 +17,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="amqp-service" target="1.8" />
       <module name="cache-service" target="1.8" />
       <module name="demo" target="1.8" />
-      <module name="demo2" target="1.8" />
       <module name="dto-model" target="1.8" />
       <module name="exception" target="1.8" />
       <module name="mq_service" target="1.8" />
