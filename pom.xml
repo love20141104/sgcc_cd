@@ -9,7 +9,7 @@
         <version>2.1.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
+    <groupId>com.sgcc</groupId>
     <artifactId>sgcc_cd</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>sgcc_cd</name>
@@ -20,7 +20,7 @@
     </properties>
 
     <modules>
-        <module>demo</module>
+        <module>sgcc</module>
         <module>dependency-package/exception</module>
         <module>dependency-package/utils</module>
         <module>mq/mq</module>

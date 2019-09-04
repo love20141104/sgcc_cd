@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.example</groupId>
+        <groupId>com.sgcc</groupId>
         <artifactId>sgcc_cd</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -37,13 +37,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.example</groupId>
+            <groupId>com.sgcc</groupId>
             <artifactId>utils</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.example</groupId>
+            <groupId>com.sgcc</groupId>
             <artifactId>dto-model</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
