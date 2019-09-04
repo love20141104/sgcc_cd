@@ -7,10 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="cache-service" />
-        <module name="demo" />
         <module name="dto-model" />
         <module name="exception" />
         <module name="mq_service" />
+        <module name="sgcc" />
         <module name="test-service" />
         <module name="utils" />
         <module name="wechat-service" />
@@ -18,10 +18,10 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cache-service" target="1.8" />
-      <module name="demo" target="1.8" />
       <module name="dto-model" target="1.8" />
       <module name="exception" target="1.8" />
       <module name="mq_service" target="1.8" />
+      <module name="sgcc" target="1.8" />
       <module name="sgcc_cd" target="1.8" />
       <module name="test-service" target="1.8" />
       <module name="utils" target="1.8" />

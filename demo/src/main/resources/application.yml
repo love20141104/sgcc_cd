@@ -3,15 +3,15 @@
 #  profiles: dev
 ##### Basic
 server:
-  port: 8100
+  port: 18624
 ##### Spring
 spring:
   application:
-    name: demo
+    name: sgcc
   ### Redis
   redis:
 #    database: 1
-    host: localhost
+    host: 192.168.1.11
     port: 6379
     password:
     jedis:
@@ -22,11 +22,11 @@ spring:
   ### mysql
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test
+    url: jdbc:mysql://192.168.1.11:3306/sgcc_cd
     username: root
     password: root@123
   activemq:
-    broker-url: tcp://localhost:61616
+    broker-url: tcp://192.168.1.11:61616
     in-memory: false
     pool:
       enabled: false #如果此处设置为true，需要加如下的依赖包，否则会自动配置失败，报JmsMessagingTemplate注入失败

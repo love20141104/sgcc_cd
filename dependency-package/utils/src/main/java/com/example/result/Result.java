@@ -2,7 +2,7 @@ package com.example.result;
 
 
 
-import com.example.exception.TopErrorCode;
+import com.sgcc.exception.TopErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
