@@ -10,6 +10,6 @@ import java.io.Serializable;
 @Data
 public abstract class RedisBaseDao implements Serializable {
 
-    //@TimeToLive
-    //final long livetime = 60L; //TTL
+    @TimeToLive
+    final long livetime = 60L; //TTL
 }

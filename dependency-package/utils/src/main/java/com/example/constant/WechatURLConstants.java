@@ -12,4 +12,6 @@ public class WechatURLConstants {
     private static final String SECRET = "949ad61412c16d82b58dba6c49cee038";
 
     public static final  String  GETACCESSTOKEN = BASE+"/cgi-bin/token?grant_type=client_credential&appid="+APPID+"&secret="+SECRET;
+
+    public static final  String  GET_JSAPI_TICKET =  BASE+"/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 }
