@@ -18,7 +18,7 @@ import org.springframework.data.redis.core.TimeToLive;
 @RedisHash("accessToken")
 public class AccessTokenDao {
     @TimeToLive
-    final long livetime = 7100L; //TTL
+    long livetime = 7100L; //TTL
     @Id
     private String access_token;
     private String expires_in;

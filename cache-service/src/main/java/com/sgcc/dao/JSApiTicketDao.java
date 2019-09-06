@@ -3,6 +3,7 @@ package com.sgcc.dao;
 import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Wither;
 import org.springframework.data.annotation.Id;
@@ -16,7 +17,7 @@ import org.springframework.data.redis.core.TimeToLive;
 @RedisHash("jsApiTicketDao")
 public class JSApiTicketDao {
     @TimeToLive
-    final long livetime = 7100L; //TTL
+    long livetime = 7100L; //TTL
     @Id
     private String ticket;
     private String expires_in;
