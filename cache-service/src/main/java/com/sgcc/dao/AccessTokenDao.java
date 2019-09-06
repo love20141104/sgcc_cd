@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Wither;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
@@ -18,6 +19,7 @@ import org.springframework.data.redis.core.TimeToLive;
 public class AccessTokenDao {
     @TimeToLive
     final long livetime = 7100L; //TTL
+    @Id
     private String access_token;
     private String expires_in;
 

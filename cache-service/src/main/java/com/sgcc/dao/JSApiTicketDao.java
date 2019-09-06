@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Wither;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
@@ -16,6 +17,7 @@ import org.springframework.data.redis.core.TimeToLive;
 public class JSApiTicketDao {
     @TimeToLive
     final long livetime = 7100L; //TTL
+    @Id
     private String ticket;
     private String expires_in;
 
