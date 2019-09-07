@@ -28,6 +28,10 @@
         <module>cache-service</module>
         <module>test-service</module>
         <module>wechat-service</module>
+        <module>serviceHall-service</module>
+        <module>question-service</module>
+        <module>preBook-service</module>
+        <module>suggestion-service</module>
 
     </modules>
 
