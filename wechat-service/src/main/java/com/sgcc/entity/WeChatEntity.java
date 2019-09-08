@@ -1,7 +1,6 @@
 package com.sgcc.entity;
 
 import com.example.constant.WechatURLConstants;
-import com.example.result.Result;
 import com.sgcc.dao.AccessTokenDao;
 import com.sgcc.dao.JSApiTicketDao;
 import com.sgcc.dtomodel.wechat.AccessTokenDTO;
@@ -30,7 +29,7 @@ public class WeChatEntity {
      */
     public AccessTokenDTO getAccessToken(){
         List<AccessTokenDao> accessTokenDaos = accessTokenQueryEntity.findAccessToken();
-        if(accessTokenDaos.size()>0){
+        if(accessTokenDaos.size()>0 && null != accessTokenDaos.get(0)){
             return accessTokenDaos.get(0).build();
         }else {
             AccessTokenDTO accessTokenDTO = restTemplate.getForObject(WechatURLConstants.GETACCESSTOKEN,AccessTokenDTO.class);
@@ -47,7 +46,7 @@ public class WeChatEntity {
      */
     public JSAPITicketDTO getJsApiTicket(){
         List<JSApiTicketDao> jsApiTicketDaos = accessTokenQueryEntity.findJSApiTicket();
-        if(jsApiTicketDaos.size()>0){
+        if(jsApiTicketDaos.size()>0 && null != jsApiTicketDaos.get(0)){
             return jsApiTicketDaos.get(0).build();
         }else {
             JSAPITicketDTO jsapiTicketDTO = restTemplate
