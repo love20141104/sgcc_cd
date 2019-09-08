@@ -30,4 +30,8 @@ public class WeChatService {
     public Result getJsApiTicket(){
         return Result.success(weChatEntity.getJsApiTicket());
     }
+
+    public Result getSignature(String url,String noncestr,String timestamp){
+        return Result.success(weChatEntity.getSignature(url,noncestr,timestamp));
+    }
 }

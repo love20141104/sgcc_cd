@@ -10,7 +10,11 @@
         <module name="dto-model" />
         <module name="exception" />
         <module name="mq_service" />
+        <module name="preBook-service" />
+        <module name="question-service" />
+        <module name="serviceHall-service" />
         <module name="sgcc" />
+        <module name="suggestion-service" />
         <module name="test-service" />
         <module name="utils" />
         <module name="wechat-service" />
@@ -21,8 +25,12 @@
       <module name="dto-model" target="1.8" />
       <module name="exception" target="1.8" />
       <module name="mq_service" target="1.8" />
+      <module name="preBook-service" target="1.8" />
+      <module name="question-service" target="1.8" />
+      <module name="serviceHall-service" target="1.8" />
       <module name="sgcc" target="1.8" />
       <module name="sgcc_cd" target="1.8" />
+      <module name="suggestion-service" target="1.8" />
       <module name="test-service" target="1.8" />
       <module name="utils" target="1.8" />
       <module name="wechat-service" target="1.8" />

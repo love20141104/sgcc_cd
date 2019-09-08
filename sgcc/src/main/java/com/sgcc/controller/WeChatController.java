@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(value = "", tags = "微信API")
@@ -29,13 +30,23 @@ public class WeChatController {
     }
 
     /**
-     * 获取getJsApiTicket
+     * 获取JsApiTicket
      * @return Result
      */
     @ApiOperation(value = "getJsApiTicket", notes = "")
     @GetMapping(value = "/getJsApiTicket")
     public Result getJsApiTicket() {
         return weChatService.getJsApiTicket();
+    }
+
+    /**
+     * 获取Signature
+     * @return Result
+     */
+    @ApiOperation(value = "getSignature", notes = "")
+    @GetMapping(value = "/getSignature")
+    public Result getSignature(@RequestParam String url, @RequestParam String noncestr, @RequestParam String timestamp) {
+        return weChatService.getSignature(url,noncestr,timestamp);
     }
 
 

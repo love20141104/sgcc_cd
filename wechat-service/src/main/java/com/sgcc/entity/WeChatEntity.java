@@ -1,10 +1,12 @@
 package com.sgcc.entity;
 
 import com.example.constant.WechatURLConstants;
+import com.example.sha1.Sign;
 import com.sgcc.dao.AccessTokenDao;
 import com.sgcc.dao.JSApiTicketDao;
 import com.sgcc.dtomodel.wechat.AccessTokenDTO;
 import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
+import com.sgcc.dtomodel.wechat.SignatureDTO;
 import com.sgcc.entity.event.AccessTokenEntity;
 import com.sgcc.entity.query.AccessTokenQueryEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class WeChatEntity {
@@ -61,5 +64,16 @@ public class WeChatEntity {
             accessTokenEntity.saveJSApiTicket(new JSApiTicketDao(jsapiTicketDTO));
             return jsapiTicketDTO;
         }
+    }
+
+    /**
+     * 获取签名
+     * @param url
+     * @param noncestr
+     * @param timestamp
+     * @return
+     */
+    public SignatureDTO getSignature(String url, String noncestr, String timestamp) {
+        return Sign.sign(getJsApiTicket().getTicket(),url,noncestr,timestamp);
     }
 }
