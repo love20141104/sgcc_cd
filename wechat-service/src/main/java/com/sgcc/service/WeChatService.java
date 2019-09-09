@@ -31,7 +31,12 @@ public class WeChatService {
         return Result.success(weChatEntity.getJsApiTicket());
     }
 
-    public Result getSignature(String url,String noncestr,String timestamp){
-        return Result.success(weChatEntity.getSignature(url,noncestr,timestamp));
+    /**
+     * 获取Signature
+     * @param url
+     * @return
+     */
+    public Result getSignature(String url){
+        return Result.success(weChatEntity.getSignature(url));
     }
 }

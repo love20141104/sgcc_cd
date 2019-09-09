@@ -1,9 +1,9 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
+import com.sgcc.dtomodel.wechat.SignatureDTO;
 import com.sgcc.service.WeChatService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,10 +43,20 @@ public class WeChatController {
      * 获取Signature
      * @return Result
      */
+    /**
+     *
+     * @param url   url
+     * @return  SignatureDTO
+     */
     @ApiOperation(value = "getSignature", notes = "")
-    @GetMapping(value = "/getSignature")
-    public Result getSignature(@RequestParam String url, @RequestParam String noncestr, @RequestParam String timestamp) {
-        return weChatService.getSignature(url,noncestr,timestamp);
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "url",value = "url"),
+            @ApiImplicitParam(name = "noncestr",value = "随机字符串"),
+            @ApiImplicitParam(name = "timestamp",value = "时间戳字符串")
+    })
+    @GetMapping(value = "/WXConfig")
+    public Result getSignature(@RequestParam String url) {
+        return weChatService.getSignature(url);
     }
 
 
