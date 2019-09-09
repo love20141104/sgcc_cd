@@ -1,20 +1,15 @@
 package com.example.demo.test;
 
-import com.sgcc.DemoApplication;
+import com.example.demo.DemoApplicationTests;
 import com.sgcc.dao.ServiceHallDao;
 import com.sgcc.service.ServiceHallService;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = DemoApplication.class)
-public class TestServiceHall {
+public class TestServiceHall extends DemoApplicationTests{
 
     @Autowired
     private ServiceHallService serviceHallService;

@@ -1,27 +1,23 @@
 package com.example.demo.test;
 
-import com.sgcc.DemoApplication;
+import com.example.demo.DemoApplicationTests;
 import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dao.QuestionCategoryDao;
-import com.sgcc.dao.ServiceHallDao;
-import com.sgcc.repository.QuestionRepository;
-import com.sgcc.service.ServiceHallService;
+import com.sgcc.repository.QAnswerRepository;
+import com.sgcc.repository.QCategoryRepository;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = DemoApplication.class)
-public class TestQuestion {
+public class TestQuestion extends DemoApplicationTests{
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private QCategoryRepository QCategoryRepository;
+    @Autowired
+    private QAnswerRepository qAnswerRepository;
 
     /***********************************问题回答增删改查**************************************/
     /**
@@ -29,7 +25,7 @@ public class TestQuestion {
      */
     @Test
     public void getQAnswerList(){
-        List<QuestionAnswerDao> categoryDaoList = questionRepository.findAllQAnswer();
+        List<QuestionAnswerDao> categoryDaoList = qAnswerRepository.findAllQAnswer();
         for (int i = 0; i < categoryDaoList.size(); i++) {
             System.out.println(categoryDaoList.get(i).getQuestionDesc());
         }
@@ -56,7 +52,7 @@ public class TestQuestion {
         dao.setAnswer("我是问题的回答一");
         answerDaoList.add(dao);
 
-        questionRepository.addQAnswer(answerDaoList);
+        qAnswerRepository.addQAnswer(answerDaoList);
 
     }
 
@@ -75,7 +71,7 @@ public class TestQuestion {
         dao.setId("9a92431d-14d8-4079-abd2-0394");
         answerDaoList.add(dao);
 
-        questionRepository.delQAnswer(answerDaoList);
+        qAnswerRepository.delQAnswer(answerDaoList);
     }
 
     /**
@@ -97,7 +93,7 @@ public class TestQuestion {
         dao.setAnswer("我是问题的回答2222");
         answerDaoList.add(dao);
 
-        questionRepository.updateQAnswer(answerDaoList);
+        qAnswerRepository.updateQAnswer(answerDaoList);
     }
 
 
@@ -110,7 +106,7 @@ public class TestQuestion {
      */
     @Test
     public void getQCategoryList(){
-        List<QuestionCategoryDao> categoryDaoList = questionRepository.findAllQCategory();
+        List<QuestionCategoryDao> categoryDaoList = QCategoryRepository.findAllQCategory();
         for (int i = 0; i < categoryDaoList.size(); i++) {
             System.out.println(categoryDaoList.get(i).getCategoryDesc()+"==>"+i);
         }
@@ -137,7 +133,7 @@ public class TestQuestion {
         dao.setCategoryOrder(10004);
         categoryDaoList.add(dao);
 
-        questionRepository.addQCategory(categoryDaoList);
+        QCategoryRepository.addQCategory(categoryDaoList);
 
     }
 
@@ -156,7 +152,7 @@ public class TestQuestion {
         dao.setCategoryId("cdf437e4-919b-4308-a38a-90ea");
         categoryDaoList.add(dao);
 
-        questionRepository.delQCategory(categoryDaoList);
+        QCategoryRepository.delQCategory(categoryDaoList);
     }
 
     /**
@@ -178,7 +174,7 @@ public class TestQuestion {
         dao.setCategoryOrder(2222);
         categoryDaoList.add(dao);
 
-        questionRepository.updateQCategory(categoryDaoList);
+        QCategoryRepository.updateQCategory(categoryDaoList);
     }
 
 

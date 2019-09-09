@@ -22,7 +22,7 @@ public class BusinessTypeRepository {
      * @return
      */
     public List<BusinessTypeDao> findAllBTypeList(){
-        String sql = "select id,business_type_id,business_type,business_type_id,order,business_type_available from d_business_type";
+        String sql = "select id,business_type_id,business_type,`order`,business_type_available from d_business_type";
         List<BusinessTypeDao> bussinessTypeDaoList = jdbcTemplate.query(sql,new businessTypeRowMapper());
 
         return bussinessTypeDaoList;
@@ -33,17 +33,15 @@ public class BusinessTypeRepository {
      * @param businessTypeDaoList
      */
     public void addBType(List<BusinessTypeDao> businessTypeDaoList){
-        String sql = "insert into d_business_type(id,business_type_id,business_type,business_type_id,order,business_type_available) " +
-                "values(?,?,?,?,?,?)";
+        String sql = "insert into d_business_type(id,business_type_id,business_type,`order`) " +
+                "values(?,?,?,?)";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setString(1,businessTypeDaoList.get(i).getId());
                 ps.setString(2,businessTypeDaoList.get(i).getBusinessTypeId());
                 ps.setString(3,businessTypeDaoList.get(i).getBusinessType());
-                ps.setString(4,businessTypeDaoList.get(i).getBusinessTypeId());
-                ps.setInt(5,businessTypeDaoList.get(i).getOrder());
-                ps.setBoolean(6,businessTypeDaoList.get(i).getBusinessTypeAvailable());
+                ps.setInt(4,businessTypeDaoList.get(i).getOrder());
             }
 
             @Override
@@ -79,12 +77,12 @@ public class BusinessTypeRepository {
      * @param businessTypeDaoList
      */
     public void updateBType(List<BusinessTypeDao> businessTypeDaoList){
-        String sql = "update d_business_type set business_type=? where id=?";
+        String sql = "update d_business_type set business_type=? where business_type_id=?";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setString(1,businessTypeDaoList.get(i).getBusinessType());
-                ps.setString(2,businessTypeDaoList.get(i).getId());
+                ps.setString(2,businessTypeDaoList.get(i).getBusinessTypeId());
             }
 
             @Override
