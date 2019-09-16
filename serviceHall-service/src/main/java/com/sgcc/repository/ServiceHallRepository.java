@@ -18,10 +18,11 @@ public class ServiceHallRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
     public List<ServiceHallDao> findHallList(){
         String sql = "select id,service_hall_id,service_hall_name,service_hall_addr,service_hall_opentime,service_hall_longitude," +
-                "service_hall_latitude,service_hall_district,service_hall_tel,service_hall_available from d_service_hall";
+                "service_hall_latitude,service_hall_district,service_hall_tel,service_hall_available,service_hall_business_desc,"+
+                "service_hall_traffic,service_hall_landmark_building,service_hall_owner,service_hall_business_district,"+
+                "service_hall_rank,service_hall_collect from d_service_hall";
 
         try {
             return jdbcTemplate.query(sql, new TestRowMapper());
@@ -70,7 +71,7 @@ public class ServiceHallRepository {
                 ps.setString(2, list.get(i).getServiceHallId());
                 ps.setString(3, list.get(i).getServiceHallName());
                 ps.setString(4, list.get(i).getServiceHallAddr());
-                ps.setString(5, list.get(i).getOpenTime());
+                ps.setString(5, list.get(i).getServiceHallOpenTime());
                 ps.setDouble(6, list.get(i).getServiceHallLongitude());
                 ps.setDouble(7, list.get(i).getServiceHallLatitude());
                 ps.setString(8, list.get(i).getServiceHallDistrict());
@@ -116,11 +117,18 @@ public class ServiceHallRepository {
                     rs.getString("service_hall_addr"),
                     rs.getString("service_hall_opentime"),
                     rs.getString("service_hall_tel"),
-                    rs.getDouble("service_hall_longitude"),
                     rs.getDouble("service_hall_latitude"),
+                    rs.getDouble("service_hall_longitude"),
                     rs.getString("service_hall_district"),
-                    rs.getBoolean("service_hall_available")
-            );
+                    rs.getBoolean("service_hall_available"),
+                    rs.getString("service_hall_business_desc"),
+                    rs.getString("service_hall_traffic"),
+                    rs.getString("service_hall_landmark_building"),
+                    rs.getString("service_hall_owner"),
+                    rs.getString("service_hall_business_district"),
+                    rs.getString("service_hall_rank"),
+                    rs.getBoolean("service_hall_collect")
+                    );
         }
 
     }

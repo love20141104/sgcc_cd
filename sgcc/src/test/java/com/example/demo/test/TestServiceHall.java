@@ -1,7 +1,9 @@
 package com.example.demo.test;
 
 import com.example.demo.DemoApplicationTests;
+import com.example.result.Result;
 import com.sgcc.dao.ServiceHallDao;
+import com.sgcc.dtomodel.map.ServiceHall_ComputedDistanceDTO;
 import com.sgcc.service.ServiceHallService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,30 @@ public class TestServiceHall extends DemoApplicationTests{
      */
     @Test
     public void getHallList(){
-        serviceHallService.findHallList();
+        Result rs = serviceHallService.findHallList();
+        if( rs.getResultCode() == 0 )
+        {
+            rs = serviceHallService.findHallList();
+            if( rs.getResultCode() == 0 ){}
+        }
     }
 
+    @Test
+    public void NearestServiceHallsTest()
+    {
+        double lat = 30.598559;
+        double lng = 104.071742;
+        Result rs = serviceHallService.NearestServiceHalls(lat,lng);
+        if( rs.getResultCode() == 0 )
+        {
+            List<ServiceHall_ComputedDistanceDTO> dtos = (List<ServiceHall_ComputedDistanceDTO>)rs.getData();
+            if( dtos == null )
+            {
 
+
+            }
+        }
+    }
     /**
      * 增加
      */
@@ -34,7 +56,7 @@ public class TestServiceHall extends DemoApplicationTests{
         dao.setId("10003");
         dao.setServiceHallName("测试网点名字3");
         dao.setServiceHallAddr("测试网点地址3");
-        dao.setOpenTime("8:30-17:30");
+        dao.setServiceHallOpenTime("8:30-17:30");
         dao.setServiceHallTel("66666666662");
         dao.setServiceHallLatitude(102.05);
         dao.setServiceHallLongitude(50.0);
@@ -46,7 +68,7 @@ public class TestServiceHall extends DemoApplicationTests{
         dao.setId("10004");
         dao.setServiceHallName("测试网点名字4");
         dao.setServiceHallAddr("测试网点地址4");
-        dao.setOpenTime("8:30-17:30");
+        dao.setServiceHallOpenTime("8:30-17:30");
         dao.setServiceHallTel("66666666664");
         dao.setServiceHallLatitude(102.05);
         dao.setServiceHallLongitude(50.0);
