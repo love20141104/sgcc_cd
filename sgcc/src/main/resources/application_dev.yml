@@ -11,7 +11,6 @@ server:
 #      key-alias: tomcat
   #    配置密码，就是在生成证书的时候输入的密码
       key-store-password: bt.cn
-
 ##### Spring
 spring:
   application:
