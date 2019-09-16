@@ -4,8 +4,9 @@ public class MapUtil {
     /**
      * 地球半径
      */
-    private static double EarthRadius = 6371.137;
+    private static double EarthRadius = 6371.004d;
 
+    public static Double KM10 = 0.104d;
     /**
      * 经纬度转化成弧度
      *
@@ -13,7 +14,7 @@ public class MapUtil {
      * @return
      */
     private static double rad(double d) {
-        return d * Math.PI / 180.0;
+        return d * Math.PI / 180.0d;
     }
 
     /**
@@ -36,7 +37,7 @@ public class MapUtil {
         double b = firstRadLng - secondRadLng;
         double cal = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(firstRadLat)
                 * Math.cos(secondRadLat) * Math.pow(Math.sin(b / 2), 2))) * EarthRadius;
-        double result = Math.round(cal * 10000d) / 10000d;
+        double result = Math.round(cal * 1000000000d) / 1000000000d;
         return result;
     }
 
