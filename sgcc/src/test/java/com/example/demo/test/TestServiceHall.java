@@ -32,8 +32,8 @@ public class TestServiceHall extends DemoApplicationTests{
     @Test
     public void NearestServiceHallsTest()
     {
-        double lat = 30.598559;
-        double lng = 104.071742;
+        double lat = 30.540936;
+        double lng = 104.075187;
         Result rs = serviceHallService.NearestServiceHalls(lat,lng);
         if( rs.getResultCode() == 0 )
         {
