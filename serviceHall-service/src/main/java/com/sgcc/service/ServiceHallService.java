@@ -41,11 +41,13 @@ public class ServiceHallService {
                 rets.add(item);
             }
         }
+        // 转成DTO,TODO 建立营业厅网点充血模型
         List<ServiceHall_ComputedDistanceDTO> datas = new ArrayList<>();
         for( ServiceHallDao item : rets )
         {
             Double distance = MapUtil.getDistance(lat,lng,item.getServiceHallLatitude(),item.getServiceHallLongitude());
             ServiceHall_ComputedDistanceDTO dto = new ServiceHall_ComputedDistanceDTO();
+            dto.setServicehall_name(item.getServiceHallName());
             dto.setServicehall_addr(item.getServiceHallAddr());
             dto.setServicehall_distance(distance);
             dto.setServicehall_district(item.getServiceHallDistrict());
@@ -56,11 +58,27 @@ public class ServiceHallService {
             dto.setServicehall_tel(item.getServiceHallTel());
             datas.add(dto);
         }
-        Collections.sort(datas,datas.get(0));
-        if( datas.size() > 5 )
-            return Result.success(datas.subList(0,5));
-        else
-            return Result.success(datas);
+
+        // 至多返回 10km内最近的 5个
+        if( rets.size() > 0 )
+        {
+            Collections.sort(datas,datas.get(0));
+        }
+
+        for( int idx = 0 ; idx < datas.size() ;idx++   )
+        {
+            if( idx > 5 )
+            {
+                return Result.success(datas.subList(0,idx));
+            }
+            else {
+                if( datas.get(idx).getServicehall_distance() > 10 )
+                {
+                    return Result.success(datas.subList(0,idx));
+                }
+            }
+        }
+        return Result.success(datas);
     }
     /**
      * 新增网点
