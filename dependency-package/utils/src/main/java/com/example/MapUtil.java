@@ -6,7 +6,7 @@ public class MapUtil {
      */
     private static double EarthRadius = 6371.004d;
 
-    public static Double KM10 = 0.104d;
+    public static Double KM10 = 0.100d;
     /**
      * 经纬度转化成弧度
      *
