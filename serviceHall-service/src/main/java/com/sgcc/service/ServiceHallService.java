@@ -67,7 +67,7 @@ public class ServiceHallService {
 
         for( int idx = 0 ; idx < datas.size() ;idx++   )
         {
-            if( idx > 5 )
+            if( idx >= 5  )
             {
                 return Result.success(datas.subList(0,idx));
             }
