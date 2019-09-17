@@ -1,8 +1,9 @@
-package com.sgcc.dtomodel.wechat;
+package com.sgcc.wechat;
 
 
 import com.example.Utils;
 import com.example.constant.WechatURLConstants;
+import com.sgcc.dtomodel.wechat.WXConfigDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class SignatureDTO implements Serializable {
+public class SignatureModel implements Serializable {
     private static final long serialVersionUID = -5760408591640273446L;
 
     private String noncestr = Utils.create_nonce_str();
@@ -27,7 +28,7 @@ public class SignatureDTO implements Serializable {
      * @param ticket
      * @param url
      */
-    public SignatureDTO(String ticket, String url) {
+    public SignatureModel(String ticket, String url) {
         this.jsapi_ticket = ticket;
         this.URL = url;
         this.signature = Utils.sign(this.getString1());//生成签名
@@ -45,6 +46,7 @@ public class SignatureDTO implements Serializable {
     }
 
     public WXConfigDTO build(){
-        return new WXConfigDTO(this);
+
+        return new WXConfigDTO(this.appId,this.timestamp,this.noncestr,this.signature);
     }
 }

@@ -1,11 +1,11 @@
 package com.sgcc.entity;
 
 import com.example.constant.WechatURLConstants;
+import com.sgcc.wechat.SignatureModel;
 import com.sgcc.dao.AccessTokenDao;
 import com.sgcc.dao.JSApiTicketDao;
 import com.sgcc.dtomodel.wechat.AccessTokenDTO;
 import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
-import com.sgcc.dtomodel.wechat.SignatureDTO;
 import com.sgcc.dtomodel.wechat.WXConfigDTO;
 import com.sgcc.entity.event.AccessTokenEntity;
 import com.sgcc.entity.query.AccessTokenQueryEntity;
@@ -71,6 +71,6 @@ public class WeChatEntity {
      * @return
      */
     public WXConfigDTO getSignature(String url) {
-        return new SignatureDTO(getJsApiTicket().getTicket(),url).build();
+        return new SignatureModel(getJsApiTicket().getTicket(),url).build();
     }
 }

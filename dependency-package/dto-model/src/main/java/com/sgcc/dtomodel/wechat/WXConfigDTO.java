@@ -19,10 +19,10 @@ public class WXConfigDTO implements Serializable {
     private String signature;// 必填，签名
     private List<String> jsApiList = new ArrayList<>(); // 必填，需要使用的JS接口列表
 
-    public WXConfigDTO(SignatureDTO signatureDTO){
-        this.appId = signatureDTO.getAppId();
-        this.timestamp = signatureDTO.getTimestamp();
-        this.nonceStr = signatureDTO.getNoncestr();
-        this.signature = signatureDTO.getSignature();
+    public WXConfigDTO(String appId,String timestamp,String nonceStr,String signature){
+        this.appId = appId;
+        this.timestamp = timestamp;
+        this.nonceStr = nonceStr;
+        this.signature = signature;
     }
 }

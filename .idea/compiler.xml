@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="cache-service" />
+        <module name="domain-model" />
         <module name="dto-model" />
         <module name="exception" />
         <module name="mq_service" />
@@ -22,6 +23,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cache-service" target="1.8" />
+      <module name="domain-model" target="1.8" />
       <module name="dto-model" target="1.8" />
       <module name="exception" target="1.8" />
       <module name="mq_service" target="1.8" />
