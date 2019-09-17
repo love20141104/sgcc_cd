@@ -1,5 +1,6 @@
 package com.sgcc.entity.query;
 
+import com.example.constant.RedisConstants;
 import com.sgcc.dao.AccessTokenDao;
 import com.sgcc.dao.JSApiTicketDao;
 import com.sgcc.repository.AccessTokenRepository;
@@ -21,15 +22,15 @@ public class AccessTokenQueryEntity {
     /**
      * 查询AccessToken
      */
-    public List<AccessTokenDao> findAccessToken(){
-        return Lists.newArrayList(accessTokenRepository.findAll());
+    public AccessTokenDao findAccessToken(){
+        return accessTokenRepository.findById(RedisConstants.ACCESS_TOKEN_ID).get();
     }
 
     /**
      * 查询JSApiTicket
      */
-    public List<JSApiTicketDao> findJSApiTicket(){
-        return Lists.newArrayList(jsApiTicketRepository.findAll());
+    public JSApiTicketDao findJSApiTicket(){
+        return jsApiTicketRepository.findById(RedisConstants.JSAPI_TICKET_ID).get();
     }
 
 

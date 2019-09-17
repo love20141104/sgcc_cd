@@ -1,8 +1,11 @@
 package com.sgcc.service;
 
 import com.example.Utils;
+import com.example.constant.CommonConstants;
 import com.example.constant.WechatURLConstants;
+import com.example.errorcode.WechatURLErrorcode;
 import com.example.result.Result;
+import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import com.sgcc.entity.WeChatEntity;
 import com.sgcc.wxpay.Sgcc_WXPay;
 import com.sgcc.wxpay.sdk.WXPayUtil;
@@ -18,6 +21,7 @@ public class WeChatService {
     @Autowired
     private WeChatEntity weChatEntity;
 
+    static int retries = 0;
     /**
      * 获取微信服务号的AccessToken
      * @return
@@ -29,8 +33,8 @@ public class WeChatService {
     /**
      * 获取微信js-api-ticket
      */
-    public Result getJsApiTicket(){
-        return Result.success(weChatEntity.getJsApiTicket());
+    public JSAPITicketDTO getJsApiTicket(){
+        return weChatEntity.getJsApiTicket();
     }
 
     /**
@@ -39,6 +43,7 @@ public class WeChatService {
      * @return
      */
     public Result getSignature(String url){
+        System.out.println("url:"+url);
         return Result.success(weChatEntity.getSignature(url));
     }
 

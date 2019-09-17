@@ -31,7 +31,10 @@ public class SignatureModel implements Serializable {
     public SignatureModel(String ticket, String url) {
         this.jsapi_ticket = ticket;
         this.URL = url;
-        this.signature = Utils.sign(this.getString1());//生成签名
+        String ctnt = this.getString1();
+        System.out.println("ticket:" + ticket );
+        System.out.println("sign:" + ctnt );
+        this.signature = Utils.sign(ctnt);//生成签名
     }
 
     /**

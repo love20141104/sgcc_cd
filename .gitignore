@@ -33,3 +33,4 @@ build/
 ### Java ###
 *.jar
 /target/
+/.idea/libraries/

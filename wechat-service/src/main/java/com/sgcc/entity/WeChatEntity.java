@@ -1,5 +1,6 @@
 package com.sgcc.entity;
 
+import com.example.constant.CommonConstants;
 import com.example.constant.WechatURLConstants;
 import com.sgcc.wechat.SignatureModel;
 import com.sgcc.dao.AccessTokenDao;
@@ -30,27 +31,30 @@ public class WeChatEntity {
      * @return
      */
     public AccessTokenDTO getAccessToken(){
-        List<AccessTokenDao> accessTokenDaos = accessTokenQueryEntity.findAccessToken();
-        if(accessTokenDaos.size()>0 && null != accessTokenDaos.get(0)){
-            return accessTokenDaos.get(0).build();
-        }else {
+        AccessTokenDao accessTokenDao = null;
+        try {
+            accessTokenDao = accessTokenQueryEntity.findAccessToken();
+            System.out.println("accessTokenDao access_token = "+ accessTokenDao.getAccess_token());
+            return accessTokenDao.build();
+        }
+        catch ( java.util.NoSuchElementException e ){
+            System.out.println("accessTokenDao access_token = null");
             AccessTokenDTO accessTokenDTO = restTemplate.getForObject(WechatURLConstants.GETACCESSTOKEN,AccessTokenDTO.class);
             accessTokenEntity.saveAccessToken(new AccessTokenDao(accessTokenDTO));
             return accessTokenDTO;
         }
-
-
-
     }
 
     /**
      * 获取微信js-api-ticket
      */
     public JSAPITicketDTO getJsApiTicket(){
-        List<JSApiTicketDao> jsApiTicketDaos = accessTokenQueryEntity.findJSApiTicket();
-        if(jsApiTicketDaos.size()>0 && null != jsApiTicketDaos.get(0)){
-            return jsApiTicketDaos.get(0).build();
-        }else {
+        JSApiTicketDao jsApiTicketDao = null;
+        try {
+            jsApiTicketDao = accessTokenQueryEntity.findJSApiTicket();
+            return jsApiTicketDao.build();
+        }
+        catch ( java.util.NoSuchElementException e ){
             JSAPITicketDTO jsapiTicketDTO = restTemplate
                     .getForObject
                             (
@@ -59,8 +63,11 @@ public class WeChatEntity {
                                                     "ACCESS_TOKEN"
                                                     ,getAccessToken().getAccess_token()
                                             )
-                            ,JSAPITicketDTO.class);
-            accessTokenEntity.saveJSApiTicket(new JSApiTicketDao(jsapiTicketDTO));
+                                    ,JSAPITicketDTO.class);
+            if( jsapiTicketDTO.getErrcode() == CommonConstants.SUCCESS )
+            {
+                accessTokenEntity.saveJSApiTicket(new JSApiTicketDao(jsapiTicketDTO));
+            }
             return jsapiTicketDTO;
         }
     }

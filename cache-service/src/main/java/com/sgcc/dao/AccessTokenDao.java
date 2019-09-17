@@ -1,5 +1,6 @@
 package com.sgcc.dao;
 
+import com.example.constant.RedisConstants;
 import com.sgcc.dao.basedao.RedisBaseDao;
 import com.sgcc.dtomodel.wechat.AccessTokenDTO;
 import lombok.AllArgsConstructor;
@@ -18,8 +19,9 @@ import org.springframework.data.redis.core.TimeToLive;
 @RedisHash("accessToken")
 public class AccessTokenDao {
     @TimeToLive
-    long livetime = 7100L; //TTL
+    long livetime = 7200L; //TTL
     @Id
+    private String id = RedisConstants.ACCESS_TOKEN_ID;
     private String access_token;
     private String expires_in;
 

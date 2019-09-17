@@ -1,5 +1,6 @@
 package com.sgcc.dao;
 
+import com.example.constant.RedisConstants;
 import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,8 +18,9 @@ import org.springframework.data.redis.core.TimeToLive;
 @RedisHash("jsApiTicketDao")
 public class JSApiTicketDao {
     @TimeToLive
-    long livetime = 7100L; //TTL
+    long livetime = 7200L; //TTL
     @Id
+    private String id = RedisConstants.JSAPI_TICKET_ID;
     private String ticket;
     private String expires_in;
 

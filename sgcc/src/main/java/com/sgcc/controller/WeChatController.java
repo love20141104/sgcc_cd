@@ -2,7 +2,9 @@ package com.sgcc.controller;
 
 import com.example.Utils;
 import com.example.constant.WechatURLConstants;
+import com.example.errorcode.WechatURLErrorcode;
 import com.example.result.Result;
+import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.service.WeChatService;
 import com.sgcc.wxpay.Sgcc_WXPay;
@@ -42,7 +44,19 @@ public class WeChatController {
     @ApiOperation(value = "getJsApiTicket", notes = "")
     @GetMapping(value = "/JsApiTicket")
     public Result getJsApiTicket() {
-        return weChatService.getJsApiTicket();
+        JSAPITicketDTO jsapiTicketDTO = weChatService.getJsApiTicket();
+        if( jsapiTicketDTO.getErrcode() == WechatURLErrorcode.SYS_BUSY )
+        {
+            try {
+                Thread.sleep(1000);
+                return Result.success(weChatService.getJsApiTicket());
+            }
+            catch (InterruptedException e )
+            {
+
+            }
+        }
+        return Result.success(jsapiTicketDTO);
     }
 
     /**
