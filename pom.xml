@@ -32,6 +32,7 @@
         <module>question-service</module>
         <module>preBook-service</module>
         <module>suggestion-service</module>
+        <module>dependency-package/domain-model</module>
 
     </modules>
 
