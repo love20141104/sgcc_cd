@@ -22,7 +22,7 @@ public class BusinessTypeRepository {
      * @return
      */
     public List<BusinessTypeDao> findAllBTypeList(){
-        String sql = "select id,business_type_id,business_type,`order`,business_type_available from d_business_type";
+        String sql = "select id,business_type_id,business_type,`order`,business_type_available from d_business_type where business_type_available=1";
         List<BusinessTypeDao> bussinessTypeDaoList = jdbcTemplate.query(sql,new businessTypeRowMapper());
 
         return bussinessTypeDaoList;
@@ -57,7 +57,7 @@ public class BusinessTypeRepository {
      * @param businessTypeDaoList
      */
     public void delBType(List<BusinessTypeDao> businessTypeDaoList){
-        String sql = "delete from d_business_type where business_type_id=?";
+        String sql = "delete from d_business_type where business_type_id=? and business_type_available=1";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -77,7 +77,7 @@ public class BusinessTypeRepository {
      * @param businessTypeDaoList
      */
     public void updateBType(List<BusinessTypeDao> businessTypeDaoList){
-        String sql = "update d_business_type set business_type=? where business_type_id=?";
+        String sql = "update d_business_type set business_type=? where business_type_id=? and business_type_available=1";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {

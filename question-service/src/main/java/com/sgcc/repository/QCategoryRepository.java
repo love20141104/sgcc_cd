@@ -26,7 +26,7 @@ public class QCategoryRepository {
      * @param
      */
     public List<QuestionCategoryDao> findAllQCategory(){
-        String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category";
+        String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category where category_available=1";
         List<QuestionCategoryDao> categoryDaoList = jdbcTemplate.query(sql,new categoryRowMapper());
         return categoryDaoList;
     }
@@ -60,7 +60,7 @@ public class QCategoryRepository {
      * @param categoryList
      */
     public void delQCategory(List<QuestionCategoryDao> categoryList){
-        String sql = "delete from d_question_category where category_id=?";
+        String sql = "delete from d_question_category where category_id=? and category_available=1";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -79,7 +79,7 @@ public class QCategoryRepository {
      * @param categoryList
      */
     public void updateQCategory(List<QuestionCategoryDao> categoryList){
-        String sql = "update d_question_category set category_desc=?,category_order=?  where category_id=?";
+        String sql = "update d_question_category set category_desc=?,category_order=?  where category_id=? and category_available=1";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
