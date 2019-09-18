@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableCaching
 @Configuration
 @SpringBootApplication
-//@ComponentScan(basePackages = {"com.sgcc"})
+@ComponentScan(basePackages = {"com.sgcc"})
 public class DemoApplication {
 
     public static void main(String[] args) {

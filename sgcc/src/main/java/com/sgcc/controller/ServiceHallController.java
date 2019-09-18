@@ -1,6 +1,8 @@
 package com.sgcc.controller;
 import com.example.result.Result;
 
+import com.sgcc.dtomodel.prebook.PrebookDTO;
+import com.sgcc.service.ProbookService;
 import com.sgcc.service.ServiceHallService;
 import com.sgcc.service.TestService;
 import com.sgcc.service.WeChatService;
@@ -15,6 +17,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import javax.websocket.server.PathParam;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Api(value = "", tags = "地图接口")
@@ -24,6 +28,8 @@ import java.util.List;
 public class ServiceHallController {
     @Autowired
     private ServiceHallService serviceHallService;
+    @Autowired
+    private ProbookService probookService;
 
     /**
      * 根据定位查最近的5个
@@ -56,17 +62,32 @@ public class ServiceHallController {
     @ApiOperation(value = "预约信息", notes = "")
     @GetMapping(value = "/PrebookInfos/user/{openId}")
     public Result getPrebookInfos(@PathVariable String openId) {
-        return null;
+        return Result.success(probookService.getPrebookInfosByUser(openId));
     }
 
     /**
      * 用户提交在线预约
      * @return
      */
-//    @ApiOperation(value = "提交预约信息", notes = "")
-//    @PostMapping(value = "/PrebookInfo")
-//    public Result submitPrebookInfo(@ResponseBody ) {
-//
-//        return null;
-//    }
+    @ApiOperation(value = "提交预约信息", notes = "")
+    @PostMapping(value = "/PrebookInfos/user/{openId}")
+    public Result submitPrebookInfo(@RequestBody PrebookDTO prebookDTO,@PathVariable String openId) {
+        System.out.println("controller:threadID : "+Thread.currentThread().getId());
+        probookService.submitPrebookInfo(prebookDTO,openId);
+        return null;
+    }
+
+
+    /**
+     * 根据营业亭id查询营业厅预约状态
+     * @param ServiceHallId
+     * @return
+     */
+    @ApiOperation(value = "查询营业厅预约状态", notes = "")
+    @PostMapping(value = "/PrebookInfo/ServiceHall-Id/{ServiceHallId}")
+    public Result submitPrebookInfo(@PathVariable String ServiceHallId) {
+        return Result.success(probookService.getPrebookInfosByServiceHall(ServiceHallId));
+    }
+
+
 }

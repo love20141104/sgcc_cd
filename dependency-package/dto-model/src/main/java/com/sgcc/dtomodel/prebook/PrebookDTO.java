@@ -1,35 +1,24 @@
-package com.sgcc.dao;
+package com.sgcc.dtomodel.prebook;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Wither;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.TimeToLive;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
-/**
- * 预约信息
- */
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
-@Wither
-@AllArgsConstructor //生成全参数构造函数
-@NoArgsConstructor  //生成无参构造函数
-@RedisHash("PreBook")
-public class PreBookDao implements Serializable {
-    private static final long serialVersionUID = -5166501578939845645L;
-    @TimeToLive
-    private long livetime ; //TTL
-    @Id
-    private String id;
+public class PrebookDTO implements Serializable {
+    private static final long serialVersionUID = -3090200043033631931L;
+
     // 用户id
     private String userId;
 
     // 营业厅id
+
     private String serviceHallId;
 
     // 预约业务办理日期
@@ -52,5 +41,4 @@ public class PreBookDao implements Serializable {
 
     // 预约提交时间
     private Timestamp submitDate;
-
 }
