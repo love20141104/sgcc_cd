@@ -45,6 +45,22 @@ public class TestServiceHall extends DemoApplicationTests{
             }
         }
     }
+    @Test
+    public void serviceHallsTest()
+    {
+        String district = "高新区";
+        Result rs = serviceHallService.serviceHalls(district);
+        if( rs.getResultCode() == 0 )
+        {
+            List<ServiceHall_ComputedDistanceDTO> dtos = (List<ServiceHall_ComputedDistanceDTO>)rs.getData();
+            if( dtos == null )
+            {
+
+
+            }
+        }
+    }
+
     /**
      * 增加
      */

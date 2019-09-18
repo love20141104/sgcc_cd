@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @Api(value = "", tags = "地图接口")
@@ -28,5 +29,11 @@ public class MapController {
     @GetMapping(value = "/NearestServiceHalls")
     public Result getNearestServiceHalls(@RequestParam Double lat,@RequestParam Double lng) {
         return serviceHallService.NearestServiceHalls(lat,lng);
+    }
+
+    @ApiOperation(value = "ServiceHall District", notes = "")
+    @GetMapping(value = "/Districts/{district}")
+    public Result getNearestServiceHalls(@PathVariable String district) {
+        return serviceHallService.serviceHalls(district);
     }
 }
