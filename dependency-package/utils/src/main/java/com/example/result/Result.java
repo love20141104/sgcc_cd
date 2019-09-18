@@ -28,6 +28,13 @@ public class Result implements Serializable {
         return result;
     }
 
+    public static Result success( String msg , Object data ) {
+        Result result = new Result();
+        result.resultCode = TopErrorCode.SUCCESS.getErrcode();
+        result.msg = msg;
+        return result;
+    }
+
     public static Result success(Object data) {
         Result result = new Result();
         result.resultCode = TopErrorCode.SUCCESS.getErrcode();
