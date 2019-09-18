@@ -7,6 +7,7 @@ import lombok.experimental.Wither;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -15,11 +16,11 @@ import java.util.Date;
 /**
  * 预约信息
  */
-@Data
 @Wither
-@AllArgsConstructor //生成全参数构造函数
-@NoArgsConstructor  //生成无参构造函数
-@RedisHash("PreBook")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@RedisHash("preBook")
 public class PreBookDao implements Serializable {
     private static final long serialVersionUID = -5166501578939845645L;
     @TimeToLive
@@ -27,16 +28,20 @@ public class PreBookDao implements Serializable {
     @Id
     private String id;
     // 用户id
+    @Indexed
     private String userId;
 
     // 营业厅id
+    @Indexed
     private String serviceHallId;
 
     // 预约业务办理日期
+    @Indexed
     private Date prebookDate;
 
     // 预约业务办理开始时间
-    private Timestamp prebookStartTime;
+    @Indexed
+    private Date prebookStartTime;
 
     // 办理业务类型
 //    private String businessTypeId;
@@ -51,6 +56,6 @@ public class PreBookDao implements Serializable {
     private String contactTel;
 
     // 预约提交时间
-    private Timestamp submitDate;
+    private Date submitDate;
 
 }

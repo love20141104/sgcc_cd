@@ -13,9 +13,10 @@ import java.util.List;
 public interface PrebookRedisRepository extends CrudRepository<PreBookDao,String> {
 
     List<PreBookDao> findAllByUserId(String userId);
+
     List<PreBookDao> findAllByServiceHallId(String serviceHallId);
 
-    List<PreBookDao> findAllByServiceHallIdAndPrebookDateAndPrebookStartTime(String serviceHallId, Date prebookDate, Timestamp prebookStartTime);
-    long countAllByServiceHallIdAndPrebookDateAndPrebookStartTime(String serviceHallId, Date prebookDate, Timestamp prebookStartTime);
+    List<PreBookDao> findAllByServiceHallIdAndPrebookDateAndPrebookStartTime(String serviceHallId, Date prebookDate, Date prebookStartTime);
+
 
 }

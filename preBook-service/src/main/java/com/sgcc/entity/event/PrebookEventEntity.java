@@ -15,31 +15,42 @@ public class PrebookEventEntity {
     @Autowired
     private PrebookRedisRepository prebookRedisRepository;
 
-    public void submitPrebookInfo(PrebookDTO prebookDTO) {
+    public PrebookDTO submitPrebookInfo(PrebookDTO prebookDTO) {
         //dto转dao
         PrebookModel prebookModel = new PrebookModel();
-
         //TODO
         prebookModel.dto2dao(new ArrayList<PrebookDTO>() {{
             add(prebookDTO);
         }});
-        synchronized (this) {
-        System.out.println("ENTITY:threadID : "+Thread.currentThread().getId());
-            //取出数量
-            if (prebookRedisRepository.findAllByServiceHallIdAndPrebookDateAndPrebookStartTime(
-                    prebookDTO.getServiceHallId()
-                    , prebookDTO.getPrebookDate()
-                    , prebookDTO.getPrebookStartTime()
-            ).size() > 4) {
-                //TODO 超过预约限制
-            } else {
-                try {
-                    prebookRedisRepository.saveAll(prebookModel.getPreBookDaos());
-                    //TODO 发MQ 持久化
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
+        if (prebookRedisRepository.findAllByServiceHallIdAndPrebookDateAndPrebookStartTime(
+                prebookDTO.getServiceHallId()
+                , prebookDTO.getPrebookDate()
+                , prebookDTO.getPrebookStartTime()
+        ).size() > 4) {
+                return null;
+        } else {
+            synchronized (this) {
+                System.out.println("ENTITY:threadID : " + Thread.currentThread().getId());
+                //取出数量
+                if (prebookRedisRepository.findAllByServiceHallIdAndPrebookDateAndPrebookStartTime(
+                        prebookDTO.getServiceHallId()
+                        , prebookDTO.getPrebookDate()
+                        , prebookDTO.getPrebookStartTime()
+                ).size() > 4) {
+                    return null;
+                } else {
+                    try {
+                        prebookRedisRepository.saveAll(prebookModel.getPreBookDaos());
+
+                        //TODO 发MQ 持久化
+                        return prebookDTO;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+
+                }
             }
         }
 

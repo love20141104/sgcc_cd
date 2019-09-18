@@ -25,7 +25,7 @@ public class PrebookDTO implements Serializable {
     private Date prebookDate;
 
     // 预约业务办理开始时间
-    private Timestamp prebookStartTime;
+    private Date prebookStartTime;
 
     // 办理业务类型
 //    private String businessTypeId;
@@ -40,5 +40,5 @@ public class PrebookDTO implements Serializable {
     private String contactTel;
 
     // 预约提交时间
-    private Timestamp submitDate;
+    private Date submitDate;
 }

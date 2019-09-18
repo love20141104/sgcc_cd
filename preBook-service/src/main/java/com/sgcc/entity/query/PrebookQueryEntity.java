@@ -25,8 +25,12 @@ public class PrebookQueryEntity {
     public List<PrebookDTO> getPrebookInfosByUser(String openId) {
 
 
-        PrebookModel prebookModel = new PrebookModel(prebookRedisRepository.findAllByUserId(
-                openId));
+        PrebookModel prebookModel = new PrebookModel(
+                prebookRedisRepository
+                        .findAllByUserId(
+                                openId
+                        )
+        );
         return prebookModel.getPrebookDTOS();
     }
 
@@ -37,16 +41,10 @@ public class PrebookQueryEntity {
      * @param serviceHallId
      */
     public List<PrebookDTO> getPrebookInfosByServiceHall(String serviceHallId) {
-        Date now = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(now.getYear(), now.getMonth(), now.getDay());
-        now = calendar.getTime();
-        calendar.add(Calendar.DATE, 4);
-        Date threeDayAgo = calendar.getTime();
-
-        PrebookModel prebookModel = new PrebookModel(prebookRedisRepository.findAllByServiceHallId(
-                serviceHallId
-        )
+        PrebookModel prebookModel = new PrebookModel(
+                prebookRedisRepository.findAllByServiceHallId(
+                        serviceHallId
+                )
         );
         return prebookModel.getPrebookDTOS();
     }

@@ -73,8 +73,7 @@ public class ServiceHallController {
     @PostMapping(value = "/PrebookInfos/user/{openId}")
     public Result submitPrebookInfo(@RequestBody PrebookDTO prebookDTO,@PathVariable String openId) {
         System.out.println("controller:threadID : "+Thread.currentThread().getId());
-        probookService.submitPrebookInfo(prebookDTO,openId);
-        return null;
+        return probookService.submitPrebookInfo(prebookDTO,openId);
     }
 
 
