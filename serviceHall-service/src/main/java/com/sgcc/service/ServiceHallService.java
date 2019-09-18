@@ -40,7 +40,11 @@ public class ServiceHallService {
     {
         List<ServiceHallDao> hallDaoList  = serviceHallEntity.findHallList();
         ServiceHallModel serviceHallModel = new ServiceHallModel(hallDaoList);
-        return Result.success(serviceHallModel.ServiceHalls(district));
+        List<ServiceHall_ComputedDistanceDTO> rets = serviceHallModel.ServiceHalls(district);
+        if( rets == null || rets.size() == 0 )
+            return Result.success("没有找到营业厅信息",rets);
+
+        return Result.success(rets);
     }
     /**
      * 新增网点

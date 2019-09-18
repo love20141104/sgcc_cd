@@ -114,10 +114,10 @@ public class ServiceHallModel {
     public List<ServiceHall_ComputedDistanceDTO> ServiceHalls(String district)
     {
         List<ServiceHallDao> daos = GetHalls(  district );
-        List<ServiceHall_ComputedDistanceDTO> dtos = Dao2Dto( m_AllHallDaoList , true );
+        List<ServiceHall_ComputedDistanceDTO> dtos = Dao2Dto( daos , false );
         if( dtos.size() < 1 )
             return null;
 
-        return GetDtos( dtos, 10 ,  5 );
+        return dtos;
     }
 }
