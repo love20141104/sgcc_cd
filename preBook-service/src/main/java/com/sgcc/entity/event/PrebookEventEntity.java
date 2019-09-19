@@ -22,12 +22,24 @@ public class PrebookEventEntity {
         prebookModel.dto2dao(new ArrayList<PrebookDTO>() {{
             add(prebookDTO);
         }});
+        //check 预约次数
+        if(prebookRedisRepository
+                .findAllByUserIdaAndPrebookDate(
+                        prebookDTO
+                                .getUserId()
+                        ,prebookDTO
+                                .getPrebookDate()
+                )
+                .size() > 1){
+            prebookDTO.setPrebookCode(null);
+            return prebookDTO;
 
+        }
         if (prebookRedisRepository.findAllByServiceHallIdAndPrebookDateAndPrebookStartTime(
                 prebookDTO.getServiceHallId()
                 , prebookDTO.getPrebookDate()
                 , prebookDTO.getPrebookStartTime()
-        ).size() > 4) {
+        ).size() > 3) {
                 return null;
         } else {
             synchronized (this) {
@@ -42,7 +54,6 @@ public class PrebookEventEntity {
                 } else {
                     try {
                         prebookRedisRepository.saveAll(prebookModel.getPreBookDaos());
-
                         //TODO 发MQ 持久化
                         return prebookDTO;
                     } catch (Exception e) {
