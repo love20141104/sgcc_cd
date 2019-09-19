@@ -1,5 +1,6 @@
 package com.sgcc.dao;
 
+import com.sgcc.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,8 @@ import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * 预约信息
@@ -57,5 +58,24 @@ public class PreBookDao implements Serializable {
 
     // 预约提交时间
     private Date submitDate;
+
+//    public PreBookDao(long livetime, String id, String userId, String serviceHallId, Date prebookDate,
+//                      Date prebookStartTime, String prebookCode, String contact, String contactTel, Date submitDate) {
+//
+//        this.livetime = DateUtils.getSeconds() + (DateUtils.daysBetweenTwoDate(new Date(), prebookDate) * 24 * 3600);
+//        this.id = id;
+//        this.userId = userId;
+//        this.serviceHallId = serviceHallId;
+//        this.prebookDate = prebookDate;
+//        this.prebookStartTime = prebookStartTime;
+//        this.prebookCode = prebookCode;
+//        this.contact = contact;
+//        this.contactTel = contactTel;
+//        this.submitDate = submitDate;
+//    }
+
+
+
+
 
 }

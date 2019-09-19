@@ -10,6 +10,7 @@
         <module name="domain-model" />
         <module name="dto-model" />
         <module name="exception" />
+        <module name="mq-service" />
         <module name="mq_service" />
         <module name="preBook-service" />
         <module name="question-service" />
@@ -26,6 +27,7 @@
       <module name="domain-model" target="1.8" />
       <module name="dto-model" target="1.8" />
       <module name="exception" target="1.8" />
+      <module name="mq-service" target="1.8" />
       <module name="mq_service" target="1.8" />
       <module name="preBook-service" target="1.8" />
       <module name="question-service" target="1.8" />
@@ -37,5 +39,21 @@
       <module name="utils" target="1.8" />
       <module name="wechat-service" target="1.8" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="cache-service" options="-parameters" />
+      <module name="dto-model" options="-parameters" />
+      <module name="exception" options="-parameters" />
+      <module name="mq-service" options="-parameters" />
+      <module name="preBook-service" options="-parameters" />
+      <module name="question-service" options="-parameters" />
+      <module name="serviceHall-service" options="-parameters" />
+      <module name="sgcc" options="-parameters" />
+      <module name="suggestion-service" options="-parameters" />
+      <module name="test-service" options="-parameters" />
+      <module name="utils" options="-parameters" />
+      <module name="wechat-service" options="-parameters" />
+    </option>
   </component>
 </project>
