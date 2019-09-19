@@ -14,7 +14,7 @@ public interface PrebookRedisRepository extends CrudRepository<PreBookDao,String
 
     List<PreBookDao> findAllByUserId(String userId);
 
-    List<PreBookDao> findAllByUserIdaAndPrebookDate(String userId,Date date);
+    List<PreBookDao> findAllByUserIdAndPrebookDate(String userId,Date date);
 
     List<PreBookDao> findAllByServiceHallId(String serviceHallId);
 

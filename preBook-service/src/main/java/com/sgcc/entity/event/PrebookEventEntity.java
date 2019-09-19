@@ -24,7 +24,7 @@ public class PrebookEventEntity {
         }});
         //check 预约次数
         if(prebookRedisRepository
-                .findAllByUserIdaAndPrebookDate(
+                .findAllByUserIdAndPrebookDate(
                         prebookDTO
                                 .getUserId()
                         ,prebookDTO
@@ -49,7 +49,7 @@ public class PrebookEventEntity {
                         prebookDTO.getServiceHallId()
                         , prebookDTO.getPrebookDate()
                         , prebookDTO.getPrebookStartTime()
-                ).size() > 4) {
+                ).size() > 3) {
                     return null;
                 } else {
                     try {
