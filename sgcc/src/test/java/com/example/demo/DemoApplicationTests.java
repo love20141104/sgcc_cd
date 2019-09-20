@@ -32,16 +32,21 @@ public class DemoApplicationTests {
 
     public static void main(String[] args) {
 
-
-            MyThread myThread2 = new MyThread();
-            myThread2.start();
+        Date d = new Date();
+        long l = d.getTime() - (14*3600*1000);
+        d = new Date(l);
+        Date d2 = new Date(d.toString());
+//            MyThread myThread2 = new MyThread();
+//            MyThread myThread = new MyThread();
+//            myThread.start();
+//            myThread2.start();
     }
 
      public static class MyThread extends Thread{
         //RestTemplate restTemplate = new RestTemplate();
         @Override
         public void run(){
-            String Url = "http://localhost:18624/ServiceHall/PrebookInfos/user/RIHAM";
+
             String param = "contact=联系人&contactTel=联系电话"
                     +"&prebookDate=2019-09-19T14:41:58.928Z"
                     +"&prebookStartTime=2019-09-19T14:41:58.928Z"
@@ -65,6 +70,7 @@ public class DemoApplicationTests {
 
 
             for(int i = 1;i<100;i++) {
+                String Url = "https://119.23.22.176:18624/ServiceHall/PrebookInfos/user/RIHAM"+i;
                 String json = "{\n" +
                         "  \"contact\": \"联系人\",\n" +
                         "  \"contactTel\": \"联系电话\",\n" +
@@ -73,11 +79,11 @@ public class DemoApplicationTests {
                         "  \"prebookStartTime\": \t \"2019-09-19T14:41:58.928Z\",\n" +
                         "  \"serviceHallId\": \"营业厅id2\",\n" +
                         "  \"submitDate\":  \"2019-09-19T14:41:58.928Z\",\n" +
-                        "  \"userId\": \"RIHAM"+(i/2)+"\"\n" +
+                        "  \"userId\": \"RIHAM"+i+"\"\n" +
                         "}";
                 System.out.println(
                         HttpRequest.sendPost(Url
-                                ,json) +"    userid : RIHAM"+(i/2)
+                                ,json) +"    userid : RIHAM"+i
 
                 );
 

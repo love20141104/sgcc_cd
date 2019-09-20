@@ -1,6 +1,7 @@
 package com.sgcc.controller;
 import com.example.result.Result;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
 import com.sgcc.service.ProbookService;
 import com.sgcc.service.ServiceHallService;
@@ -18,6 +19,9 @@ import io.swagger.annotations.ApiOperation;
 
 import javax.websocket.server.PathParam;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -79,13 +83,18 @@ public class ServiceHallController {
 
     /**
      * 根据营业亭id查询营业厅预约状态
-     * @param ServiceHallId
+     * @param serviceHallId
      * @return
      */
     @ApiOperation(value = "查询营业厅预约状态", notes = "")
-    @PostMapping(value = "/PrebookInfo/ServiceHall-Id/{ServiceHallId}")
-    public Result submitPrebookInfo(@PathVariable String ServiceHallId) {
-        return Result.success(probookService.getPrebookInfosByServiceHall(ServiceHallId));
+    @PostMapping(value = "/PrebookInfo/ServiceHall-Id/{serviceHallId}")
+
+    public Result submitPrebookInfo(
+            @PathVariable String serviceHallId
+            ,@RequestParam
+                    String prebookDate
+    ) {
+        return Result.success(probookService.getPrebookInfosByServiceHall(serviceHallId,prebookDate));
     }
 
 

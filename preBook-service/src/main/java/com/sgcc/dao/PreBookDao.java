@@ -38,11 +38,11 @@ public class PreBookDao implements Serializable {
 
     // 预约业务办理日期
     @Indexed
-    private Date prebookDate;
+    private String prebookDate;
 
-    // 预约业务办理开始时间
+    // 预约业务办理时间段
     @Indexed
-    private Date prebookStartTime;
+    private String prebookStartTime;
 
     // 办理业务类型
 //    private String businessTypeId;

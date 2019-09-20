@@ -22,10 +22,10 @@ public class PrebookDTO implements Serializable {
     private String serviceHallId;
 
     // 预约业务办理日期
-    private Date prebookDate;
+    private String prebookDate;
 
-    // 预约业务办理开始时间
-    private Date prebookStartTime;
+    // 预约业务办理时间段
+    private String prebookStartTime;
 
     // 办理业务类型
 //    private String businessTypeId;
