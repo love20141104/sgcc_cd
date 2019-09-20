@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 意见建议
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor  //生成无参构造函数
 public class SuggestionDao {
 
+
     private String id;
 
     // 意见id
@@ -21,9 +23,6 @@ public class SuggestionDao {
 
     // 用户id
     private String userId;
-
-    // 意见标题
-    private String suggestionTitle;
 
     // 意见内容
     private String suggestionContent;
@@ -35,6 +34,13 @@ public class SuggestionDao {
     private String suggestionTel;
 
     // 意见提交时间
-    private Timestamp submitDate;
+    private Date submitDate;
+
+    private String img_1;
+
+    private String img_2;
+
+    private String img_3;
+
 
 }

@@ -20,14 +20,14 @@ public class SuggestionImgDao {
     // 意见id
     private String imgId;
 
-    // 图片url
-    private String imgUrl;
-
     // 用户id
     private String userId;
 
+    // 图片url
+    private String imgUrl;
+
     // 意见提交时间
-    private Timestamp submitDate;
+    private Date submitDate;
 
 
 }
