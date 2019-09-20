@@ -12,5 +12,14 @@ public class SuggestionRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    public void save(SuggestionDao dao )
+    {
+
+    }
+
+    public SuggestionDao findAllByUserId(String userId )
+    {
+        return null;
+    }
 
 }

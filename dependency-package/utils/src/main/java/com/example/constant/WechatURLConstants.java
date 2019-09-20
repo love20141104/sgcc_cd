@@ -15,6 +15,8 @@ public class WechatURLConstants {
 
     public static final  String  GET_JSAPI_TICKET =  BASE+"/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 
+    public static final  String  URL_GET_MEDIA =  BASE+"/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID";
+
     public static final  String mch_id = "1550585661";
 
     public static final  String APPKEY = "SSCDGDabcdefghijklmnopqrstuvwxyz";

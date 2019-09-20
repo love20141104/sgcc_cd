@@ -11,6 +11,8 @@ import com.sgcc.dtomodel.wechat.WXConfigDTO;
 import com.sgcc.entity.event.AccessTokenEntity;
 import com.sgcc.entity.query.AccessTokenQueryEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -79,5 +81,20 @@ public class WeChatEntity {
      */
     public WXConfigDTO getSignature(String url) {
         return new SignatureModel(getJsApiTicket().getTicket(),url).build();
+    }
+
+    public byte[] downloadMedia(String mediaId)
+    {
+        String URL = WechatURLConstants.URL_GET_MEDIA.replace(
+                "ACCESS_TOKEN",getAccessToken().getAccess_token()
+                ).replace(
+                "MEDIA_ID"
+                ,mediaId
+        );
+        ResponseEntity<byte[]> rsp = restTemplate.getForEntity(URL,byte[].class );
+        if( rsp.getStatusCode() == HttpStatus.OK ){
+            return rsp.getBody();
+        }
+        return null;
     }
 }
