@@ -13,7 +13,11 @@ public class SuggestionViewDTO implements Serializable{
     private static final long serialVersionUID = -1820156418106116259L;
     private String suggestionId;
     private String suggestionContent;
+    private String media_1;
     private String img_1;
+    private String media_2;
     private String img_2;
+    private String media_3;
     private String img_3;
+    private String suggestionReply;
 }

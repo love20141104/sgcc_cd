@@ -43,7 +43,7 @@ public class ServiceHallController {
      */
     @ApiOperation(value = "Nearest ServiceHall", notes = "")
     @GetMapping(value = "/NearestServiceHalls")
-    public Result getNearestServiceHalls(@RequestParam Double lat,@RequestParam Double lng) {
+    public Result NearestServiceHalls(@RequestParam Double lat,@RequestParam Double lng) {
         return serviceHallService.NearestServiceHalls(lat,lng);
     }
 
@@ -54,7 +54,7 @@ public class ServiceHallController {
      */
     @ApiOperation(value = "ServiceHall District", notes = "")
     @GetMapping(value = "/Districts/{district}")
-    public Result getNearestServiceHalls(@PathVariable String district) {
+    public Result ServiceHalls(@PathVariable String district) {
         return serviceHallService.serviceHalls(district);
     }
 
