@@ -63,7 +63,7 @@ public class ServiceHallController {
      * @param openId
      * @return
      */
-    @ApiOperation(value = "预约信息", notes = "")
+    @ApiOperation(value = "查询用户的预约信息", notes = "")
     @GetMapping(value = "/PrebookInfos/user/{openId}")
     public Result getPrebookInfos(@PathVariable String openId) {
         return probookService.getPrebookInfosByUser(openId);
@@ -73,7 +73,7 @@ public class ServiceHallController {
      * 用户提交在线预约
      * @return
      */
-    @ApiOperation(value = "提交预约信息", notes = "")
+    @ApiOperation(value = "用户提交在线预约", notes = "")
     @PostMapping(value = "/PrebookInfos/user/{openId}")
     public Result submitPrebookInfo(@RequestBody PrebookDTO prebookDTO,@PathVariable String openId) {
         System.out.println("controller:threadID : "+Thread.currentThread().getId());
@@ -94,9 +94,6 @@ public class ServiceHallController {
             ,@RequestParam
                     String prebookDate
     ) {
-
-
-
         return probookService.getPrebookInfosByServiceHall(serviceHallId,prebookDate);
     }
 

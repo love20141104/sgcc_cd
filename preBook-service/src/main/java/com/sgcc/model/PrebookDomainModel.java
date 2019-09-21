@@ -19,10 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @NoArgsConstructor
 @Data
@@ -59,6 +56,7 @@ public class PrebookDomainModel {
                 ));
             });
         }};
+        Collections.sort(this.prebookDTOS);
     }
 
 //    public PrebookDomainModel dto2dao(List<PrebookDTO> prebookDTOS) {
