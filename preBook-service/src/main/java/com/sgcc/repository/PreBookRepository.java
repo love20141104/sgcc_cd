@@ -49,8 +49,8 @@ public class PreBookRepository {
                 ps.setString(2,preBookDaoList.get(i).getUserId());
                 ps.setString(3,preBookDaoList.get(i).getServiceHallId());
                 ps.setString(4,preBookDaoList.get(i).getPrebookCode());
-                ps.setDate(5,new Date(preBookDaoList.get(i).getPrebookDate().getTime()));
-                ps.setDate(6,new Date(preBookDaoList.get(i).getPrebookStartTime().getTime()));
+                ps.setString(5,preBookDaoList.get(i).getPrebookDate());
+                ps.setString(6,preBookDaoList.get(i).getPrebookStartTime());
                 ps.setString(7,preBookDaoList.get(i).getContact());
                 ps.setString(8,preBookDaoList.get(i).getContactTel());
                 ps.setDate(9,new Date(preBookDaoList.get(i).getSubmitDate().getTime()));

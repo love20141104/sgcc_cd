@@ -1,7 +1,9 @@
 package com.sgcc.amqp.consumer;
 
+import com.sgcc.dao.PreBookDao;
 import com.sgcc.dto.PrebookInfoSaveDTO;
 import com.sgcc.entity.PrebookEntity;
+import com.sgcc.entity.event.PrebookEventEntity;
 import com.sgcc.entity.query.PrebookQueryEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
@@ -17,14 +19,13 @@ public class PrebookConsumer {
     private PrebookQueryEntity prebookQueryEntity;
 
     @Autowired
-    private PrebookEntity prebookEntity;
+    private PrebookEventEntity prebookEventEntity;
 
     @JmsListener(destination = "prebook_mq")
-    public void savePrebook(PrebookInfoSaveDTO prebookInfoSaveDTO){
-        System.out.println(prebookInfoSaveDTO.getIds());
+    public void savePrebook(PreBookDao preBookDao){
         try{
-            prebookEntity.savePrebooks(
-                    prebookQueryEntity.findPrebookList(prebookInfoSaveDTO.getIds())
+            prebookEventEntity.savePrebooks(
+                    preBookDao
             );
         }catch (Exception e){
             e.printStackTrace();
