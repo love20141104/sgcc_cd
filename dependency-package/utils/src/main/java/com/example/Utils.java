@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Utils {
@@ -59,6 +60,11 @@ public class Utils {
         return string1;
     }
 
+    public static String GetCurrentTime()
+    {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(new Date());
+    }
 //    public static String createSign(Map params, String key) {
 //
 ////        StringBuffer sbkey = new StringBuffer();

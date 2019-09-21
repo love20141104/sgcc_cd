@@ -42,5 +42,4 @@ public class SuggestionDao {
 
     private String img_3;
 
-
 }

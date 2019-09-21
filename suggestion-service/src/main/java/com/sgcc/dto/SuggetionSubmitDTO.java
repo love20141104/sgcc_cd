@@ -14,10 +14,10 @@ public class SuggetionSubmitDTO implements Serializable {
     private static final long serialVersionUID = -2451743385362120087L;
     private String userId;
     private String suggestionContent;
-    private Date suggestionContact;
-    private Date suggestionTel;
-    private String img_1;
-    private String img_2;
-    private String img_3;
+    private String suggestionContact;
+    private String suggestionTel;
+    private String media_1;
+    private String media_2;
+    private String media_3;
 
 }
