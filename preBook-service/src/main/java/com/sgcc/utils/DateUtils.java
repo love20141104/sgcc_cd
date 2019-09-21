@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 public class DateUtils {
     /**
      * 获取今天还剩多少秒
+     *
      * @return
      */
     public static long getSeconds() {
@@ -21,6 +22,7 @@ public class DateUtils {
 
     /**
      * 计算两个日期差几天
+     *
      * @param dateFrom
      * @param dateTo
      * @return
@@ -34,7 +36,7 @@ public class DateUtils {
         dateTo.setSeconds(0);
         long from = dateFrom.getTime();
         long to = dateTo.getTime();
-        return  ((to - from) / (1000 * 60 * 60 * 24L));
+        return ((to - from) / (1000 * 60 * 60 * 24L));
     }
 
 }

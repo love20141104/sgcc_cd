@@ -25,7 +25,7 @@ import java.util.UUID;
 public class PreBookDao implements Serializable {
     private static final long serialVersionUID = -5166501578939845645L;
     @TimeToLive
-    private long livetime ; //TTL
+    private long livetime; //TTL
     @Id
     private String id;
     // 用户id
@@ -73,9 +73,6 @@ public class PreBookDao implements Serializable {
 //        this.contactTel = contactTel;
 //        this.submitDate = submitDate;
 //    }
-
-
-
 
 
 }

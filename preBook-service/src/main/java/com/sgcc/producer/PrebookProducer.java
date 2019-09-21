@@ -20,8 +20,8 @@ public class PrebookProducer {
     //在线预约消息队列
     private static final String prebook_MQ = "prebook_mq";
 
-    public void prebookMQ(PreBookDao preBookDao){
-        jmsMessagingTemplate.convertAndSend(prebook_MQ,preBookDao);
+    public void prebookMQ(PreBookDao preBookDao) {
+        jmsMessagingTemplate.convertAndSend(prebook_MQ, preBookDao);
     }
 
 

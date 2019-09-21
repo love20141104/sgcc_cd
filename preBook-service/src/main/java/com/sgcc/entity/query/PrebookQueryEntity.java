@@ -99,10 +99,11 @@ public class PrebookQueryEntity {
 
     /**
      * 根据用户id查预约信息
+     *
      * @param openId
      * @return
      */
-    public List<PreBookDao> findAllByUserId(String openId){
+    public List<PreBookDao> findAllByUserId(String openId) {
         return prebookRedisRepository.findAllByUserId(openId);
     }
 
