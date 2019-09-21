@@ -20,7 +20,10 @@ public enum TopErrorCode {
     EXEC_PROC_ERR(9 , "启动流程失败"),
     PARENT_NOT_EXIST(10 , "父节点不存在"),
     EXEC_PUSH_DOWN_ERR(11 , "下推失败"),
-    GENERAL_ERR( 100 , "通用错误" );
+    GENERAL_ERR( 100 , "通用错误" ),
+    PREBOOK_FULL( 10001 , "该时间段预约已满" ),
+    EXCEEDING_LIMIT( 10002 , "超过最大预约次数" ),
+    PARAMETER_ERR( 101 , "参数错误" );
 
 
     //错误码

@@ -51,12 +51,28 @@ public class PrebookQueryEntity {
      * @param date
      * @return
      */
-    public boolean findAllByUserIdAndPrebookDate(String userId, String date) {
+    public boolean findAllByUserIdAndPrebookDate(String userId, String date, String prebookStartTime) {
         List<PreBookDao> prebookDaos =
                 prebookRedisRepository.findAllByUserIdAndPrebookDate(userId, date);
-        if (null == prebookDaos || prebookDaos.size() < 2) {
+        //判断是否为空
+        if (null == prebookDaos  ) {
             return false;
-        } else {
+        }
+        //若不为空,且当日预约次数未达到限制
+        else if(prebookDaos.size() < 2){
+            //判断是否存在相同时间段的预约
+            for (PreBookDao prebookDao : prebookDaos) {
+                //如果有同一个时间段的预约信息，则不允许相同预约重复提交
+                if (prebookDao.getPrebookStartTime().equals(prebookStartTime)) {
+                    return true;
+                }
+            }
+            //如果没有同一个时间段的预约信息，则可以继续提交
+            return false;
+        }
+        //预约次数达到限制，不可以预约
+        else {
+            System.out.println("userid:"+prebookDaos.get(0).getUserId()+" userid:"+userId+"  Size:"+prebookDaos.size());
             return true;
         }
     }

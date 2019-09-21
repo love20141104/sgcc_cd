@@ -45,11 +45,25 @@ public class ProbookService {
             return Result.failure(TopErrorCode.GENERAL_ERR, "openId为空");
         }
         //参数检查 end
-        List<PreBookDao> preBookDaos = prebookQueryEntity.findAllByUserId(openId);
-        PrebookDomainModel prebookModel = new PrebookDomainModel(preBookDaos);
-        prebookModel.buildPrebookDTOS();
-        List<PrebookDTO> prebookDTOS = prebookModel.getPrebookDTOS();
+        List<PrebookDTO> prebookDTOS = this.getPrebookInfos(openId);
         return Result.success(prebookDTOS);
+    }
+
+    /**
+     * 根据用户id查询所有的预约信息
+     *
+     * @param openId
+     * @return
+     */
+    private List<PrebookDTO> getPrebookInfos(String openId){
+        //根据用户openid查询该用户近3天的所有预约信息
+        List<PreBookDao> preBookDaos = prebookQueryEntity.findAllByUserId(openId);
+        //根据preBookDaos构造PrebookDomainModel
+        PrebookDomainModel prebookModel = new PrebookDomainModel(preBookDaos);
+        //根据preBookDaos构造preBookDTOs
+        prebookModel.buildPrebookDTOS();
+        //返回prebookDTOS
+        return prebookModel.getPrebookDTOS();
     }
 
     /**
@@ -75,25 +89,41 @@ public class ProbookService {
                 throw new RuntimeException("联系人相关信息为空");
             }
             DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-            format1.parse(prebookDTO.getPrebookDate());
+            String S = format1.format(format1.parse(prebookDTO.getPrebookDate().trim()));
+            prebookDTO.setPrebookDate(S);
+            prebookDTO.setPrebookStartTime(prebookDTO.getPrebookStartTime().trim());
+            prebookDTO.setContact(prebookDTO.getContact().trim());
+            prebookDTO.setUserId(prebookDTO.getUserId().trim());
+            prebookDTO.setContactTel(prebookDTO.getContactTel().trim());
+            prebookDTO.setServiceHallId(prebookDTO.getServiceHallId().trim());
             //参数检查 end
 
             System.out.println("service:threadID : " + Thread.currentThread().getId());
+            //构造PrebookDomainModel
             PrebookDomainModel prebookDomainModel = new PrebookDomainModel(prebookDTO);
+            //dto转dao
             prebookDomainModel.buildPrebookDao();
             //用户提交在线预约
             prebookDTO = this.submitPrebookInfo(prebookDomainModel);
+            //获取提交后的预约信息列表
+            List<PrebookDTO> prebookDTOS = this.getPrebookInfos(openId);
+
             if (null != prebookDTO) {
                 if (!Strings.isNullOrEmpty(prebookDTO.getPrebookCode())) {
-                    return Result.success(prebookDTO);
+                    //该用户预约成功
+                    return Result.success(prebookDTOS);
                 } else {
-                    return Result.failure(TopErrorCode.GENERAL_ERR, "超过最大预约次数");
+                    //预约号为空,该用户预约达到最大次数,或提交过相同预约信息
+                    return Result.failure(TopErrorCode.EXCEEDING_LIMIT, prebookDTOS);
                 }
             } else {
-                return Result.failure(TopErrorCode.GENERAL_ERR, "该时间预约已满");
+                //该时段预约已满
+                return Result.failure(TopErrorCode.PREBOOK_FULL, prebookDTOS);
             }
-        } catch (ParseException e) {
-            return Result.failure(TopErrorCode.GENERAL_ERR, "参数错误 ");
+        } catch (Exception e) {
+            List<PrebookDTO> prebookDTOS = this.getPrebookInfos(openId);
+            //未知错误导致的预约失败
+            return Result.failure(TopErrorCode.PARAMETER_ERR, prebookDTOS);
         }
 
     }
@@ -105,10 +135,26 @@ public class ProbookService {
      * @return
      */
     private PrebookDTO submitPrebookInfo(PrebookDomainModel prebookDomainModel) {
-        if (prebookQueryEntity.findAllByUserIdAndPrebookDate(prebookDomainModel.getPrebookDTO().getUserId(), prebookDomainModel.getPrebookDTO().getPrebookDate())) {
+        //用户当天的预约次数是否超过限制
+        if (prebookQueryEntity
+                .findAllByUserIdAndPrebookDate
+                        (
+                                //用户openid
+                                prebookDomainModel
+                                        .getPrebookDTO().getUserId()
+                                //预约日期
+                                , prebookDomainModel
+                                        .getPrebookDTO().getPrebookDate()
+                                //预约时间段
+                                , prebookDomainModel
+                                        .getPrebookDTO().getPrebookStartTime()
+                        )
+                ) {
+            //预约次数超过限制,将预约号置空
             prebookDomainModel.getPrebookDTO().setPrebookCode(null);
             return prebookDomainModel.getPrebookDTO();
         }
+        //判断此营业厅该时段预约次数是否超过限制
         if (prebookQueryEntity.findAllByServiceHallIdAndPrebookDateAndPrebookStartTime(
                 prebookDomainModel.getPrebookDTO().getServiceHallId()
                 , prebookDomainModel.getPrebookDTO().getPrebookDate()
@@ -116,8 +162,9 @@ public class ProbookService {
             return null;
         } else {
             synchronized (this) {
+
                 System.out.println("PrebookDomainModel:threadID : " + Thread.currentThread().getId());
-                //取出数量
+                //再次判断此营业厅该时段预约次数是否超过限制
                 if (prebookQueryEntity.findAllByServiceHallIdAndPrebookDateAndPrebookStartTime(
                         prebookDomainModel.getPrebookDTO().getServiceHallId()
                         , prebookDomainModel.getPrebookDTO().getPrebookDate()
@@ -126,9 +173,10 @@ public class ProbookService {
                 } else {
                     try {
                         //存入redis
-                        prebookEventEntity.cacheSubmitPreBookDao(prebookDomainModel.getPreBookDao());//TODO
-                        //TODO 发MQ 持久化
+                        prebookEventEntity.cacheSubmitPreBookDao(prebookDomainModel.getPreBookDao());
+                        //发MQ 持久化
                         prebookProducer.prebookMQ(prebookDomainModel.getPreBookDao());//TODO
+                        //返回预约信息
                         return prebookDomainModel.getPrebookDTO();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -147,7 +195,7 @@ public class ProbookService {
      * @param serviceHallId
      */
     public Result getPrebookInfosByServiceHall(String serviceHallId, String prebookDate) {
-        //参数检查
+        //参数检查 start
         try {
             DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
             format1.parse(prebookDate);
@@ -159,14 +207,19 @@ public class ProbookService {
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR, "参数格式不正确");
         }
+        //参数检查 end
 
-        List<PreBookDao> preBookDaos = new ArrayList<>(prebookQueryEntity.getPrebookInfosByServiceHall(serviceHallId, prebookDate));
+        List<PreBookDao> preBookDaos = new ArrayList<>(
+                //查询该营业厅指定日期的全部预约信息
+                prebookQueryEntity.getPrebookInfosByServiceHall(serviceHallId, prebookDate)
+        );
         //根据营业厅id和预约的日期构造PrebookDomainModel
         PrebookDomainModel prebookModel = new PrebookDomainModel(preBookDaos);
+        //根据preBookDaos构造preBookDTOs
         prebookModel.buildPrebookDTOS();
         //清洗营业厅预约信息,返回营业厅的预约状态
-        ServiceHallPrebookStatusDTO serviceHallPrebookStatus = prebookModel.getServiceHallPrebookStatus(serviceHallId, prebookDate);
-
+        ServiceHallPrebookStatusDTO serviceHallPrebookStatus = prebookModel
+                .getServiceHallPrebookStatus(serviceHallId, prebookDate);
         return Result.success(serviceHallPrebookStatus);
 
     }

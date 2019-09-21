@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PrebookDTO implements Serializable {
+public class PrebookDTO implements Serializable,Comparable<PrebookDTO> {
     private static final long serialVersionUID = -3090200043033631931L;
 
     // 用户id
@@ -41,4 +41,13 @@ public class PrebookDTO implements Serializable {
 
     // 预约提交时间
     private Date submitDate;
+
+    @Override
+    public int compareTo(PrebookDTO prebookDTO) {
+        if(this.getPrebookDate().compareTo(prebookDTO.getPrebookDate()) == 0){
+            return this.getPrebookStartTime().compareTo(prebookDTO.getPrebookStartTime());
+        }else {
+            return this.getPrebookDate().compareTo(prebookDTO.getPrebookDate());
+        }
+    }
 }

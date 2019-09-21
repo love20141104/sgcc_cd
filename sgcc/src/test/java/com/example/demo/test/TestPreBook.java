@@ -1,190 +1,317 @@
-//package com.example.demo.test;
-//
-//import com.example.demo.DemoApplicationTests;
-//import com.sgcc.dao.BusinessTypeDao;
-//import com.sgcc.dao.PreBookDao;
-//import com.sgcc.repository.BusinessTypeRepository;
-////import com.sgcc.repository.PreBookRepository;
-//import org.junit.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//
-//import java.sql.Timestamp;
-//import java.util.ArrayList;
-//import java.util.Date;
-//import java.util.List;
-//import java.util.UUID;
-//
-//
-//public class TestPreBook extends DemoApplicationTests{
-//
-//    @Autowired
-//    private PreBookRepository preBookRepository;
-//
-//    @Autowired
-//    private BusinessTypeRepository businessTypeRepository;
-//
-//    /**************************************业务类型增删改查*************************************/
-//    /**
-//     * 查询
-//     */
-//    @Test
-//    public void getBTypeList(){
-//        List<BusinessTypeDao> businessTypeDaoList = businessTypeRepository.findAllBTypeList();
-//        for (int i = 0; i < businessTypeDaoList.size(); i++) {
-//            System.out.println(businessTypeDaoList.get(i).getBusinessType());
+package com.example.demo.test;
+
+import com.example.constant.PrebookStartTimeConstants;
+import com.example.demo.HttpRequest;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.*;
+
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = TestPreBook.class)
+public class TestPreBook{
+
+    /**
+     * 10个用户同时提交随机三天的预约
+     */
+    @Test
+    public void test1(){
+        for(int i = 0;i<10;i++){
+            MyThread myThread = new MyThread();
+            MyThread myThread2 = new MyThread();
+            MyThread myThread3 = new MyThread();
+            MyThread myThread4 = new MyThread();
+            MyThread myThread5 = new MyThread();
+            MyThread myThread6 = new MyThread();
+            MyThread myThread7 = new MyThread();
+            MyThread myThread8 = new MyThread();
+            MyThread myThread9 = new MyThread();
+            MyThread myThread0 = new MyThread();
+            myThread.setUserId("RIHAM1");
+            myThread2.setUserId("RIHAM2");
+            myThread3.setUserId("RIHAM3");
+            myThread4.setUserId("RIHAM4");
+            myThread5.setUserId("RIHAM5");
+            myThread6.setUserId("RIHAM6");
+            myThread7.setUserId("RIHAM7");
+            myThread8.setUserId("RIHAM8");
+            myThread9.setUserId("RIHAM9");
+            myThread0.setUserId("RIHAM0");
+            myThread.start();
+            myThread2.start();
+            myThread3.start();
+            myThread4.start();
+            myThread5.start();
+            myThread6.start();
+            myThread7.start();
+            myThread8.start();
+            myThread9.start();
+            myThread0.start();
+            try {
+                Thread.currentThread().sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 10个用户同时提交同一天不同时间段的预约
+     */
+    @Test
+     public void test4(){
+        for(int i = 0;i<10;i++){
+            MyThread4 myThread = new MyThread4();
+            MyThread4 myThread2 = new MyThread4();
+            MyThread4 myThread3 = new MyThread4();
+            MyThread4 myThread4 = new MyThread4();
+            MyThread4 myThread5 = new MyThread4();
+            MyThread4 myThread6 = new MyThread4();
+            MyThread4 myThread7 = new MyThread4();
+            MyThread4 myThread8 = new MyThread4();
+            MyThread4 myThread9 = new MyThread4();
+            MyThread4 myThread0 = new MyThread4();
+            myThread.setUserId("RIHAM1");
+            myThread2.setUserId("RIHAM2");
+            myThread3.setUserId("RIHAM3");
+            myThread4.setUserId("RIHAM4");
+            myThread5.setUserId("RIHAM5");
+            myThread6.setUserId("RIHAM6");
+            myThread7.setUserId("RIHAM7");
+            myThread8.setUserId("RIHAM8");
+            myThread9.setUserId("RIHAM9");
+            myThread0.setUserId("RIHAM0");
+            myThread.start();
+            myThread2.start();
+            myThread3.start();
+            myThread4.start();
+            myThread5.start();
+            myThread6.start();
+            myThread7.start();
+            myThread8.start();
+            myThread9.start();
+            myThread0.start();
+            try {
+                Thread.currentThread().sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * 10个用户同时提交同一天同一个时间段的预约
+     */
+    @Test
+    public void test3(){
+//        for(int i = 0;i<10;i++){
+        MyThread3 myThread = new MyThread3();
+        MyThread3 myThread2 = new MyThread3();
+        MyThread3 myThread3 = new MyThread3();
+        MyThread3 myThread4 = new MyThread3();
+        MyThread3 myThread5 = new MyThread3();
+        MyThread3 myThread6 = new MyThread3();
+        MyThread3 myThread7 = new MyThread3();
+        MyThread3 myThread8 = new MyThread3();
+        MyThread3 myThread9 = new MyThread3();
+        MyThread3 myThread0 = new MyThread3();
+        myThread.setUserId("RIHAM1");
+        myThread2.setUserId("RIHAM2");
+        myThread3.setUserId("RIHAM3");
+        myThread4.setUserId("RIHAM4");
+        myThread5.setUserId("RIHAM5");
+        myThread6.setUserId("RIHAM6");
+        myThread7.setUserId("RIHAM7");
+        myThread8.setUserId("RIHAM8");
+        myThread9.setUserId("RIHAM9");
+        myThread0.setUserId("RIHAM0");
+        myThread.start();
+        myThread2.start();
+        myThread3.start();
+        myThread4.start();
+        myThread5.start();
+        myThread6.start();
+        myThread7.start();
+        myThread8.start();
+        myThread9.start();
+        myThread0.start();
 //        }
-//    }
-//
-//
-//    /**
-//     * 增加
-//     */
-//    @Test
-//    public void addBType(){
-//        List<BusinessTypeDao> businessTypeDaoList = new ArrayList<BusinessTypeDao>();
-//        BusinessTypeDao dao = null;
-//        dao= new BusinessTypeDao();
-//        dao.setId("10001");
-//        dao.setBusinessTypeId(UUID.randomUUID().toString().substring(0,28));
-//        dao.setBusinessType("一级业务");
-//        dao.setOrder(101);
-//        businessTypeDaoList.add(dao);
-//
-//        dao= new BusinessTypeDao();
-//        dao.setId("10002");
-//        dao.setBusinessTypeId(UUID.randomUUID().toString().substring(0,28));
-//        dao.setBusinessType("二级业务");
-//        dao.setOrder(102);
-//        businessTypeDaoList.add(dao);
-//
-//        businessTypeRepository.addBType(businessTypeDaoList);
-//    }
-//
-//    /**
-//     * 删除
-//     */
-//    @Test
-//    public void delBType(){
-//        List<BusinessTypeDao> businessTypeDaoList = new ArrayList<BusinessTypeDao>();
-//        BusinessTypeDao dao =null;
-//        dao = new BusinessTypeDao();
-//        dao.setBusinessTypeId("5a2ba620-a08e-4971-a7b2-c893");
-//
-//        businessTypeDaoList.add(dao);
-//        dao = new BusinessTypeDao();
-//        dao.setBusinessTypeId("3e5b94cb-ff31-4be6-836b-4eca");
-//        businessTypeDaoList.add(dao);
-//
-//        businessTypeRepository.delBType(businessTypeDaoList);
-//    }
-//
-//    /**
-//     * 修改
-//     */
-//    @Test
-//    public void updateBType(){
-//        List<BusinessTypeDao> businessTypeDaoList = new ArrayList<BusinessTypeDao>();
-//        BusinessTypeDao dao =null;
-//        dao = new BusinessTypeDao();
-//        dao.setBusinessTypeId("5a2ba620-a08e-4971-a7b2-c893");
-//        dao.setBusinessType("特级业务");
-//        businessTypeDaoList.add(dao);
-//
-//        dao = new BusinessTypeDao();
-//        dao.setBusinessTypeId("3e5b94cb-ff31-4be6-836b-4eca");
-//        dao.setBusinessType("超级业务");
-//        businessTypeDaoList.add(dao);
-//
-//        businessTypeRepository.updateBType(businessTypeDaoList);
-//    }
-//
-//
-//    /**************************************预约信息增删改查*************************************/
-//    /**
-//     * 查询
-//     */
-//    @Test
-//    public void getPreBookList(){
-//        preBookRepository.findAllPreBookList();
-//    }
-//
-//
-//    /**
-//     * 增加
-//     */
-//    @Test
-//    public void addPreBook(){
-//        List<PreBookDao> PreBookDaoList = new ArrayList<PreBookDao>();
-//        PreBookDao dao = null;
-//        dao= new PreBookDao();
-//        dao.setId("10001");
-//        dao.setUserId("6666");
-//        dao.setServiceHallId("010f7bce-d594-4e0f-a");
-//        dao.setPrebookDate(new Date());
-//        dao.setPrebookStartTime(new Timestamp(new Date().getTime()));
-//        dao.setBusinessTypeId("166566");
-//        dao.setPrebookCode("4646464");
-//        dao.setContact("张三");
-//        dao.setContactTel("3333333");
-//        dao.setSubmitDate(new Timestamp(new Date().getTime()));
-//        PreBookDaoList.add(dao);
-//
-//        dao= new PreBookDao();
-//        dao.setId("10002");
-//        dao.setUserId("8888");
-//        dao.setServiceHallId("010f7bce-d594-4e0f-a");
-//        dao.setPrebookDate(new Date());
-//        dao.setPrebookStartTime(new Timestamp(new Date().getTime()));
-//        dao.setBusinessTypeId("166566");
-//        dao.setPrebookCode("4646464");
-//        dao.setContact("李四");
-//        dao.setContactTel("4444444");
-//        dao.setSubmitDate(new Timestamp(new Date().getTime()));
-//        PreBookDaoList.add(dao);
-//
-//        preBookRepository.addPreBook(PreBookDaoList);
-//    }
-//
-//    /**
-//     * 删除
-//     */
-//    @Test
-//    public void delPreBook(){
-//        List<PreBookDao> PreBookDaoList = new ArrayList<PreBookDao>();
-//        PreBookDao dao =null;
-//        dao = new PreBookDao();
-//        dao.setId("10001");
-//
-//        PreBookDaoList.add(dao);
-//        dao = new PreBookDao();
-//        dao.setId("10002");
-//        PreBookDaoList.add(dao);
-//
-//        preBookRepository.delPreBook(PreBookDaoList);
-//    }
-//
-//    /**
-//     * 修改
-//     */
-//    @Test
-//    public void updatePreBook(){
-//        List<PreBookDao> PreBookDaoList = new ArrayList<PreBookDao>();
-//        PreBookDao dao =null;
-//        dao = new PreBookDao();
-//        dao.setId("10001");
-//        dao.setContact("王麻子");
-//        dao.setContactTel("9999999");
-//        PreBookDaoList.add(dao);
-//
-//        dao = new PreBookDao();
-//        dao.setId("10002");
-//        dao.setContact("王武");
-//        dao.setContactTel("5555555");
-//        PreBookDaoList.add(dao);
-//
-//        preBookRepository.updatePreBook(PreBookDaoList);
-//    }
-//
-//
-//
-//}
+    }
+
+
+
+
+
+    /**、
+     * 单用户提交10次预约,日期固定随机，时间段随机
+     */
+    @Test
+    public void test2(){
+        for(int i = 0;i<10;i++){
+            MyThread2 myThread = new MyThread2();
+            myThread.setUserId("RIHAM1");
+            myThread.start();
+            try {
+                Thread.currentThread().sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class MyThread2 extends Thread{
+        //RestTemplate restTemplate = new RestTemplate();
+
+        String userId = "RIHAM";
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        @Override
+        public void run(){
+
+            Random rand = new Random();
+
+//            for(int i = 1;i<20;i++) {
+            String Url = "http://localhost:18624/ServiceHall/PrebookInfos/user/"+userId;
+            String json = "{\n" +
+                    "  \"contact\": \"联系人\",\n" +
+                    "  \"contactTel\": \"联系电话\",\n" +
+                    "  \"prebookCode\": \"\",\n" +
+                    "  \"prebookDate\":"+" \"2019-09-2"+3+"\",\n" +
+                    "  \"prebookStartTime\": \t \""+ PrebookStartTimeConstants.TIME_LIST.get(rand.nextInt(5))+"\",\n" +
+                    "  \"serviceHallId\": \"营业厅id2\",\n" +
+                    "  \"submitDate\":  \"2019-09-21T14:41:58.928Z\",\n" +
+                    "  \"userId\": \""+userId+"\"\n" +
+                    "}";
+            System.out.println(
+                    HttpRequest.sendPost(Url
+                            ,json) +"    userid : "+userId
+
+            );
+
+//            }
+
+        }
+    }
+
+
+    public class MyThread3 extends Thread{
+        //RestTemplate restTemplate = new RestTemplate();
+
+        String userId = "RIHAM";
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        @Override
+        public void run(){
+
+            Random rand = new Random();
+
+//            for(int i = 1;i<20;i++) {
+            String Url = "http://localhost:18624/ServiceHall/PrebookInfos/user/"+userId;
+            String json = "{\n" +
+                    "  \"contact\": \"联系人\",\n" +
+                    "  \"contactTel\": \"联系电话\",\n" +
+                    "  \"prebookCode\": \"\",\n" +
+                    "  \"prebookDate\":"+" \"2019-09-2"+3+"\",\n" +
+                    "  \"prebookStartTime\": \t \""+ PrebookStartTimeConstants.TIME_LIST.get(3)+"\",\n" +
+                    "  \"serviceHallId\": \"营业厅id2\",\n" +
+                    "  \"submitDate\":  \"2019-09-21T14:41:58.928Z\",\n" +
+                    "  \"userId\": \""+userId+"\"\n" +
+                    "}";
+            System.out.println(
+                    HttpRequest.sendPost(Url
+                            ,json) +"    userid : "+userId
+
+            );
+
+//            }
+
+        }
+    }
+
+    public class MyThread extends Thread{
+        //RestTemplate restTemplate = new RestTemplate();
+
+        String userId = "RIHAM";
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        @Override
+        public void run(){
+
+            Random rand = new Random();
+
+//            for(int i = 1;i<20;i++) {
+            String Url = "http://localhost:18624/ServiceHall/PrebookInfos/user/"+userId;
+            String json = "{\n" +
+                    "  \"contact\": \"联系人\",\n" +
+                    "  \"contactTel\": \"联系电话\",\n" +
+                    "  \"prebookCode\": \"\",\n" +
+                    "  \"prebookDate\":"+" \"2019-09-2"+rand.nextInt(3)+"\",\n" +
+                    "  \"prebookStartTime\": \t \""+ PrebookStartTimeConstants.TIME_LIST.get(rand.nextInt(5))+"\",\n" +
+                    "  \"serviceHallId\": \"营业厅id2\",\n" +
+                    "  \"submitDate\":  \"2019-09-21T14:41:58.928Z\",\n" +
+                    "  \"userId\": \""+userId+"\"\n" +
+                    "}";
+            System.out.println(
+                    HttpRequest.sendPost(Url
+                            ,json) +"    userid : "+userId
+
+            );
+
+//            }
+
+        }
+    }
+
+    public class MyThread4 extends Thread{
+        //RestTemplate restTemplate = new RestTemplate();
+
+        String userId = "RIHAM";
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        @Override
+        public void run(){
+
+            Random rand = new Random();
+
+//            for(int i = 1;i<20;i++) {
+            String Url = "http://localhost:18624/ServiceHall/PrebookInfos/user/"+userId;
+            String json = "{\n" +
+                    "  \"contact\": \"联系人\",\n" +
+                    "  \"contactTel\": \"联系电话\",\n" +
+                    "  \"prebookCode\": \"\",\n" +
+                    "  \"prebookDate\":"+" \"2019-09-2"+3+"\",\n" +
+                    "  \"prebookStartTime\": \t \""+ PrebookStartTimeConstants.TIME_LIST.get(rand.nextInt(5))+"\",\n" +
+                    "  \"serviceHallId\": \"营业厅id2\",\n" +
+                    "  \"submitDate\":  \"2019-09-21T14:41:58.928Z\",\n" +
+                    "  \"userId\": \""+userId+"\"\n" +
+                    "}";
+            System.out.println(
+                    HttpRequest.sendPost(Url
+                            ,json) +"    userid : "+userId
+
+            );
+
+//            }
+
+        }
+    }
+
+
+
+}
