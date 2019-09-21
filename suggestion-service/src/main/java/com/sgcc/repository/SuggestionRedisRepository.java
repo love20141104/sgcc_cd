@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface SuggestionRedisRepository extends CrudRepository<SuggestionRedisDao,String> {
-    List<SuggestionRedisDao> findAllByUserId(String userId);
+    List<SuggestionRedisDao> findAllByUserId( String userId );
 
     SuggestionRedisDao findBySuggestionId( String suggestionId);
 }

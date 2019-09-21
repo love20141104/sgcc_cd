@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SuggetionSubmitDTO implements Serializable {
+public class SuggestionSubmitDTO implements Serializable {
     private static final long serialVersionUID = -2451743385362120087L;
     private String userId;
     private String suggestionContent;

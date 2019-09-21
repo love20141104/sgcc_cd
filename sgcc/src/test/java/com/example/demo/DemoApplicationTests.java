@@ -62,11 +62,11 @@ public class DemoApplicationTests {
                         "  \"submitDate\":  \"2019-09-19T14:41:58.928Z\",\n" +
                         "  \"userId\": \"RIHAM"+i+"\"\n" +
                         "}";
-                System.out.println(
-                        HttpRequest.sendPost(Url
-                                ,json) +"    userid : RIHAM"+j
-
-                );
+//                System.out.println(
+//                        HttpRequest.sendPost(Url
+//                                ,json) +"    userid : RIHAM"+j
+//
+//                );
 
             }
 

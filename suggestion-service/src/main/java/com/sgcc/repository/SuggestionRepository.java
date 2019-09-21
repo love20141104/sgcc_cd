@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +26,7 @@ public class SuggestionRepository {
 
     public List<SuggestionDao> findAllByUserID(String userId){
         String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                "suggestion_tel,submit_date,img_1,img_2,img_3 from b_suggestion";
+                "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
         sql = sql + " where user_id = '" + userId + "'";
         logger.info("查询所有意见信息:"+sql);
         return jdbcTemplate.query(sql,new suggestionRowMapper());
@@ -34,12 +34,20 @@ public class SuggestionRepository {
 
     public SuggestionDao findBySuggestionId(String suggestion_id){
         String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                "suggestion_tel,submit_date,img_1,img_2,img_3 from b_suggestion";
+                "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
         sql = sql + " where suggestion_id = '" + suggestion_id + "'";
         logger.info("查询所有意见信息:"+sql);
         return jdbcTemplate.query(sql,new suggestionRowMapper()).get(0);
     }
 
+    @Transactional
+    public SuggestionDao update(String reply_user_id , String reply_content, Date reply_date, String suggestion_id){
+        String sql = "update b_suggestion set reply_user_id='" + reply_user_id+ "',"+
+                "reply_content = '" + reply_content +"'," + "reply_date = " + reply_date +"";
+        sql = sql + " where suggestion_id = '" + suggestion_id + "'";
+        jdbcTemplate.execute(sql);
+        return findBySuggestionId(suggestion_id);
+    }
 
     /**
      * 查询所有意见信息
@@ -47,7 +55,7 @@ public class SuggestionRepository {
      */
     public List<SuggestionDao> findAll(){
         String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                "suggestion_tel,submit_date,img_1,img_2,img_3 from b_suggestion";
+                "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
         logger.info("查询所有意见信息:"+sql);
         return jdbcTemplate.query(sql,new suggestionRowMapper());
     }
@@ -70,10 +78,13 @@ public class SuggestionRepository {
                 ps.setString(4,suggestionDaoList.get(i).getSuggestionContent());
                 ps.setString(5,suggestionDaoList.get(i).getSuggestionContact());
                 ps.setString(6,suggestionDaoList.get(i).getSuggestionTel());
-                ps.setDate(7,new Date(suggestionDaoList.get(i).getSubmitDate().getTime()));
+                ps.setDate(  7,new java.sql.Date(suggestionDaoList.get(i).getSubmitDate().getTime()) );
                 ps.setString(8,suggestionDaoList.get(i).getImg_1());
                 ps.setString(9,suggestionDaoList.get(i).getImg_2());
                 ps.setString(10,suggestionDaoList.get(i).getImg_3());
+                ps.setString(11,suggestionDaoList.get(i).getReplyUserId());
+                ps.setString(12,suggestionDaoList.get(i).getReplyContent());
+                ps.setDate(  13,new java.sql.Date(suggestionDaoList.get(i).getReplyDate().getTime()) );
             }
 
             @Override
@@ -141,7 +152,10 @@ public class SuggestionRepository {
                     rs.getDate("submit_date"),
                     rs.getString("img_1"),
                     rs.getString("img_2"),
-                    rs.getString("img_3")
+                    rs.getString("img_3"),
+                    rs.getString("reply_user_id"),
+                    rs.getString("reply_content"),
+                    rs.getDate("reply_date")
                     );
         }
     }
