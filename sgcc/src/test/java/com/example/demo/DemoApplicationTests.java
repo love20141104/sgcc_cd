@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.constant.PrebookStartTimeConstants;
 import com.example.constant.WechatURLConstants;
 import com.sgcc.DemoApplication;
 import com.sgcc.dtomodel.wechat.AccessTokenDTO;
@@ -16,6 +17,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Random;
+
 ////
 ////@RunWith(SpringRunner.class)
 ////@SpringBootTest(classes = DemoApplication.class)
@@ -32,14 +35,11 @@ public class DemoApplicationTests {
 
     public static void main(String[] args) {
 
-        Date d = new Date();
-        long l = d.getTime() - (14*3600*1000);
-        d = new Date(l);
-        Date d2 = new Date(d.toString());
-//            MyThread myThread2 = new MyThread();
-//            MyThread myThread = new MyThread();
-//            myThread.start();
-//            myThread2.start();
+
+            MyThread myThread2 = new MyThread();
+            MyThread myThread = new MyThread();
+            myThread.start();
+            myThread2.start();
     }
 
      public static class MyThread extends Thread{
@@ -47,43 +47,24 @@ public class DemoApplicationTests {
         @Override
         public void run(){
 
-            String param = "contact=联系人&contactTel=联系电话"
-                    +"&prebookDate=2019-09-19T14:41:58.928Z"
-                    +"&prebookStartTime=2019-09-19T14:41:58.928Z"
-                    +"&serviceHallId=营业厅id2"
-                    +"&submitDate=2019-09-19T14:41:58.928Z"
-                    +"userId=RIHAM";
-
-
-            JSONObject postData = new JSONObject();
-            postData.put("contact","联系人");
-            postData.put("contactTel","联系电话");
-            postData.put("prebookDate","2019-09-19T14:41:58.928Z");
-            postData.put("prebookStartTime","2019-09-19T14:41:58.928Z");
-            postData.put("serviceHallId","营业厅id2");
-            postData.put("submitDate","2019-09-19T14:41:58.928Z");
-            postData.put("userId","RIHAM");
-
-            RestTemplate restTemplate = new RestTemplate();
-
-
-
+            Random rand = new Random();
 
             for(int i = 1;i<100;i++) {
-                String Url = "https://119.23.22.176:18624/ServiceHall/PrebookInfos/user/RIHAM"+i;
+                int j = rand.nextInt(5);
+                String Url = "http://localhost:18624/ServiceHall/PrebookInfos/user/RIHAM"+j;
                 String json = "{\n" +
                         "  \"contact\": \"联系人\",\n" +
                         "  \"contactTel\": \"联系电话\",\n" +
                         "  \"prebookCode\": \"\",\n" +
-                        "  \"prebookDate\": \"2019-09-19T14:41:58.928Z\",\n" +
-                        "  \"prebookStartTime\": \t \"2019-09-19T14:41:58.928Z\",\n" +
+                        "  \"prebookDate\":"+" \"2019-09-2"+rand.nextInt(10)+"\",\n" +
+                        "  \"prebookStartTime\": \t \""+ PrebookStartTimeConstants.TIME_LIST.get(rand.nextInt(5))+"\",\n" +
                         "  \"serviceHallId\": \"营业厅id2\",\n" +
                         "  \"submitDate\":  \"2019-09-19T14:41:58.928Z\",\n" +
                         "  \"userId\": \"RIHAM"+i+"\"\n" +
                         "}";
                 System.out.println(
                         HttpRequest.sendPost(Url
-                                ,json) +"    userid : RIHAM"+i
+                                ,json) +"    userid : RIHAM"+j
 
                 );
 

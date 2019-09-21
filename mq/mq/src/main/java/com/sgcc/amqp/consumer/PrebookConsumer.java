@@ -24,9 +24,9 @@ public class PrebookConsumer {
     @JmsListener(destination = "prebook_mq")
     public void savePrebook(PreBookDao preBookDao){
         try{
-//            prebookEventEntity.savePrebooks(
-//                    preBookDao
-//            );
+            prebookEventEntity.savePrebooks(
+                    preBookDao
+            );
         }catch (Exception e){
             e.printStackTrace();
         }

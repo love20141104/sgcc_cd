@@ -66,7 +66,7 @@ public class ServiceHallController {
     @ApiOperation(value = "预约信息", notes = "")
     @GetMapping(value = "/PrebookInfos/user/{openId}")
     public Result getPrebookInfos(@PathVariable String openId) {
-        return Result.success(probookService.getPrebookInfosByUser(openId));
+        return probookService.getPrebookInfosByUser(openId);
     }
 
     /**
@@ -94,7 +94,10 @@ public class ServiceHallController {
             ,@RequestParam
                     String prebookDate
     ) {
-        return Result.success(probookService.getPrebookInfosByServiceHall(serviceHallId,prebookDate));
+
+
+
+        return probookService.getPrebookInfosByServiceHall(serviceHallId,prebookDate);
     }
 
 
