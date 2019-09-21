@@ -26,14 +26,7 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @Data
-public class PrebookDomainModel  {
-//    @Autowired
-//    private PrebookQueryEntity prebookQueryEntity;// = new PrebookQueryEntity();
-//    @Autowired
-//    private PrebookEventEntity prebookEventEntity;// = new PrebookEventEntity();
-//    @Autowired
-//    private PrebookProducer prebookProducer;// = new PrebookProducer();
-
+public class PrebookDomainModel {
     List<PrebookDTO> prebookDTOS = new ArrayList<>();
     List<PreBookDao> preBookDaos = new ArrayList<>();
     PrebookDTO prebookDTO;
@@ -41,11 +34,17 @@ public class PrebookDomainModel  {
 
     /**
      * 根据营业厅id和预约的日期构造PrebookDomainModel 或 根据用户的openId构造
+     *
      * @param preBookDaos
      */
     public PrebookDomainModel(List<PreBookDao> preBookDaos) {
-        this.prebookDTOS = null;//todo
         this.preBookDaos = preBookDaos;
+    }
+
+    /**
+     * 根据preBookDaos构造preBookDTOs
+     */
+    public void buildPrebookDTOS() {
         this.prebookDTOS = new ArrayList<PrebookDTO>() {{
             preBookDaos.forEach(preBookDao -> {
                 add(new PrebookDTO(
@@ -60,7 +59,6 @@ public class PrebookDomainModel  {
                 ));
             });
         }};
-
     }
 
 //    public PrebookDomainModel dto2dao(List<PrebookDTO> prebookDTOS) {
@@ -110,14 +108,21 @@ public class PrebookDomainModel  {
 //    }
 
     /**
-     * 用户提交预约信息时，将PrebookDTO转换成PreBookDao
+     * 用户提交预约信息时，构造PrebookDomainModel
+     *
      * @param prebookDTO
      */
-    public PrebookDomainModel(PrebookDTO prebookDTO) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        prebookDTO.setPrebookCode(UUID.randomUUID().toString());
-        prebookDTO.setSubmitDate(new Date());
+    public PrebookDomainModel(PrebookDTO prebookDTO) {
         this.prebookDTO = prebookDTO;
+    }
+
+    /**
+     * 将PrebookDTO转换成PreBookDao
+     */
+    public void buildPrebookDao() throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        this.prebookDTO.setPrebookCode(UUID.randomUUID().toString());
+        this.prebookDTO.setSubmitDate(new Date());
         this.preBookDao = new PreBookDao(
                 DateUtils.getSeconds() + (DateUtils.daysBetweenTwoDate(new Date(), simpleDateFormat.parse(prebookDTO.getPrebookDate())) * 24 * 3600)
                 , UUID.randomUUID().toString()
@@ -132,13 +137,26 @@ public class PrebookDomainModel  {
         );
     }
 
-
-
-
     /**
-     * 用户提交在线预约
-     * @return
+     * 清洗营业厅预约信息,返回营业厅的预约状态
      */
+    public ServiceHallPrebookStatusDTO getServiceHallPrebookStatus(String serviceHallId, String prebookDate) {
+        ServiceHallPrebookStatusDTO serviceHallPrebookStatusDTO = new ServiceHallPrebookStatusDTO(serviceHallId, prebookDate);
+        this.prebookDTOS.forEach(dto -> {
+            PrebookStartTimeDTO prebookStartTimeDTO = new PrebookStartTimeDTO(dto.getPrebookStartTime());
+            //更新营业厅预约信息
+            serviceHallPrebookStatusDTO.buildPrebookStartTimeDTOS(prebookStartTimeDTO);
+        });
+        //补全没有预约信息的时段
+        serviceHallPrebookStatusDTO.buildNullPrebookStartTimeDTOS();
+        return serviceHallPrebookStatusDTO;
+
+    }
+
+//    /**
+//     * 用户提交在线预约
+//     * @return
+//     */
 //    public PrebookDTO submitPrebookInfo() {
 //        //check 预约次数
 //        if(prebookQueryEntity.findAllByUserIdAndPrebookDate(prebookDTO.getUserId(),prebookDTO.getPrebookDate())){
@@ -179,20 +197,4 @@ public class PrebookDomainModel  {
 //
 //    }
 
-
-    /**
-     * 清洗营业厅预约信息,返回营业厅的预约状态
-     */
-    public ServiceHallPrebookStatusDTO getServiceHallPrebookStatus(String serviceHallId,String prebookDate) {
-        ServiceHallPrebookStatusDTO serviceHallPrebookStatusDTO = new ServiceHallPrebookStatusDTO(serviceHallId,prebookDate);
-        this.prebookDTOS.forEach(dto ->{
-            PrebookStartTimeDTO prebookStartTimeDTO = new PrebookStartTimeDTO(dto.getPrebookStartTime());
-            //更新营业厅预约信息
-            serviceHallPrebookStatusDTO.buildPprebookStartTimeDTOS(prebookStartTimeDTO);
-        });
-        //补全没有预约信息的时段
-        serviceHallPrebookStatusDTO.buildNullPprebookStartTimeDTOS();
-        return serviceHallPrebookStatusDTO;
-
-    }
 }

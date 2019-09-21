@@ -15,9 +15,10 @@ public class PrebookEntity {
 
     /**
      * 添加在线预约信息
+     *
      * @param preBookDaoList
      */
-    public void savePrebooks(List<PreBookDao> preBookDaoList){
+    public void savePrebooks(List<PreBookDao> preBookDaoList) {
         preBookRepository.addPreBook(preBookDaoList);
     }
 

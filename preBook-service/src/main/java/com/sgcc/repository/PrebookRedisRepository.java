@@ -10,15 +10,15 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface PrebookRedisRepository extends CrudRepository<PreBookDao,String> {
+public interface PrebookRedisRepository extends CrudRepository<PreBookDao, String> {
 
     List<PreBookDao> findAllByUserId(String userId);
 
-    List<PreBookDao> findAllByUserIdAndPrebookDate(String userId,String date);
+    List<PreBookDao> findAllByUserIdAndPrebookDate(String userId, String date);
 
     List<PreBookDao> findAllByServiceHallId(String serviceHallId);
 
-    List<PreBookDao> findAllByServiceHallIdAndPrebookDate(String serviceHallId,String prebookDate);
+    List<PreBookDao> findAllByServiceHallIdAndPrebookDate(String serviceHallId, String prebookDate);
 
     List<PreBookDao> findAllByServiceHallIdAndPrebookDateAndPrebookStartTime(String serviceHallId, String prebookDate, String prebookStartTime);
 

@@ -49,7 +49,7 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
      * @param prebookStartTimeDTO
      * @return
      */
-    public void buildPprebookStartTimeDTOS(PrebookStartTimeDTO prebookStartTimeDTO){
+    public void buildPrebookStartTimeDTOS(PrebookStartTimeDTO prebookStartTimeDTO){
         if(this.prebookStartTimeDTOS.keySet().contains(prebookStartTimeDTO.prebookStartTime)){
             this.prebookStartTimeDTOS.get(prebookStartTimeDTO.prebookStartTime).buildCount(prebookStartTimeDTO.getPrebookCount());
         }else {
@@ -61,7 +61,7 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
     /**
      * 补全没有预约信息的时段
      */
-    public void buildNullPprebookStartTimeDTOS(){
+    public void buildNullPrebookStartTimeDTOS(){
         PrebookStartTimeConstants.TIME_LIST.forEach(time ->{
             if(!this.prebookStartTimeDTOS.keySet().contains(time)){
                 this.prebookStartTimeDTOS.put(time,new PrebookStartTimeDTO().buildPrebookStartTime(time));

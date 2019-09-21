@@ -36,24 +36,25 @@ public class PreBookRepository {
 
     /**
      * 添加预约信息
+     *
      * @param preBookDaoList
      */
-    public void addPreBook(List<PreBookDao> preBookDaoList){
+    public void addPreBook(List<PreBookDao> preBookDaoList) {
         String sql = "insert into b_prebook(id,user_open_id,service_hall_id,prebook_code,prebook_date," +
-                        "prebook_start_time,contact,contact_tel,submit_time) values(?,?,?,?,?,?,?,?,?)";
-        logger.info("添加预约信息sql:"+sql);
+                "prebook_start_time,contact,contact_tel,submit_time) values(?,?,?,?,?,?,?,?,?)";
+        logger.info("添加预约信息sql:" + sql);
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,preBookDaoList.get(i).getId());
-                ps.setString(2,preBookDaoList.get(i).getUserId());
-                ps.setString(3,preBookDaoList.get(i).getServiceHallId());
-                ps.setString(4,preBookDaoList.get(i).getPrebookCode());
-                ps.setString(5,preBookDaoList.get(i).getPrebookDate());
-                ps.setString(6,preBookDaoList.get(i).getPrebookStartTime());
-                ps.setString(7,preBookDaoList.get(i).getContact());
-                ps.setString(8,preBookDaoList.get(i).getContactTel());
-                ps.setDate(9,new Date(preBookDaoList.get(i).getSubmitDate().getTime()));
+                ps.setString(1, preBookDaoList.get(i).getId());
+                ps.setString(2, preBookDaoList.get(i).getUserId());
+                ps.setString(3, preBookDaoList.get(i).getServiceHallId());
+                ps.setString(4, preBookDaoList.get(i).getPrebookCode());
+                ps.setString(5, preBookDaoList.get(i).getPrebookDate());
+                ps.setString(6, preBookDaoList.get(i).getPrebookStartTime());
+                ps.setString(7, preBookDaoList.get(i).getContact());
+                ps.setString(8, preBookDaoList.get(i).getContactTel());
+                ps.setDate(9, new Date(preBookDaoList.get(i).getSubmitDate().getTime()));
 
             }
 

@@ -19,17 +19,18 @@ public class PrebookEventEntity {
 
     @Autowired
     private PreBookRepository preBookRepository;
+
     /**
      * 将preBookDao存入redis
      *
      * @param preBookDao
      */
     public void cacheSubmitPreBookDao(PreBookDao preBookDao) {
-        try{
+        try {
             prebookRedisRepository.save(preBookDao);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new  RuntimeException("存入redis失败");
+            throw new RuntimeException("存入redis失败");
         }
 
     }
@@ -40,6 +41,8 @@ public class PrebookEventEntity {
      * @param preBookDao
      */
     public void savePrebooks(PreBookDao preBookDao) {
-        preBookRepository.addPreBook(new ArrayList<PreBookDao>(){{add(preBookDao);}});
+        preBookRepository.addPreBook(new ArrayList<PreBookDao>() {{
+            add(preBookDao);
+        }});
     }
 }
