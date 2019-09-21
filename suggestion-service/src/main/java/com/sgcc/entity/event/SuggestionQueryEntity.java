@@ -5,13 +5,19 @@ import com.sgcc.repository.SuggestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class SuggestionQueryEntity {
     @Autowired
     private SuggestionRepository suggestionRepository;
 
-    public SuggestionDao findAllByUserId(String userId )
+    public List<SuggestionDao> GetAllSuggestions(String userId )
     {
-        return suggestionRepository.findAllByUserId(userId);
+        return suggestionRepository.findAllByUserID(userId);
+    }
+    public SuggestionDao GetSuggestion(String suggestionId )
+    {
+        return suggestionRepository.findBySuggestionId(suggestionId);
     }
 }

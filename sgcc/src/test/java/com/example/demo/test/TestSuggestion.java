@@ -5,6 +5,7 @@ import com.sgcc.DemoApplication;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionImgDao;
 import com.sgcc.repository.SuggestionRepository;
+import com.sgcc.repository.SuggestionImgRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class TestSuggestion{
     @Autowired
     private SuggestionRepository suggestionRepository;
 
+    @Autowired
+    private SuggestionImgRepository suggestionImgRepository;
+
 
     /****************************************SuggestionDao**********************************************/
     /**
@@ -30,7 +34,7 @@ public class TestSuggestion{
      */
     @Test
     public void findAllSuggestionImg(){
-        List<SuggestionImgDao> suggestionDaoList =suggestionRepository.findAllSuggestionImg();
+        List<SuggestionImgDao> suggestionDaoList =suggestionImgRepository.findAllSuggestionImg();
         for (int i = 0; i < suggestionDaoList.size(); i++) {
             System.out.println(suggestionDaoList.get(i).getImgUrl());
         }
@@ -60,7 +64,7 @@ public class TestSuggestion{
         suggestionImgDao.setSubmitDate(new Date());
         suggestionImgDaoList.add(suggestionImgDao);
 
-        suggestionRepository.addSuggestionImg(suggestionImgDaoList);
+        suggestionImgRepository.addSuggestionImg(suggestionImgDaoList);
     }
 
     /**
@@ -81,7 +85,7 @@ public class TestSuggestion{
         suggestionImgDao.setImgId("31562843-aff4-48ac-81ec-e404258ed435");
         suggestionImgDaoList.add(suggestionImgDao);
 
-        suggestionRepository.updateSuggestionImg(suggestionImgDaoList);
+        suggestionImgRepository.updateSuggestionImg(suggestionImgDaoList);
     }
 
     /**
@@ -100,7 +104,7 @@ public class TestSuggestion{
         suggestionImgDao.setImgId("31562843-aff4-48ac-81ec-e404258ed435");
         suggestionImgDaoList.add(suggestionImgDao);
 
-        suggestionRepository.delSuggestionImg(suggestionImgDaoList);
+        suggestionImgRepository.delSuggestionImg(suggestionImgDaoList);
     }
 
 
@@ -114,7 +118,7 @@ public class TestSuggestion{
      */
     @Test
     public void findAllSuggestion(){
-        List<SuggestionDao> suggestionDaoList =suggestionRepository.findAllSuggestion();
+        List<SuggestionDao> suggestionDaoList =suggestionRepository.findAll();
         for (int i = 0; i < suggestionDaoList.size(); i++) {
             System.out.println(suggestionDaoList.get(i).getSuggestionContent());
         }
@@ -154,7 +158,7 @@ public class TestSuggestion{
         suggestionDao.setImg_3("");
         suggestionDaoList.add(suggestionDao);
 
-        suggestionRepository.addSuggestion(suggestionDaoList);
+        suggestionRepository.saveAll(suggestionDaoList);
     }
 
     /**
@@ -178,7 +182,7 @@ public class TestSuggestion{
         suggestionDao.setSuggestionId("f469a4e9-d389-4d17-9067-1f2ddc06ade8");
         suggestionDaoList.add(suggestionDao);
 
-        suggestionRepository.updateSuggestion(suggestionDaoList);
+        suggestionRepository.updateAll(suggestionDaoList);
     }
 
     /**
@@ -196,7 +200,7 @@ public class TestSuggestion{
         suggestionDao.setSuggestionId("f469a4e9-d389-4d17-9067-1f2ddc06ade8");
         suggestionDaoList.add(suggestionDao);
 
-        suggestionRepository.delSuggestion(suggestionDaoList);
+        suggestionRepository.delAll(suggestionDaoList);
     }
 
 
