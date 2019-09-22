@@ -7,9 +7,7 @@ import com.sgcc.repository.SuggestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class SuggestionEventEntity {
@@ -48,4 +46,17 @@ public class SuggestionEventEntity {
         Iterable<SuggestionRedisDao> daos = suggestionRedisRepository.findAllById(suggestionIds);
         suggestionRedisRepository.deleteAll(daos);
     }
+
+    public void RefreshSuggestion( SuggestionDao dao )
+    {
+        Optional<SuggestionRedisDao> rdao = suggestionRedisRepository.findById(dao.getId());
+        if( rdao != null ){
+            rdao.get().setImg_1(dao.getImg_1());
+            rdao.get().setImg_2(dao.getImg_2());
+            rdao.get().setImg_3(dao.getImg_3());
+            suggestionRedisRepository.save( rdao.get() );
+        }
+
+    }
+
 }

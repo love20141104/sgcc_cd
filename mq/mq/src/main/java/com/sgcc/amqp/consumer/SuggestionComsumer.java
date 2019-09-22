@@ -30,10 +30,12 @@ public class SuggestionComsumer {
             dao.setImg_3(uploadFile(dao.getImg_3())); ;
             // Todo 持久化
             suggestionEventEntity.Save(dao);
+            suggestionEventEntity.RefreshSuggestion(dao);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
+    //TODO 上传文件修改
     private String uploadFile( String mediaId )
     {
         if( Strings.isNullOrEmpty(mediaId) )

@@ -19,7 +19,7 @@ import java.util.Date;
 public class SuggestionRedisDao implements Serializable{
     private static final long serialVersionUID = 651593204725609408L;
     @TimeToLive
-    private long livetime = 86400 * 3 ; //TTL
+    private long livetime = 600  ; //TTL
     @Id
     private String id;
     // 意见id
