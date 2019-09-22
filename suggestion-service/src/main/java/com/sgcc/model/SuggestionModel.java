@@ -1,5 +1,6 @@
 package com.sgcc.model;
 
+import com.google.common.base.Strings;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
@@ -156,17 +157,17 @@ public class SuggestionModel {
         dao.setUserId(dto.getUserId());
         dao.setSubmitDate(new Date());
 
-        if( !dto.getMedia_1().equals("") )
+        if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_1() ) )
             dao.setImg_1(dto.getMedia_1());
         else
             dao.setImg_1("");
 
-        if( !dto.getMedia_2().equals("") )
+        if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_2() ) )
             dao.setImg_2(dto.getMedia_2());
         else
             dao.setImg_2("");
 
-        if( !dto.getMedia_3().equals("") )
+        if( !!Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_3() ) )
             dao.setImg_3(dto.getMedia_3());
         else
             dao.setImg_3("");
@@ -180,6 +181,7 @@ public class SuggestionModel {
         SuggestionDetailDTO dto = new SuggestionDetailDTO();
         dto.setId(dao.getId());
         dto.setSuggestionId( dao.getSuggestionId());
+        dto.setUserId( dao.getUserId());
         dto.setSuggestionContent( dao.getSuggestionContent());
         dto.setSuggestionContact( dao.getSuggestionContact());
         dto.setSuggestionTel( dao.getSuggestionTel());
@@ -208,17 +210,17 @@ public class SuggestionModel {
         dao.setUserId(m_suggestionSubmitDTO.getUserId());
         dao.setSubmitDate(new Date());
 
-        if( !m_suggestionSubmitDTO.getMedia_1().equals("") )
+        if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_1() ) )
             dao.setImg_1(m_suggestionSubmitDTO.getMedia_1());
         else
             dao.setImg_1("");
 
-        if( !m_suggestionSubmitDTO.getMedia_2().equals("") )
+        if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_2() ))
             dao.setImg_2(m_suggestionSubmitDTO.getMedia_2());
         else
             dao.setImg_2("");
 
-        if( !m_suggestionSubmitDTO.getMedia_3().equals("") )
+        if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_3() ))
             dao.setImg_3(m_suggestionSubmitDTO.getMedia_3());
         else
             dao.setImg_3("");

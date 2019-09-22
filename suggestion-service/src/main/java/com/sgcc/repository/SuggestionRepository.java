@@ -88,9 +88,9 @@ public class SuggestionRepository {
                 ps.setString(8,suggestionDaoList.get(i).getImg_1());
                 ps.setString(9,suggestionDaoList.get(i).getImg_2());
                 ps.setString(10,suggestionDaoList.get(i).getImg_3());
-                ps.setString(11,suggestionDaoList.get(i).getReplyUserId());
-                ps.setString(12,suggestionDaoList.get(i).getReplyContent());
-                ps.setDate(  13,new java.sql.Date(suggestionDaoList.get(i).getReplyDate().getTime()) );
+//                ps.setString(11,suggestionDaoList.get(i).getReplyUserId());
+//                ps.setString(12,suggestionDaoList.get(i).getReplyContent());
+//                ps.setDate(  13,new java.sql.Date(suggestionDaoList.get(i).getReplyDate().getTime()) );
             }
 
             @Override

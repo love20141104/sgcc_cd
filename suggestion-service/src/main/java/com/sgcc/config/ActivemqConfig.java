@@ -20,7 +20,7 @@ public class ActivemqConfig {
     public ActiveMQConnectionFactory activeMQConnectionFactory(){
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(BROKER_URL);
         factory.setTrustedPackages(Arrays.asList(TRUST_PACKAGE.split(",")));
-
+        factory.setDispatchAsync(true);
         factory.setTrustAllPackages(true);
         return factory;
     }
