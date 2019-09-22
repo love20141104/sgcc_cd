@@ -1,5 +1,6 @@
 package com.sgcc.model;
 
+import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
@@ -113,9 +114,6 @@ public class SuggestionModel {
             return null;
         SuggestionRedisDao rdao = new SuggestionRedisDao();
         rdao.setId(dao.getId());
-        rdao.setImg_1(dao.getImg_1());
-        rdao.setImg_2(dao.getImg_2());
-        rdao.setImg_3(dao.getImg_3());
         rdao.setSubmitDate(dao.getSubmitDate());
         rdao.setSuggestionContact(dao.getSuggestionContact());
         rdao.setSuggestionContent(dao.getSuggestionContent());
@@ -125,6 +123,22 @@ public class SuggestionModel {
         rdao.setReplyUserId(dao.getReplyUserId());
         rdao.setReplyDate(dao.getReplyDate());
         rdao.setReplyContent(dao.getReplyContent());
+
+        if( !Strings.isNullOrEmpty(dao.getImg_1()) && Utils.verifyUrl(dao.getImg_1()) )
+            rdao.setImg_1(dao.getImg_1());
+        else
+            rdao.setMediaId_1(dao.getImg_1());
+
+        if( !Strings.isNullOrEmpty(dao.getImg_2()) && Utils.verifyUrl(dao.getImg_2()) )
+            rdao.setImg_2(dao.getImg_2());
+        else
+            rdao.setMediaId_2(dao.getImg_2());
+
+        if( !Strings.isNullOrEmpty(dao.getImg_3()) && Utils.verifyUrl(dao.getImg_3()) )
+            rdao.setImg_1(dao.getImg_3());
+        else
+            rdao.setMediaId_3(dao.getImg_3());
+
         return rdao;
     }
     public List<SuggestionRedisDao> ListDao2ListRedisDao(List<SuggestionDao> daos )
@@ -247,5 +261,4 @@ public class SuggestionModel {
         rdao.setReplyContent(m_dao.getReplyContent());
         return rdao;
     }
-
 }

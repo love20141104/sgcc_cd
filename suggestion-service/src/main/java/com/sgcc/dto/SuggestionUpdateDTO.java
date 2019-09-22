@@ -12,7 +12,7 @@ import java.util.Date;
 public class SuggestionUpdateDTO implements Serializable{
     private static final long serialVersionUID = -4581669884064441516L;
     private String suggestionId;
-    private String userId;
+    private String replyUserId;
     private String replyContent;
     private Date replyDate;
 }

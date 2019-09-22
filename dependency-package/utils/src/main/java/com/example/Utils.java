@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -79,11 +80,26 @@ public class Utils {
         return  url.matches(regex);
 
     }
-
+    public static String GetTime(Date date )
+    {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(date);
+    }
     public static String GetCurrentTime()
     {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df.format(new Date());
+    }
+    public static java.util.Date GetDate(String time )
+    {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return sdf.parse(time);
+        }
+        catch (ParseException e )
+        {
+            return new Date();
+        }
     }
 //    public static String createSign(Map params, String key) {
 //

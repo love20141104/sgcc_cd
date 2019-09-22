@@ -71,15 +71,18 @@ public class SuggestionService {
 
     public Result submit(SuggestionSubmitDTO submitDTO, String openId) {
         SuggestionModel model = new SuggestionModel( submitDTO );
-        suggestionEventEntity.Save( model.Dao2RedisDao(model.DTO2DAO()) );
-        suggestionProducer.SaveSuggestionMQ( model.DTO2DAO() );
+        SuggestionDao dao = model.DTO2DAO();
+        List<SuggestionDao> daos = new ArrayList<>();
+        daos.add(dao);
+        suggestionProducer.CacheSuggestionMQ( model.ListDao2RedisDaos(daos) );
+        suggestionProducer.SaveSuggestionMQ( dao );
         return Result.success(getSuggestions(openId));
     }
 
     public Result update(SuggestionUpdateDTO updateDTO ) {
         SuggestionModel model = new SuggestionModel( updateDTO );
         // 写MySQL
-        SuggestionDao dao = suggestionEventEntity.Update(updateDTO.getUserId()
+        SuggestionDao dao = suggestionEventEntity.Update(updateDTO.getReplyUserId()
                 ,updateDTO.getReplyContent(),new Date(),updateDTO.getSuggestionId());
         if( dao == null )
             return null;

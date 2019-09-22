@@ -1,7 +1,7 @@
 package com.sgcc.repository;
 
+import com.example.Utils;
 import com.sgcc.dao.SuggestionDao;
-import com.sgcc.dao.SuggestionImgDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLDataException;
 import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,7 +38,7 @@ public class SuggestionRepository {
                     "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
             sql = sql + " where suggestion_id = '" + suggestion_id + "'";
             logger.info("查询所有意见信息:"+sql);
-            return jdbcTemplate.query(sql,new suggestionRowMapper()).get(0);
+            return jdbcTemplate.queryForObject(sql,new suggestionRowMapper());
         }catch (Exception e )
         {
             return null;
@@ -49,7 +48,7 @@ public class SuggestionRepository {
     @Transactional
     public SuggestionDao update(String reply_user_id , String reply_content, Date reply_date, String suggestion_id){
         String sql = "update b_suggestion set reply_user_id='" + reply_user_id+ "',"+
-                "reply_content = '" + reply_content +"'," + "reply_date = " + reply_date +"";
+                "reply_content = '" + reply_content +"'," + "reply_date = '" + Utils.GetTime(reply_date) +"'";
         sql = sql + " where suggestion_id = '" + suggestion_id + "'";
         jdbcTemplate.execute(sql);
         return findBySuggestionId(suggestion_id);
@@ -84,13 +83,10 @@ public class SuggestionRepository {
                 ps.setString(4,suggestionDaoList.get(i).getSuggestionContent());
                 ps.setString(5,suggestionDaoList.get(i).getSuggestionContact());
                 ps.setString(6,suggestionDaoList.get(i).getSuggestionTel());
-                ps.setDate(  7,new java.sql.Date(suggestionDaoList.get(i).getSubmitDate().getTime()) );
+                ps.setString(7,Utils.GetTime(suggestionDaoList.get(i).getSubmitDate()) );
                 ps.setString(8,suggestionDaoList.get(i).getImg_1());
                 ps.setString(9,suggestionDaoList.get(i).getImg_2());
                 ps.setString(10,suggestionDaoList.get(i).getImg_3());
-//                ps.setString(11,suggestionDaoList.get(i).getReplyUserId());
-//                ps.setString(12,suggestionDaoList.get(i).getReplyContent());
-//                ps.setDate(  13,new java.sql.Date(suggestionDaoList.get(i).getReplyDate().getTime()) );
             }
 
             @Override
@@ -146,29 +142,27 @@ public class SuggestionRepository {
     }
 
     class suggestionRowMapper implements RowMapper<SuggestionDao>{
-
         @Override
         public SuggestionDao mapRow(ResultSet rs, int i) throws SQLException {
-            return new SuggestionDao(
+            SuggestionDao dao = new SuggestionDao(
                     rs.getString("id"),
                     rs.getString("suggestion_id"),
                     rs.getString("user_id"),
                     rs.getString("suggestion_content"),
                     rs.getString("suggestion_contact"),
                     rs.getString("suggestion_tel"),
-                    rs.getDate("submit_date"),
+                    new java.util.Date( rs.getDate("submit_date").getTime()),
                     rs.getString("img_1"),
                     rs.getString("img_2"),
                     rs.getString("img_3"),
                     rs.getString("reply_user_id"),
                     rs.getString("reply_content"),
-                    rs.getDate("reply_date")
+                    null
                     );
+            if( rs.getDate("reply_date") != null )
+                dao.setReplyDate( new java.util.Date( rs.getDate("reply_date").getTime()) );
+            return dao;
+
         }
     }
-
-
-
-
-
 }

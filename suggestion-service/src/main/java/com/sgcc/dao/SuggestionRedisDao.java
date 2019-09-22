@@ -48,9 +48,10 @@ public class SuggestionRedisDao implements Serializable{
 
     private String img_3;
 
+    private Date replyDate;
+
     private String replyUserId;
 
     private String replyContent;
 
-    private Date replyDate;
 }

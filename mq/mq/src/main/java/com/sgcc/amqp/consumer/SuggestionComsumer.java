@@ -3,6 +3,7 @@ package com.sgcc.amqp.consumer;
 import com.google.common.base.Strings;
 import com.sgcc.FastDFSClient.FastDFSClient;
 import com.sgcc.dao.SuggestionDao;
+import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
 import com.sgcc.entity.WeChatEntity;
 import com.sgcc.entity.query.SuggestionEventEntity;
@@ -52,8 +53,8 @@ public class SuggestionComsumer {
     }
 
     @JmsListener(destination = "Suggestion_mq_c")
-    public void Cache( SuggestionRedisDaos sugst ){
+    public void Cache( SuggestionRedisDaos daos ){
         // Todo
-        suggestionEventEntity.SaveAll(sugst.getSuggestionRedisDaoList());
+        suggestionEventEntity.SaveAll( daos.getSuggestionRedisDaoList() );
     }
 }
