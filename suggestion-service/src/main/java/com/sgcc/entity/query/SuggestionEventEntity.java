@@ -37,4 +37,15 @@ public class SuggestionEventEntity {
     {
         suggestionRedisRepository.save(dao);
     }
+
+    public void DeleteSuggestions(List<String> suggestionIds )
+    {
+        suggestionRepository.deleteAll(suggestionIds);
+    }
+
+    public void FlushSuggestions(List<String> suggestionIds )
+    {
+        Iterable<SuggestionRedisDao> daos = suggestionRedisRepository.findAllById(suggestionIds);
+        suggestionRedisRepository.deleteAll(daos);
+    }
 }

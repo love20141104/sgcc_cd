@@ -1,6 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
+import com.sgcc.dto.SuggestionDeleteDTO;
 import com.sgcc.dto.SuggestionSubmitDTO;
 import com.sgcc.dto.SuggestionUpdateDTO;
 import com.sgcc.dto.SuggestionViewDTO;
@@ -52,5 +53,11 @@ public class SuggestionController {
     @PutMapping(value = "/{id}")
     public Result update(@RequestBody SuggestionUpdateDTO suggestionUpdateDTO, @PathVariable("id") String suggestionId) {
         return suggestionService.update(suggestionUpdateDTO);
+    }
+
+    @ApiOperation(value = "批量删除意见", notes = "")
+    @PostMapping(value = "/Deletes")
+    public Result delete(@RequestBody SuggestionDeleteDTO dto ) {
+        return suggestionService.delete(dto);
     }
 }

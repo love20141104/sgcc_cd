@@ -5,6 +5,7 @@ import com.sgcc.FastDFSClient.FastDFSClient;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
+import com.sgcc.dto.SuggestionDeleteDTO;
 import com.sgcc.entity.WeChatEntity;
 import com.sgcc.entity.query.SuggestionEventEntity;
 import com.sgcc.model.SuggestionModel;
@@ -57,4 +58,11 @@ public class SuggestionComsumer {
         // Todo
         suggestionEventEntity.SaveAll( daos.getSuggestionRedisDaoList() );
     }
+
+    @JmsListener(destination = "Suggestion_mq_d")
+    public void Delete( SuggestionDeleteDTO dto ){
+        // Todo
+        suggestionEventEntity.DeleteSuggestions( dto.getSuggestionIds() );
+    }
+
 }

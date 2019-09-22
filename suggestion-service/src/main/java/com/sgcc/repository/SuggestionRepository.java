@@ -124,19 +124,20 @@ public class SuggestionRepository {
 
     /**
      * 删除意见信息
-     * @param suggestionDaoList
+     * @param suggestionIds
      */
-    public void delAll(List<SuggestionDao> suggestionDaoList){
+    @Transactional
+    public void deleteAll(List<String> suggestionIds){
         String sql = "delete from b_suggestion where suggestion_id=?";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,suggestionDaoList.get(i).getSuggestionId());
+                ps.setString(1,suggestionIds.get(i));
             }
 
             @Override
             public int getBatchSize() {
-                return suggestionDaoList.size();
+                return suggestionIds.size();
             }
         });
     }

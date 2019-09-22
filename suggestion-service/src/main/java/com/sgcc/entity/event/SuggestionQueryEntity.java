@@ -35,4 +35,5 @@ public class SuggestionQueryEntity {
     {
         return suggestionRepository.findBySuggestionId(suggestionId);
     }
+
 }

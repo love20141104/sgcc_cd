@@ -3,6 +3,7 @@ package com.sgcc.producer;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
+import com.sgcc.dto.SuggestionDeleteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.jms.core.JmsMessagingTemplate;
@@ -19,6 +20,7 @@ public class SuggestionProducer {
     private static final String Suggestion_PersistMQ = "Suggestion_mq_p";
     private static final String Suggestion_SendMsgMQ = "Suggestion_mq_s";
     private static final String Suggestion_CacheMQ = "Suggestion_mq_c";
+    private static final String Suggestion_DeleteMQ = "Suggestion_mq_d";
 
     public void SaveSuggestionMQ( SuggestionDao dao )
     {
@@ -28,6 +30,11 @@ public class SuggestionProducer {
     public void CacheSuggestionMQ( SuggestionRedisDaos daos )
     {
         jmsMessagingTemplate.convertAndSend(Suggestion_CacheMQ,daos);
+    }
+
+    public void DeleteSuggestionMQ( SuggestionDeleteDTO dto )
+    {
+        jmsMessagingTemplate.convertAndSend(Suggestion_DeleteMQ,dto );
     }
     // TODO 到时候再说消息体
     public void SendMsgMQ( Object dao )

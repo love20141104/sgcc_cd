@@ -4,6 +4,7 @@ import com.example.demo.DemoApplicationTests;
 import com.sgcc.DemoApplication;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionImgDao;
+import com.sgcc.dto.SuggestionDeleteDTO;
 import com.sgcc.dto.SuggestionSubmitDTO;
 import com.sgcc.repository.SuggestionRepository;
 import com.sgcc.repository.SuggestionImgRepository;
@@ -205,17 +206,14 @@ public class TestSuggestion{
      */
     @Test
     public void delSuggestion(){
-        List<SuggestionDao> suggestionDaoList = new ArrayList<SuggestionDao>();
-        SuggestionDao suggestionDao = null;
-        suggestionDao = new SuggestionDao();
-        suggestionDao.setSuggestionId("7295b7c9-8caf-40aa-9317-974710a421dd");
-        suggestionDaoList.add(suggestionDao);
-
-        suggestionDao = new SuggestionDao();
-        suggestionDao.setSuggestionId("f469a4e9-d389-4d17-9067-1f2ddc06ade8");
-        suggestionDaoList.add(suggestionDao);
-
-        suggestionRepository.delAll(suggestionDaoList);
+        SuggestionDeleteDTO dto = new SuggestionDeleteDTO();
+        List<String> suggestionDaoList = new ArrayList<>();
+        suggestionDaoList.add("1408aeda-c943-43d1-8c27-8fd0fe320009");
+        suggestionDaoList.add("6d6c522b-d19e-4fc5-ba72-1388488d0145");
+        suggestionDaoList.add("49697a8c-af62-40ab-8634-2090c90bd8af");
+        suggestionDaoList.add("d91cab7c-b5e3-4803-94a3-535425e88473");
+        dto.setSuggestionIds(suggestionDaoList);
+        suggestionService.delete(dto);
     }
 
 

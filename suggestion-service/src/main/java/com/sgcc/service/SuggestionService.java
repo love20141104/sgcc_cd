@@ -3,7 +3,7 @@ package com.sgcc.service;
 import com.example.result.Result;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
-import com.sgcc.dto.SuggestionDetailDTO;
+import com.sgcc.dto.SuggestionDeleteDTO;
 import com.sgcc.dto.SuggestionUpdateDTO;
 import com.sgcc.dto.SuggestionViewDTO;
 import com.sgcc.dto.SuggestionSubmitDTO;
@@ -23,7 +23,6 @@ import java.util.List;
 public class SuggestionService {
     @Autowired
     private SuggestionQueryEntity suggestionQueryEntity;
-
     @Autowired
     private SuggestionEventEntity suggestionEventEntity;
     @Autowired
@@ -36,7 +35,6 @@ public class SuggestionService {
         if( redisDao != null ){
             return Result.success( model.RedisDAO2DetailDTO(redisDao) );
         }
-
         // 读MySQL
         SuggestionDao dao = suggestionQueryEntity.GetSuggestion(suggestionId);
         if( dao == null )
@@ -57,12 +55,10 @@ public class SuggestionService {
         if( redisDaos.size() > 0 ){
             return model.RedisDAOS2DTOS(redisDaos);
         }
-
         // 读MySQL
         List<SuggestionDao> daos = suggestionQueryEntity.GetAllSuggestions(openId);
         if( daos == null || daos.size() < 1 )
             return null;
-
         // 存Redis
         suggestionProducer.CacheSuggestionMQ( model.ListDao2RedisDaos(daos) );
 
@@ -86,13 +82,18 @@ public class SuggestionService {
                 ,updateDTO.getReplyContent(),new Date(),updateDTO.getSuggestionId());
         if( dao == null )
             return null;
-
         List<SuggestionDao> daos = new ArrayList<>();
         daos.add(dao);
         // 存Redis
         suggestionProducer.CacheSuggestionMQ( model.ListDao2RedisDaos(daos) );
 
         return Result.success( model.DAO2DTO(dao) );
+    }
+
+    public Result delete( SuggestionDeleteDTO dto ) {
+        suggestionProducer.DeleteSuggestionMQ(dto);
+        suggestionEventEntity.FlushSuggestions( dto.getSuggestionIds() );
+        return Result.success();
     }
 }
 
