@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLDataException;
 import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,11 +34,16 @@ public class SuggestionRepository {
     }
 
     public SuggestionDao findBySuggestionId(String suggestion_id){
-        String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
-        sql = sql + " where suggestion_id = '" + suggestion_id + "'";
-        logger.info("查询所有意见信息:"+sql);
-        return jdbcTemplate.query(sql,new suggestionRowMapper()).get(0);
+        try{
+            String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
+                    "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
+            sql = sql + " where suggestion_id = '" + suggestion_id + "'";
+            logger.info("查询所有意见信息:"+sql);
+            return jdbcTemplate.query(sql,new suggestionRowMapper()).get(0);
+        }catch (Exception e )
+        {
+            return null;
+        }
     }
 
     @Transactional
@@ -99,6 +105,7 @@ public class SuggestionRepository {
      * 修改意见信息
      * @param suggestionDaoList
      */
+    @Transactional
     public void updateAll(List<SuggestionDao> suggestionDaoList){
         String sql = "update b_suggestion set suggestion_content=?,suggestion_contact=?,suggestion_tel=? where suggestion_id=?";
 

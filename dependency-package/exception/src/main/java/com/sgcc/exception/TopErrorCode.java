@@ -23,7 +23,8 @@ public enum TopErrorCode {
     GENERAL_ERR( 100 , "通用错误" ),
     PREBOOK_FULL( 10001 , "该时间段预约已满" ),
     EXCEEDING_LIMIT( 10002 , "超过最大预约次数" ),
-    PARAMETER_ERR( 101 , "参数错误" );
+    PARAMETER_ERR( 101 , "参数错误" ),
+    NO_DATAS( 102 , "未找到数据" );
 
 
     //错误码

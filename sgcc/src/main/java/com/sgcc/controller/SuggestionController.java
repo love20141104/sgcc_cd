@@ -28,7 +28,7 @@ public class SuggestionController {
         List<SuggestionViewDTO> dtos = suggestionService.getSuggestions(userId);
 
         if( dtos == null )
-            return Result.failure( TopErrorCode.GENERAL_ERR);
+            return Result.failure( TopErrorCode.NO_DATAS);
 
         if( dtos.size() < 1)
             return Result.success( );
