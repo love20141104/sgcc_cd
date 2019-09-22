@@ -1,5 +1,7 @@
 package com.sgcc.model;
 
+import com.example.Utils;
+import com.google.common.base.Strings;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
@@ -34,14 +36,7 @@ public class SuggestionModel {
     private SuggestionUpdateDTO m_suggestionUpdatetDTO = null;
     private String m_userId = null;
     private String m_errMsg = "";
-    @Autowired
-    private SuggestionQueryEntity suggestionQueryEntity;
-
-    @Autowired
-    private SuggestionEventEntity suggestionEventEntity;
-
-    @Autowired
-    private SuggestionProducer suggestionProducer;
+    private SuggestionDao m_dao = null;
 
     public SuggestionModel( SuggestionSubmitDTO dto  ){
         m_suggestionSubmitDTO = dto;
@@ -119,9 +114,6 @@ public class SuggestionModel {
             return null;
         SuggestionRedisDao rdao = new SuggestionRedisDao();
         rdao.setId(dao.getId());
-        rdao.setImg_1(dao.getImg_1());
-        rdao.setImg_2(dao.getImg_2());
-        rdao.setImg_3(dao.getImg_3());
         rdao.setSubmitDate(dao.getSubmitDate());
         rdao.setSuggestionContact(dao.getSuggestionContact());
         rdao.setSuggestionContent(dao.getSuggestionContent());
@@ -131,6 +123,22 @@ public class SuggestionModel {
         rdao.setReplyUserId(dao.getReplyUserId());
         rdao.setReplyDate(dao.getReplyDate());
         rdao.setReplyContent(dao.getReplyContent());
+
+        if( !Strings.isNullOrEmpty(dao.getImg_1()) && Utils.verifyUrl(dao.getImg_1()) )
+            rdao.setImg_1(dao.getImg_1());
+        else
+            rdao.setMediaId_1(dao.getImg_1());
+
+        if( !Strings.isNullOrEmpty(dao.getImg_2()) && Utils.verifyUrl(dao.getImg_2()) )
+            rdao.setImg_2(dao.getImg_2());
+        else
+            rdao.setMediaId_2(dao.getImg_2());
+
+        if( !Strings.isNullOrEmpty(dao.getImg_3()) && Utils.verifyUrl(dao.getImg_3()) )
+            rdao.setImg_1(dao.getImg_3());
+        else
+            rdao.setMediaId_3(dao.getImg_3());
+
         return rdao;
     }
     public List<SuggestionRedisDao> ListDao2ListRedisDao(List<SuggestionDao> daos )
@@ -163,17 +171,17 @@ public class SuggestionModel {
         dao.setUserId(dto.getUserId());
         dao.setSubmitDate(new Date());
 
-        if( !dto.getMedia_1().equals("") )
+        if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_1() ) )
             dao.setImg_1(dto.getMedia_1());
         else
             dao.setImg_1("");
 
-        if( !dto.getMedia_2().equals("") )
+        if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_2() ) )
             dao.setImg_2(dto.getMedia_2());
         else
             dao.setImg_2("");
 
-        if( !dto.getMedia_3().equals("") )
+        if( !!Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_3() ) )
             dao.setImg_3(dto.getMedia_3());
         else
             dao.setImg_3("");
@@ -187,6 +195,7 @@ public class SuggestionModel {
         SuggestionDetailDTO dto = new SuggestionDetailDTO();
         dto.setId(dao.getId());
         dto.setSuggestionId( dao.getSuggestionId());
+        dto.setUserId( dao.getUserId());
         dto.setSuggestionContent( dao.getSuggestionContent());
         dto.setSuggestionContact( dao.getSuggestionContact());
         dto.setSuggestionTel( dao.getSuggestionTel());
@@ -201,75 +210,55 @@ public class SuggestionModel {
         dto.setReplyDate(dao.getReplyDate());
         return dto;
     }
-
-    public List<SuggestionViewDTO> submit()
+    public SuggestionDao DTO2DAO(  )
     {
-        SuggestionDao dao = DTO2DAO(m_suggestionSubmitDTO);
-        if( dao == null ){
+        if( m_suggestionSubmitDTO == null )
             return null;
-        }
-        m_userId = dao.getUserId();
-        SuggestionRedisDao redisDao = Dao2RedisDao(dao);
-        suggestionEventEntity.Save(redisDao);
-        suggestionProducer.SaveSuggestionMQ(dao);
-        return GetAllSuggestions();
+
+        SuggestionDao dao = new SuggestionDao();
+        dao.setId(UUID.randomUUID().toString());
+        dao.setSuggestionId(dao.getId());
+        dao.setSuggestionTel(m_suggestionSubmitDTO.getSuggestionTel());
+        dao.setSuggestionContact(m_suggestionSubmitDTO.getSuggestionContact());
+        dao.setSuggestionContent(m_suggestionSubmitDTO.getSuggestionContent());
+        dao.setUserId(m_suggestionSubmitDTO.getUserId());
+        dao.setSubmitDate(new Date());
+
+        if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_1() ) )
+            dao.setImg_1(m_suggestionSubmitDTO.getMedia_1());
+        else
+            dao.setImg_1("");
+
+        if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_2() ))
+            dao.setImg_2(m_suggestionSubmitDTO.getMedia_2());
+        else
+            dao.setImg_2("");
+
+        if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_3() ))
+            dao.setImg_3(m_suggestionSubmitDTO.getMedia_3());
+        else
+            dao.setImg_3("");
+
+        return dao;
     }
-
-    public List<SuggestionViewDTO> GetAllSuggestions( )
+    public SuggestionRedisDao Dao2RedisDao( )
     {
-        // 读Redis
-        List<SuggestionRedisDao>  redisDaos = suggestionQueryEntity.GetAllsuggestions(m_userId);
-        if( redisDaos.size() > 0 ){
-            return RedisDAOS2DTOS(redisDaos);
-        }
-
-        // 读MySQL
-        List<SuggestionDao> daos = suggestionQueryEntity.GetAllSuggestions(m_userId);
-        if( daos == null || daos.size() < 1 )
+        if( m_dao == null )
             return null;
-
-        // 存Redis
-        suggestionProducer.CacheSuggestionMQ( ListDao2RedisDaos(daos) );
-
-        return DAOS2DTOS(daos);
-    }
-
-    public SuggestionDetailDTO GetSuggestion(String suggestionId)
-    {
-        // 读Redis
-        SuggestionRedisDao redisDao = suggestionQueryEntity.GetRedisSuggestion(suggestionId);
-        if( redisDao != null ){
-            return RedisDAO2DetailDTO(redisDao);
-        }
-
-        // 读MySQL
-        SuggestionDao dao = suggestionQueryEntity.GetSuggestion(suggestionId);
-        if( dao == null )
-            return null;
-
-        List<SuggestionDao> daos = new ArrayList<>();
-        daos.add(dao);
-        // 存Redis
-        suggestionProducer.CacheSuggestionMQ( ListDao2RedisDaos(daos) );
-
-        return RedisDAO2DetailDTO(Dao2RedisDao(dao));
-    }
-
-    public SuggestionViewDTO reply()
-    {
-        String suggestionId = m_suggestionUpdatetDTO.getSuggestionId();
-
-        // 写MySQL
-        SuggestionDao dao = suggestionEventEntity.Update(m_suggestionUpdatetDTO.getUserId()
-                ,m_suggestionUpdatetDTO.getReplyContent(),new Date(),suggestionId);
-        if( dao == null )
-            return null;
-
-        List<SuggestionDao> daos = new ArrayList<>();
-        daos.add(dao);
-        // 存Redis
-        suggestionProducer.CacheSuggestionMQ( ListDao2RedisDaos(daos) );
-
-        return DAO2DTO(dao);
+        SuggestionRedisDao rdao = new SuggestionRedisDao();
+        rdao.setId(m_dao.getId());
+        rdao.setImg_1(m_dao.getImg_1());
+        rdao.setImg_2(m_dao.getImg_2());
+        rdao.setImg_3(m_dao.getImg_3());
+        rdao.setSubmitDate(m_dao.getSubmitDate());
+        rdao.setSuggestionContact(m_dao.getSuggestionContact());
+        rdao.setSuggestionContent(m_dao.getSuggestionContent());
+        rdao.setSuggestionId(m_dao.getSuggestionId());
+        rdao.setSuggestionTel(m_dao.getSuggestionTel());
+        rdao.setUserId(m_dao.getUserId());
+        rdao.setReplyUserId(m_dao.getReplyUserId());
+        rdao.setReplyDate(m_dao.getReplyDate());
+        rdao.setReplyContent(m_dao.getReplyContent());
+        return rdao;
     }
 }

@@ -4,8 +4,10 @@ import com.example.demo.DemoApplicationTests;
 import com.sgcc.DemoApplication;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionImgDao;
+import com.sgcc.dto.SuggestionSubmitDTO;
 import com.sgcc.repository.SuggestionRepository;
 import com.sgcc.repository.SuggestionImgRepository;
+import com.sgcc.service.SuggestionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,19 @@ public class TestSuggestion{
     @Autowired
     private SuggestionImgRepository suggestionImgRepository;
 
+    @Autowired
+    private SuggestionService suggestionService;
+
+    @Test
+    public void submitTest()
+    {
+        SuggestionSubmitDTO dto = new SuggestionSubmitDTO();
+        dto.setSuggestionContact("Riham");
+        dto.setSuggestionTel("15810274507");
+        dto.setSuggestionContent("JustTest");
+        dto.setUserId("112233");
+        suggestionService.submit( dto, dto.getUserId() );
+    }
 
     /****************************************SuggestionDao**********************************************/
     /**

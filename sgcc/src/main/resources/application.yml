@@ -37,6 +37,15 @@ spring:
     in-memory: false
     pool:
       enabled: false #如果此处设置为true，需要加如下的依赖包，否则会自动配置失败，报JmsMessagingTemplate注入失败
+  ###fdfs
+    fdfs:
+      so-timeout: 1501
+      connect-timeout: 601
+      thumb-image:             #缩略图生成参数
+        width: 150
+        height: 150
+      web-server-url: 192.168.0.108/
+      tracker-list: 192.168.0.108:22122
 
   ### Data
   ### postgresql

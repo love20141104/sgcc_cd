@@ -16,7 +16,7 @@ import java.util.Date;
 public class SuggestionDao implements Serializable{
 
 
-    private static final long serialVersionUID = 335517474785245744L;
+    private static final long serialVersionUID = -3661299190077916770L;
     private String id;
 
     // 意见id

@@ -7,8 +7,11 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
     /**
@@ -59,11 +62,44 @@ public class Utils {
         }
         return string1;
     }
+    public static boolean verifyUrl(String url){
+        if( Strings.isNullOrEmpty(url) )
+            return false;
+        //转换为小写
+        url = url.toLowerCase();
+        String regex = "^((https|http|ftp|rtsp|mms)?://)"  //https、http、ftp、rtsp、mms
+                + "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?" //ftp的user@
+                + "(([0-9]{1,3}\\.){3}[0-9]{1,3}" // IP形式的URL- 例如：199.194.52.184
+                + "|" // 允许IP和DOMAIN（域名）
+                + "([0-9a-z_!~*'()-]+\\.)*" // 域名- www.
+                + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\." // 二级域名
+                + "[a-z]{2,6})" // first level domain- .com or .museum
+                + "(:[0-9]{1,5})?" // 端口号最大为65535,5位数
+                + "((/?)|" // a slash isn't required if there is no file name
+                + "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+        return  url.matches(regex);
 
+    }
+    public static String GetTime(Date date )
+    {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(date);
+    }
     public static String GetCurrentTime()
     {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df.format(new Date());
+    }
+    public static java.util.Date GetDate(String time )
+    {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return sdf.parse(time);
+        }
+        catch (ParseException e )
+        {
+            return new Date();
+        }
     }
 //    public static String createSign(Map params, String key) {
 //
