@@ -26,12 +26,18 @@ public class SuggestionEventEntity {
         return suggestionRepository.update(reply_user_id,reply_content,reply_date,suggestion_id);
     }
 
-    public void SaveAll( List<SuggestionRedisDao> daos )
+    public void SaveAll( List<SuggestionDao> daos )
+    {
+        suggestionRepository.saveAll(daos);
+    }
+
+
+    public void CacheAll( List<SuggestionRedisDao> daos )
     {
         suggestionRedisRepository.saveAll(daos);
     }
 
-    public void Save( SuggestionRedisDao dao )
+    public void Cache( SuggestionRedisDao dao )
     {
         suggestionRedisRepository.save(dao);
     }
@@ -45,18 +51,6 @@ public class SuggestionEventEntity {
     {
         Iterable<SuggestionRedisDao> daos = suggestionRedisRepository.findAllById(suggestionIds);
         suggestionRedisRepository.deleteAll(daos);
-    }
-
-    public void RefreshSuggestion( SuggestionDao dao )
-    {
-        Optional<SuggestionRedisDao> rdao = suggestionRedisRepository.findById(dao.getId());
-        if( rdao != null ){
-            rdao.get().setImg_1(dao.getImg_1());
-            rdao.get().setImg_2(dao.getImg_2());
-            rdao.get().setImg_3(dao.getImg_3());
-            suggestionRedisRepository.save( rdao.get() );
-        }
-
     }
 
 }

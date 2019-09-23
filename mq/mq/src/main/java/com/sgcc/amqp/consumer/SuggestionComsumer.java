@@ -3,15 +3,13 @@ package com.sgcc.amqp.consumer;
 import com.google.common.base.Strings;
 import com.sgcc.FastDFSClient.FastDFSClient;
 import com.sgcc.dao.SuggestionDao;
-import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
+import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dto.SuggestionDeleteDTO;
 import com.sgcc.entity.WeChatEntity;
-import com.sgcc.entity.query.SuggestionEventEntity;
-import com.sgcc.model.SuggestionModel;
+import com.sgcc.service.SuggestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,18 +17,19 @@ public class SuggestionComsumer {
     @Autowired
     private WeChatEntity weChatEntity;
     @Autowired
-    private SuggestionEventEntity suggestionEventEntity;
+    private SuggestionService suggestionService;
 
     @JmsListener(destination = "Suggestion_mq_p")
     public void Save( SuggestionDao dao ){
         try{
-            // Todo 下载
+            // 下载
             dao.setImg_1(uploadFile(dao.getImg_1())); ;
             dao.setImg_2(uploadFile(dao.getImg_2())); ;
             dao.setImg_3(uploadFile(dao.getImg_3())); ;
-            // Todo 持久化
-            suggestionEventEntity.Save(dao);
-            suggestionEventEntity.RefreshSuggestion(dao);
+            // 持久化
+            suggestionService.SaveSuggestion(dao);
+            // 同步 Redis
+            suggestionService.ReloadSuggestions( dao.getUserId() );
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -55,16 +54,22 @@ public class SuggestionComsumer {
         // Todo
     }
 
-    @JmsListener(destination = "Suggestion_mq_c")
-    public void Cache( SuggestionRedisDaos daos ){
-        // Todo
-        suggestionEventEntity.SaveAll( daos.getSuggestionRedisDaoList() );
+    @JmsListener(destination = "Suggestion_mq_cacheAll")
+    public void CacheAll( SuggestionRedisDaos daos ){
+        suggestionService.CacheSuggestions( daos );
     }
-
+    @JmsListener(destination = "Suggestion_mq_cache")
+    public void Cache( SuggestionRedisDao dao ){
+        suggestionService.CacheSuggestion( dao );
+    }
+    @JmsListener(destination = "Suggestion_mq_r")
+    public void Reload( String userId ){
+        suggestionService.ReloadSuggestions( userId );
+    }
     @JmsListener(destination = "Suggestion_mq_d")
     public void Delete( SuggestionDeleteDTO dto ){
         // Todo
-        suggestionEventEntity.DeleteSuggestions( dto.getSuggestionIds() );
+        suggestionService.DeleteSuggestions( dto.getSuggestionIds() );
     }
 
 }

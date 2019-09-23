@@ -19,7 +19,9 @@ public class SuggestionProducer {
     //在线预约消息队列
     private static final String Suggestion_PersistMQ = "Suggestion_mq_p";
     private static final String Suggestion_SendMsgMQ = "Suggestion_mq_s";
-    private static final String Suggestion_CacheMQ = "Suggestion_mq_c";
+    private static final String Suggestion_CacheAllMQ = "Suggestion_mq_cacheAll";
+    private static final String Suggestion_CacheMQ = "Suggestion_mq_cache";
+    private static final String Suggestion_ReloadMQ = "Suggestion_mq_r";
     private static final String Suggestion_DeleteMQ = "Suggestion_mq_d";
 
     public void SaveSuggestionMQ( SuggestionDao dao )
@@ -27,9 +29,19 @@ public class SuggestionProducer {
         jmsMessagingTemplate.convertAndSend(Suggestion_PersistMQ,dao);
     }
 
-    public void CacheSuggestionMQ( SuggestionRedisDaos daos )
+    public void CacheAllSuggestionsMQ( SuggestionRedisDaos daos )
     {
-        jmsMessagingTemplate.convertAndSend(Suggestion_CacheMQ,daos);
+        jmsMessagingTemplate.convertAndSend(Suggestion_CacheAllMQ,daos);
+    }
+
+    public void CacheSuggestionMQ( SuggestionRedisDao dao )
+    {
+        jmsMessagingTemplate.convertAndSend(Suggestion_CacheMQ,dao);
+    }
+
+    public void ReloadSuggestionsMQ( String userId )
+    {
+        jmsMessagingTemplate.convertAndSend(Suggestion_ReloadMQ,userId);
     }
 
     public void DeleteSuggestionMQ( SuggestionDeleteDTO dto )
