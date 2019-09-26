@@ -34,4 +34,9 @@ public class QAEventEntity {
         qaRedisRepository.saveAll(questionCategoryDaos);
     }
 
+    public void innitQuestionAnswer(String categoryId){
+        List<QuestionAnswerDao> questionCategoryDaos = qAnswerRepository.findQAnswerByCategoryId(categoryId);
+        qaRedisRepository.saveAll(questionCategoryDaos);
+    }
+
 }

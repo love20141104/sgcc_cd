@@ -26,8 +26,16 @@ public class QAnswerRepository {
      * @param
      */
     public List<QuestionAnswerDao> findAllQAnswer(){
-        
+
         String sql = "select id,category_id,question_desc,answer,available from d_question_answer where available = 1";
+        List<QuestionAnswerDao> answerDaoList = jdbcTemplate.query(sql,new answerRowMapper());
+        return answerDaoList;
+    }
+
+    public List<QuestionAnswerDao> findQAnswerByCategoryId(String categoryId){
+
+        String sql = "select id,category_id,question_desc,answer,available from d_question_answer"
+                + " where available = 1 and category_id = '"+categoryId+"'";
         List<QuestionAnswerDao> answerDaoList = jdbcTemplate.query(sql,new answerRowMapper());
         return answerDaoList;
     }

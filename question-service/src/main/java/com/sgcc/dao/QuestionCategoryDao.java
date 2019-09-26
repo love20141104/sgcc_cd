@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
 /**
@@ -16,6 +17,8 @@ import org.springframework.data.redis.core.index.Indexed;
 @NoArgsConstructor  //生成无参构造函数
 @RedisHash("question_category")
 public class QuestionCategoryDao {
+    @TimeToLive
+    private long timetolive = 60;
     @Id
     private String id;
     @Indexed
@@ -40,4 +43,15 @@ public class QuestionCategoryDao {
         );
     }
 
+    public QuestionCategoryDao(String id
+            ,String categoryId
+            ,String categoryDesc
+            ,Integer categoryOrder
+            ,Boolean categoryAvailable){
+        this.id = id;
+        this.categoryId = categoryId;
+        this.categoryDesc = categoryDesc;
+        this.categoryOrder = categoryOrder;
+        this.categoryAvailable = categoryAvailable;
+    }
 }

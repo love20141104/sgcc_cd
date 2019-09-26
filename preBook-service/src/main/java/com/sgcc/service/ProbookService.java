@@ -55,7 +55,7 @@ public class ProbookService {
      * @param openId
      * @return
      */
-    private List<PrebookDTO> getPrebookInfos(String openId){
+    private List<PrebookDTO> getPrebookInfos(String openId) {
         //根据用户openid查询该用户近3天的所有预约信息
         List<PreBookDao> preBookDaos = prebookQueryEntity.findAllByUserId(openId);
         //根据preBookDaos构造PrebookDomainModel
@@ -223,4 +223,6 @@ public class ProbookService {
         return Result.success(serviceHallPrebookStatus);
 
     }
+
+
 }
