@@ -17,20 +17,6 @@ public class PrebookQueryEntity {
     @Autowired
     private PrebookRedisRepository prebookRedisRepository;
 
-
-//    /**
-//     * 根据用户id查询所有的预约信息
-//     *
-//     * @param openId
-//     */
-//    public List<PrebookDTO> getPrebookInfosByUser(String openId) {
-//
-//
-//        PrebookDomainModel prebookModel = new PrebookDomainModel(openId);
-//        return prebookModel.getPrebookDTOS();
-//    }
-
-
     /**
      * 根据营业亭id查询营业厅预约状态
      *
@@ -43,7 +29,6 @@ public class PrebookQueryEntity {
         );
         return preBookDaos;
     }
-
     /**
      * 用户当天的预约次数是否超过限制
      *
@@ -76,8 +61,6 @@ public class PrebookQueryEntity {
             return true;
         }
     }
-
-
     /**
      * 根据预约ids查找预约信息
      *
@@ -91,7 +74,6 @@ public class PrebookQueryEntity {
             });
         }};
     }
-
     /**
      * 判断此营业厅该时段预约次数是否超过限制
      *
