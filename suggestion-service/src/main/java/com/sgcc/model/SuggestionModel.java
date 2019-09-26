@@ -5,10 +5,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
-import com.sgcc.dto.SuggestionDetailDTO;
-import com.sgcc.dto.SuggestionUpdateDTO;
-import com.sgcc.dto.SuggestionViewDTO;
-import com.sgcc.dto.SuggestionSubmitDTO;
+import com.sgcc.dto.*;
 import com.sgcc.entity.event.SuggestionQueryEntity;
 import com.sgcc.entity.query.SuggestionEventEntity;
 import com.sgcc.producer.SuggestionProducer;
@@ -260,5 +257,23 @@ public class SuggestionModel {
         rdao.setReplyDate(m_dao.getReplyDate());
         rdao.setReplyContent(m_dao.getReplyContent());
         return rdao;
+    }
+    public SuggestionDao MapDTO2DAO(SuggestionMappingDTO dto )
+    {
+        SuggestionDao dao = new SuggestionDao();
+        dao.setId(dto.getId());
+        dao.setSuggestionId(dto.getSuggestionId());
+        dao.setSuggestionContact(dto.getSuggestionContact());
+        dao.setSuggestionContent(dto.getSuggestionContent());
+        dao.setSuggestionTel(dto.getSuggestionTel());
+        dao.setUserId(dto.getUserId());
+        dao.setSubmitDate(dto.getSubmitDate());
+        dao.setReplyUserId(dto.getReplyUserId());
+        dao.setReplyDate(dto.getReplyDate());
+        dao.setReplyContent(dto.getReplyContent());
+        dao.setImg_1(dto.getImg_1());
+        dao.setImg_2(dto.getImg_2());
+        dao.setImg_3(dto.getImg_3());
+        return dao;
     }
 }

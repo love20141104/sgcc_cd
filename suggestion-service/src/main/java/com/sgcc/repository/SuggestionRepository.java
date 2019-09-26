@@ -9,12 +9,15 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
+
+import static org.checkerframework.checker.units.UnitsTools.m;
 
 @Repository
 public class SuggestionRepository {
@@ -26,10 +29,13 @@ public class SuggestionRepository {
 
     public List<SuggestionDao> findAllByUserID(String userId){
         String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
+                "suggestion_tel,DATE_FORMAT(submit_date ,'%Y-%m-%d %H:%m:%s') AS submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
+//        String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
+//                "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
         sql = sql + " where user_id = '" + userId + "'";
         logger.info("查询所有意见信息:"+sql);
         return jdbcTemplate.query(sql,new suggestionRowMapper());
+//        DATE_FORMAT(你的日期字段 ,"%Y-%m-%d") AS date
     }
 
     public SuggestionDao findBySuggestionId(String suggestion_id){
@@ -38,6 +44,28 @@ public class SuggestionRepository {
                     "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
             sql = sql + " where suggestion_id = '" + suggestion_id + "'";
             logger.info("查询所有意见信息:"+sql);
+            return jdbcTemplate.queryForObject(sql,new suggestionRowMapper());
+        }catch (Exception e )
+        {
+            return null;
+        }
+    }
+    public SuggestionDao findById(String id){
+        try{
+            String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
+                    "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
+            sql = sql + " where id = '" + id + "'";
+            return jdbcTemplate.queryForObject(sql,new suggestionRowMapper());
+        }catch (Exception e )
+        {
+            return null;
+        }
+    }
+    public SuggestionDao findByReplyUserId(String reply_user_id){
+        try{
+            String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
+                    "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
+            sql = sql + " where reply_user_id = '" + reply_user_id + "'";
             return jdbcTemplate.queryForObject(sql,new suggestionRowMapper());
         }catch (Exception e )
         {
@@ -152,7 +180,7 @@ public class SuggestionRepository {
                     rs.getString("suggestion_content"),
                     rs.getString("suggestion_contact"),
                     rs.getString("suggestion_tel"),
-                    new java.util.Date( rs.getDate("submit_date").getTime()),
+                    null,
                     rs.getString("img_1"),
                     rs.getString("img_2"),
                     rs.getString("img_3"),
@@ -160,8 +188,14 @@ public class SuggestionRepository {
                     rs.getString("reply_content"),
                     null
                     );
-            if( rs.getDate("reply_date") != null )
-                dao.setReplyDate( new java.util.Date( rs.getDate("reply_date").getTime()) );
+            if( rs.getDate("submit_date") != null )
+            {
+                dao.setSubmitDate( Utils.GetDate( rs.getString("submit_date")) );
+            }
+
+            if( rs.getDate("reply_date") != null ){
+                dao.setReplyDate( Utils.GetDate( rs.getString("reply_date") ));
+            }
             return dao;
 
         }

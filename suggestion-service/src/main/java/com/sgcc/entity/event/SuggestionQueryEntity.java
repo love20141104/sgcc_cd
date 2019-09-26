@@ -35,5 +35,12 @@ public class SuggestionQueryEntity {
     {
         return suggestionRepository.findBySuggestionId(suggestionId);
     }
-
+    public List<SuggestionDao> findAll()
+    {
+        return suggestionRepository.findAll();
+    }
+    public SuggestionDao findById(String id)
+    {
+        return suggestionRepository.findById(id);
+    }
 }
