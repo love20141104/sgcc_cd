@@ -4,10 +4,12 @@ import com.sgcc.dao.PreBookDao;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
 import com.sgcc.dtomodel.prebook.ServiceHallPrebookStatusDTO;
 import com.sgcc.model.PrebookDomainModel;
+import com.sgcc.repository.PreBookRepository;
 import com.sgcc.repository.PrebookRedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 public class PrebookQueryEntity {
     @Autowired
     private PrebookRedisRepository prebookRedisRepository;
+    @Autowired
+    private PreBookRepository preBookRepository;
 
     /**
      * 根据营业亭id查询营业厅预约状态
@@ -105,4 +109,16 @@ public class PrebookQueryEntity {
         return prebookRedisRepository.findAllByUserId(openId);
     }
 
+    /**
+     * 根据多个条件查询预约信息
+     * @param user_open_id
+     * @param service_hall_id
+     * @param prebook_code
+     * @param prebook_date_start
+     * @param prebook_date_end
+     */
+    public List<PreBookDao> getPrebook(String user_open_id, String service_hall_id, String prebook_code, String prebook_date_start, String prebook_date_end) {
+
+        return preBookRepository.getPrebook(user_open_id,service_hall_id,prebook_code,prebook_date_start,prebook_date_end);
+    }
 }

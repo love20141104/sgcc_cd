@@ -10,6 +10,7 @@
         <module name="domain-model" />
         <module name="dto-model" />
         <module name="exception" />
+        <module name="management-service" />
         <module name="mq-service" />
         <module name="mq_service" />
         <module name="preBook-service" />
@@ -27,6 +28,7 @@
       <module name="domain-model" target="1.8" />
       <module name="dto-model" target="1.8" />
       <module name="exception" target="1.8" />
+      <module name="management-service" target="1.8" />
       <module name="mq-service" target="1.8" />
       <module name="mq_service" target="1.8" />
       <module name="preBook-service" target="1.8" />

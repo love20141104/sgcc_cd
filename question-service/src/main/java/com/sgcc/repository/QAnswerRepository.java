@@ -1,5 +1,6 @@
 package com.sgcc.repository;
 
+import com.google.common.base.Joiner;
 import com.sgcc.dao.QuestionAnswerDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -66,21 +67,12 @@ public class QAnswerRepository {
 
     /**
      * 删除问题回答
-     * @param answerDaoList
+     * @param ids
      */
-    public void delQAnswer(List<QuestionAnswerDao> answerDaoList){
-        String sql = "delete from d_question_answer where id=?";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,answerDaoList.get(i).getId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return answerDaoList.size();
-            }
-        });
+    public void delQAnswer(List<String> ids){
+        String sql = "update d_question_answer set available = 0 where id in ('"
+                +Joiner.on("','").join(ids)+"')";
+        jdbcTemplate.execute(sql);
     }
 
     /**

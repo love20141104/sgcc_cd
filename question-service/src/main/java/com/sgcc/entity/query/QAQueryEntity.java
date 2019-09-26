@@ -52,5 +52,16 @@ public class QAQueryEntity {
     public List<QuestionAnswerDao> getRedisQAList(String categoryId){
         return qaRedisRepository.findAllByCategoryIdAndAndCategoryAvailable(categoryId,true);
     }
+
+    /**
+     * 查询问题分类
+     * @param categoryId
+     * @param categoryDesc
+     */
+    public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc) {
+        return qCategoryRepository.selectQuestionCategory(categoryId,categoryDesc);
+    }
+
+
 }
 

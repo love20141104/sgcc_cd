@@ -11,6 +11,8 @@ import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -59,20 +61,27 @@ public class PreBookDao implements Serializable {
     // 预约提交时间
     private Date submitDate;
 
-//    public PreBookDao(long livetime, String id, String userId, String serviceHallId, Date prebookDate,
-//                      Date prebookStartTime, String prebookCode, String contact, String contactTel, Date submitDate) {
-//
-//        this.livetime = DateUtils.getSeconds() + (DateUtils.daysBetweenTwoDate(new Date(), prebookDate) * 24 * 3600);
-//        this.id = id;
-//        this.userId = userId;
-//        this.serviceHallId = serviceHallId;
-//        this.prebookDate = prebookDate;
-//        this.prebookStartTime = prebookStartTime;
-//        this.prebookCode = prebookCode;
-//        this.contact = contact;
-//        this.contactTel = contactTel;
-//        this.submitDate = submitDate;
-//    }
+    public PreBookDao(String id, String userId, String serviceHallId, String prebookDate,
+                      String prebookStartTime, String prebookCode, String contact, String contactTel, Date submitDate) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            this.livetime = DateUtils.getSeconds() + (DateUtils.daysBetweenTwoDate(new Date(), simpleDateFormat.parse(prebookDate)) * 24 * 3600);
+            this.id = id;
+            this.userId = userId;
+            this.serviceHallId = serviceHallId;
+            this.prebookDate = prebookDate;
+            this.prebookStartTime = prebookStartTime;
+            this.prebookCode = prebookCode;
+            this.contact = contact;
+            this.contactTel = contactTel;
+            this.submitDate = submitDate;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
+    }
 
 
 }

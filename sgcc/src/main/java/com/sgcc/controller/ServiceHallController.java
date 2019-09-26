@@ -32,6 +32,7 @@ public class ServiceHallController {
     @Autowired
     private ProbookService probookService;
 
+
     /**
      * 根据定位查最近的5个
      * @param lat
@@ -93,33 +94,5 @@ public class ServiceHallController {
         return probookService.getPrebookInfosByServiceHall(serviceHallId,prebookDate);
     }
 
-
-//    /**
-//     * 后台管理系统修改预约信息
-//     * @param prebookCode
-//     * @param prebookDTO
-//     * @return
-//     */
-//    @ApiOperation(value = "查询营业厅预约状态", notes = "")
-//    @PostMapping(value = "/PrebookInfo/prebook-Code/{prebookCode}")
-//    public Result updatePrebookInfo(
-//            @PathVariable String prebookCode
-//            ,@RequestBody PrebookDTO prebookDTO
-//    ) {
-//        return prebookManagementService.updatePrebookDTO(prebookCode,prebookDTO);
-//    }
-//
-//    /**
-//     * 后台管理系统作废预约信息
-//     * @param prebookCode
-//     *             bbbbbbbbbb@return
-//     */
-//    @ApiOperation(value = "查询营业厅预约状态", notes = "")
-//    @DeleteMapping(value = "/PrebookInfo/prebook-Code/{prebookCode}")
-//    public Result deletePrebookInfo(
-//            @PathVariable String prebookCode
-//    ) {
-//        return prebookManagementService.deletePrebookDTO(prebookCode);
-//    }
 
 }

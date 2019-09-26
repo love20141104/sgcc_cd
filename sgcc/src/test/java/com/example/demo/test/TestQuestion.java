@@ -61,17 +61,17 @@ public class TestQuestion extends DemoApplicationTests{
      */
     @Test
     public void delQAnswer(){
-        List<QuestionAnswerDao> answerDaoList = new ArrayList<QuestionAnswerDao>();
-        QuestionAnswerDao dao =null;
-        dao = new QuestionAnswerDao();
-        dao.setId("80b057f2-9679-46ce-8a8e-0d0e");
-
-        answerDaoList.add(dao);
-        dao = new QuestionAnswerDao();
-        dao.setId("9a92431d-14d8-4079-abd2-0394");
-        answerDaoList.add(dao);
-
-        qAnswerRepository.delQAnswer(answerDaoList);
+//        List<QuestionAnswerDao> answerDaoList = new ArrayList<QuestionAnswerDao>();
+//        QuestionAnswerDao dao =null;
+//        dao = new QuestionAnswerDao();
+//        dao.setId("80b057f2-9679-46ce-8a8e-0d0e");
+//
+//        answerDaoList.add(dao);
+//        dao = new QuestionAnswerDao();
+//        dao.setId("9a92431d-14d8-4079-abd2-0394");
+//        answerDaoList.add(dao);
+//
+//        qAnswerRepository.delQAnswer(answerDaoList);
     }
 
     /**
@@ -152,7 +152,7 @@ public class TestQuestion extends DemoApplicationTests{
         dao.setCategoryId("cdf437e4-919b-4308-a38a-90ea");
         categoryDaoList.add(dao);
 
-        QCategoryRepository.delQCategory(categoryDaoList);
+//        QCategoryRepository.delQCategory(categoryDaoList);
     }
 
     /**

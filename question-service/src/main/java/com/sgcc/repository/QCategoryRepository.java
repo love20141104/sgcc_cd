@@ -1,5 +1,7 @@
 package com.sgcc.repository;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.sgcc.dao.QuestionCategoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -56,22 +58,14 @@ public class QCategoryRepository {
     }
 
     /**
-     * 删除问题类型
-     * @param categoryList
+     * 作废问题类型
+     * @param categoryIds
      */
-    public void delQCategory(List<QuestionCategoryDao> categoryList){
-        String sql = "delete from d_question_category where category_id=? and category_available=1";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,categoryList.get(i).getCategoryId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return categoryList.size();
-            }
-        });
+    public void delQCategory(List<String> categoryIds){
+        String sql = "update d_question_category set category_available=0 where category_id in ('"
+                + Joiner.on("','").join(categoryIds)
+                +"')";
+        jdbcTemplate.execute(sql);
     }
 
     /**
@@ -93,6 +87,28 @@ public class QCategoryRepository {
                 return categoryList.size();
             }
         });
+    }
+
+    /**
+     * 查询问题分类
+     *
+     * @param categoryId
+     * @param categoryDesc
+     */
+    public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc) {
+        String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category";
+        StringBuffer sql_where = new StringBuffer();
+        if(!Strings.isNullOrEmpty(categoryId)){
+            sql_where.append(" category_id like '%").append("d_question_category%' and ");
+        }if(Strings.isNullOrEmpty(categoryDesc)){
+            sql_where.append("category_desc like '%").append("category_desc%' and ");
+        }
+
+        if(!Strings.isNullOrEmpty(sql_where.toString())){
+            sql +=" where " + sql_where.toString().substring(0,sql_where.toString().length() - 4);
+        }
+        return jdbcTemplate.query(sql,new categoryRowMapper());
+
     }
 
     class categoryRowMapper implements RowMapper<QuestionCategoryDao> {

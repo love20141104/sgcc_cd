@@ -68,4 +68,12 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
             }
         });
     }
+
+    /**
+     *
+     * @return
+     */
+    public List<PrebookStartTimeDTO> getPrebookStartTimeDTOs(){
+        return new ArrayList<PrebookStartTimeDTO>(prebookStartTimeDTOS.values());
+    }
 }
