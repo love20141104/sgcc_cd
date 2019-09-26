@@ -101,6 +101,10 @@ public class Utils {
             return new Date();
         }
     }
+    public static String GetSQLDateStr(String field)
+    {
+        return "DATE_FORMAT("+field+" ,'%Y-%m-%d %H:%m:%s') AS " +field+ "";
+    }
 //    public static String createSign(Map params, String key) {
 //
 ////        StringBuffer sbkey = new StringBuffer();

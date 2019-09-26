@@ -29,7 +29,7 @@ public class SuggestionRepository {
 
     public List<SuggestionDao> findAllByUserID(String userId){
         String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                "suggestion_tel,DATE_FORMAT(submit_date ,'%Y-%m-%d %H:%m:%s') AS submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
+                "suggestion_tel," + Utils.GetSQLDateStr("submit_date")+ ",img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
 //        String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
 //                "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
         sql = sql + " where user_id = '" + userId + "'";
