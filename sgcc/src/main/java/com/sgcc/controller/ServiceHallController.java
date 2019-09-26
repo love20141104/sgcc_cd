@@ -3,10 +3,7 @@ import com.example.result.Result;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
-import com.sgcc.service.ProbookService;
-import com.sgcc.service.ServiceHallService;
-import com.sgcc.service.TestService;
-import com.sgcc.service.WeChatService;
+import com.sgcc.service.*;
 import com.sgcc.test.TestRedisDTO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -87,8 +84,7 @@ public class ServiceHallController {
      * @return
      */
     @ApiOperation(value = "查询营业厅预约状态", notes = "")
-    @PostMapping(value = "/PrebookInfo/ServiceHall-Id/{serviceHallId}")
-
+    @GetMapping(value = "/PrebookInfo/ServiceHall-Id/{serviceHallId}")
     public Result submitPrebookInfo(
             @PathVariable String serviceHallId
             ,@RequestParam
@@ -97,5 +93,33 @@ public class ServiceHallController {
         return probookService.getPrebookInfosByServiceHall(serviceHallId,prebookDate);
     }
 
+
+//    /**
+//     * 后台管理系统修改预约信息
+//     * @param prebookCode
+//     * @param prebookDTO
+//     * @return
+//     */
+//    @ApiOperation(value = "查询营业厅预约状态", notes = "")
+//    @PostMapping(value = "/PrebookInfo/prebook-Code/{prebookCode}")
+//    public Result updatePrebookInfo(
+//            @PathVariable String prebookCode
+//            ,@RequestBody PrebookDTO prebookDTO
+//    ) {
+//        return prebookManagementService.updatePrebookDTO(prebookCode,prebookDTO);
+//    }
+//
+//    /**
+//     * 后台管理系统作废预约信息
+//     * @param prebookCode
+//     *             bbbbbbbbbb@return
+//     */
+//    @ApiOperation(value = "查询营业厅预约状态", notes = "")
+//    @DeleteMapping(value = "/PrebookInfo/prebook-Code/{prebookCode}")
+//    public Result deletePrebookInfo(
+//            @PathVariable String prebookCode
+//    ) {
+//        return prebookManagementService.deletePrebookDTO(prebookCode);
+//    }
 
 }

@@ -1,6 +1,7 @@
 package com.sgcc.model;
 
 import com.example.constant.PrebookStartTimeConstants;
+import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
 
 import com.sgcc.dto.PrebookInfoSaveDTO;
@@ -119,7 +120,9 @@ public class PrebookDomainModel {
      */
     public void buildPrebookDao() throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        this.prebookDTO.setPrebookCode(UUID.randomUUID().toString());
+        if(Strings.isNullOrEmpty(this.prebookDTO.getPrebookCode())){
+            this.prebookDTO.setPrebookCode(UUID.randomUUID().toString());
+        }
         this.prebookDTO.setSubmitDate(new Date());
         this.preBookDao = new PreBookDao(
                 DateUtils.getSeconds() + (DateUtils.daysBetweenTwoDate(new Date(), simpleDateFormat.parse(prebookDTO.getPrebookDate())) * 24 * 3600)

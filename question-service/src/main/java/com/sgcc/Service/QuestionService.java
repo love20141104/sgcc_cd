@@ -25,24 +25,24 @@ public class QuestionService {
      * 将mysql中的常见问题信息全部存入redis
      */
     public void initCategory(){
-        try{
-            qaEventEntity.innitQuestionCategory();
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("常见问题初始化失败");
-        }
+//        try{
+//            qaEventEntity.innitQuestionCategory();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            throw new RuntimeException("常见问题初始化失败");
+//        }
     }
 
     /**
      * 将mysql中的常见问题信息全部存入redis
      */
     public void initQuestion(){
-        try{
-            qaEventEntity.innitQuestionAnswer();
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("常见问题初始化失败");
-        }
+//        try{
+//            qaEventEntity.innitQuestionAnswer();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            throw new RuntimeException("常见问题初始化失败");
+//        }
     }
 
 
@@ -53,6 +53,11 @@ public class QuestionService {
      */
     public List<QuestionCategoryDTO> getQuestionCategory() {
         List<QuestionCategoryDao> questionCategoryDaos = qaQueryEntity.getRedisCategoryList();
+        //如果redis中没取到,从mysql中查出并存入redis
+        if(null == questionCategoryDaos || questionCategoryDaos.size() == 0 || null == questionCategoryDaos.get(0)){
+            qaEventEntity.innitQuestionCategory();
+            questionCategoryDaos = qaQueryEntity.getRedisCategoryList();
+        }
         CategoryModel categoryModel = new CategoryModel(questionCategoryDaos);
         categoryModel.buildQuestionCategoryDTOS();
         return categoryModel.getQuestionCategoryDTOS();
@@ -66,6 +71,11 @@ public class QuestionService {
      */
     public QAListDTO getQAList(String categoryId) {
         List<QuestionAnswerDao> questionAnswerDaos = qaQueryEntity.getRedisQAList(categoryId);
+        //如果redis中没取到,从mysql中查出并存入redis
+        if(null == questionAnswerDaos || questionAnswerDaos.size() == 0 || null == questionAnswerDaos.get(0)){
+            qaEventEntity.innitQuestionAnswer(categoryId);
+            questionAnswerDaos = qaQueryEntity.getRedisQAList(categoryId);
+        }
         QuestionDomainModel questionDomainModel = new QuestionDomainModel(categoryId, questionAnswerDaos);
         questionDomainModel.buildQAListDTO();
         return questionDomainModel.getQaListDTO();
