@@ -59,12 +59,13 @@ public class PreBookDao implements Serializable {
     private String contactTel;
 
     // 预约提交时间
-    private Date submitDate;
+    private String submitDate;
 
     public PreBookDao(String id, String userId, String serviceHallId, String prebookDate,
-                      String prebookStartTime, String prebookCode, String contact, String contactTel, Date submitDate) {
+                      String prebookStartTime, String prebookCode, String contact, String contactTel, String submitDate) {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
             this.livetime = DateUtils.getSeconds() + (DateUtils.daysBetweenTwoDate(new Date(), simpleDateFormat.parse(prebookDate)) * 24 * 3600);

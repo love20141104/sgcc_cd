@@ -110,8 +110,13 @@ public class PrebookManager {
                 System.out.println("删除失败");
                 throw new RuntimeException("删除失败");
             }
+            //如果redis中存在则删除
+            if(null != prebookQueryEntity.findByIdInRedis(id)){
+                prebookEventEntity.deleteInRedis(id);
+            }
             return Result.success();
         } catch (Exception e) {
+            e.printStackTrace();
             return Result.failure(TopErrorCode.PARAMETER_ERR);
         }
     }
@@ -147,8 +152,12 @@ public class PrebookManager {
     ) {
         try {
             DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-            prebook_date_start = format1.format(format1.parse(prebook_date_start.trim()));
-            prebook_date_end = format1.format(format1.parse(prebook_date_end.trim()));
+            if(!Strings.isNullOrEmpty(prebook_date_start)){
+                prebook_date_start = format1.format(format1.parse(prebook_date_start.trim()));
+            }
+            if(!Strings.isNullOrEmpty(prebook_date_end)){
+                prebook_date_end = format1.format(format1.parse(prebook_date_end.trim()));
+            }
             return Result.success(prebookQueryEntity.getPrebook(user_open_id, service_hall_id, prebook_code, prebook_date_start, prebook_date_end));
         } catch (ParseException e) {
             e.printStackTrace();

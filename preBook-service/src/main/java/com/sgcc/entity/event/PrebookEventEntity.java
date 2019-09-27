@@ -60,9 +60,9 @@ public class PrebookEventEntity {
      */
     public PreBookDao updatePrebook(PrebookDTO prebookDTO) {
         List<PreBookDao> preBookDaos = preBookRepository.updatePreBook(prebookDTO);
-        if(null != preBookDaos && preBookDaos.size()==1 && null != preBookDaos.get(0)){
+        if (null != preBookDaos && preBookDaos.size() == 1 && null != preBookDaos.get(0)) {
             return preBookDaos.get(0);
-        }else {
+        } else {
             return null;
         }
     }
@@ -75,11 +75,24 @@ public class PrebookEventEntity {
      */
     public String deletePrebook(String prebookCode) {
         List<String> id = preBookRepository.deletePrebook(prebookCode);
-        if(null != id && id.size()==1 && !Strings.isNullOrEmpty(id.get(0))){
+        if (null != id && id.size() == 1 && !Strings.isNullOrEmpty(id.get(0))) {
             return id.get(0);
-        }else {
+        } else {
             return null;
         }
 
+    }
+
+    /**
+     * 删除redis中的预约信息
+     *
+     * @param id
+     */
+    public void deleteInRedis(String id) {
+        try {
+            prebookRedisRepository.deleteById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

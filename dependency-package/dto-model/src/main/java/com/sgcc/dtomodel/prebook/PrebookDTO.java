@@ -40,7 +40,7 @@ public class PrebookDTO implements Serializable,Comparable<PrebookDTO> {
     private String contactTel;
 
     // 预约提交时间
-    private Date submitDate;
+    private String submitDate;
 
     @Override
     public int compareTo(PrebookDTO prebookDTO) {

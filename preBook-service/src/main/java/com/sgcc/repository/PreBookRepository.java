@@ -14,6 +14,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -58,7 +60,7 @@ public class PreBookRepository {
                 ps.setString(6, preBookDaoList.get(i).getPrebookStartTime());
                 ps.setString(7, preBookDaoList.get(i).getContact());
                 ps.setString(8, preBookDaoList.get(i).getContactTel());
-                ps.setDate(9, new Date(preBookDaoList.get(i).getSubmitDate().getTime()));
+                ps.setString(9, preBookDaoList.get(i).getSubmitDate());
 
             }
 
@@ -161,7 +163,7 @@ public class PreBookRepository {
         String sql_select = "select id from b_prebook where prebook_code = '" + prebookCode + "'";
         List<String> id = jdbcTemplate.queryForList(sql_select, String.class);
 
-        String sql_delete = "delete from b_prebook where prebookCode =  '" + prebookCode + "'";
+        String sql_delete = "delete from b_prebook where prebook_code =  '" + prebookCode + "'";
         jdbcTemplate.execute(sql_delete);
         return id;
     }
@@ -190,10 +192,10 @@ public class PreBookRepository {
             sql_where.append("prebook_code like '%").append(prebook_code).append("%' and ");
         }
         if(!Strings.isNullOrEmpty(prebook_date_start)){
-            sql_where.append("prebook_date_start >= '").append(prebook_date_start).append("' and ");
+            sql_where.append("prebook_date >= '").append(prebook_date_start).append("' and ");
         }
         if(!Strings.isNullOrEmpty(prebook_date_start)){
-            sql_where.append("prebook_date_end <= '").append(prebook_date_end).append("' and ");
+            sql_where.append("prebook_date <= '").append(prebook_date_end).append("' and ");
         }
 
         if(!Strings.isNullOrEmpty(sql_where.toString())){
@@ -205,6 +207,7 @@ public class PreBookRepository {
 
 
     class PreBookRowMapper implements RowMapper<PreBookDao>{
+        DateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         @Override
         public PreBookDao mapRow(ResultSet rs, int i) throws SQLException {
@@ -217,7 +220,7 @@ public class PreBookRepository {
                     rs.getString("prebook_code"),
                     rs.getString("contact"),
                     rs.getString("contact_tel"),
-                    rs.getDate("submit_time")
+                    rs.getString("submit_time")
             );
         }
     }

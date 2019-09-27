@@ -120,10 +120,13 @@ public class PrebookDomainModel {
      */
     public void buildPrebookDao() throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         if(Strings.isNullOrEmpty(this.prebookDTO.getPrebookCode())){
             this.prebookDTO.setPrebookCode(UUID.randomUUID().toString());
         }
-        this.prebookDTO.setSubmitDate(new Date());
+
+        this.prebookDTO.setSubmitDate(simpleDateFormat2.format(new Date()));
         this.preBookDao = new PreBookDao(
                 DateUtils.getSeconds() + (DateUtils.daysBetweenTwoDate(new Date(), simpleDateFormat.parse(prebookDTO.getPrebookDate())) * 24 * 3600)
                 , UUID.randomUUID().toString()
