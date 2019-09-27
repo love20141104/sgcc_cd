@@ -34,7 +34,7 @@ public class PrebookStartTimeDTO implements Serializable {
 
     public void buildCount (int prebookCount){
         this.prebookCount += prebookCount;
-        if(prebookCount >= 4){
+        if(this.prebookCount >= 4){
             this.prebookStatus = PrebookStatus.UNBOOKABLE;
         }else {
             this.prebookStatus = PrebookStatus.BOOKABLE;
