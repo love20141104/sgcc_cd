@@ -1,5 +1,7 @@
 package com.sgcc.repository;
 
+import com.example.CurrentPage;
+import com.example.PaginationHelper;
 import com.example.Utils;
 import com.sgcc.dao.SuggestionDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -99,6 +99,20 @@ public class SuggestionRepository {
                 "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
         logger.info("查询所有意见信息:"+sql);
         return jdbcTemplate.query(sql,new suggestionRowMapper());
+    }
+
+    public CurrentPage<SuggestionDao> findAll(int getPageNo, int getPageSize) {
+        PaginationHelper<SuggestionDao> ph = new PaginationHelper<>();
+        // 持久化
+        String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
+                "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
+        String countSql = "SELECT Count(id) FROM b_suggestion;";
+        try {
+            return ph.fetchPage(jdbcTemplate, countSql, sql, new Object[]{}, getPageNo,getPageSize, new suggestionRowMapper());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -205,7 +219,6 @@ public class SuggestionRepository {
                 dao.setReplyDate( Utils.GetDate( rs.getString("reply_date") ));
             }
             return dao;
-
         }
     }
 }
