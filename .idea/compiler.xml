@@ -47,6 +47,7 @@
       <module name="cache-service" options="-parameters" />
       <module name="dto-model" options="-parameters" />
       <module name="exception" options="-parameters" />
+      <module name="management-service" options="-parameters" />
       <module name="mq-service" options="-parameters" />
       <module name="preBook-service" options="-parameters" />
       <module name="question-service" options="-parameters" />

@@ -1,11 +1,16 @@
 package com.example.demo.test;
 
+import com.example.constant.WechatURLConstants;
 import com.example.demo.DemoApplicationTests;
 import com.sgcc.DemoApplication;
+import com.sgcc.FastDFSClient.FastDFSClient;
+import com.sgcc.dao.AccessTokenDao;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionImgDao;
 import com.sgcc.dto.SuggestionDeleteDTO;
 import com.sgcc.dto.SuggestionSubmitDTO;
+import com.sgcc.dtomodel.wechat.AccessTokenDTO;
+import com.sgcc.entity.event.AccessTokenEntity;
 import com.sgcc.repository.SuggestionRepository;
 import com.sgcc.repository.SuggestionImgRepository;
 import com.sgcc.service.SuggestionService;
@@ -13,8 +18,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +40,18 @@ public class TestSuggestion{
 
     @Autowired
     private SuggestionService suggestionService;
+
+    @Autowired
+    private FastDFSClient fastDFSClient;
+
+
+    @Test
+    public void uploadFile() throws IOException {
+//        File file = new File("/home/xiemin/图片/电网logo.jpeg");
+//
+//        String path = fastDFSClient.uploadFile(file,"jpg");
+//        System.out.println(path);
+    }
 
     @Test
     public void submitTest()

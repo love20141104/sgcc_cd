@@ -111,7 +111,7 @@ public class SuggestionRepository {
                 ps.setString(4,suggestionDaoList.get(i).getSuggestionContent());
                 ps.setString(5,suggestionDaoList.get(i).getSuggestionContact());
                 ps.setString(6,suggestionDaoList.get(i).getSuggestionTel());
-                ps.setString(7,Utils.GetTime(suggestionDaoList.get(i).getSubmitDate()) );
+                ps.setString(7,Utils.GetTime(suggestionDaoList.get(i).getSubmitDate()));
                 ps.setString(8,suggestionDaoList.get(i).getImg_1());
                 ps.setString(9,suggestionDaoList.get(i).getImg_2());
                 ps.setString(10,suggestionDaoList.get(i).getImg_3());

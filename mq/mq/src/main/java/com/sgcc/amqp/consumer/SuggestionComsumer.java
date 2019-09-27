@@ -18,14 +18,16 @@ public class SuggestionComsumer {
     private WeChatEntity weChatEntity;
     @Autowired
     private SuggestionService suggestionService;
+    @Autowired
+    private FastDFSClient fastDFSClient;
 
     @JmsListener(destination = "Suggestion_mq_p")
     public void Save( SuggestionDao dao ){
         try{
             // 下载
-            dao.setImg_1(uploadFile(dao.getImg_1())); ;
-            dao.setImg_2(uploadFile(dao.getImg_2())); ;
-            dao.setImg_3(uploadFile(dao.getImg_3())); ;
+            dao.setImg_1(uploadFile(dao.getImg_1()));
+            dao.setImg_2(uploadFile(dao.getImg_2()));
+            dao.setImg_3(uploadFile(dao.getImg_3()));
             // 持久化
             suggestionService.SaveSuggestion(dao);
             // 同步 Redis
@@ -46,7 +48,7 @@ public class SuggestionComsumer {
         {
             return "";
         }
-        return new FastDFSClient().uploadFile( new String(ctnt) ,".jpg");
+        return fastDFSClient.uploadFile( new String(ctnt) ,".jpg");
     }
 
     @JmsListener(destination = "Suggestion_mq_s")

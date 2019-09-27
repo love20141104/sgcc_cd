@@ -1,5 +1,6 @@
 package com.sgcc.controller;
 
+import com.example.constant.WechatURLConstants;
 import com.example.result.Result;
 import com.sgcc.dto.SuggestionDeleteDTO;
 import com.sgcc.dto.SuggestionSubmitDTO;
@@ -40,6 +41,7 @@ public class SuggestionController {
     @ApiOperation(value = "提交意见", notes = "")
     @PostMapping(value = "/users/{id}")
     public Result submit(@RequestBody SuggestionSubmitDTO suggestionSubmitDTO, @PathVariable("id") String userId) {
+
         return suggestionService.submit(suggestionSubmitDTO,userId);
     }
 

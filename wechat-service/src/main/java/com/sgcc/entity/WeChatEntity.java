@@ -85,12 +85,8 @@ public class WeChatEntity {
 
     public byte[] downloadMedia(String mediaId)
     {
-        String URL = WechatURLConstants.URL_GET_MEDIA.replace(
-                "ACCESS_TOKEN",getAccessToken().getAccess_token()
-                ).replace(
-                "MEDIA_ID"
-                ,mediaId
-        );
+        String URL = WechatURLConstants.URL_GET_MEDIA.replace("ACCESS_TOKEN",getAccessToken().getAccess_token())
+                                                     .replace("MEDIA_ID",mediaId);
         ResponseEntity<byte[]> rsp = restTemplate.getForEntity(URL,byte[].class );
         if( rsp.getStatusCode() == HttpStatus.OK ){
             return rsp.getBody();

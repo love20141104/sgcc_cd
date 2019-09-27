@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,12 @@ import com.github.tobato.fastdfs.service.FastFileStorageClient;
 public class FastDFSClient {
 
     private final Logger logger = LoggerFactory.getLogger(FastDFSClient.class);
+
+    @Value("${fdfs:reqHost}")
+    private String reqHost;
+
+    @Value("${fdfs:reqPort}")
+    private String reqPort;
 
     @Autowired
     private FastFileStorageClient storageClient;
@@ -73,7 +80,8 @@ public class FastDFSClient {
 
     // 封装图片完整URL地址
     private String getResAccessUrl(StorePath storePath) {
-        String fileUrl = fdfsWebServer.getWebServerUrl() + storePath.getFullPath();
+        String httpUrl = fdfsWebServer.getWebServerUrl();
+        String fileUrl = httpUrl.substring(0,httpUrl.indexOf("/")) +":18625/"+ storePath.getFullPath();
         return fileUrl;
     }
 

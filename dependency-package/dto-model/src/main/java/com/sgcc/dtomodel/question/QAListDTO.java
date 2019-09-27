@@ -22,5 +22,4 @@ public class QAListDTO implements Serializable {
     public QAListDTO(String categoryId){
         this.categoryId = categoryId;
     }
-
 }
