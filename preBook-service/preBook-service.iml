@@ -53,5 +53,6 @@
     <orderEntry type="library" name="Maven: org.apache.activemq:activemq-jms-pool:5.15.9" level="project" />
     <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-jta_1.0.1B_spec:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-pool2:2.6.2" level="project" />
+    <orderEntry type="module" module-name="serviceHall-service" />
   </component>
 </module>

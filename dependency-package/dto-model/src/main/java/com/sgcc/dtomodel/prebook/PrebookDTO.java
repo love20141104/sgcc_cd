@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Data
 public class PrebookDTO implements Serializable,Comparable<PrebookDTO> {
     private static final long serialVersionUID = -3090200043033631931L;
@@ -18,8 +18,10 @@ public class PrebookDTO implements Serializable,Comparable<PrebookDTO> {
     private String userId;
 
     // 营业厅id
-
     private String serviceHallId;
+
+    // 营业厅名
+    private String serviceHallName;
 
     // 预约业务办理日期
     private String prebookDate;
@@ -41,6 +43,35 @@ public class PrebookDTO implements Serializable,Comparable<PrebookDTO> {
 
     // 预约提交时间
     private String submitDate;
+
+
+
+
+
+    public PrebookDTO(
+            String userId
+            ,String serviceHallId
+            ,String prebookDate
+            ,String prebookStartTime
+            ,String prebookCode
+            ,String contact
+            ,String contactTel
+            ,String submitDate
+    ){
+        this.userId = userId;
+        this.serviceHallId = serviceHallId;
+        this.prebookDate = prebookDate;
+        this.prebookStartTime = prebookStartTime;
+        this.prebookCode = prebookCode;
+        this.contact = contact;
+        this.contactTel = contactTel;
+        this.submitDate = submitDate;
+    }
+
+    public PrebookDTO buildServiceHallName(String serviceHallName){
+        this.serviceHallName = serviceHallName;
+        return this;
+    }
 
     @Override
     public int compareTo(PrebookDTO prebookDTO) {

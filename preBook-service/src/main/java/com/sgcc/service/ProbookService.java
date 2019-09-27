@@ -5,8 +5,10 @@ import com.example.constant.PrebookStartTimeConstants;
 import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
+import com.sgcc.dao.ServiceHallDao;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
 import com.sgcc.dtomodel.prebook.ServiceHallPrebookStatusDTO;
+import com.sgcc.entity.ServiceHallEntity;
 import com.sgcc.entity.event.PrebookEventEntity;
 import com.sgcc.entity.query.PrebookQueryEntity;
 import com.sgcc.exception.TopErrorCode;
@@ -32,6 +34,9 @@ public class ProbookService {
     private PrebookQueryEntity prebookQueryEntity;
     @Autowired
     private PrebookProducer prebookProducer;
+    @Autowired
+    private ServiceHallEntity serviceHallEntity;
+
 
     /**
      * 根据用户id查询所有的预约信息
@@ -60,8 +65,12 @@ public class ProbookService {
         List<PreBookDao> preBookDaos = prebookQueryEntity.findAllByUserId(openId);
         //根据preBookDaos构造PrebookDomainModel
         PrebookDomainModel prebookModel = new PrebookDomainModel(preBookDaos);
+
+
+        List<ServiceHallDao> serviceHallDaos = serviceHallEntity.findHallList();
+
         //根据preBookDaos构造preBookDTOs
-        prebookModel.buildPrebookDTOS();
+        prebookModel.buildPrebookDTOS(serviceHallDaos);
         //返回prebookDTOS
         return prebookModel.getPrebookDTOS();
     }
@@ -215,8 +224,11 @@ public class ProbookService {
         );
         //根据营业厅id和预约的日期构造PrebookDomainModel
         PrebookDomainModel prebookModel = new PrebookDomainModel(preBookDaos);
+
+        List<ServiceHallDao> serviceHallDaos = serviceHallEntity.findHallList();
+
         //根据preBookDaos构造preBookDTOs
-        prebookModel.buildPrebookDTOS();
+        prebookModel.buildPrebookDTOS(serviceHallDaos);
         //清洗营业厅预约信息,返回营业厅的预约状态
         ServiceHallPrebookStatusDTO serviceHallPrebookStatus = prebookModel
                 .getServiceHallPrebookStatus(serviceHallId, prebookDate);
