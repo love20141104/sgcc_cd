@@ -116,7 +116,7 @@ public class PreBookRepository {
      * @param prebookDTO
      */
     @Transactional
-    public List<String> updatePreBook(PrebookDTO prebookDTO) {
+    public List<PreBookDao> updatePreBook(PrebookDTO prebookDTO) {
         try {
 
 
@@ -142,8 +142,8 @@ public class PreBookRepository {
                 }
             });
 
-            String sql_select = "select id from b_prebook where prebook_code = '" + prebookDTO.getPrebookCode() + "'";
-            return jdbcTemplate.queryForList(sql_select, String.class);
+            String sql_select = "select id,user_open_id,service_hall_id,prebook_code,prebook_date,prebook_start_time,contact,contact_tel,submit_time from b_prebook where prebook_code = '" + prebookDTO.getPrebookCode() + "'";
+            return jdbcTemplate.query(sql_select, new PreBookRowMapper());
         }catch (Exception e){
             e.printStackTrace();
             return null;

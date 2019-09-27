@@ -3,48 +3,26 @@ package com.sgcc.service;
 import com.example.constant.PrebookStartTimeConstants;
 import com.example.result.Result;
 import com.google.common.base.Strings;
-import com.sgcc.dao.QuestionAnswerDao;
-import com.sgcc.dao.QuestionCategoryDao;
+import com.sgcc.dao.PreBookDao;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
-import com.sgcc.dtomodel.question.QADTO;
-import com.sgcc.dtomodel.question.QAListDTO;
-import com.sgcc.dtomodel.question.QuestionCategoryDTO;
 import com.sgcc.entity.event.PrebookEventEntity;
-import com.sgcc.entity.event.QAEventEntity;
 import com.sgcc.entity.query.PrebookQueryEntity;
-import com.sgcc.entity.query.QAQueryEntity;
 import com.sgcc.exception.TopErrorCode;
-import com.sgcc.model.CategoryModel;
-import com.sgcc.model.QuestionDomainModel;
-import com.sgcc.producer.ManagementProducer;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
-public class ManagementService {
-
+public class PrebookManager {
     @Autowired
     private ProbookService probookService;
     @Autowired
     private PrebookEventEntity prebookEventEntity;
     @Autowired
     private PrebookQueryEntity prebookQueryEntity;
-
-    @Autowired
-    private QAEventEntity qaEventEntity;
-    @Autowired
-    private QAQueryEntity qaQueryEntity;
-
-
-
-
     /**
      *  ================================= 预约信息start =================================
      */
@@ -90,13 +68,19 @@ public class ManagementService {
             prebookDTO.setServiceHallId(prebookDTO.getServiceHallId().trim());
             //参数检查 end
             //改mysql
-            String id = prebookEventEntity.updatePrebook(prebookDTO);
-            if (!Strings.isNullOrEmpty(id)) {
-                System.out.println("id:" + id + " 的预约信息已修改");
+            PreBookDao preBookDao = prebookEventEntity.updatePrebook(prebookDTO);
+            if (null != preBookDao) {
+                System.out.println("id:" + preBookDao.getId() + " 的预约信息已修改");
             } else {
                 System.out.println("修改失败");
                 throw new RuntimeException("修改失败");
             }
+
+            //如果redis中存在则更新
+            if(null != prebookQueryEntity.findByIdInRedis(preBookDao.getId())){
+                prebookEventEntity.cacheSubmitPreBookDao(preBookDao);
+            }
+
             return Result.success();
         } catch (Exception e) {
             e.printStackTrace();
@@ -176,151 +160,4 @@ public class ManagementService {
     /**
      * ================================= 预约信息end =======================================
      */
-
-    /**
-     * =============================== 常见问题start =======================================
-     */
-
-    /**
-     * 增加问题分类
-     */
-
-    public Result insertQuestionCategory(QuestionCategoryDTO questionCategoryDTO) {
-        try {
-            List<QuestionCategoryDao> questionCategoryDaos = transform(questionCategoryDTO);
-            qaEventEntity.insertQuestionCategory(questionCategoryDaos);
-            return Result.success();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-        }
-    }
-
-    /**
-     * 修改问题分类
-     */
-    public Result updateQuestionCategory(QuestionCategoryDTO questionCategoryDTO) {
-        try {
-            List<QuestionCategoryDao> questionCategoryDaos = transform(questionCategoryDTO);
-            qaEventEntity.updateQuestionCategory(questionCategoryDaos);
-            return Result.success();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-        }
-
-    }
-
-    /**
-     * 数据转换 dto2dao
-     *
-     * @param questionCategoryDTO
-     * @return
-     */
-    private List<QuestionCategoryDao> transform(QuestionCategoryDTO questionCategoryDTO) {
-        CategoryModel categoryModel = new CategoryModel();
-        List<QuestionCategoryDTO> questionCategoryDTOS = new ArrayList<QuestionCategoryDTO>() {{
-            add(questionCategoryDTO);
-        }};
-        categoryModel.build(questionCategoryDTOS);
-        categoryModel.buildQuestionCategoryDaos();
-        return categoryModel.getQuestionCategoryDaos();
-    }
-
-
-    /**
-     * 作废问题分类
-     */
-    public Result deleteQuestionCategory(List<String> categoryIds) {
-        try {
-            qaEventEntity.deleteQuestionCategory(categoryIds);
-            return Result.success();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-        }
-    }
-
-    /**
-     * 查询问题分类
-     */
-    public Result selectQuestionCategory(
-            String categoryId
-            , String categoryDesc
-    ) {
-        try {
-            List<QuestionCategoryDao> questionCategoryDaos = qaQueryEntity.selectQuestionCategory(categoryId, categoryDesc);
-            CategoryModel categoryModel = new CategoryModel(questionCategoryDaos);
-            categoryModel.buildQuestionCategoryDTOS();
-            return Result.success(categoryModel.getQuestionCategoryDTOS());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-        }
-    }
-
-    /**
-     * 增加QA信息
-     */
-
-    public Result insertQA(String categoryId, QADTO qadto) {
-        try {
-            List<QuestionAnswerDao> questionAnswerDaos = transform(categoryId, qadto);
-            qaEventEntity.insertQA(questionAnswerDaos);
-            return Result.success();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-        }
-    }
-
-    /**
-     * 修改QA信息
-     */
-    public Result updateQA(String categoryId, QADTO qadto) {
-        try {
-
-            List<QuestionAnswerDao> questionAnswerDaos = transform(categoryId, qadto);
-            qaEventEntity.updateQA(questionAnswerDaos);
-            return Result.success();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-        }
-    }
-
-    /**
-     * 数据转换 dto2dao
-     *
-     * @param categoryId
-     * @param qadto
-     * @return
-     */
-    private List<QuestionAnswerDao> transform(String categoryId, QADTO qadto) {
-        QAListDTO qaListDTO = new QAListDTO(categoryId);
-        qaListDTO.getQAdtos().add(qadto);
-        QuestionDomainModel questionDomainModel = new QuestionDomainModel();
-        questionDomainModel.build(categoryId, qaListDTO);
-        questionDomainModel.buildQuestionAnswerDaos();
-        return questionDomainModel.getQuestionAnswerDaos();
-    }
-
-    /**
-     * 作废QA信息
-     */
-    public Result deleteQA(List<String> ids) {
-        try {
-            qaEventEntity.deleteQA(ids);
-            return Result.success();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-        }
-    }
-
-    /**
-     * =============================== 常见问题end =========================================
-     */
-
-
 }

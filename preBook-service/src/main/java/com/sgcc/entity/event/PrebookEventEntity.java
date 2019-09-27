@@ -58,10 +58,10 @@ public class PrebookEventEntity {
      *
      * @param prebookDTO
      */
-    public String updatePrebook(PrebookDTO prebookDTO) {
-        List<String> id = preBookRepository.updatePreBook(prebookDTO);
-        if(null != id && id.size()==1 && !Strings.isNullOrEmpty(id.get(0))){
-            return id.get(0);
+    public PreBookDao updatePrebook(PrebookDTO prebookDTO) {
+        List<PreBookDao> preBookDaos = preBookRepository.updatePreBook(prebookDTO);
+        if(null != preBookDaos && preBookDaos.size()==1 && null != preBookDaos.get(0)){
+            return preBookDaos.get(0);
         }else {
             return null;
         }
