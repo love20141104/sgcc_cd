@@ -1,5 +1,6 @@
 package com.sgcc.repository;
 
+import com.example.Utils;
 import com.sgcc.dao.ServiceHallDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -60,7 +61,7 @@ public class ServiceHallRepository {
      * 新增网点
      * @param list
      */
-    public void saveServiceHall(List<ServiceHallDao> list){
+    public void saveServiceHalls(List<ServiceHallDao> list){
         String sql = "INSERT INTO d_service_hall(id,service_hall_id,service_hall_name,service_hall_addr" +
                 ",service_hall_opentime,service_hall_longitude,service_hall_latitude,service_hall_district," +
                 "service_hall_tel,service_hall_available) values(?,?,?,?,?,?,?,?,?,?)";
@@ -89,21 +90,12 @@ public class ServiceHallRepository {
 
     /**
      * 删除网点
-     * @param list
+     * @param ids
      */
-    public void delServiceHall(List<ServiceHallDao> list){
-        String sql = "delete from d_service_hall where service_hall_id=?";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1, list.get(i).getServiceHallId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return list.size();
-            }
-        });
+    public void delServiceHalls(List<String> ids){
+        String strIds = Utils.joinStrings(ids,"','");
+        String sql = "delete from d_service_hall where service_hall_id in('"+ strIds +"')";
+        jdbcTemplate.execute(sql);
     }
 
 

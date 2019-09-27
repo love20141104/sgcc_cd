@@ -4,10 +4,7 @@ import com.example.result.Result;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
-import com.sgcc.dto.SuggestionDeleteDTO;
-import com.sgcc.dto.SuggestionUpdateDTO;
-import com.sgcc.dto.SuggestionViewDTO;
-import com.sgcc.dto.SuggestionSubmitDTO;
+import com.sgcc.dto.*;
 import com.sgcc.entity.event.SuggestionQueryEntity;
 import com.sgcc.entity.query.SuggestionEventEntity;
 import com.sgcc.exception.TopErrorCode;
@@ -76,11 +73,24 @@ public class SuggestionService {
         return Result.success( getSuggestions(openId) );
     }
 
-    public Result update(SuggestionUpdateDTO updateDTO ) {
+    public Result reply(SuggestionReplyDTO updateDTO ) {
         SuggestionModel model = new SuggestionModel( updateDTO );
         // 写MySQL
         SuggestionDao dao = suggestionEventEntity.Update(updateDTO.getReplyUserId()
                 ,updateDTO.getReplyContent(),new Date(),updateDTO.getSuggestionId());
+        if( dao == null )
+            return null;
+        // 更新 Redis
+        suggestionProducer.CacheSuggestionMQ( model.Dao2RedisDao(dao) );
+
+        return Result.success( model.DAO2DTO(dao) );
+    }
+
+    public Result update(SuggestionMappingDTO mappingDTO ) {
+        SuggestionModel model = new SuggestionModel();
+        SuggestionDao dao = model.MapDTO2DAO(mappingDTO);
+        // 写MySQL
+        dao = suggestionEventEntity.Update(dao);
         if( dao == null )
             return null;
         // 更新 Redis
@@ -114,11 +124,6 @@ public class SuggestionService {
         suggestionEventEntity.Cache( dao );
     }
 
-    public void SaveSuggestions( List<SuggestionDao> daos)
-    {
-        suggestionEventEntity.SaveAll( daos );
-    }
-
     public void SaveSuggestion( SuggestionDao dao)
     {
         suggestionEventEntity.Save( dao );
@@ -127,6 +132,27 @@ public class SuggestionService {
     public void DeleteSuggestions(List<String> suggestionIds )
     {
         suggestionEventEntity.DeleteSuggestions(suggestionIds);
+    }
+
+    public Result AddSuggestion(SuggestionMappingDTO dto )
+    {
+        SuggestionModel model = new SuggestionModel();
+        // 持久化
+        SaveSuggestion( model.MapDTO2DAO(dto) );
+        // 同步 Redis
+        ReloadSuggestions( dto.getUserId() );
+        return Result.success();
+    }
+    public Result getSuggestions(  )
+    {
+        try {
+            List<SuggestionDao> daos = suggestionEventEntity.GetSuggestions();
+            SuggestionModel model = new SuggestionModel();
+            return Result.success(model.DAOs2MapDTOs(daos));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        }
     }
 }
 

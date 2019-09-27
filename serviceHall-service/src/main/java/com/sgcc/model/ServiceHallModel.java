@@ -2,7 +2,8 @@ package com.sgcc.model;
 
 import com.example.MapUtil;
 import com.sgcc.dao.ServiceHallDao;
-import com.sgcc.dtomodel.map.ServiceHall_ComputedDistanceDTO;
+import com.sgcc.dto.ServiceHallComputedDistanceDTO;
+import com.sgcc.dto.ServiceHallMappingDTO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +14,10 @@ public class ServiceHallModel {
     Double m_UserLat = 0.00D;
     Double m_UserLng = 0.00D;
 
+    public ServiceHallModel(  ){
+
+    }
+    
     public ServiceHallModel( Double lat,double lng ){
         m_UserLat = lat ;
         m_UserLng = lng;
@@ -40,14 +45,13 @@ public class ServiceHallModel {
         }
         return rets;
     }
-
-    public List<ServiceHall_ComputedDistanceDTO> Dao2Dto( List<ServiceHallDao> rets ,boolean isGetDistance  )
+    public List<ServiceHallComputedDistanceDTO> Dao2Dto(List<ServiceHallDao> rets , boolean isGetDistance  )
     {
         // 转成DTO,TODO 建立营业厅网点充血模型
-        List<ServiceHall_ComputedDistanceDTO> datas = new ArrayList<>();
+        List<ServiceHallComputedDistanceDTO> datas = new ArrayList<>();
         for( ServiceHallDao item : rets )
         {
-            ServiceHall_ComputedDistanceDTO dto = new ServiceHall_ComputedDistanceDTO();
+            ServiceHallComputedDistanceDTO dto = new ServiceHallComputedDistanceDTO();
             if( isGetDistance )
             {
                 Double distance = MapUtil.getDistance( m_UserLat ,m_UserLng ,item.getServiceHallLatitude(),item.getServiceHallLongitude());
@@ -76,8 +80,7 @@ public class ServiceHallModel {
         }
         return rets;
     }
-
-    public List<ServiceHall_ComputedDistanceDTO> GetDtos( List<ServiceHall_ComputedDistanceDTO> datas,int distance,int count )
+    public List<ServiceHallComputedDistanceDTO> GetDtos(List<ServiceHallComputedDistanceDTO> datas, int distance, int count )
     {
         if( datas.size() > 0 )
         {
@@ -99,25 +102,97 @@ public class ServiceHallModel {
         }
         return datas;
     }
-    public List<ServiceHall_ComputedDistanceDTO> NearestServiceHalls() {
+    public List<ServiceHallComputedDistanceDTO> NearestServiceHalls() {
         List<ServiceHallDao> daos = Get10KMHalls();
         if (daos.size() < 1)
             return null;
 
-        List<ServiceHall_ComputedDistanceDTO> dtos = Dao2Dto(daos, true);
+        List<ServiceHallComputedDistanceDTO> dtos = Dao2Dto(daos, true);
         if (dtos.size() < 1)
             return null;
 
         return GetDtos(dtos, 10, 5);
     }
-
-    public List<ServiceHall_ComputedDistanceDTO> ServiceHalls(String district)
+    public List<ServiceHallComputedDistanceDTO> ServiceHalls(String district)
     {
         List<ServiceHallDao> daos = GetHalls(  district );
-        List<ServiceHall_ComputedDistanceDTO> dtos = Dao2Dto( daos , false );
+        List<ServiceHallComputedDistanceDTO> dtos = Dao2Dto( daos , false );
         if( dtos.size() < 1 )
             return null;
 
         return dtos;
+    }
+    public ServiceHallMappingDTO DAO2MapDTO(ServiceHallDao dao)
+    {
+        if( dao == null )
+            return null;
+        ServiceHallMappingDTO dto = new ServiceHallMappingDTO();
+        dto.setId(dao.getId());
+        dto.setServiceHallAddr(dao.getServiceHallAddr());
+        dto.setServiceHallAvailable(dao.getServiceHallAvailable());
+        dto.setServiceHallBusinessDesc(dao.getServiceHallBusinessDesc());
+        dto.setServiceHallBusinessDistrict(dao.getServiceHallBusinessDistrict());
+        dto.setServiceHallCollect(dao.getServiceHallCollect());
+        dto.setServiceHallDistrict(dao.getServiceHallDistrict());
+        dto.setServiceHallId(dao.getServiceHallId());
+        dto.setServiceHallLandmarkBuilding(dao.getServiceHallLandmarkBuilding());
+        dto.setServiceHallLatitude(dao.getServiceHallLatitude());
+        dto.setServiceHallLongitude(dao.getServiceHallLongitude());
+        dto.setServiceHallName(dao.getServiceHallName());
+        dto.setServiceHallOpenTime(dao.getServiceHallOpenTime());
+        dto.setServiceHallOwner(dao.getServiceHallOwner());
+        dto.setServiceHallRank(dao.getServiceHallRank());
+        dto.setServiceHallTel(dao.getServiceHallTel());
+        dto.setServiceHallTraffic(dao.getServiceHallTraffic());
+        return dto;
+    }
+
+    public ServiceHallDao MapDTO2DAO(ServiceHallMappingDTO dto )
+    {
+        if( dto == null )
+            return null;
+        ServiceHallDao dao = new ServiceHallDao();
+        dao.setId(dao.getId());
+        dao.setServiceHallAddr(dto.getServiceHallAddr());
+        dao.setServiceHallAvailable(dto.getServiceHallAvailable());
+        dao.setServiceHallBusinessDesc(dto.getServiceHallBusinessDesc());
+        dao.setServiceHallBusinessDistrict(dto.getServiceHallBusinessDistrict());
+        dao.setServiceHallCollect(dto.getServiceHallCollect());
+        dao.setServiceHallDistrict(dto.getServiceHallDistrict());
+        dao.setServiceHallId(dto.getServiceHallId());
+        dao.setServiceHallLandmarkBuilding(dto.getServiceHallLandmarkBuilding());
+        dao.setServiceHallLatitude(dto.getServiceHallLatitude());
+        dao.setServiceHallLongitude(dto.getServiceHallLongitude());
+        dao.setServiceHallName(dto.getServiceHallName());
+        dao.setServiceHallOpenTime(dto.getServiceHallOpenTime());
+        dao.setServiceHallOwner(dto.getServiceHallOwner());
+        dao.setServiceHallRank(dto.getServiceHallRank());
+        dao.setServiceHallTel(dto.getServiceHallTel());
+        dao.setServiceHallTraffic(dto.getServiceHallTraffic());
+        return dao;
+    }
+
+    public List<ServiceHallMappingDTO> DAOs2MapDTOs(List<ServiceHallDao> daos)
+    {
+        if( daos == null || daos.size() < 1)
+            return null;
+        List<ServiceHallMappingDTO> dtos = new ArrayList<>();
+        for(ServiceHallDao dao:daos)
+        {
+            dtos.add( DAO2MapDTO(dao));
+        }
+        return dtos;
+    }
+
+    public List<ServiceHallDao> MapDTOs2DAOs(List<ServiceHallMappingDTO> dtos )
+    {
+        if( dtos == null || dtos.size() < 1)
+            return null;
+        List<ServiceHallDao> daos = new ArrayList<>();
+        for(ServiceHallMappingDTO dto:dtos)
+        {
+            daos.add( MapDTO2DAO(dto));
+        }
+        return daos;
     }
 }

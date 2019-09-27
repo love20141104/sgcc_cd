@@ -25,12 +25,14 @@ public class SuggestionEventEntity {
     public SuggestionDao Update(String reply_user_id , String reply_content, Date reply_date, String suggestion_id ){
         return suggestionRepository.update(reply_user_id,reply_content,reply_date,suggestion_id);
     }
+    public SuggestionDao Update( SuggestionDao dao ){
+        return suggestionRepository.update(dao);
+    }
 
     public void SaveAll( List<SuggestionDao> daos )
     {
         suggestionRepository.saveAll(daos);
     }
-
 
     public void CacheAll( List<SuggestionRedisDao> daos )
     {
@@ -53,4 +55,8 @@ public class SuggestionEventEntity {
         suggestionRedisRepository.deleteAll(daos);
     }
 
+    public List<SuggestionDao> GetSuggestions()
+    {
+        return suggestionRepository.findAll();
+    }
 }

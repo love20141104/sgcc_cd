@@ -1,7 +1,9 @@
 package com.example;
 
 import com.example.constant.WechatURLConstants;
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.sun.xml.internal.ws.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -105,6 +107,10 @@ public class Utils {
     {
         return "DATE_FORMAT("+field+" ,'%Y-%m-%d %H:%m:%s') AS " +field+ "";
     }
+    public static String joinStrings(List<String> strings, String separator) {
+        return Joiner.on(separator).join(strings);
+    }
+
 //    public static String createSign(Map params, String key) {
 //
 ////        StringBuffer sbkey = new StringBuffer();

@@ -34,27 +34,38 @@ public class ServiceHallEntity {
     }
 
     /**
-     * 新增网点
+     * 批量新增网点
      * @param list
      */
-    public void saveServiceHall(List<ServiceHallDao> list){
-        repository.saveServiceHall(list);
+    public void saveServiceHalls(List<ServiceHallDao> list){
+        repository.saveServiceHalls(list);
     }
-
+    /**
+     * 新增网点
+     * @param dao
+     */
+    public void saveServiceHall(ServiceHallDao dao){
+        repository.saveServiceHalls(new ArrayList<ServiceHallDao>(){{add(dao);}});
+    }
     /**
      * 删除网点
-     * @param list
+     * @param ids
      */
-    public void delServiceHall(List<ServiceHallDao> list){
-        repository.delServiceHall(list);
+    public void delServiceHalls(List<String> ids){
+        repository.delServiceHalls(ids);
     }
-
     /**
-     * 修改网点
+     * 批量修改网点
      * @param list
      */
-    public void updateServiceHall(List<ServiceHallDao> list){
+    public void updateServiceHalls(List<ServiceHallDao> list){
         repository.updateServiceHall(list);
     }
-
+    /**
+     * 修改网点
+     * @param dao
+     */
+    public void updateServiceHall(ServiceHallDao dao){
+        repository.updateServiceHall(new ArrayList<ServiceHallDao>(){{add(dao);}});
+    }
 }

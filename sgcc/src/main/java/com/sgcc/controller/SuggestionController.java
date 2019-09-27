@@ -1,11 +1,7 @@
 package com.sgcc.controller;
 
-import com.example.constant.WechatURLConstants;
 import com.example.result.Result;
-import com.sgcc.dto.SuggestionDeleteDTO;
-import com.sgcc.dto.SuggestionSubmitDTO;
-import com.sgcc.dto.SuggestionUpdateDTO;
-import com.sgcc.dto.SuggestionViewDTO;
+import com.sgcc.dto.*;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.service.SuggestionService;
 import io.swagger.annotations.Api;
@@ -51,15 +47,59 @@ public class SuggestionController {
         return suggestionService.getSuggestion(suggestionId);
     }
 
-    @ApiOperation(value = "修改意见", notes = "")
+    @ApiOperation(value = "回复意见", notes = "")
     @PutMapping(value = "/{id}")
-    public Result update(@RequestBody SuggestionUpdateDTO suggestionUpdateDTO, @PathVariable("id") String suggestionId) {
-        return suggestionService.update(suggestionUpdateDTO);
+    public Result reply(@RequestBody SuggestionReplyDTO suggestionReplyDTO, @PathVariable("id") String suggestionId) {
+        return suggestionService.reply(suggestionReplyDTO);
     }
 
     @ApiOperation(value = "批量删除意见", notes = "")
     @PostMapping(value = "/Deletes")
     public Result delete(@RequestBody SuggestionDeleteDTO dto ) {
+        return suggestionService.delete(dto);
+    }
+
+    /**
+     * 后台管理系统查询意见
+     */
+    @ApiOperation(value = "后台管理系统查询意见", notes = "")
+    @GetMapping(value = "/Suggestions")
+    public Result getSuggestions(  )
+    {
+        return suggestionService.getSuggestions();
+    }
+    /**
+     * 后台管理系统修改意见
+     */
+    @ApiOperation(value = "后台管理系统修改意见", notes = "")
+    @PutMapping(value = "/Suggestions/{id}")
+    public Result updateSuggestion(SuggestionMappingDTO dto , @PathVariable("id") String suggestionId)
+    {
+        return suggestionService.update(dto);
+    }
+    /**
+     * 后台管理系统新增意见
+     */
+    @ApiOperation(value = "后台管理系统新增意见", notes = "")
+    @PostMapping(value = "/Suggestions/{id}")
+    public Result AddSuggestion(SuggestionMappingDTO dto, @PathVariable("id") String suggestionId )
+    {
+        return suggestionService.AddSuggestion(dto);
+    }
+    /**
+     * 后台管理系统删除意见
+     */
+    @ApiOperation(value = "后台管理系统删除意见", notes = "")
+    @DeleteMapping(value = "/Suggestions/{id}}")
+    public Result deletes(@RequestBody SuggestionDeleteDTO dto, @PathVariable("id") String suggestionId ) {
+        return suggestionService.delete(dto);
+    }
+    /**
+     * 后台管理系统批量删除意见
+     */
+    @ApiOperation(value = "后台管理系统批量删除意见", notes = "")
+    @PostMapping(value = "/Suggestions/Deletes")
+    public Result deletes(@RequestBody SuggestionDeleteDTO dto ) {
         return suggestionService.delete(dto);
     }
 }

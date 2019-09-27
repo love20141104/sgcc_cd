@@ -6,14 +6,10 @@ import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
 import com.sgcc.dto.*;
-import com.sgcc.entity.event.SuggestionQueryEntity;
-import com.sgcc.entity.query.SuggestionEventEntity;
-import com.sgcc.producer.SuggestionProducer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -30,7 +26,7 @@ public class SuggestionModel {
     private List<SuggestionDao> m_suggestionDaos = null;
     private List<SuggestionViewDTO> m_suggestionViewDTO = null;
     private SuggestionSubmitDTO m_suggestionSubmitDTO = null;
-    private SuggestionUpdateDTO m_suggestionUpdatetDTO = null;
+    private SuggestionReplyDTO m_suggestionUpdatetDTO = null;
     private String m_userId = null;
     private String m_errMsg = "";
     private SuggestionDao m_dao = null;
@@ -38,10 +34,10 @@ public class SuggestionModel {
     public SuggestionModel( SuggestionSubmitDTO dto  ){
         m_suggestionSubmitDTO = dto;
     }
-    public SuggestionModel( SuggestionUpdateDTO updateDto  ){
+    public SuggestionModel( SuggestionReplyDTO updateDto  ){
         m_suggestionUpdatetDTO = updateDto;
     }
-    public SuggestionModel(SuggestionSubmitDTO dto , List<SuggestionDao> daos){
+    public SuggestionModel( SuggestionSubmitDTO dto , List<SuggestionDao> daos){
         m_suggestionSubmitDTO = dto;
         m_suggestionDaos = daos;
     }
@@ -275,5 +271,45 @@ public class SuggestionModel {
         dao.setImg_2(dto.getImg_2());
         dao.setImg_3(dto.getImg_3());
         return dao;
+    }
+    public SuggestionMappingDTO DAO2MapDTO( SuggestionDao dao )
+    {
+        SuggestionMappingDTO dto = new SuggestionMappingDTO();
+        dto.setId(dao.getId());
+        dto.setSuggestionId(dao.getSuggestionId());
+        dto.setSuggestionContact(dao.getSuggestionContact());
+        dto.setSuggestionContent(dao.getSuggestionContent());
+        dto.setSuggestionTel(dao.getSuggestionTel());
+        dto.setUserId(dao.getUserId());
+        dto.setSubmitDate(dao.getSubmitDate());
+        dto.setReplyUserId(dao.getReplyUserId());
+        dto.setReplyDate(dao.getReplyDate());
+        dto.setReplyContent(dao.getReplyContent());
+        dto.setImg_1(dao.getImg_1());
+        dto.setImg_2(dao.getImg_2());
+        dto.setImg_3(dao.getImg_3());
+        return dto;
+    }
+    public List<SuggestionDao> MapDTOs2DAOs(List<SuggestionMappingDTO> dtos)
+    {
+        if( dtos == null || dtos.size() < 1 )
+            return null;
+        List<SuggestionDao> daos = new ArrayList<>();
+        for( SuggestionMappingDTO dto : dtos )
+        {
+            daos.add( MapDTO2DAO(dto) );
+        }
+        return daos;
+    }
+    public List< SuggestionMappingDTO> DAOs2MapDTOs(List<SuggestionDao> daos)
+    {
+        if( daos == null || daos.size() < 1 )
+            return null;
+        List<SuggestionMappingDTO> dtos = new ArrayList<>();
+        for( SuggestionDao dao : daos )
+        {
+            dtos.add( DAO2MapDTO(dao) );
+        }
+        return dtos;
     }
 }

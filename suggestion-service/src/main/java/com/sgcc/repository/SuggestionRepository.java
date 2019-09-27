@@ -82,6 +82,14 @@ public class SuggestionRepository {
         return findBySuggestionId(suggestion_id);
     }
 
+    @Transactional
+    public SuggestionDao update(SuggestionDao dao){
+        String sql = "update b_suggestion set reply_user_id='" + dao.getReplyUserId()+ "',"+
+                "reply_content = '" + dao.getReplyContent() +"'," + "reply_date = '" + Utils.GetTime(dao.getReplyDate()) +"'";
+        sql = sql + " where suggestion_id = '" + dao.getSuggestionId() + "'";
+        jdbcTemplate.execute(sql);
+        return findBySuggestionId(dao.getSuggestionId());
+    }
     /**
      * 查询所有意见信息
      * @return

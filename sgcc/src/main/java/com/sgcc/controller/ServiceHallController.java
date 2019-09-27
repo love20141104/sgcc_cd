@@ -2,9 +2,10 @@ package com.sgcc.controller;
 import com.example.result.Result;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sgcc.dto.ServiceHallDeleteDTO;
+import com.sgcc.dto.ServiceHallMappingDTO;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
 import com.sgcc.service.*;
-import com.sgcc.test.TestRedisDTO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,5 +95,47 @@ public class ServiceHallController {
         return probookService.getPrebookInfosByServiceHall(serviceHallId,prebookDate);
     }
 
-
+    /**
+     * 后台管理系统查询营业厅
+     */
+    @ApiOperation(value = "后台管理系统查询营业厅", notes = "")
+    @GetMapping(value = "/ServiceHalls")
+    public Result getServiceHalls(  )
+    {
+        return serviceHallService.findHallList();
+    }
+    /**
+     * 后台管理系统修改营业厅
+     */
+    @ApiOperation(value = "后台管理系统修改营业厅", notes = "")
+    @PutMapping(value = "/ServiceHalls/{id}")
+    public Result updateServiceHalls( ServiceHallMappingDTO dto , @PathVariable("id") String serviceHallId)
+    {
+        return serviceHallService.updateServiceHall(dto);
+    }
+    /**
+     * 后台管理系统新增营业厅
+     */
+    @ApiOperation(value = "后台管理系统新增营业厅", notes = "")
+    @PostMapping(value = "/ServiceHalls/{id}")
+    public Result AddServiceHall(ServiceHallMappingDTO dto, @PathVariable("id") String serviceHallId )
+    {
+        return serviceHallService.saveServiceHall(dto);
+    }
+    /**
+     * 后台管理系统删除营业厅
+     */
+    @ApiOperation(value = "后台管理系统删除营业厅", notes = "")
+    @DeleteMapping(value = "/ServiceHalls/{id}}")
+    public Result deleteServiceHall(@PathVariable("id") String serviceHallId ) {
+        return serviceHallService.delServiceHall(serviceHallId);
+    }
+    /**
+     * 后台管理系统批量删除营业厅
+     */
+    @ApiOperation(value = "后台管理系统批量删除营业厅", notes = "")
+    @PostMapping(value = "/ServiceHalls/Deletes")
+    public Result deletes(@RequestBody ServiceHallDeleteDTO dto ) {
+        return serviceHallService.delServiceHalls(dto.getIds());
+    }
 }
