@@ -207,7 +207,7 @@ public class ProbookService {
         //参数检查 start
         try {
             DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-            format1.parse(prebookDate);
+            prebookDate = format1.format(format1.parse(prebookDate.trim()));
             if (Strings.isNullOrEmpty(serviceHallId)) {
                 throw new RuntimeException("serviceHallId为空");
             }
