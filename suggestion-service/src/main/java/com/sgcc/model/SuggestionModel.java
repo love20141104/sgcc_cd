@@ -128,7 +128,7 @@ public class SuggestionModel {
             rdao.setMediaId_2(dao.getImg_2());
 
         if( !Strings.isNullOrEmpty(dao.getImg_3()) && Utils.verifyUrl(dao.getImg_3()) )
-            rdao.setImg_1(dao.getImg_3());
+            rdao.setImg_3(dao.getImg_3());
         else
             rdao.setMediaId_3(dao.getImg_3());
 
