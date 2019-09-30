@@ -3,6 +3,7 @@ package com.sgcc.repository;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
+import com.sgcc.dtomodel.prebook.PrebookInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -178,6 +179,7 @@ public class PreBookRepository {
      * @param prebook_date_end
      * @return
      */
+
     @Transactional
     public List<PreBookDao> getPrebook(String user_open_id, String service_hall_id, String prebook_code, String prebook_date_start, String prebook_date_end) {
         String sql = "select id,user_open_id,service_hall_id,prebook_code,prebook_date,prebook_start_time,contact,contact_tel,submit_time from b_prebook ";

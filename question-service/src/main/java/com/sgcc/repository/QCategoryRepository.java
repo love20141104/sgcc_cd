@@ -99,9 +99,9 @@ public class QCategoryRepository {
         String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(categoryId)){
-            sql_where.append(" category_id like '%").append("d_question_category%' and ");
-        }if(Strings.isNullOrEmpty(categoryDesc)){
-            sql_where.append("category_desc like '%").append("category_desc%' and ");
+            sql_where.append(" category_id like '%").append(categoryId+"%' and ");
+        }if(!Strings.isNullOrEmpty(categoryDesc)){
+            sql_where.append("category_desc like '%").append(categoryDesc+"%' and ");
         }
 
         if(!Strings.isNullOrEmpty(sql_where.toString())){

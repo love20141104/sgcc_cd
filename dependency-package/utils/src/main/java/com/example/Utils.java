@@ -3,17 +3,13 @@ package com.example;
 import com.example.constant.WechatURLConstants;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
-import com.sun.xml.internal.ws.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Utils {
     /**

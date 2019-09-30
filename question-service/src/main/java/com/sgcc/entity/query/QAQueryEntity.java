@@ -2,6 +2,7 @@ package com.sgcc.entity.query;
 
 import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dao.QuestionCategoryDao;
+import com.sgcc.dtomodel.question.QAnswerDTO;
 import com.sgcc.repository.QARedisRepository;
 import com.sgcc.repository.QAnswerRepository;
 import com.sgcc.repository.QCategoryRedisRepository;
@@ -33,8 +34,8 @@ public class QAQueryEntity {
     /**
      * 查询所有问题回答
      */
-    public List<QuestionAnswerDao> getAvailableQAList(){
-        return qAnswerRepository.findAllQAnswer();
+    public List<QAnswerDTO> getAvailableQAList(String category_name, String question_desc, String answer){
+        return qAnswerRepository.findQAnswerList(category_name,question_desc,answer);
     }
 
     /**

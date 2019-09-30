@@ -5,6 +5,7 @@ import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dao.QuestionCategoryDao;
 import com.sgcc.dtomodel.question.QADTO;
 import com.sgcc.dtomodel.question.QAListDTO;
+import com.sgcc.dtomodel.question.QAnswerDTO;
 import com.sgcc.dtomodel.question.QuestionCategoryDTO;
 import com.sgcc.entity.event.QAEventEntity;
 import com.sgcc.entity.query.QAQueryEntity;
@@ -90,10 +91,7 @@ public class QuestionManger {
     /**
      * 查询问题分类
      */
-    public Result selectQuestionCategory(
-            String categoryId
-            , String categoryDesc
-    ) {
+    public Result selectQuestionCategory(String categoryId, String categoryDesc) {
         try {
             List<QuestionCategoryDao> questionCategoryDaos = qaQueryEntity.selectQuestionCategory(categoryId, categoryDesc);
             CategoryModel categoryModel = new CategoryModel(questionCategoryDaos);
@@ -159,6 +157,19 @@ public class QuestionManger {
             qaEventEntity.deleteQA(ids);
             return Result.success();
         } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        }
+    }
+
+    /**
+     * 查询QA信息
+     */
+    public Result selectQADTO(String category_name, String question_desc,String answer) {
+        try {
+            List<QAnswerDTO> questionAnswerDaos = qaQueryEntity.getAvailableQAList(category_name,question_desc,answer);
+            return Result.success(questionAnswerDaos);
+        }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.PARAMETER_ERR);
         }
