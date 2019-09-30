@@ -5,7 +5,6 @@ import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
-import com.sgcc.dtomodel.prebook.PrebookInfoDTO;
 import com.sgcc.entity.event.PrebookEventEntity;
 import com.sgcc.entity.query.PrebookQueryEntity;
 import com.sgcc.exception.TopErrorCode;

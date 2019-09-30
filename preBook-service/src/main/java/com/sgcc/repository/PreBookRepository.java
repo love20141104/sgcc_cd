@@ -3,7 +3,6 @@ package com.sgcc.repository;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
-import com.sgcc.dtomodel.prebook.PrebookInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
