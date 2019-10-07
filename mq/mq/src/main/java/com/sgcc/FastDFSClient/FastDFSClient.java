@@ -77,6 +77,20 @@ public class FastDFSClient {
             return url;
         return "";
     }
+    /**
+     * 将一段字符串生成一个文件上传
+     * @param content 文件内容
+     * @param fileExtension
+     * @return
+     */
+    public String uploadFile(byte[] content, String fileExtension) {
+        ByteArrayInputStream stream = new ByteArrayInputStream(content);
+        StorePath storePath = storageClient.uploadFile(stream,content.length, fileExtension,null);
+        String url = getResAccessUrl(storePath);
+        if( Utils.verifyUrl(url) )
+            return url;
+        return "";
+    }
 
     // 封装图片完整URL地址
     private String getResAccessUrl(StorePath storePath) {

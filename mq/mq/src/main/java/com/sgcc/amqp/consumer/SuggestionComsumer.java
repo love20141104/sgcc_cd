@@ -48,7 +48,7 @@ public class SuggestionComsumer {
         {
             return "";
         }
-        return fastDFSClient.uploadFile( new String(ctnt) ,".jpg");
+        return fastDFSClient.uploadFile( ctnt,"png");
     }
 
     @JmsListener(destination = "Suggestion_mq_s")
