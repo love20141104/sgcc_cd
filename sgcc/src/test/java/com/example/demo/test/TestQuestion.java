@@ -1,21 +1,31 @@
 package com.example.demo.test;
 
-import com.example.demo.DemoApplicationTests;
+import com.sgcc.DemoApplication;
 import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dao.QuestionCategoryDao;
 import com.sgcc.repository.QAnswerRepository;
+import com.sgcc.repository.QAnswersRepository;
 import com.sgcc.repository.QCategoryRepository;
+import com.sgcc.repository.QCategorysRepository;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-public class TestQuestion extends DemoApplicationTests{
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = DemoApplication.class)
+public class TestQuestion {
 
     @Autowired
-    private QCategoryRepository QCategoryRepository;
+    private QCategorysRepository QCategorysRepository;
+    @Autowired
+    private QAnswersRepository qAnswersRepository;
+    @Autowired
+    private QCategoryRepository qCategoryRepository;
     @Autowired
     private QAnswerRepository qAnswerRepository;
 
@@ -25,7 +35,7 @@ public class TestQuestion extends DemoApplicationTests{
      */
     @Test
     public void getQAnswerList(){
-        List<QuestionAnswerDao> categoryDaoList = qAnswerRepository.findAllQAnswer();
+        List<QuestionAnswerDao> categoryDaoList = qAnswersRepository.findAllQAnswer();
         for (int i = 0; i < categoryDaoList.size(); i++) {
             System.out.println(categoryDaoList.get(i).getQuestionDesc());
         }
@@ -36,23 +46,13 @@ public class TestQuestion extends DemoApplicationTests{
      */
     @Test
     public void addQAnswer(){
-        List<QuestionAnswerDao> answerDaoList = new ArrayList<QuestionAnswerDao>();
-        QuestionAnswerDao dao = null;
-        dao= new QuestionAnswerDao();
-        dao.setId(UUID.randomUUID().toString().substring(0,28));
+        QuestionAnswerDao dao = new QuestionAnswerDao();
+        dao.setId(UUID.randomUUID().toString());
         dao.setCategoryId("2c37b94b-268e-49a7-8e3d-1e9b");
-        dao.setQuestionDesc("我是问题的描述一");
-        dao.setAnswer("我是问题的回答一");
-        answerDaoList.add(dao);
+        dao.setQuestionDesc("我是描述1001");
+        dao.setAnswer("我是问题的回答1001");
 
-        dao = new QuestionAnswerDao();
-        dao.setId(UUID.randomUUID().toString().substring(0,28));
-        dao.setCategoryId("a949024a-774f-4621-ade0-0540");
-        dao.setQuestionDesc("我是问题的描述一");
-        dao.setAnswer("我是问题的回答一");
-        answerDaoList.add(dao);
-
-        qAnswerRepository.addQAnswer(answerDaoList);
+        qAnswerRepository.addQAnswer(dao);
 
     }
 
@@ -79,21 +79,11 @@ public class TestQuestion extends DemoApplicationTests{
      */
     @Test
     public void updateQAnswer(){
-        List<QuestionAnswerDao> answerDaoList = new ArrayList<QuestionAnswerDao>();
-        QuestionAnswerDao dao =null;
-        dao = new QuestionAnswerDao();
-        dao.setId("1e974093-9c22-48b8-aa8e-ebc1");
-        dao.setQuestionDesc("我是问题的描述1111");
-        dao.setAnswer("我是问题的回答1111");
-
-        answerDaoList.add(dao);
-        dao = new QuestionAnswerDao();
-        dao.setId("80b057f2-9679-46ce-8a8e-0d0e");
-        dao.setQuestionDesc("我是问题的描述2222");
-        dao.setAnswer("我是问题的回答2222");
-        answerDaoList.add(dao);
-
-        qAnswerRepository.updateQAnswer(answerDaoList);
+        QuestionAnswerDao dao =new QuestionAnswerDao();
+        dao.setId("f2f1ef58-6668-4e6d-b0c3-ec21f38e69f0");
+        dao.setQuestionDesc("我是问题的描述9999");
+        dao.setAnswer("我是问题的回答9999");
+        qAnswerRepository.updateQAnswer(dao);
     }
 
 
@@ -106,7 +96,7 @@ public class TestQuestion extends DemoApplicationTests{
      */
     @Test
     public void getQCategoryList(){
-        List<QuestionCategoryDao> categoryDaoList = QCategoryRepository.findAllQCategory();
+        List<QuestionCategoryDao> categoryDaoList = QCategorysRepository.findAllQCategory();
         for (int i = 0; i < categoryDaoList.size(); i++) {
             System.out.println(categoryDaoList.get(i).getCategoryDesc()+"==>"+i);
         }
@@ -117,23 +107,13 @@ public class TestQuestion extends DemoApplicationTests{
      */
     @Test
     public void addQCategory(){
-        List<QuestionCategoryDao> categoryDaoList = new ArrayList<QuestionCategoryDao>();
-        QuestionCategoryDao dao = null;
-        dao= new QuestionCategoryDao();
-        dao.setId("10003");
-        dao.setCategoryId(UUID.randomUUID().toString().substring(0,28));
-        dao.setCategoryDesc("问题类型3333");
-        dao.setCategoryOrder(10003);
-        categoryDaoList.add(dao);
+        QuestionCategoryDao dao = new QuestionCategoryDao();
+        dao.setId("10005");
+        dao.setCategoryId(UUID.randomUUID().toString());
+        dao.setCategoryDesc("问题类型5555");
+        dao.setCategoryOrder(10005);
 
-        dao = new QuestionCategoryDao();
-        dao.setId("10004");
-        dao.setCategoryId(UUID.randomUUID().toString().substring(0,28));
-        dao.setCategoryDesc("问题类型4444");
-        dao.setCategoryOrder(10004);
-        categoryDaoList.add(dao);
-
-        QCategoryRepository.addQCategory(categoryDaoList);
+        qCategoryRepository.addQCategory(dao);
 
     }
 
@@ -160,21 +140,12 @@ public class TestQuestion extends DemoApplicationTests{
      */
     @Test
     public void updateQCategory(){
-        List<QuestionCategoryDao> categoryDaoList = new ArrayList<QuestionCategoryDao>();
-        QuestionCategoryDao dao =null;
-        dao = new QuestionCategoryDao();
-        dao.setCategoryId("2c37b94b-268e-49a7-8e3d-1e9b");
-        dao.setCategoryDesc("问题类型1111");
-        dao.setCategoryOrder(1111);
+        QuestionCategoryDao dao = new QuestionCategoryDao();
+        dao.setCategoryId("c9c03934-9bf5-4e6d-b882-c1920c72ae9b");
+        dao.setCategoryDesc("描述5555");
+        dao.setCategoryOrder(5555);
 
-        categoryDaoList.add(dao);
-        dao = new QuestionCategoryDao();
-        dao.setCategoryId("a949024a-774f-4621-ade0-0540");
-        dao.setCategoryDesc("问题类型2222");
-        dao.setCategoryOrder(2222);
-        categoryDaoList.add(dao);
-
-        QCategoryRepository.updateQCategory(categoryDaoList);
+        qCategoryRepository.updateQCategory(dao);
     }
 
 

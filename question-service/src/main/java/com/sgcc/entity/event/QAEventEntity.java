@@ -1,45 +1,41 @@
 package com.sgcc.entity.event;
 
-import com.google.common.base.Strings;
 import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dao.QuestionCategoryDao;
-import com.sgcc.dtomodel.question.QuestionCategoryDTO;
-import com.sgcc.model.CategoryModel;
 import com.sgcc.repository.QARedisRepository;
-import com.sgcc.repository.QAnswerRepository;
+import com.sgcc.repository.QAnswersRepository;
 import com.sgcc.repository.QCategoryRedisRepository;
-import com.sgcc.repository.QCategoryRepository;
+import com.sgcc.repository.QCategorysRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
 
 @Component
 public class QAEventEntity {
     @Autowired
-    private QAnswerRepository qAnswerRepository;
+    private QAnswersRepository qAnswersRepository;
     @Autowired
     private QARedisRepository qaRedisRepository;
     @Autowired
     private QCategoryRedisRepository qCategoryRedisRepository;
     @Autowired
-    private QCategoryRepository qCategoryRepository;
+    private QCategorysRepository qCategorysRepository;
 
 
 
     public void innitQuestionCategory(){
-        List<QuestionCategoryDao> questionCategoryDaos = qCategoryRepository.findAllQCategory();
+        List<QuestionCategoryDao> questionCategoryDaos = qCategorysRepository.findAllQCategory();
         qCategoryRedisRepository.saveAll(questionCategoryDaos);
     }
 
     public void innitQuestionAnswer(){
-        List<QuestionAnswerDao> questionCategoryDaos = qAnswerRepository.findAllQAnswer();
+        List<QuestionAnswerDao> questionCategoryDaos = qAnswersRepository.findAllQAnswer();
         qaRedisRepository.saveAll(questionCategoryDaos);
     }
 
     public void innitQuestionAnswer(String categoryId){
-        List<QuestionAnswerDao> questionCategoryDaos = qAnswerRepository.findQAnswerByCategoryId(categoryId);
+        List<QuestionAnswerDao> questionCategoryDaos = qAnswersRepository.findQAnswerByCategoryId(categoryId);
         qaRedisRepository.saveAll(questionCategoryDaos);
     }
 
@@ -49,7 +45,7 @@ public class QAEventEntity {
      */
     public void insertQuestionCategory(List<QuestionCategoryDao> questionCategoryDaos){
 
-        qCategoryRepository.addQCategory(questionCategoryDaos);
+        qCategorysRepository.addQCategory(questionCategoryDaos);
     }
 
     /**
@@ -57,7 +53,7 @@ public class QAEventEntity {
      * @param questionCategoryDaos
      */
     public void updateQuestionCategory(List<QuestionCategoryDao> questionCategoryDaos) {
-        qCategoryRepository.updateQCategory(questionCategoryDaos);
+        qCategorysRepository.updateQCategory(questionCategoryDaos);
 
     }
 
@@ -66,21 +62,21 @@ public class QAEventEntity {
      * @param categoryIds
      */
     public void deleteQuestionCategory(List<String> categoryIds) {
-        qCategoryRepository.delQCategory(categoryIds);
+        qCategorysRepository.delQCategory(categoryIds);
     }
 
     /**
      * 管理工具新增问题信息
      */
     public void insertQA(List<QuestionAnswerDao> questionAnswerDaos){
-        qAnswerRepository.addQAnswer(questionAnswerDaos);
+        qAnswersRepository.addQAnswer(questionAnswerDaos);
     }
 
     /**
      * 管理工具修改问题信息
      */
     public void updateQA(List<QuestionAnswerDao> questionAnswerDaos){
-        qAnswerRepository.updateQAnswer(questionAnswerDaos);
+        qAnswersRepository.updateQAnswer(questionAnswerDaos);
     }
 
 
@@ -89,6 +85,6 @@ public class QAEventEntity {
      * @param ids
      */
     public void deleteQA(List<String> ids) {
-        qAnswerRepository.delQAnswer(ids);
+        qAnswersRepository.delQAnswer(ids);
     }
 }

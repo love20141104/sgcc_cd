@@ -1,7 +1,7 @@
 package com.sgcc.entity;
 
 import com.sgcc.dao.ServiceHallDao;
-import com.sgcc.repository.ServiceHallRepository;
+import com.sgcc.repository.ServiceHallsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class ServiceHallEntity {
 
     @Autowired
-    private ServiceHallRepository repository;
+    private ServiceHallsRepository repository;
 
     private List<ServiceHallDao> m_hallDaoList = new ArrayList<>();
 

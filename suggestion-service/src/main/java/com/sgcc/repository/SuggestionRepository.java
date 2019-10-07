@@ -10,14 +10,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Date;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-
-import static org.checkerframework.checker.units.UnitsTools.m;
 
 @Repository
 public class SuggestionRepository {
@@ -117,58 +116,33 @@ public class SuggestionRepository {
 
     /**
      * 添加意见信息
-     * @param suggestionDaoList
+     * @param suggestionDao
      */
     @Transactional
-    public void saveAll(List<SuggestionDao> suggestionDaoList){
+    public void saveAll(SuggestionDao suggestionDao){
         String sql = "insert into b_suggestion(id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                "suggestion_tel,submit_date,img_1,img_2,img_3) values(?,?,?,?,?,?,?,?,?,?)";
+                "suggestion_tel,submit_date,img_1,img_2,img_3) " +
+                "values('"+suggestionDao.getId()+"','"+suggestionDao.getSuggestionId()+"'" +
+                ",'"+suggestionDao.getUserId()+"','"+suggestionDao.getSuggestionContent()+"'" +
+                ",'"+suggestionDao.getSuggestionContact()+"','"+suggestionDao.getSuggestionTel()+"'" +
+                ",'"+Utils.GetTime(suggestionDao.getSubmitDate())+"','"+suggestionDao.getImg_1()+"'" +
+                ",'"+suggestionDao.getImg_2()+"','"+suggestionDao.getImg_3()+"')";
         logger.info("添加意见信息:"+sql);
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,suggestionDaoList.get(i).getId());
-                ps.setString(2,suggestionDaoList.get(i).getSuggestionId());
-                ps.setString(3,suggestionDaoList.get(i).getUserId());
-                ps.setString(4,suggestionDaoList.get(i).getSuggestionContent());
-                ps.setString(5,suggestionDaoList.get(i).getSuggestionContact());
-                ps.setString(6,suggestionDaoList.get(i).getSuggestionTel());
-                ps.setString(7,Utils.GetTime(suggestionDaoList.get(i).getSubmitDate()));
-                ps.setString(8,suggestionDaoList.get(i).getImg_1());
-                ps.setString(9,suggestionDaoList.get(i).getImg_2());
-                ps.setString(10,suggestionDaoList.get(i).getImg_3());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return suggestionDaoList.size();
-            }
-        });
+        jdbcTemplate.update(sql);
 
     }
 
     /**
      * 修改意见信息
-     * @param suggestionDaoList
+     * @param suggestionDao
      */
     @Transactional
-    public void updateAll(List<SuggestionDao> suggestionDaoList){
-        String sql = "update b_suggestion set suggestion_content=?,suggestion_contact=?,suggestion_tel=? where suggestion_id=?";
+    public void updateAll(SuggestionDao suggestionDao){
+        String sql = "update b_suggestion set suggestion_content='"+suggestionDao.getSuggestionContent()+"'" +
+                ",suggestion_contact='"+suggestionDao.getSuggestionContact()+"'" +
+                ",suggestion_tel='"+suggestionDao.getSuggestionTel()+"' where suggestion_id='"+suggestionDao.getSuggestionId()+"'";
 
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,suggestionDaoList.get(i).getSuggestionContent());
-                ps.setString(2,suggestionDaoList.get(i).getSuggestionContact());
-                ps.setString(3,suggestionDaoList.get(i).getSuggestionTel());
-                ps.setString(4,suggestionDaoList.get(i).getSuggestionId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return suggestionDaoList.size();
-            }
-        });
+        jdbcTemplate.update(sql);
 
     }
 
@@ -178,18 +152,8 @@ public class SuggestionRepository {
      */
     @Transactional
     public void deleteAll(List<String> suggestionIds){
-        String sql = "delete from b_suggestion where suggestion_id=?";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,suggestionIds.get(i));
-            }
-
-            @Override
-            public int getBatchSize() {
-                return suggestionIds.size();
-            }
-        });
+        String sql = "delete from b_suggestion where suggestion_id in('"+Utils.joinStrings(suggestionIds,"','")+"')";
+        jdbcTemplate.execute(sql);
     }
 
     class suggestionRowMapper implements RowMapper<SuggestionDao>{

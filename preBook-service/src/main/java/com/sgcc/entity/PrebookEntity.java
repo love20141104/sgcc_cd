@@ -1,7 +1,7 @@
 package com.sgcc.entity;
 
 import com.sgcc.dao.PreBookDao;
-import com.sgcc.repository.PreBookRepository;
+import com.sgcc.repository.PreBooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public class PrebookEntity {
 
     @Autowired
-    private PreBookRepository preBookRepository;
+    private PreBooksRepository preBooksRepository;
 
     /**
      * 添加在线预约信息
@@ -19,7 +19,7 @@ public class PrebookEntity {
      * @param preBookDaoList
      */
     public void savePrebooks(List<PreBookDao> preBookDaoList) {
-        preBookRepository.addPreBook(preBookDaoList);
+        preBooksRepository.addPreBook(preBookDaoList);
     }
 
 

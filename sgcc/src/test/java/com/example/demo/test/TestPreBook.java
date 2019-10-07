@@ -1,9 +1,17 @@
 package com.example.demo.test;
 
+import com.example.Utils;
 import com.example.constant.PrebookStartTimeConstants;
 import com.example.demo.HttpRequest;
+import com.sgcc.DemoApplication;
+import com.sgcc.dao.BusinessTypeDao;
+import com.sgcc.dao.PreBookDao;
+import com.sgcc.dtomodel.prebook.PrebookDTO;
+import com.sgcc.repository.BusinessTypeRepository;
+import com.sgcc.repository.PreBookRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -11,8 +19,85 @@ import java.util.*;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = TestPreBook.class)
+@SpringBootTest(classes = {TestPreBook.class, DemoApplication.class})
 public class TestPreBook{
+
+    @Autowired
+    private PreBookRepository preBookRepository;
+
+    @Autowired
+    private BusinessTypeRepository businessTypeRepository;
+
+
+    @Test
+    public void delBusinessType(){
+        List<String> list = new ArrayList<>();
+        list.add("43f10bd8-21dc-4a07-8262-b5649244507e");
+
+        businessTypeRepository.delBType(list);
+    }
+
+
+    @Test
+    public void updateBusinessType(){
+        BusinessTypeDao businessTypeDao = new BusinessTypeDao();
+        businessTypeDao.setBusinessType("aaaaaaaaaaaaa");
+        businessTypeDao.setBusinessTypeId("43f10bd8-21dc-4a07-8262-b5649244507e");
+
+        businessTypeRepository.updateBType(businessTypeDao);
+    }
+
+
+    @Test
+    public void addBusinessType(){
+        BusinessTypeDao businessTypeDao = new BusinessTypeDao();
+        businessTypeDao.setId(UUID.randomUUID().toString());
+        businessTypeDao.setBusinessTypeId(UUID.randomUUID().toString());
+        businessTypeDao.setBusinessType("asdsa");
+        businessTypeDao.setOrder(111);
+
+        businessTypeRepository.addBType(businessTypeDao);
+    }
+
+
+    @Test
+    public void addPrebook(){
+        String date = Utils.GetTime(new Date());
+        System.out.println("=================>"+date);
+        PreBookDao preBookDao = new PreBookDao();
+        preBookDao.setId(UUID.randomUUID().toString());
+        preBookDao.setUserId("1001");
+        preBookDao.setServiceHallId("1002");
+        preBookDao.setPrebookCode(UUID.randomUUID().toString());
+        preBookDao.setPrebookDate(date);
+        preBookDao.setPrebookStartTime("2019-10-01");
+        preBookDao.setContact("admin");
+        preBookDao.setContactTel("79989898989");
+        preBookDao.setSubmitDate(date);
+
+        preBookRepository.addPreBook(preBookDao);
+
+    }
+
+
+    @Test
+    public void updatePrebook(){
+        String date = Utils.GetTime(new Date());
+        System.out.println("=================>"+date);
+
+        PrebookDTO prebookDTO = new PrebookDTO();
+        prebookDTO.setUserId("1111");
+        prebookDTO.setServiceHallId("1222");
+        prebookDTO.setPrebookCode("fe1259d6-6373-4116-a4cf-6bd5e0568996");
+        prebookDTO.setPrebookDate(date);
+        prebookDTO.setPrebookStartTime("2019-01-01");
+        prebookDTO.setContact("lisi");
+        prebookDTO.setContactTel("000000000");
+
+        preBookRepository.updatePreBook(prebookDTO);
+
+    }
+
 
     /**
      * 10个用户同时提交随机三天的预约

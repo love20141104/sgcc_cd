@@ -1,7 +1,7 @@
 package com.sgcc.entity.query;
 
 import com.sgcc.dao.PreBookDao;
-import com.sgcc.repository.PreBookRepository;
+import com.sgcc.repository.PreBooksRepository;
 import com.sgcc.repository.PrebookRedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class PrebookQueryEntity {
     @Autowired
     private PrebookRedisRepository prebookRedisRepository;
     @Autowired
-    private PreBookRepository preBookRepository;
+    private PreBooksRepository preBooksRepository;
 
     /**
      * 根据营业亭id查询营业厅预约状态
@@ -114,7 +114,7 @@ public class PrebookQueryEntity {
      */
     public List<PreBookDao> getPrebook(String user_open_id, String service_hall_id, String prebook_code, String prebook_date_start, String prebook_date_end) {
 
-        return preBookRepository.getPrebook(user_open_id,service_hall_id,prebook_code,prebook_date_start,prebook_date_end);
+        return preBooksRepository.getPrebook(user_open_id,service_hall_id,prebook_code,prebook_date_start,prebook_date_end);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.sgcc.repository;
 
+import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
@@ -10,7 +11,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,124 +32,46 @@ public class PreBookRepository {
      * 查询所有预约信息
      * @return
      */
-//    public List<PreBookDao> findAllPreBookList(){
-//        String sql = "select id,user_id,service_hall_id,business_type_id,prebook_code,prebook_date," +
-//                "prebook_start_time,contact,contact_tel,submit_time from b_prebook";
-//        List<PreBookDao> preBookDaoList = jdbcTemplate.query(sql,new PreBookRowMapper());
-//
-//        return preBookDaoList;
-//    }
+    public List<PreBookDao> findAllPreBookList(){
+        String sql = "select id,user_id,service_hall_id,business_type_id,prebook_code,prebook_date," +
+                "prebook_start_time,contact,contact_tel,submit_time from b_prebook";
+        List<PreBookDao> preBookDaoList = jdbcTemplate.query(sql,new PreBookRowMapper());
+
+        return preBookDaoList;
+    }
 
     /**
      * 添加预约信息
      *
-     * @param preBookDaoList
+     * @param preBookDao
      */
-    public void addPreBook(List<PreBookDao> preBookDaoList) {
+    public void addPreBook(PreBookDao preBookDao) {
         String sql = "insert into b_prebook(id,user_open_id,service_hall_id,prebook_code,prebook_date," +
-                "prebook_start_time,contact,contact_tel,submit_time) values(?,?,?,?,?,?,?,?,?)";
+                "prebook_start_time,contact,contact_tel,submit_time) values('"+preBookDao.getId()+"'" +
+                ",'"+preBookDao.getUserId()+"','"+preBookDao.getServiceHallId()+"','"+preBookDao.getPrebookCode()+"'" +
+                ",'"+ preBookDao.getPrebookDate() +"','"+preBookDao.getPrebookStartTime()+"'" +
+                ",'"+preBookDao.getContact()+"','"+preBookDao.getContactTel()+"','"+preBookDao.getSubmitDate()+"')";
         logger.info("添加预约信息sql:" + sql);
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1, preBookDaoList.get(i).getId());
-                ps.setString(2, preBookDaoList.get(i).getUserId());
-                ps.setString(3, preBookDaoList.get(i).getServiceHallId());
-                ps.setString(4, preBookDaoList.get(i).getPrebookCode());
-                ps.setString(5, preBookDaoList.get(i).getPrebookDate());
-                ps.setString(6, preBookDaoList.get(i).getPrebookStartTime());
-                ps.setString(7, preBookDaoList.get(i).getContact());
-                ps.setString(8, preBookDaoList.get(i).getContactTel());
-                ps.setString(9, preBookDaoList.get(i).getSubmitDate());
-
-            }
-
-            @Override
-            public int getBatchSize() {
-                return preBookDaoList.size();
-            }
-        });
-
+        jdbcTemplate.update(sql);
     }
 
-//    /**
-//     * 删除预约信息
-//     * @param preBookDaoList
-//     */
-//    public void delPreBook(List<PreBookDao> preBookDaoList){
-//        String sql = "delete from b_prebook where id=?";
-//        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-//            @Override
-//            public void setValues(PreparedStatement ps, int i) throws SQLException {
-//                ps.setString(1,preBookDaoList.get(i).getId());
-//            }
-//
-//            @Override
-//            public int getBatchSize() {
-//                return preBookDaoList.size();
-//            }
-//        });
-//
-//    }
-//
-//    /**
-//     * 修改预约信息
-//     * @param preBookDaoList
-//     */
-//    public void updatePreBook(List<PreBookDao> preBookDaoList){
-//        String sql = "update b_prebook set contact=?,contact_tel=? where id=?";
-//        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-//            @Override
-//            public void setValues(PreparedStatement ps, int i) throws SQLException {
-//                ps.setString(1,preBookDaoList.get(i).getContact());
-//                ps.setString(2,preBookDaoList.get(i).getContactTel());
-//                ps.setString(3,preBookDaoList.get(i).getId());
-//            }
-//
-//            @Override
-//            public int getBatchSize() {
-//                return preBookDaoList.size();
-//            }
-//        });
-//    }
 
     /**
-     * 管理系统修改预约信息
+     * 修改预约信息
      * @param prebookDTO
      */
     @Transactional
     public List<PreBookDao> updatePreBook(PrebookDTO prebookDTO) {
-        try {
+        String sql = "update b_prebook set user_open_id='"+prebookDTO.getUserId()+"',contact='"+prebookDTO.getContact()+"'" +
+                ",contact_tel='"+prebookDTO.getContactTel()+"',service_hall_id='"+prebookDTO.getServiceHallId()+"'" +
+                ",prebook_date='"+ prebookDTO.getPrebookDate()+"'" +
+                ",prebook_start_time='"+prebookDTO.getPrebookStartTime()+
+                "' where prebook_code='"+prebookDTO.getPrebookCode()+"'";
+        jdbcTemplate.update(sql);
+        String sql_select = "select id,user_open_id,service_hall_id,prebook_code,prebook_date,prebook_start_time,contact" +
+                ",contact_tel,submit_time from b_prebook where prebook_code = '" + prebookDTO.getPrebookCode() + "'";
+        return jdbcTemplate.query(sql_select, new PreBookRowMapper());
 
-
-            List<PrebookDTO> prebookDTOS = new ArrayList<PrebookDTO>() {{
-                add(prebookDTO);
-            }};
-            String sql = "update b_prebook set user_open_id=?,contact=?,contact_tel=?,service_hall_id=?,prebook_date=?,prebook_start_time=? where prebook_code=?";
-            jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-                @Override
-                public void setValues(PreparedStatement ps, int i) throws SQLException {
-                    ps.setString(1, prebookDTOS.get(i).getUserId());
-                    ps.setString(2, prebookDTOS.get(i).getContact());
-                    ps.setString(3, prebookDTOS.get(i).getContactTel());
-                    ps.setString(4, prebookDTOS.get(i).getServiceHallId());
-                    ps.setString(5, prebookDTOS.get(i).getPrebookDate());
-                    ps.setString(6, prebookDTOS.get(i).getPrebookStartTime());
-                    ps.setString(7, prebookDTOS.get(i).getPrebookCode());
-                }
-
-                @Override
-                public int getBatchSize() {
-                    return prebookDTOS.size();
-                }
-            });
-
-            String sql_select = "select id,user_open_id,service_hall_id,prebook_code,prebook_date,prebook_start_time,contact,contact_tel,submit_time from b_prebook where prebook_code = '" + prebookDTO.getPrebookCode() + "'";
-            return jdbcTemplate.query(sql_select, new PreBookRowMapper());
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
     }
 
     /**

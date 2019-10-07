@@ -36,25 +36,13 @@ public class QCategoryRepository {
 
     /**
      * 新增问题类型
-     * @param categoryList
+     * @param questionCategoryDao
      */
-    public void addQCategory(List<QuestionCategoryDao> categoryList){
+    public void addQCategory(QuestionCategoryDao questionCategoryDao){
         String sql = "insert into d_question_category(id,category_id,category_desc,category_order) " +
-                "values(?,?,?,?)";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,categoryList.get(i).getId());
-                ps.setString(2,categoryList.get(i).getCategoryId());
-                ps.setString(3,categoryList.get(i).getCategoryDesc());
-                ps.setInt(4,categoryList.get(i).getCategoryOrder());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return categoryList.size();
-            }
-        });
+                "values('"+questionCategoryDao.getId()+"','"+questionCategoryDao.getCategoryId()+"'" +
+                ",'"+questionCategoryDao.getCategoryDesc()+"',"+questionCategoryDao.getCategoryOrder()+")";
+        jdbcTemplate.update(sql);
     }
 
     /**
@@ -70,23 +58,13 @@ public class QCategoryRepository {
 
     /**
      * 修改问题类型
-     * @param categoryList
+     * @param questionCategoryDao
      */
-    public void updateQCategory(List<QuestionCategoryDao> categoryList){
-        String sql = "update d_question_category set category_desc=?,category_order=?  where category_id=? and category_available=1";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,categoryList.get(i).getCategoryDesc());
-                ps.setInt(2,categoryList.get(i).getCategoryOrder());
-                ps.setString(3,categoryList.get(i).getCategoryId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return categoryList.size();
-            }
-        });
+    public void updateQCategory(QuestionCategoryDao questionCategoryDao){
+        String sql = "update d_question_category set category_desc='"+questionCategoryDao.getCategoryDesc()+"'" +
+                ",category_order="+questionCategoryDao.getCategoryOrder()+
+                " where category_id='"+questionCategoryDao.getCategoryId()+"'";
+        jdbcTemplate.update(sql);
     }
 
     /**

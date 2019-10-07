@@ -66,25 +66,13 @@ public class QAnswerRepository {
 
     /**
      * 新增问题回答
-     * @param answerDaoList
+     * @param questionAnswerDao
      */
-    public void addQAnswer(List<QuestionAnswerDao> answerDaoList){
+    public void addQAnswer(QuestionAnswerDao questionAnswerDao){
         String sql = "insert into d_question_answer(id,category_id,question_desc,answer) " +
-                "values(?,?,?,?)";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,answerDaoList.get(i).getId());
-                ps.setString(2,answerDaoList.get(i).getCategoryId());
-                ps.setString(3,answerDaoList.get(i).getQuestionDesc());
-                ps.setString(4,answerDaoList.get(i).getAnswer());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return answerDaoList.size();
-            }
-        });
+                "values('"+questionAnswerDao.getId()+"','"+questionAnswerDao.getCategoryId()+"'" +
+                ",'"+questionAnswerDao.getQuestionDesc()+"','"+questionAnswerDao.getAnswer()+"')";
+        jdbcTemplate.update(sql);
     }
 
     /**
@@ -100,23 +88,12 @@ public class QAnswerRepository {
     /**
                     rs.getString("category_id"),
      * 修改问题回答
-     * @param answerDaoList
+     * @param questionAnswerDao
      */
-    public void updateQAnswer(List<QuestionAnswerDao> answerDaoList){
-        String sql = "update d_question_answer set question_desc=?,answer=?  where id=?";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,answerDaoList.get(i).getQuestionDesc());
-                ps.setString(2,answerDaoList.get(i).getAnswer());
-                ps.setString(3,answerDaoList.get(i).getId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return answerDaoList.size();
-            }
-        });
+    public void updateQAnswer(QuestionAnswerDao questionAnswerDao){
+        String sql = "update d_question_answer set question_desc='"+questionAnswerDao.getQuestionDesc()+"'" +
+                ",answer='"+questionAnswerDao.getAnswer()+"'  where id='"+questionAnswerDao.getId()+"'";
+        jdbcTemplate.update(sql);
     }
 
     class answerRowMapper implements RowMapper<QuestionAnswerDao> {
