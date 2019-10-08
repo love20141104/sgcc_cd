@@ -1,5 +1,6 @@
 package com.sgcc.model;
 
+import com.example.Utils;
 import com.example.constant.PrebookStartTimeConstants;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
@@ -119,16 +120,20 @@ public class PrebookDomainModel {
      * 在线预约时间段排序
      */
     public Map<String,PrebookStartTimeDTO> sortPrebookStartTime(Map<String,PrebookStartTimeDTO> map){
-
         Map<String,PrebookStartTimeDTO> map2 = new LinkedHashMap<>();
         List<String> timeList = PrebookStartTimeConstants.TIME_LIST;
         for (String str : timeList) {
-            for(Map.Entry<String, PrebookStartTimeDTO> entry : map.entrySet()) {
-                if (entry.getKey().equals(str)){
-                    map2.put(entry.getKey(),entry.getValue());
-                }
+            String maxTime = str.substring(str.length()-5,str.length())+":00";
+            System.out.println("当前时间段最大时间："+maxTime);
+            if (Utils.GetCurrentTimeForHMS().before(Utils.GetDateForHMS(maxTime))){
+                for(Map.Entry<String, PrebookStartTimeDTO> entry : map.entrySet()) {
+                    if (entry.getKey().equals(str)){
+                        map2.put(entry.getKey(),entry.getValue());
+                    }
 
+                }
             }
+
         }
         return map2;
     }
