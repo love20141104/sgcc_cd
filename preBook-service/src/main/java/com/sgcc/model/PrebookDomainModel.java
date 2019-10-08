@@ -73,8 +73,12 @@ public class PrebookDomainModel {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        //TODO 编码规则
         if(Strings.isNullOrEmpty(this.prebookDTO.getPrebookCode())){
-            this.prebookDTO.setPrebookCode(UUID.randomUUID().toString());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+            Random ra =new Random();
+            String s = "Y" + formatter.format(new Date()) + (ra.nextInt(100000)|+1);
+            this.prebookDTO.setPrebookCode(s);
         }
 
         this.prebookDTO.setSubmitDate(simpleDateFormat2.format(new Date()));
