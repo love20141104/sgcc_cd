@@ -44,45 +44,36 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
         this.prebookStartTimeDTOS = new LinkedHashMap<>();
     }
 
+    public ServiceHallPrebookStatusDTO(Map<String,PrebookStartTimeDTO> prebookStartTimeDTOS){
+        this.prebookStartTimeDTOS = prebookStartTimeDTOS;
+    }
+
     /**
      * 更新营业厅预约信息
      * @param prebookStartTimeDTO
      * @return
      */
-//    public void buildPrebookStartTimeDTOS(PrebookStartTimeDTO prebookStartTimeDTO){
-//        if(this.prebookStartTimeDTOS.keySet().contains(prebookStartTimeDTO.prebookStartTime)){
-//            this.prebookStartTimeDTOS.get(prebookStartTimeDTO.prebookStartTime).buildCount(prebookStartTimeDTO.getPrebookCount());
-//        }else {
-//            this.prebookStartTimeDTOS.put(prebookStartTimeDTO.prebookStartTime,prebookStartTimeDTO);
-//        }
-//    }
-
-
-    /**
-     * 补全没有预约信息的时段
-     */
-    public void buildNullPrebookStartTimeDTOS(){
-        PrebookStartTimeConstants.TIME_LIST.forEach(time ->{
-            if(!this.prebookStartTimeDTOS.keySet().contains(time)){
-                this.prebookStartTimeDTOS.put(time,new PrebookStartTimeDTO().buildPrebookStartTime(time));
-            }
-        });
-    }
-
-    /**
-     * 加入所有时间段并更新营业厅预约信息
-     * @param prebookStartTimeDTO
-     */
     public void buildPrebookStartTimeDTOS(PrebookStartTimeDTO prebookStartTimeDTO){
-        PrebookStartTimeConstants.TIME_LIST.forEach(time ->{
-            this.prebookStartTimeDTOS.put(time,new PrebookStartTimeDTO().buildPrebookStartTime(time));
-        });
         if(this.prebookStartTimeDTOS.keySet().contains(prebookStartTimeDTO.prebookStartTime)){
             this.prebookStartTimeDTOS.get(prebookStartTimeDTO.prebookStartTime).buildCount(prebookStartTimeDTO.getPrebookCount());
         }else {
             this.prebookStartTimeDTOS.put(prebookStartTimeDTO.prebookStartTime,prebookStartTimeDTO);
         }
     }
+
+
+    /**
+     * 补全没有预约信息的时段
+     */
+    public Map<String,PrebookStartTimeDTO> buildNullPrebookStartTimeDTOS(){
+        PrebookStartTimeConstants.TIME_LIST.forEach(time ->{
+            if(!this.prebookStartTimeDTOS.keySet().contains(time)){
+                this.prebookStartTimeDTOS.put(time,new PrebookStartTimeDTO().buildPrebookStartTime(time));
+            }
+        });
+        return this.prebookStartTimeDTOS;
+    }
+
 
 
     /**

@@ -1,5 +1,6 @@
 package com.sgcc.model;
 
+import com.example.constant.PrebookStartTimeConstants;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
 
@@ -99,20 +100,6 @@ public class PrebookDomainModel {
     /**
      * 清洗营业厅预约信息,返回营业厅的预约状态
      */
-//    public ServiceHallPrebookStatusDTO getServiceHallPrebookStatus(String serviceHallId, String prebookDate) {
-//        ServiceHallPrebookStatusDTO serviceHallPrebookStatusDTO = new ServiceHallPrebookStatusDTO(serviceHallId, prebookDate);
-//        this.prebookDTOS.forEach(dto -> {
-//            PrebookStartTimeDTO prebookStartTimeDTO = new PrebookStartTimeDTO(dto.getPrebookStartTime());
-//            //更新营业厅预约信息
-//            serviceHallPrebookStatusDTO.buildPrebookStartTimeDTOS(prebookStartTimeDTO);
-//        });
-//        //补全没有预约信息的时段
-//        serviceHallPrebookStatusDTO.buildNullPrebookStartTimeDTOS();
-//        return serviceHallPrebookStatusDTO;
-//
-//    }
-
-
     public ServiceHallPrebookStatusDTO getServiceHallPrebookStatus(String serviceHallId, String prebookDate) {
         ServiceHallPrebookStatusDTO serviceHallPrebookStatusDTO = new ServiceHallPrebookStatusDTO(serviceHallId, prebookDate);
         this.prebookDTOS.forEach(dto -> {
@@ -121,10 +108,32 @@ public class PrebookDomainModel {
             serviceHallPrebookStatusDTO.buildPrebookStartTimeDTOS(prebookStartTimeDTO);
         });
         //补全没有预约信息的时段
-        serviceHallPrebookStatusDTO.buildNullPrebookStartTimeDTOS();
-        return serviceHallPrebookStatusDTO;
+        Map<String,PrebookStartTimeDTO> map = serviceHallPrebookStatusDTO.buildNullPrebookStartTimeDTOS();
+        ServiceHallPrebookStatusDTO serviceHallPrebookStatusDTO1 = new ServiceHallPrebookStatusDTO(sortPrebookStartTime(map));
+
+        return serviceHallPrebookStatusDTO1;
 
     }
+
+    /**
+     * 在线预约时间段排序
+     */
+    public Map<String,PrebookStartTimeDTO> sortPrebookStartTime(Map<String,PrebookStartTimeDTO> map){
+
+        Map<String,PrebookStartTimeDTO> map2 = new LinkedHashMap<>();
+        List<String> timeList = PrebookStartTimeConstants.TIME_LIST;
+        for (String str : timeList) {
+            for(Map.Entry<String, PrebookStartTimeDTO> entry : map.entrySet()) {
+                if (entry.getKey().equals(str)){
+                    map2.put(entry.getKey(),entry.getValue());
+                }
+
+            }
+        }
+        return map2;
+    }
+
+
 
 
 
