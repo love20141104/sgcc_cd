@@ -41,7 +41,7 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
     public ServiceHallPrebookStatusDTO(String serviceHallId,String prebookDate){
         this.serviceHallId = serviceHallId;
         this.prebookDate = prebookDate;
-        this.prebookStartTimeDTOS = new HashMap<>();
+        this.prebookStartTimeDTOS = new LinkedHashMap<>();
     }
 
     /**
