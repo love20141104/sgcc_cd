@@ -110,7 +110,7 @@ public class PrebookDomainModel {
         });
         //补全没有预约信息的时段
         Map<String,PrebookStartTimeDTO> map = serviceHallPrebookStatusDTO.buildNullPrebookStartTimeDTOS();
-        ServiceHallPrebookStatusDTO serviceHallPrebookStatusDTO1 = new ServiceHallPrebookStatusDTO(sortPrebookStartTime(map));
+        ServiceHallPrebookStatusDTO serviceHallPrebookStatusDTO1 = new ServiceHallPrebookStatusDTO(sortPrebookStartTime(map,prebookDate));
 
         return serviceHallPrebookStatusDTO1;
 
@@ -119,13 +119,13 @@ public class PrebookDomainModel {
     /**
      * 在线预约时间段排序
      */
-    public Map<String,PrebookStartTimeDTO> sortPrebookStartTime(Map<String,PrebookStartTimeDTO> map){
+    public Map<String,PrebookStartTimeDTO> sortPrebookStartTime(Map<String,PrebookStartTimeDTO> map,String prebookDate){
         Map<String,PrebookStartTimeDTO> map2 = new LinkedHashMap<>();
         List<String> timeList = PrebookStartTimeConstants.TIME_LIST;
         for (String str : timeList) {
-            String maxTime = str.substring(str.length()-5,str.length())+":00";
+            String maxTime = prebookDate+" "+str.substring(str.length()-5,str.length())+":00";
             System.out.println("当前时间段最大时间："+maxTime);
-            if (Utils.GetCurrentTimeForHMS().before(Utils.GetDateForHMS(maxTime))){
+            if (Utils.GetCurTime().before(Utils.GetDate(maxTime))){
                 for(Map.Entry<String, PrebookStartTimeDTO> entry : map.entrySet()) {
                     if (entry.getKey().equals(str)){
                         map2.put(entry.getKey(),entry.getValue());

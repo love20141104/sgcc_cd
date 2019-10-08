@@ -90,29 +90,17 @@ public class Utils {
         return df.format(new Date());
     }
 
-    public static Date GetCurrentTimeForHMS()
+    public static Date GetCurTime()
     {
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String hms = df.format(new Date());
-        return GetDateForHMS(hms);
+        return GetDate(hms);
     }
 
     public static java.util.Date GetDate(String time )
     {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            return sdf.parse(time);
-        }
-        catch (ParseException e )
-        {
-            return new Date();
-        }
-    }
-
-    public static java.util.Date GetDateForHMS(String time )
-    {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             return sdf.parse(time);
         }
         catch (ParseException e )
