@@ -99,6 +99,20 @@ public class PrebookDomainModel {
     /**
      * 清洗营业厅预约信息,返回营业厅的预约状态
      */
+//    public ServiceHallPrebookStatusDTO getServiceHallPrebookStatus(String serviceHallId, String prebookDate) {
+//        ServiceHallPrebookStatusDTO serviceHallPrebookStatusDTO = new ServiceHallPrebookStatusDTO(serviceHallId, prebookDate);
+//        this.prebookDTOS.forEach(dto -> {
+//            PrebookStartTimeDTO prebookStartTimeDTO = new PrebookStartTimeDTO(dto.getPrebookStartTime());
+//            //更新营业厅预约信息
+//            serviceHallPrebookStatusDTO.buildPrebookStartTimeDTOS(prebookStartTimeDTO);
+//        });
+//        //补全没有预约信息的时段
+//        serviceHallPrebookStatusDTO.buildNullPrebookStartTimeDTOS();
+//        return serviceHallPrebookStatusDTO;
+//
+//    }
+
+
     public ServiceHallPrebookStatusDTO getServiceHallPrebookStatus(String serviceHallId, String prebookDate) {
         ServiceHallPrebookStatusDTO serviceHallPrebookStatusDTO = new ServiceHallPrebookStatusDTO(serviceHallId, prebookDate);
         this.prebookDTOS.forEach(dto -> {
@@ -111,4 +125,7 @@ public class PrebookDomainModel {
         return serviceHallPrebookStatusDTO;
 
     }
+
+
+
 }

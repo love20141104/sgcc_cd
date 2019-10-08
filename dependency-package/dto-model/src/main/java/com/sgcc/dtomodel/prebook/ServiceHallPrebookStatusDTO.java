@@ -49,13 +49,13 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
      * @param prebookStartTimeDTO
      * @return
      */
-    public void buildPrebookStartTimeDTOS(PrebookStartTimeDTO prebookStartTimeDTO){
-        if(this.prebookStartTimeDTOS.keySet().contains(prebookStartTimeDTO.prebookStartTime)){
-            this.prebookStartTimeDTOS.get(prebookStartTimeDTO.prebookStartTime).buildCount(prebookStartTimeDTO.getPrebookCount());
-        }else {
-            this.prebookStartTimeDTOS.put(prebookStartTimeDTO.prebookStartTime,prebookStartTimeDTO);
-        }
-    }
+//    public void buildPrebookStartTimeDTOS(PrebookStartTimeDTO prebookStartTimeDTO){
+//        if(this.prebookStartTimeDTOS.keySet().contains(prebookStartTimeDTO.prebookStartTime)){
+//            this.prebookStartTimeDTOS.get(prebookStartTimeDTO.prebookStartTime).buildCount(prebookStartTimeDTO.getPrebookCount());
+//        }else {
+//            this.prebookStartTimeDTOS.put(prebookStartTimeDTO.prebookStartTime,prebookStartTimeDTO);
+//        }
+//    }
 
 
     /**
@@ -68,6 +68,22 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
             }
         });
     }
+
+    /**
+     * 加入所有时间段并更新营业厅预约信息
+     * @param prebookStartTimeDTO
+     */
+    public void buildPrebookStartTimeDTOS(PrebookStartTimeDTO prebookStartTimeDTO){
+        PrebookStartTimeConstants.TIME_LIST.forEach(time ->{
+            this.prebookStartTimeDTOS.put(time,new PrebookStartTimeDTO().buildPrebookStartTime(time));
+        });
+        if(this.prebookStartTimeDTOS.keySet().contains(prebookStartTimeDTO.prebookStartTime)){
+            this.prebookStartTimeDTOS.get(prebookStartTimeDTO.prebookStartTime).buildCount(prebookStartTimeDTO.getPrebookCount());
+        }else {
+            this.prebookStartTimeDTOS.put(prebookStartTimeDTO.prebookStartTime,prebookStartTimeDTO);
+        }
+    }
+
 
     /**
      *
