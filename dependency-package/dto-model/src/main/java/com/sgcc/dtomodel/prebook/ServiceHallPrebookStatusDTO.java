@@ -19,7 +19,7 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
     //预约业务办理日期
     private String prebookDate;
     //营业厅预约状态
-    private Map<String,PrebookStartTimeDTO> prebookStartTimeDTOS = new HashMap<>();
+    private Map<String,PrebookStartTimeDTO> prebookStartTimeDTOS = new LinkedHashMap<>();
 
     /**
      * 构造函数
@@ -30,7 +30,7 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
     public ServiceHallPrebookStatusDTO(String serviceHallId,String prebookDate,Map<String,PrebookStartTimeDTO> prebookStartTimeDTOS){
         this.serviceHallId = serviceHallId;
         this.prebookDate = prebookDate;
-        this.prebookStartTimeDTOS = new HashMap<>(prebookStartTimeDTOS);
+        this.prebookStartTimeDTOS = new LinkedHashMap<>(prebookStartTimeDTOS);
     }
 
     /**
