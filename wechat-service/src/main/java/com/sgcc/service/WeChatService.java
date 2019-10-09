@@ -6,6 +6,8 @@ import com.example.constant.WechatURLConstants;
 import com.example.errorcode.WechatURLErrorcode;
 import com.example.result.Result;
 import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
+import com.sgcc.dtomodel.wechat.template.TemplateData;
+import com.sgcc.dtomodel.wechat.template.TemplateMessage;
 import com.sgcc.entity.WeChatEntity;
 import com.sgcc.wxpay.Sgcc_WXPay;
 import com.sgcc.wxpay.sdk.WXPayUtil;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
@@ -84,4 +87,30 @@ public class WeChatService {
         }
         return null;
     }
+
+    public Result sendTempMsg(String openId){
+        try {
+            Map<String, TemplateData> data = new LinkedHashMap<>();
+            data.put("first",new TemplateData("申请成功模板消息测试","#173177"));
+            data.put("event",new TemplateData("超级","#173177"));
+            data.put("dept",new TemplateData("神部","#173177"));
+            data.put("date",new TemplateData("2019年10月09日","#173177"));
+            data.put("remark",new TemplateData("申请成功！","#173177"));
+
+            TemplateMessage templateMessage = new TemplateMessage(
+                    "PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
+                    openId,     //  o7sDrsqAggP4dwbNnVMEC-JX__tE    o7sDrso9Jk1F_lhoItpSY2xTqEmY
+                    "https://cdgd.pryun.vip",
+                    data
+            );
+            weChatEntity.sendTempMsg(templateMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.success();
+    }
+
+
+
+
 }
