@@ -91,8 +91,9 @@ public class ManagementController {
     public Result selectQuestionCategoryDTO(
             @RequestParam(required = false) String categoryId
             , @RequestParam(required = false) String categoryDesc
+            , @RequestParam boolean available
     ) {
-        return questionManger.selectQuestionCategory(categoryId,categoryDesc);
+        return questionManger.selectQuestionCategory(categoryId,categoryDesc,available);
     }
 
     @ApiOperation(value = "新增问题问答", notes = "")

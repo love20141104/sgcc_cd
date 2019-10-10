@@ -91,9 +91,9 @@ public class QuestionManger {
     /**
      * 查询问题分类
      */
-    public Result selectQuestionCategory(String categoryId, String categoryDesc) {
+    public Result selectQuestionCategory(String categoryId, String categoryDesc ,boolean available) {
         try {
-            List<QuestionCategoryDao> questionCategoryDaos = qaQueryEntity.selectQuestionCategory(categoryId, categoryDesc);
+            List<QuestionCategoryDao> questionCategoryDaos = qaQueryEntity.selectQuestionCategory(categoryId, categoryDesc,available);
             CategoryModel categoryModel = new CategoryModel(questionCategoryDaos);
             categoryModel.buildQuestionCategoryDTOS();
             return Result.success(categoryModel.getQuestionCategoryDTOS());

@@ -59,8 +59,8 @@ public class QAQueryEntity {
      * @param categoryId
      * @param categoryDesc
      */
-    public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc) {
-        return qCategorysRepository.selectQuestionCategory(categoryId,categoryDesc);
+    public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc,boolean available) {
+        return qCategorysRepository.selectQuestionCategory(categoryId,categoryDesc,available);
     }
 
 

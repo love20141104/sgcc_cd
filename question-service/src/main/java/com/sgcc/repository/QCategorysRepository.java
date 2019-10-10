@@ -95,7 +95,7 @@ public class QCategorysRepository {
      * @param categoryId
      * @param categoryDesc
      */
-    public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc) {
+    public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc,boolean available) {
         String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(categoryId)){
@@ -105,7 +105,10 @@ public class QCategorysRepository {
         }
 
         if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql +=" where " + sql_where.toString().substring(0,sql_where.toString().length() - 4);
+//            sql +=" where " + sql_where.toString().substring(0,sql_where.toString().length() - 4);
+            sql +=" where " + sql_where.toString() + " category_available = " + available;
+        }else {
+            sql += " where "+" category_available = " + available;
         }
         return jdbcTemplate.query(sql,new categoryRowMapper());
 
