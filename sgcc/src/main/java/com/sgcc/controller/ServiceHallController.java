@@ -109,7 +109,7 @@ public class ServiceHallController {
      */
     @ApiOperation(value = "后台管理系统修改营业厅", notes = "")
     @PutMapping(value = "/ServiceHalls/{id}")
-    public Result updateServiceHalls( ServiceHallMappingDTO dto , @PathVariable("id") String serviceHallId)
+    public Result updateServiceHalls(@RequestBody ServiceHallMappingDTO dto , @PathVariable("id") String serviceHallId)
     {
         return serviceHallService.updateServiceHall(dto);
     }
@@ -118,7 +118,7 @@ public class ServiceHallController {
      */
     @ApiOperation(value = "后台管理系统新增营业厅", notes = "")
     @PostMapping(value = "/ServiceHalls/{id}")
-    public Result AddServiceHall(ServiceHallMappingDTO dto, @PathVariable("id") String serviceHallId )
+    public Result AddServiceHall(@RequestBody ServiceHallMappingDTO dto, @PathVariable("id") String serviceHallId )
     {
         return serviceHallService.saveServiceHall(dto);
     }
