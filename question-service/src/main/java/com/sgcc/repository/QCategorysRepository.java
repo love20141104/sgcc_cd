@@ -74,13 +74,14 @@ public class QCategorysRepository {
      * @param categoryList
      */
     public void updateQCategory(List<QuestionCategoryDao> categoryList){
-        String sql = "update d_question_category set category_desc=?,category_order=?  where category_id=? and category_available=1";
+        String sql = "update d_question_category set category_desc=?,category_order=?,category_detail=? where category_id=? and category_available=1";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setString(1,categoryList.get(i).getCategoryDesc());
                 ps.setInt(2,categoryList.get(i).getCategoryOrder());
-                ps.setString(3,categoryList.get(i).getCategoryId());
+                ps.setString(3,categoryList.get(i).getCategoryDetail());
+                ps.setString(4,categoryList.get(i).getCategoryId());
             }
 
             @Override
