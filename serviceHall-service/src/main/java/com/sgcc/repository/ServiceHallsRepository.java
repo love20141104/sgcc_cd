@@ -64,7 +64,8 @@ public class ServiceHallsRepository {
     public void saveServiceHalls(List<ServiceHallDao> list){
         String sql = "INSERT INTO d_service_hall(id,service_hall_id,service_hall_name,service_hall_addr" +
                 ",service_hall_opentime,service_hall_longitude,service_hall_latitude,service_hall_district," +
-                "service_hall_tel,service_hall_available) values(?,?,?,?,?,?,?,?,?,?)";
+                "service_hall_tel,service_hall_available,service_hall_owner,service_hall_traffic,service_hall_rank," +
+                "service_hall_collect) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -78,6 +79,10 @@ public class ServiceHallsRepository {
                 ps.setString(8, list.get(i).getServiceHallDistrict());
                 ps.setString(9, list.get(i).getServiceHallTel());
                 ps.setBoolean(10, list.get(i).getServiceHallAvailable());
+                ps.setString(11, list.get(i).getServiceHallOwner());
+                ps.setString(12, list.get(i).getServiceHallTraffic());
+                ps.setString(13, list.get(i).getServiceHallRank());
+                ps.setBoolean(14, list.get(i).getServiceHallCollect());
             }
 
             @Override

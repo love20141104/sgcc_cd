@@ -56,11 +56,12 @@ public class ServiceHallService {
         try{
             if( dto == null )
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
-                if(Strings.isNullOrEmpty(dto.getServiceHallId())){
-                    dto.setServiceHallId(UUID.randomUUID().toString());
-                    dto.setId(dto.getServiceHallId());
-
+            if (Strings.isNullOrEmpty(dto.getServiceHallId()) && Strings.isNullOrEmpty(dto.getId())) {
+                dto.setServiceHallId(UUID.randomUUID().toString());
+                dto.setId(dto.getServiceHallId());
             }
+
+
             ServiceHallModel model = new ServiceHallModel();
             serviceHallEntity.saveServiceHall(model.MapDTO2DAO(dto));
             return Result.success();

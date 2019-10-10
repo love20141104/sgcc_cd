@@ -152,7 +152,7 @@ public class ServiceHallModel {
         if( dto == null )
             return null;
         ServiceHallDao dao = new ServiceHallDao();
-        dao.setId(dao.getId());
+        dao.setId(dto.getId());
         dao.setServiceHallAddr(dto.getServiceHallAddr());
         dao.setServiceHallAvailable(dto.getServiceHallAvailable());
         dao.setServiceHallBusinessDesc(dto.getServiceHallBusinessDesc());
