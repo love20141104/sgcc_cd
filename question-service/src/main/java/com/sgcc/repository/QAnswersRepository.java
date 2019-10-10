@@ -103,13 +103,14 @@ public class QAnswersRepository {
      * @param answerDaoList
      */
     public void updateQAnswer(List<QuestionAnswerDao> answerDaoList){
-        String sql = "update d_question_answer set question_desc=?,answer=?  where id=?";
+        String sql = "update d_question_answer set question_desc=?,answer=?,category_id=?  where id=?";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setString(1,answerDaoList.get(i).getQuestionDesc());
                 ps.setString(2,answerDaoList.get(i).getAnswer());
-                ps.setString(3,answerDaoList.get(i).getId());
+                ps.setString(3,answerDaoList.get(i).getCategoryId());
+                ps.setString(4,answerDaoList.get(i).getId());
             }
 
             @Override
