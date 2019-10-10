@@ -28,7 +28,7 @@ public class QCategoryRepository {
      * @param
      */
     public List<QuestionCategoryDao> findAllQCategory(){
-        String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category where category_available=1";
+        String sql = "select id,category_id,category_desc,category_order,category_detail,category_available from d_question_category where category_available=1";
         List<QuestionCategoryDao> categoryDaoList = jdbcTemplate.query(sql,new categoryRowMapper());
         return categoryDaoList;
     }
@@ -97,7 +97,8 @@ public class QCategoryRepository {
                     rs.getString("category_id"),
                     rs.getString("category_desc"),
                     rs.getInt("category_order"),
-                    rs.getBoolean("category_available")
+                    rs.getBoolean("category_available"),
+                    rs.getString("category_detail")
             );
         }
 

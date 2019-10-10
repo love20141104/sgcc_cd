@@ -23,6 +23,8 @@ public class QuestionCategoryDTO implements Serializable ,Comparable<QuestionCat
     // 是否可用
     private Boolean categoryAvailable;
 
+    private String categoryDetail;
+
     @Override
     public int compareTo(QuestionCategoryDTO questionCategoryDTO) {
         return this.categoryOrder.compareTo(questionCategoryDTO.categoryOrder);

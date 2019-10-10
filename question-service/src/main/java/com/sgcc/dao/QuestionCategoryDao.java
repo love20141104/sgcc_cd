@@ -30,6 +30,9 @@ public class QuestionCategoryDao {
 
     // 排序
     private Integer categoryOrder;
+
+    private String categoryDetail;
+
     @Indexed
     // 是否可用
     private Boolean categoryAvailable;
@@ -40,6 +43,7 @@ public class QuestionCategoryDao {
                 ,this.categoryDesc
                 ,this.categoryOrder
                 ,this.categoryAvailable
+                ,this.categoryDetail
         );
     }
 
@@ -47,11 +51,13 @@ public class QuestionCategoryDao {
             ,String categoryId
             ,String categoryDesc
             ,Integer categoryOrder
-            ,Boolean categoryAvailable){
+            ,Boolean categoryAvailable
+            ,String categoryDetail){
         this.id = id;
         this.categoryId = categoryId;
         this.categoryDesc = categoryDesc;
         this.categoryOrder = categoryOrder;
         this.categoryAvailable = categoryAvailable;
+        this.categoryDetail = categoryDetail;
     }
 }

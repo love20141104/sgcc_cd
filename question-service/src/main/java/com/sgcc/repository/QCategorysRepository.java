@@ -28,7 +28,7 @@ public class QCategorysRepository {
      * @param
      */
     public List<QuestionCategoryDao> findAllQCategory(){
-        String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category where category_available=1";
+        String sql = "select id,category_id,category_desc,category_order,category_detail,category_available from d_question_category where category_available=1";
         List<QuestionCategoryDao> categoryDaoList = jdbcTemplate.query(sql,new categoryRowMapper());
         return categoryDaoList;
     }
@@ -39,8 +39,8 @@ public class QCategorysRepository {
      * @param categoryList
      */
     public void addQCategory(List<QuestionCategoryDao> categoryList){
-        String sql = "insert into d_question_category(id,category_id,category_desc,category_order) " +
-                "values(?,?,?,?)";
+        String sql = "insert into d_question_category(id,category_id,category_desc,category_order,category_detail) " +
+                "values(?,?,?,?,?)";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -48,6 +48,7 @@ public class QCategorysRepository {
                 ps.setString(2,categoryList.get(i).getCategoryId());
                 ps.setString(3,categoryList.get(i).getCategoryDesc());
                 ps.setInt(4,categoryList.get(i).getCategoryOrder());
+                ps.setString(5,categoryList.get(i).getCategoryDetail());
             }
 
             @Override
@@ -96,7 +97,7 @@ public class QCategorysRepository {
      * @param categoryDesc
      */
     public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc,boolean available) {
-        String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category";
+        String sql = "select id,category_id,category_desc,category_order,category_detail,category_available from d_question_category";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(categoryId)){
             sql_where.append(" category_id like '%").append(categoryId+"%' and ");
@@ -122,7 +123,8 @@ public class QCategorysRepository {
                     rs.getString("category_id"),
                     rs.getString("category_desc"),
                     rs.getInt("category_order"),
-                    rs.getBoolean("category_available")
+                    rs.getBoolean("category_available"),
+                    rs.getString("category_detail")
             );
         }
 

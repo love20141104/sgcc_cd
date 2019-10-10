@@ -46,6 +46,7 @@ public class CategoryModel {
                     ,dto.getCategoryDesc()
                     ,dto.getCategoryOrder()
                     ,dto.getCategoryAvailable()
+                    ,dto.getCategoryDetail()
             )));
         }};
     }
