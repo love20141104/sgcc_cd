@@ -117,8 +117,8 @@ public class ServiceHallController {
      * 后台管理系统新增营业厅
      */
     @ApiOperation(value = "后台管理系统新增营业厅", notes = "")
-    @PostMapping(value = "/ServiceHalls/{id}")
-    public Result AddServiceHall(@RequestBody ServiceHallMappingDTO dto, @PathVariable("id") String serviceHallId )
+    @PostMapping(value = "/ServiceHalls")
+    public Result AddServiceHall(@RequestBody ServiceHallMappingDTO dto)
     {
         return serviceHallService.saveServiceHall(dto);
     }
