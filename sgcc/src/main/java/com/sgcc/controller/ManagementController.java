@@ -3,6 +3,7 @@ package com.sgcc.controller;
 import com.example.result.Result;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
 
+import com.sgcc.dtomodel.question.CategrateInsertDTO;
 import com.sgcc.dtomodel.question.QADTO;
 import com.sgcc.dtomodel.question.QuestionCategoryDTO;
 import com.sgcc.service.PrebookManager;
@@ -70,8 +71,8 @@ public class ManagementController {
 
     @ApiOperation(value = "新增问题分类", notes = "")
     @PostMapping(value = "/SuggestionInfo/addQCategory")
-    public Result insertQuestionCategoryDTO(@RequestBody QuestionCategoryDTO questionCategoryDTO) {
-            return questionManger.insertQuestionCategory(questionCategoryDTO);
+    public Result insertQuestionCategoryDTO(@RequestBody CategrateInsertDTO categrateInsertDTO) {
+            return questionManger.insertQuestionCategory(categrateInsertDTO);
     }
 
     @ApiOperation(value = "修改问题分类", notes = "")
