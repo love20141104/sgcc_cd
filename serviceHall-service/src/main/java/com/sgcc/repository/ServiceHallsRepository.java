@@ -34,18 +34,45 @@ public class ServiceHallsRepository {
 
     }
 
+
+    public List<ServiceHallDao> findHallById(String id){
+        String sql = "select id,service_hall_id,service_hall_name,service_hall_addr,service_hall_opentime,service_hall_longitude," +
+                "service_hall_latitude,service_hall_district,service_hall_tel,service_hall_available,service_hall_business_desc,"+
+                "service_hall_traffic,service_hall_landmark_building,service_hall_owner,service_hall_business_district,"+
+                "service_hall_rank,service_hall_collect from d_service_hall where service_hall_available = 1 and service_hall_id= " +
+                "'"+id+"'";
+
+        try {
+            return jdbcTemplate.query(sql, new TestRowMapper());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("失败！！");
+        }
+
+    }
+
+
     /**
      * 修改网点
      * @param list
      */
     public void updateServiceHall(List<ServiceHallDao> list){
-        String sql = "update d_service_hall set service_hall_name=?,service_hall_addr=? where service_hall_id=?";
+        String sql = "update d_service_hall set service_hall_name=?,service_hall_addr=?,service_hall_opentime=?, " +
+                "service_hall_district=?,service_hall_owner=?,service_hall_available=?,service_hall_traffic=?, " +
+                "service_hall_rank=?,service_hall_collect=? where service_hall_id=?";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setString(1, list.get(i).getServiceHallName());
                 ps.setString(2, list.get(i).getServiceHallAddr());
-                ps.setString(3, list.get(i).getServiceHallId());
+                ps.setString(3, list.get(i).getServiceHallOpenTime());
+                ps.setString(4, list.get(i).getServiceHallDistrict());
+                ps.setString(5, list.get(i).getServiceHallOwner());
+                ps.setBoolean(6, list.get(i).getServiceHallAvailable());
+                ps.setString(7, list.get(i).getServiceHallTraffic());
+                ps.setString(8, list.get(i).getServiceHallRank());
+                ps.setBoolean(9, list.get(i).getServiceHallCollect());
+                ps.setString(10, list.get(i).getServiceHallId());
             }
 
             @Override
@@ -61,12 +88,12 @@ public class ServiceHallsRepository {
      * 新增网点
      * @param list
      */
-    public void saveServiceHalls(List<ServiceHallDao> list){
+    public int[] saveServiceHalls(List<ServiceHallDao> list){
         String sql = "INSERT INTO d_service_hall(id,service_hall_id,service_hall_name,service_hall_addr" +
                 ",service_hall_opentime,service_hall_longitude,service_hall_latitude,service_hall_district," +
                 "service_hall_tel,service_hall_available,service_hall_owner,service_hall_traffic,service_hall_rank," +
                 "service_hall_collect) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+        int[] result = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setString(1, list.get(i).getId());
@@ -90,6 +117,7 @@ public class ServiceHallsRepository {
                 return list.size();
             }
         });
+        return result;
     }
 
 

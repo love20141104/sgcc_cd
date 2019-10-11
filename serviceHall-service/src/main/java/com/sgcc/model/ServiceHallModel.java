@@ -1,6 +1,7 @@
 package com.sgcc.model;
 
 import com.example.MapUtil;
+import com.google.common.base.Strings;
 import com.sgcc.dao.ServiceHallDao;
 import com.sgcc.dto.ServiceHallComputedDistanceDTO;
 import com.sgcc.dto.ServiceHallMappingDTO;
@@ -155,7 +156,7 @@ public class ServiceHallModel {
         if( dto == null )
             return null;
         ServiceHallDao dao = new ServiceHallDao();
-        if (StringUtils.isEmpty(dao.getId())) {
+        if (Strings.isNullOrEmpty(dao.getId())) {
             dao.setId(UUID.randomUUID().toString());
         }
         dao.setServiceHallAddr(dto.getServiceHallAddr());

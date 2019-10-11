@@ -1,12 +1,14 @@
 package com.sgcc.repository;
 
 import com.example.Utils;
+import com.google.common.base.Strings;
 import com.sgcc.dao.ServiceHallDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -42,9 +44,37 @@ public class ServiceHallRepository {
      * @param serviceHallDao
      */
     public void updateServiceHall(ServiceHallDao serviceHallDao) {
-        String sql = "update d_service_hall set service_hall_name='" + serviceHallDao.getServiceHallName() +
-                "',service_hall_addr='" + serviceHallDao.getServiceHallAddr() + "' where service_hall_id='"+
-                serviceHallDao.getServiceHallId()+"'";
+        String sql = "update d_service_hall set service_hall_name='"+serviceHallDao.getServiceHallName()+"'" +
+                ",service_hall_addr='"+serviceHallDao.getServiceHallAddr()+"'" +
+                ",service_hall_opentime='"+serviceHallDao.getServiceHallOpenTime()+"'" +
+                ",service_hall_district='"+serviceHallDao.getServiceHallDistrict()+"'" +
+                ",service_hall_owner='"+serviceHallDao.getServiceHallOwner()+"'" +
+                ",service_hall_available="+serviceHallDao.getServiceHallAvailable()+"" +
+                ",service_hall_traffic='"+serviceHallDao.getServiceHallTraffic()+"'" +
+                ",service_hall_rank='"+serviceHallDao.getServiceHallRank()+"'" +
+                ",service_hall_collect="+serviceHallDao.getServiceHallCollect()+"";
+
+        StringBuffer stringBuffer = new StringBuffer();
+        String whereSql = " where service_hall_id='"+serviceHallDao.getServiceHallId()+"'";
+        if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallTel()))
+            stringBuffer.append(",").append("service_hall_tel='"+serviceHallDao.getServiceHallTel()+"'");
+        if (!(serviceHallDao.getServiceHallLongitude()-0.0<1e-6))
+            stringBuffer.append(",").append("service_hall_longitude='"+serviceHallDao.getServiceHallLongitude()+"'");
+        if (!(serviceHallDao.getServiceHallLatitude()-0.0<1e-6))
+            stringBuffer.append(",").append("service_hall_latitude='"+serviceHallDao.getServiceHallLatitude()+"'");
+        if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallLandmarkBuilding()))
+            stringBuffer.append(",").append("service_hall_landmark_building='"+serviceHallDao.getServiceHallLandmarkBuilding()+"'");
+        if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallBusinessDesc()))
+            stringBuffer.append(",").append("service_hall_business_desc='"+serviceHallDao.getServiceHallBusinessDesc()+"'");
+        if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallBusinessDistrict()))
+            stringBuffer.append(",").append("service_hall_business_district='"+serviceHallDao.getServiceHallBusinessDistrict()+"'");
+
+        if (!Strings.isNullOrEmpty(stringBuffer.toString())){
+            sql+= stringBuffer.toString()+whereSql;
+        }else {
+            sql+= whereSql;
+        }
+
         logger.info("updateSQL:"+sql);
         jdbcTemplate.update(sql);
     }

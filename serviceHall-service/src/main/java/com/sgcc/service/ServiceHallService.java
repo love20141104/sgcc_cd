@@ -27,7 +27,7 @@ public class ServiceHallService {
      *查询网点
      */
     public Result findHallList(){
-        List<ServiceHallDao> hallDaoList  = serviceHallEntity.findHalls();
+        List<ServiceHallDao> hallDaoList  = serviceHallEntity.findHallList();
         return Result.success(hallDaoList);
     }
 
