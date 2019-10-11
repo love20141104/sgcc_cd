@@ -4,6 +4,7 @@ import com.example.result.Result;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sgcc.dto.ServiceHallDeleteDTO;
 import com.sgcc.dto.ServiceHallMappingDTO;
+import com.sgcc.dto.UpdateServiceHallDTO;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
 import com.sgcc.service.*;
 import io.swagger.annotations.ApiImplicitParam;
@@ -109,7 +110,7 @@ public class ServiceHallController {
      */
     @ApiOperation(value = "后台管理系统修改营业厅", notes = "")
     @PutMapping(value = "/ServiceHalls/{id}")
-    public Result updateServiceHalls(@RequestBody ServiceHallMappingDTO dto , @PathVariable("id") String serviceHallId)
+    public Result updateServiceHalls(@RequestBody UpdateServiceHallDTO dto )
     {
         return serviceHallService.updateServiceHall(dto);
     }

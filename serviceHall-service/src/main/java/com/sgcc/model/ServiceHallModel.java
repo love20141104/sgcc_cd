@@ -4,10 +4,13 @@ import com.example.MapUtil;
 import com.sgcc.dao.ServiceHallDao;
 import com.sgcc.dto.ServiceHallComputedDistanceDTO;
 import com.sgcc.dto.ServiceHallMappingDTO;
+import com.sgcc.dto.UpdateServiceHallDTO;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class ServiceHallModel {
     List<ServiceHallDao> m_AllHallDaoList  = new ArrayList<>();
@@ -127,14 +130,14 @@ public class ServiceHallModel {
         if( dao == null )
             return null;
         ServiceHallMappingDTO dto = new ServiceHallMappingDTO();
-        dto.setId(dao.getId());
+        //dto.setId(dao.getId());
         dto.setServiceHallAddr(dao.getServiceHallAddr());
         dto.setServiceHallAvailable(dao.getServiceHallAvailable());
         dto.setServiceHallBusinessDesc(dao.getServiceHallBusinessDesc());
         dto.setServiceHallBusinessDistrict(dao.getServiceHallBusinessDistrict());
         dto.setServiceHallCollect(dao.getServiceHallCollect());
         dto.setServiceHallDistrict(dao.getServiceHallDistrict());
-        dto.setServiceHallId(dao.getServiceHallId());
+        //dto.setServiceHallId(dao.getServiceHallId());
         dto.setServiceHallLandmarkBuilding(dao.getServiceHallLandmarkBuilding());
         dto.setServiceHallLatitude(dao.getServiceHallLatitude());
         dto.setServiceHallLongitude(dao.getServiceHallLongitude());
@@ -148,6 +151,33 @@ public class ServiceHallModel {
     }
 
     public ServiceHallDao MapDTO2DAO(ServiceHallMappingDTO dto )
+    {
+        if( dto == null )
+            return null;
+        ServiceHallDao dao = new ServiceHallDao();
+        if (StringUtils.isEmpty(dao.getId())) {
+            dao.setId(UUID.randomUUID().toString());
+        }
+        dao.setServiceHallAddr(dto.getServiceHallAddr());
+        dao.setServiceHallAvailable(dto.getServiceHallAvailable());
+        dao.setServiceHallBusinessDesc(dto.getServiceHallBusinessDesc());
+        dao.setServiceHallBusinessDistrict(dto.getServiceHallBusinessDistrict());
+        dao.setServiceHallCollect(dto.getServiceHallCollect());
+        dao.setServiceHallDistrict(dto.getServiceHallDistrict());
+        dao.setServiceHallId(dao.getId());
+        dao.setServiceHallLandmarkBuilding(dto.getServiceHallLandmarkBuilding());
+        dao.setServiceHallLatitude(dto.getServiceHallLatitude());
+        dao.setServiceHallLongitude(dto.getServiceHallLongitude());
+        dao.setServiceHallName(dto.getServiceHallName());
+        dao.setServiceHallOpenTime(dto.getServiceHallOpenTime());
+        dao.setServiceHallOwner(dto.getServiceHallOwner());
+        dao.setServiceHallRank(dto.getServiceHallRank());
+        dao.setServiceHallTel(dto.getServiceHallTel());
+        dao.setServiceHallTraffic(dto.getServiceHallTraffic());
+        return dao;
+    }
+
+    public ServiceHallDao updateDTO2DAO(UpdateServiceHallDTO dto )
     {
         if( dto == null )
             return null;
@@ -192,6 +222,7 @@ public class ServiceHallModel {
         for(ServiceHallMappingDTO dto:dtos)
         {
             daos.add( MapDTO2DAO(dto));
+
         }
         return daos;
     }

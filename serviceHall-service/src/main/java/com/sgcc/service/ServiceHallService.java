@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.ServiceHallDao;
 import com.sgcc.dto.ServiceHallComputedDistanceDTO;
 import com.sgcc.dto.ServiceHallMappingDTO;
+import com.sgcc.dto.UpdateServiceHallDTO;
 import com.sgcc.entity.ServiceHallEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.ServiceHallModel;
@@ -26,7 +27,7 @@ public class ServiceHallService {
      *查询网点
      */
     public Result findHallList(){
-        List<ServiceHallDao> hallDaoList  = serviceHallEntity.findHallList();
+        List<ServiceHallDao> hallDaoList  = serviceHallEntity.findHalls();
         return Result.success(hallDaoList);
     }
 
@@ -56,10 +57,10 @@ public class ServiceHallService {
         try{
             if( dto == null )
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
-            if (Strings.isNullOrEmpty(dto.getServiceHallId()) && Strings.isNullOrEmpty(dto.getId())) {
-                dto.setServiceHallId(UUID.randomUUID().toString());
-                dto.setId(dto.getServiceHallId());
-            }
+//            if (Strings.isNullOrEmpty(dto.getServiceHallId()) || Strings.isNullOrEmpty(dto.getId())) {
+//                dto.setServiceHallId(UUID.randomUUID().toString());
+//                dto.setId(dto.getServiceHallId());
+//            }
 
 
             ServiceHallModel model = new ServiceHallModel();
@@ -81,12 +82,12 @@ public class ServiceHallService {
         try{
             if( list == null || list.size() < 1 )
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
-            for ( int i = 0; i < list.size(); i++ ) {
-                if(Strings.isNullOrEmpty(list.get(i).getServiceHallId())){
-                    list.get(i).setServiceHallId(UUID.randomUUID().toString());
-                    list.get(i).setId(list.get(i).getServiceHallId());
-                }
-            }
+//            for ( int i = 0; i < list.size(); i++ ) {
+//                if(Strings.isNullOrEmpty(list.get(i).getServiceHallId())){
+//                    list.get(i).setServiceHallId(UUID.randomUUID().toString());
+//                    list.get(i).setId(list.get(i).getServiceHallId());
+//                }
+//            }
             ServiceHallModel model = new ServiceHallModel();
             serviceHallEntity.saveServiceHalls(model.MapDTOs2DAOs(list));
             return Result.success();
@@ -152,12 +153,12 @@ public class ServiceHallService {
      * @param dto
      * @return
      */
-    public Result updateServiceHall(ServiceHallMappingDTO dto){
+    public Result updateServiceHall(UpdateServiceHallDTO dto){
         try{
             if( dto == null )
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
             ServiceHallModel model = new ServiceHallModel();
-            serviceHallEntity.updateServiceHall(model.MapDTO2DAO(dto));
+            serviceHallEntity.updateServiceHall(model.updateDTO2DAO(dto));
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();

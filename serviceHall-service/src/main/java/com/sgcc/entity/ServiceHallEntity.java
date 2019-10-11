@@ -33,6 +33,10 @@ public class ServiceHallEntity {
         return hallDaoList;
     }
 
+    public List<ServiceHallDao> findHalls(){
+        return repository.findHallList();
+    }
+
     /**
      * 批量新增网点
      * @param list
