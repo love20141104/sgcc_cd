@@ -1,6 +1,7 @@
 package com.sgcc;
 
 import com.sgcc.Service.QuestionService;
+import com.sgcc.service.ArticleService;
 import com.sgcc.service.ServiceHallService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -18,6 +19,9 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
 
         ServiceHallService serviceHallService = contextRefreshedEvent.getApplicationContext().getBean(ServiceHallService.class);
         serviceHallService.Initialize();
+
+        ArticleService articleService =contextRefreshedEvent.getApplicationContext().getBean(ArticleService.class);
+        articleService.Initialize( null );
         System.out.println("Redis初始化成功");
     }
 }

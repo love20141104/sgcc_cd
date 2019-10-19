@@ -5,8 +5,8 @@ import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
 import com.sgcc.dto.*;
-import com.sgcc.entity.event.SuggestionQueryEntity;
-import com.sgcc.entity.query.SuggestionEventEntity;
+import com.sgcc.entity.query.SuggestionQueryEntity;
+import com.sgcc.entity.event.SuggestionEventEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.SuggestionModel;
 import com.sgcc.producer.SuggestionProducer;
@@ -146,7 +146,7 @@ public class SuggestionService {
     public Result getSuggestions(  )
     {
         try {
-            List<SuggestionDao> daos = suggestionEventEntity.GetSuggestions();
+            List<SuggestionDao> daos = suggestionQueryEntity.GetSuggestions();
             SuggestionModel model = new SuggestionModel();
             return Result.success(model.DAOs2MapDTOs(daos));
         } catch (Exception e) {

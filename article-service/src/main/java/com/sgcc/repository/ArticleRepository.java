@@ -22,6 +22,18 @@ public class ArticleRepository {
 
     private Logger logger = Logger.getLogger(ArticleRepository.class.toString());
 
+    public List<ArticleDao> findAll( ){
+        String sql = "select id,article_title,article_desc,article_img,article_url," +
+                "article_recommended,article_type" + Utils.GetSQLDateStr("submit_date")+ " from b_article";
+        try{
+            return jdbcTemplate.query(sql,new articleRowMapper());
+        }
+        catch (NoSuchElementException e )
+        {
+            return null;
+        }
+    }
+
     public List<ArticleDao> findAllByRecommended( Boolean isRecommended ){
         String sql = "select id,article_title,article_desc,article_img,article_url," +
                 "article_recommended,article_type" + Utils.GetSQLDateStr("submit_date")+ " from b_article";
@@ -47,6 +59,42 @@ public class ArticleRepository {
             return null;
         }
     }
+    public ArticleDao findByID( String id ){
+        String sql = "select id,article_title,article_desc,article_img,article_url," +
+                "article_recommended,article_type" + Utils.GetSQLDateStr("submit_date")+ " from b_article";
+        sql = sql + " where id = '" + id + "'";
+        try{
+            return jdbcTemplate.queryForObject(sql,new articleRowMapper());
+        }
+        catch (NoSuchElementException e )
+        {
+            return null;
+        }
+    }
+
+    @Transactional
+    public void save(ArticleDao dao){
+        String sql = "insert into b_article(id,article_title,article_desc,article_img,article_url," +
+                "article_recommended,article_type,submit_time) values('"+dao.getId()+"'" +
+                ",'"+dao.getArticle_title()+"','"+dao.getArticle_desc()+"','"+dao.getArticle_img()+"'" +
+                ",'"+ dao.getArticle_url() +"','"+dao.isArticle_recommended()+"'" +
+                ",'"+dao.getArticle_type()+"','"+dao.getSubmitDate()+"')";
+        jdbcTemplate.execute(sql);
+    }
+
+    @Transactional
+    public ArticleDao update(ArticleDao dao){
+        String sql = "update b_article set article_title='"+dao.getArticle_title()+"'" +
+                ",article_desc='"+dao.getArticle_desc()+"',article_img='"+dao.getArticle_img()+"'" +
+                ",article_url='"+ dao.getArticle_url()+"'" +
+                ",article_recommended='"+dao.isArticle_recommended()+
+                ",article_type='"+dao.getArticle_type()+
+                ",submit_time='"+dao.getSubmitDate()+
+                "' where id='"+dao.getId()+"'";
+        jdbcTemplate.update(sql);
+        return findByID(dao.getId());
+    }
+
     @Transactional
     public void deleteAll(List<String> articleIds){
         String strIds = Utils.joinStrings(articleIds,"','");

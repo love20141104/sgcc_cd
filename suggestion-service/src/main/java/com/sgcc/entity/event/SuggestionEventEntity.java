@@ -1,4 +1,4 @@
-package com.sgcc.entity.query;
+package com.sgcc.entity.event;
 
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
@@ -55,8 +55,4 @@ public class SuggestionEventEntity {
         suggestionRedisRepository.deleteAll(daos);
     }
 
-    public List<SuggestionDao> GetSuggestions()
-    {
-        return suggestionsRepository.findAll();
-    }
 }

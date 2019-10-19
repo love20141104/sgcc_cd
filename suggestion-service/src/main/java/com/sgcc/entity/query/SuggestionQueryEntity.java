@@ -1,4 +1,4 @@
-package com.sgcc.entity.event;
+package com.sgcc.entity.query;
 
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
@@ -42,5 +42,9 @@ public class SuggestionQueryEntity {
     public SuggestionDao findById(String id)
     {
         return suggestionsRepository.findById(id);
+    }
+    public List<SuggestionDao> GetSuggestions()
+    {
+        return suggestionsRepository.findAll();
     }
 }

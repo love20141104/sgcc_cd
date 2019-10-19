@@ -1,3 +1,5 @@
+
+
 package com.sgcc.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,8 +10,9 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor //生成全参数构造函数
 @NoArgsConstructor  //生成无参构造函数
-public class ArticleViewDTO implements Serializable{
-    private static final long serialVersionUID = -7966853100804257653L;
+public class ArticleUpdateDTO implements Serializable {
+
+    private static final long serialVersionUID = 3934451276087963939L;
     private String id;
 
     private String article_title;
@@ -18,9 +21,9 @@ public class ArticleViewDTO implements Serializable{
 
     private String article_img;
 
-    private String article_url;
-
     private boolean article_recommended;
 
     private String article_type;
+
+    private String article_url;
 }

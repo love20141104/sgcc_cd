@@ -52,7 +52,7 @@ public class PreBookRepository {
                 ",'"+ preBookDao.getPrebookDate() +"','"+preBookDao.getPrebookStartTime()+"'" +
                 ",'"+preBookDao.getContact()+"','"+preBookDao.getContactTel()+"','"+preBookDao.getSubmitDate()+"')";
         logger.info("添加预约信息sql:" + sql);
-        jdbcTemplate.update(sql);
+        jdbcTemplate.execute(sql);
     }
 
 
