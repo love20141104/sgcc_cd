@@ -6,25 +6,25 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="article-service" />
-        <module name="bill-service" />
-        <module name="cache-service" />
+        <module name="mq-service" />
+        <module name="test-service" />
         <module name="consumer-manager-service" />
         <module name="domain-model" />
-        <module name="dto-model" />
-        <module name="exception" />
-        <module name="management-service" />
-        <module name="mq-service" />
-        <module name="mq_service" />
-        <module name="preBook-service" />
-        <module name="question-service" />
         <module name="serviceHall-service" />
-        <module name="sgcc" />
-        <module name="suggestion-service" />
-        <module name="test-service" />
-        <module name="util-service" />
-        <module name="utils" />
         <module name="wechat-service" />
+        <module name="mq_service" />
+        <module name="cache-service" />
+        <module name="article-service" />
+        <module name="utils" />
+        <module name="suggestion-service" />
+        <module name="sgcc" />
+        <module name="util-service" />
+        <module name="exception" />
+        <module name="question-service" />
+        <module name="dto-model" />
+        <module name="bill-service" />
+        <module name="preBook-service" />
+        <module name="management-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -55,6 +55,7 @@
       <module name="article-service" options="-parameters" />
       <module name="bill-service" options="-parameters" />
       <module name="cache-service" options="-parameters" />
+      <module name="domain-model" options="-parameters" />
       <module name="dto-model" options="-parameters" />
       <module name="exception" options="-parameters" />
       <module name="management-service" options="-parameters" />
