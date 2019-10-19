@@ -35,6 +35,7 @@
         <module>dependency-package/domain-model</module>
         <module>management-service</module>
         <module>article-service</module>
+        <module>bill-service</module>
 
     </modules>
 
