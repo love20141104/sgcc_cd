@@ -142,7 +142,7 @@ public class ConsumerManagerService {
         try {
 
             //TODO 根据用户id查询对应的客户经理id
-            String consumerManagerId = "";
+            String consumerManagerId = "test1";
             ConsumerManagerDao consumerManagerDao = consumerManagerQueryEntity.findByIdInRedis(consumerManagerId);
             //如果redis中没查到
             if (null == consumerManagerDao) {

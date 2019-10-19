@@ -86,7 +86,8 @@ public class ConsumerManagerRepository {
                 +", consumer_manager_emergency_tel = '" + consumerManagerDao.getConsumerManagerEmergencyTel() +"'"
                 +", consumer_manager_work_unit = '" + consumerManagerDao.getConsumerManagerWorkUnit() +"'"
                 +", consumer_manager_category = '" + consumerManagerDao.getConsumerManagerCategory() +"'"
-                +", consumer_manager_img = '" + consumerManagerDao.getConsumerManagerImg() +"';";
+                +", consumer_manager_img = '" + consumerManagerDao.getConsumerManagerImg() +"' " +
+                " where consumer_manager_id = '"+consumerManagerDao.getConsumerManagerId()+"';";
         logger.info("修改客户经理信息："+sql);
         jdbcTemplate.execute(sql);
     }
