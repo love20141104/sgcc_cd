@@ -29,7 +29,7 @@ public class ArticleService {
 
     public void Initialize( ArticleDaos daos ){
         List<ArticleDao> listdao = new ArrayList<>();
-        if( daos != null )
+        if( daos != null && daos.getArticleRedisDaoList() != null && daos.getArticleRedisDaoList().size() > 0 )
             listdao = daos.getArticleRedisDaoList();
         else
             listdao = articleQueryEntity.getArticles();
@@ -113,7 +113,7 @@ public class ArticleService {
             return;
 
         articleEventEntity.update(dao);
-        articleProducer.CacheAllArticlesMQ( null );
+        articleProducer.CacheAllArticlesMQ( new ArticleDaos() );
     }
 
     public void deletes( List<String> articleIds )
