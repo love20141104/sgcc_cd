@@ -4,16 +4,20 @@ import com.example.constant.PrebookStartTimeConstants;
 import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
+import com.sgcc.dao.ServiceHallDao;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
+import com.sgcc.entity.ServiceHallEntity;
 import com.sgcc.entity.event.PrebookEventEntity;
 import com.sgcc.entity.query.PrebookQueryEntity;
 import com.sgcc.exception.TopErrorCode;
+import com.sgcc.model.PrebookDomainModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Service
 public class PrebookManager {
@@ -23,6 +27,8 @@ public class PrebookManager {
     private PrebookEventEntity prebookEventEntity;
     @Autowired
     private PrebookQueryEntity prebookQueryEntity;
+    @Autowired
+    private ServiceHallEntity serviceHallEntity;
     /**
      *  ================================= 预约信息start =================================
      */
@@ -158,7 +164,20 @@ public class PrebookManager {
             if(!Strings.isNullOrEmpty(prebook_date_end)){
                 prebook_date_end = format1.format(format1.parse(prebook_date_end.trim()));
             }
-            return Result.success(prebookQueryEntity.getPrebook(user_open_id, service_hall_id, prebook_code, prebook_date_start, prebook_date_end));
+
+            List<PreBookDao> preBookDaos = prebookQueryEntity.getPrebook(user_open_id, service_hall_id,
+                    prebook_code, prebook_date_start, prebook_date_end);
+
+            //根据preBookDaos构造PrebookDomainModel
+            PrebookDomainModel prebookModel = new PrebookDomainModel(preBookDaos);
+
+
+            List<ServiceHallDao> serviceHallDaos = serviceHallEntity.findHallList();
+
+            //根据preBookDaos构造preBookDTOs
+            prebookModel.buildPrebookDTOS(serviceHallDaos);
+
+            return Result.success(prebookModel.getPrebookDTOS());
         } catch (ParseException e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.PARAMETER_ERR);

@@ -7,8 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="article-service" />
+        <module name="bill-service" />
         <module name="cache-service" />
-        <module name="consumer-manager-service" />
         <module name="domain-model" />
         <module name="dto-model" />
         <module name="exception" />
@@ -21,15 +21,14 @@
         <module name="sgcc" />
         <module name="suggestion-service" />
         <module name="test-service" />
-        <module name="util-service" />
         <module name="utils" />
         <module name="wechat-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="article-service" target="1.8" />
+      <module name="bill-service" target="1.8" />
       <module name="cache-service" target="1.8" />
-      <module name="consumer-manager-service" target="1.8" />
       <module name="domain-model" target="1.8" />
       <module name="dto-model" target="1.8" />
       <module name="exception" target="1.8" />
@@ -43,13 +42,14 @@
       <module name="sgcc_cd" target="1.8" />
       <module name="suggestion-service" target="1.8" />
       <module name="test-service" target="1.8" />
-      <module name="util-service" target="1.8" />
       <module name="utils" target="1.8" />
       <module name="wechat-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="article-service" options="-parameters" />
+      <module name="bill-service" options="-parameters" />
       <module name="cache-service" options="-parameters" />
       <module name="dto-model" options="-parameters" />
       <module name="exception" options="-parameters" />
