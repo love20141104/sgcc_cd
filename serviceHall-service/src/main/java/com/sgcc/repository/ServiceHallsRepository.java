@@ -93,6 +93,8 @@ public class ServiceHallsRepository {
                 ",service_hall_opentime,service_hall_longitude,service_hall_latitude,service_hall_district," +
                 "service_hall_tel,service_hall_available,service_hall_owner,service_hall_traffic,service_hall_rank," +
                 "service_hall_collect) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+
         int[] result = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
