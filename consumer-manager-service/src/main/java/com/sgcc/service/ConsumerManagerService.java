@@ -32,7 +32,20 @@ public class ConsumerManagerService {
     public Result insertConsumerManager(ConsumerManagerInsertDTO consumerManagerInsertDTO) {
 
         //参数检查start
-        //TODO
+        if (
+                Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerName()) ||
+                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerTel()) ||
+                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerServiceArea()) ||
+                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerAdministrativeRegion()) ||
+                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerDuty()) ||
+                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerWorkTime()) ||
+                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerEmergencyTel()) ||
+                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerWorkUnit()) ||
+                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerCategory()) ||
+                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerImg())
+                ) {
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        }
         //参数检查end
         ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerInsertDTO);
         consumerManagerDomainModel.insertTransform();
@@ -63,10 +76,6 @@ public class ConsumerManagerService {
      * 删除客户经理
      */
     public Result deleteConsumerManager(String consumerManagerId) {
-        //参数检查start
-        //TODO
-        //参数检查end
-
         try {
             consumerManagerEventEntity.deleteConsumerManager(consumerManagerId);
             //如果redis中存在则删除
@@ -113,7 +122,19 @@ public class ConsumerManagerService {
      */
     public Result updateConsumerManager(ConsumerManagerDTO consumerManagerDTO) {
         //参数检查start
-        //TODO
+        if (Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerId()) ||
+                Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerName()) ||
+                Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerTel()) ||
+                Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerServiceArea()) ||
+                Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerAdministrativeRegion()) ||
+                Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerDuty()) ||
+                Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerWorkTime()) ||
+                Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerEmergencyTel()) ||
+                Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerWorkUnit()) ||
+                Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerCategory()) ||
+                Strings.isNullOrEmpty(consumerManagerDTO.getConsumerManagerImg())) {
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        }
         //参数检查end
         ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerDTO);
         consumerManagerDomainModel.updateTransform();
