@@ -20,8 +20,9 @@ public class BillController {
 
     @ApiOperation(value = "查询月度账单", notes = "")
     @GetMapping(value = "/billInfo/{userId}")
-    public Result queryBillInfo(@PathVariable String userId) {
-        return billService.queryBillInfoById(userId);
+    public Result queryBillInfo(@PathVariable(required = true) String userNo,
+                                @RequestParam(required = true) long date) {
+        return billService.queryBillInfoById(userNo,date);
     }
 
 

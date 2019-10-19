@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @AllArgsConstructor //生成全参数构造函数
@@ -20,7 +18,7 @@ public class MonthlyBillsDTO implements Serializable {
 
     private String userNo;
 
-    private int billMonth;
+    private Date billMonth;
 
     private double startNum;
 
@@ -30,8 +28,8 @@ public class MonthlyBillsDTO implements Serializable {
 
     private double totalSum;    // 电费合计
 
-    private Map<String,ElectricityTypeDTO> Map = new LinkedHashMap<>();
 
-
+    private List<ElectricityTypeDTO> flist = new ArrayList<>();
+    private List<ElectricityTypeDTO> slist = new ArrayList<>();
 
 }
