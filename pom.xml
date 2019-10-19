@@ -36,6 +36,8 @@
         <module>management-service</module>
         <module>article-service</module>
         <module>bill-service</module>
+        <!--<module>consumer-manager-service</module>-->
+        <module>util-service</module>
 
     </modules>
 
