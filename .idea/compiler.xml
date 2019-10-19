@@ -65,6 +65,7 @@
       <module name="sgcc" options="-parameters" />
       <module name="suggestion-service" options="-parameters" />
       <module name="test-service" options="-parameters" />
+      <module name="util-service" options="-parameters" />
       <module name="utils" options="-parameters" />
       <module name="wechat-service" options="-parameters" />
     </option>
