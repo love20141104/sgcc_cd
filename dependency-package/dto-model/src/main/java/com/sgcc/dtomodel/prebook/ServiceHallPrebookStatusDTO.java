@@ -19,7 +19,7 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
     //预约业务办理日期
     private String prebookDate;
     //营业厅预约状态
-    private Map<String,PrebookStartTimeDTO> prebookStartTimeDTOS = new HashMap<>();
+    private Map<String,PrebookStartTimeDTO> prebookStartTimeDTOS = new LinkedHashMap<>();
 
     /**
      * 构造函数
@@ -30,7 +30,7 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
     public ServiceHallPrebookStatusDTO(String serviceHallId,String prebookDate,Map<String,PrebookStartTimeDTO> prebookStartTimeDTOS){
         this.serviceHallId = serviceHallId;
         this.prebookDate = prebookDate;
-        this.prebookStartTimeDTOS = new HashMap<>(prebookStartTimeDTOS);
+        this.prebookStartTimeDTOS = new LinkedHashMap<>(prebookStartTimeDTOS);
     }
 
     /**
@@ -41,7 +41,11 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
     public ServiceHallPrebookStatusDTO(String serviceHallId,String prebookDate){
         this.serviceHallId = serviceHallId;
         this.prebookDate = prebookDate;
-        this.prebookStartTimeDTOS = new HashMap<>();
+        this.prebookStartTimeDTOS = new LinkedHashMap<>();
+    }
+
+    public ServiceHallPrebookStatusDTO(Map<String,PrebookStartTimeDTO> prebookStartTimeDTOS){
+        this.prebookStartTimeDTOS = prebookStartTimeDTOS;
     }
 
     /**
@@ -61,13 +65,16 @@ public class ServiceHallPrebookStatusDTO implements Serializable {
     /**
      * 补全没有预约信息的时段
      */
-    public void buildNullPrebookStartTimeDTOS(){
+    public Map<String,PrebookStartTimeDTO> buildNullPrebookStartTimeDTOS(){
         PrebookStartTimeConstants.TIME_LIST.forEach(time ->{
             if(!this.prebookStartTimeDTOS.keySet().contains(time)){
                 this.prebookStartTimeDTOS.put(time,new PrebookStartTimeDTO().buildPrebookStartTime(time));
             }
         });
+        return this.prebookStartTimeDTOS;
     }
+
+
 
     /**
      *

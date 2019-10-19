@@ -1,5 +1,7 @@
 package com.sgcc.model;
 
+import com.example.Utils;
+import com.example.constant.PrebookStartTimeConstants;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
 
@@ -73,8 +75,12 @@ public class PrebookDomainModel {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        //TODO 编码规则
         if(Strings.isNullOrEmpty(this.prebookDTO.getPrebookCode())){
-            this.prebookDTO.setPrebookCode(UUID.randomUUID().toString());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+            Random ra =new Random();
+            String s = "Y" + formatter.format(new Date()) + (ra.nextInt(100000)|+1);
+            this.prebookDTO.setPrebookCode(s);
         }
 
         this.prebookDTO.setSubmitDate(simpleDateFormat2.format(new Date()));
@@ -103,8 +109,37 @@ public class PrebookDomainModel {
             serviceHallPrebookStatusDTO.buildPrebookStartTimeDTOS(prebookStartTimeDTO);
         });
         //补全没有预约信息的时段
-        serviceHallPrebookStatusDTO.buildNullPrebookStartTimeDTOS();
-        return serviceHallPrebookStatusDTO;
+        Map<String,PrebookStartTimeDTO> map = serviceHallPrebookStatusDTO.buildNullPrebookStartTimeDTOS();
+        ServiceHallPrebookStatusDTO serviceHallPrebookStatusDTO1 = new ServiceHallPrebookStatusDTO(sortPrebookStartTime(map,prebookDate));
+
+        return serviceHallPrebookStatusDTO1;
 
     }
+
+    /**
+     * 在线预约时间段排序
+     */
+    public Map<String,PrebookStartTimeDTO> sortPrebookStartTime(Map<String,PrebookStartTimeDTO> map,String prebookDate){
+        Map<String,PrebookStartTimeDTO> map2 = new LinkedHashMap<>();
+        List<String> timeList = PrebookStartTimeConstants.TIME_LIST;
+        for (String str : timeList) {
+            String maxTime = prebookDate+" "+str.substring(str.length()-5,str.length())+":00";
+            System.out.println("当前时间段最大时间："+maxTime);
+            if (Utils.GetCurTime().before(Utils.GetDate(maxTime))){
+                for(Map.Entry<String, PrebookStartTimeDTO> entry : map.entrySet()) {
+                    if (entry.getKey().equals(str)){
+                        map2.put(entry.getKey(),entry.getValue());
+                    }
+
+                }
+            }
+
+        }
+        return map2;
+    }
+
+
+
+
+
 }

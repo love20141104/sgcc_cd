@@ -1,5 +1,6 @@
 package com.sgcc.repository;
 
+import com.example.Utils;
 import com.sgcc.dao.BusinessTypeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -33,68 +34,37 @@ public class BusinessTypeRepository {
     /**
      * 添加业务类型
      *
-     * @param businessTypeDaoList
+     * @param businessTypeDao
      */
-    public void addBType(List<BusinessTypeDao> businessTypeDaoList) {
+    public void addBType(BusinessTypeDao businessTypeDao) {
         String sql = "insert into d_business_type(id,business_type_id,business_type,`order`) " +
-                "values(?,?,?,?)";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1, businessTypeDaoList.get(i).getId());
-                ps.setString(2, businessTypeDaoList.get(i).getBusinessTypeId());
-                ps.setString(3, businessTypeDaoList.get(i).getBusinessType());
-                ps.setInt(4, businessTypeDaoList.get(i).getOrder());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return businessTypeDaoList.size();
-            }
-        });
+                "values('"+businessTypeDao.getId()+"','"+businessTypeDao.getBusinessTypeId()+"'" +
+                ",'"+businessTypeDao.getBusinessType()+"',"+businessTypeDao.getOrder()+")";
+        jdbcTemplate.update(sql);
 
     }
 
     /**
      * 删除业务类型
      *
-     * @param businessTypeDaoList
+     * @param businessTypeIds
      */
-    public void delBType(List<BusinessTypeDao> businessTypeDaoList) {
-        String sql = "delete from d_business_type where business_type_id=? and business_type_available=1";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1, businessTypeDaoList.get(i).getBusinessTypeId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return businessTypeDaoList.size();
-            }
-        });
+    public void delBType(List<String> businessTypeIds) {
+        String strIds = Utils.joinStrings(businessTypeIds,"','");
+        String sql = "delete from d_business_type where business_type_id in('"+strIds+"')";
+        jdbcTemplate.update(sql);
 
     }
 
     /**
      * 修改业务类型
      *
-     * @param businessTypeDaoList
+     * @param businessTypeDao
      */
-    public void updateBType(List<BusinessTypeDao> businessTypeDaoList) {
-        String sql = "update d_business_type set business_type=? where business_type_id=? and business_type_available=1";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1, businessTypeDaoList.get(i).getBusinessType());
-                ps.setString(2, businessTypeDaoList.get(i).getBusinessTypeId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return businessTypeDaoList.size();
-            }
-        });
+    public void updateBType(BusinessTypeDao businessTypeDao) {
+        String sql = "update d_business_type set business_type='"+businessTypeDao.getBusinessType()+
+                "' where business_type_id='"+businessTypeDao.getBusinessTypeId()+"'";
+        jdbcTemplate.update(sql);
     }
 
 

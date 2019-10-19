@@ -4,9 +4,9 @@ import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dao.QuestionCategoryDao;
 import com.sgcc.dtomodel.question.QAnswerDTO;
 import com.sgcc.repository.QARedisRepository;
-import com.sgcc.repository.QAnswerRepository;
+import com.sgcc.repository.QAnswersRepository;
 import com.sgcc.repository.QCategoryRedisRepository;
-import com.sgcc.repository.QCategoryRepository;
+import com.sgcc.repository.QCategorysRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,27 +15,27 @@ import java.util.List;
 @Component
 public class QAQueryEntity {
     @Autowired
-    private QAnswerRepository qAnswerRepository;
+    private QAnswersRepository qAnswersRepository;
     @Autowired
     private QARedisRepository qaRedisRepository;
     @Autowired
     private QCategoryRedisRepository qCategoryRedisRepository;
     @Autowired
-    private QCategoryRepository qCategoryRepository;
+    private QCategorysRepository qCategorysRepository;
 
     /**
      * 从mysql中查询可用的问题分类列表
      * @return
      */
     public List<QuestionCategoryDao> getAvailableCategoryList(){
-        return qCategoryRepository.findAllQCategory();
+        return qCategorysRepository.findAllQCategory();
     }
 
     /**
      * 查询所有问题回答
      */
     public List<QAnswerDTO> getAvailableQAList(String category_name, String question_desc, String answer){
-        return qAnswerRepository.findQAnswerList(category_name,question_desc,answer);
+        return qAnswersRepository.findQAnswerList(category_name,question_desc,answer);
     }
 
     /**
@@ -59,8 +59,8 @@ public class QAQueryEntity {
      * @param categoryId
      * @param categoryDesc
      */
-    public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc) {
-        return qCategoryRepository.selectQuestionCategory(categoryId,categoryDesc);
+    public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc,boolean available) {
+        return qCategorysRepository.selectQuestionCategory(categoryId,categoryDesc,available);
     }
 
 

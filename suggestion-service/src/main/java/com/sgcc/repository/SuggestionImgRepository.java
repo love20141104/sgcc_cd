@@ -1,5 +1,6 @@
 package com.sgcc.repository;
 
+import com.example.Utils;
 import com.sgcc.dao.SuggestionImgDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -28,64 +29,32 @@ public class SuggestionImgRepository {
 
     /**
      * 删除意见图片信息
-     * @param suggestionImgDaoList
+     * @param ids
      */
-    public void delSuggestionImg(List<SuggestionImgDao> suggestionImgDaoList){
-        String sql = "delete from b_suggestion_img where img_id=?";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,suggestionImgDaoList.get(i).getImgId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return suggestionImgDaoList.size();
-            }
-        });
+    public void delSuggestionImg(List<String> ids){
+        String sql = "delete from b_suggestion_img where img_id in('"+ Utils.joinStrings(ids,",")+"')";
+        jdbcTemplate.update(sql);
     }
     /**
      * 修改意见图片信息
-     * @param suggestionImgDaoList
+     * @param suggestionImgDao
      */
-    public void updateSuggestionImg(List<SuggestionImgDao> suggestionImgDaoList){
-        String sql = "update b_suggestion_img set img_url=? where img_id=?";
-
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,suggestionImgDaoList.get(i).getImgUrl());
-                ps.setString(2,suggestionImgDaoList.get(i).getImgId());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return suggestionImgDaoList.size();
-            }
-        });
+    public void updateSuggestionImg(SuggestionImgDao suggestionImgDao){
+        String sql = "update b_suggestion_img set img_url='"+suggestionImgDao.getImgUrl()+"' " +
+                "where img_id='"+suggestionImgDao.getImgId()+"'";
+        jdbcTemplate.update(sql);
 
     }
     /**
      * 添加意见图片信息
-     * @param suggestionImgDaoList
+     * @param suggestionImgDao
      */
-    public void addSuggestionImg(List<SuggestionImgDao> suggestionImgDaoList){
-        String sql = "insert into b_suggestion_img(id,img_id,user_id,img_url,img_date) values(?,?,?,?,?)";
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1,suggestionImgDaoList.get(i).getId());
-                ps.setString(2,suggestionImgDaoList.get(i).getImgId());
-                ps.setString(3,suggestionImgDaoList.get(i).getUserId());
-                ps.setString(4,suggestionImgDaoList.get(i).getImgUrl());
-                ps.setDate(5,new Date(suggestionImgDaoList.get(i).getSubmitDate().getTime()));
-            }
-
-            @Override
-            public int getBatchSize() {
-                return suggestionImgDaoList.size();
-            }
-        });
+    public void addSuggestionImg(SuggestionImgDao suggestionImgDao){
+        String sql = "insert into b_suggestion_img(id,img_id,user_id,img_url,img_date) " +
+                "values('"+suggestionImgDao.getId()+"','"+suggestionImgDao.getImgId()+"'" +
+                ",'"+suggestionImgDao.getUserId()+"','"+suggestionImgDao.getImgUrl()+"'" +
+                ",'"+Utils.GetTime(suggestionImgDao.getSubmitDate())+"')";
+        jdbcTemplate.update(sql);
 
     }
     class suggestionImgRowMapper implements RowMapper<SuggestionImgDao> {

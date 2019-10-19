@@ -2,6 +2,7 @@ package com.sgcc.model;
 
 import com.google.common.base.Strings;
 import com.sgcc.dao.QuestionCategoryDao;
+import com.sgcc.dtomodel.question.CategrateInsertDTO;
 import com.sgcc.dtomodel.question.QuestionCategoryDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,8 +47,23 @@ public class CategoryModel {
                     ,dto.getCategoryDesc()
                     ,dto.getCategoryOrder()
                     ,dto.getCategoryAvailable()
+                    ,dto.getCategoryDetail()
             )));
         }};
     }
 
+    public void buildDao(CategrateInsertDTO categrateInsertDTO) {
+        String s = UUID.randomUUID().toString();
+        this.questionCategoryDaos = new ArrayList<QuestionCategoryDao>(){{
+            add(new QuestionCategoryDao(
+                    s
+                    ,s
+                    ,categrateInsertDTO.getCategoryDesc()
+                    ,0
+                    ,true
+                    ,categrateInsertDTO.getCategoryDetail()
+            ));
+        }};
+
+    }
 }

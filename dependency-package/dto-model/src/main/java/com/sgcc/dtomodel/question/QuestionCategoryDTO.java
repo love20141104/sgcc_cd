@@ -18,13 +18,18 @@ public class QuestionCategoryDTO implements Serializable ,Comparable<QuestionCat
     private String categoryDesc;
 
     // 排序
-    private Integer categoryOrder;
+    private Integer categoryOrder = 0;
 
     // 是否可用
     private Boolean categoryAvailable;
 
+    private String categoryDetail;
+
     @Override
     public int compareTo(QuestionCategoryDTO questionCategoryDTO) {
+        if(this.categoryOrder.compareTo(questionCategoryDTO.categoryOrder) == 0){
+            return this.categoryDesc.compareTo(questionCategoryDTO.categoryDesc);
+        }
         return this.categoryOrder.compareTo(questionCategoryDTO.categoryOrder);
     }
 }

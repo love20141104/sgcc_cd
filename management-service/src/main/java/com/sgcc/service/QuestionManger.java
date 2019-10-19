@@ -1,12 +1,10 @@
 package com.sgcc.service;
 
 import com.example.result.Result;
+import com.google.common.base.Strings;
 import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dao.QuestionCategoryDao;
-import com.sgcc.dtomodel.question.QADTO;
-import com.sgcc.dtomodel.question.QAListDTO;
-import com.sgcc.dtomodel.question.QAnswerDTO;
-import com.sgcc.dtomodel.question.QuestionCategoryDTO;
+import com.sgcc.dtomodel.question.*;
 import com.sgcc.entity.event.QAEventEntity;
 import com.sgcc.entity.query.QAQueryEntity;
 import com.sgcc.exception.TopErrorCode;
@@ -32,9 +30,15 @@ public class QuestionManger {
      * 增加问题分类
      */
 
-    public Result insertQuestionCategory(QuestionCategoryDTO questionCategoryDTO) {
+    public Result insertQuestionCategory(CategrateInsertDTO categrateInsertDTO) {
         try {
-            List<QuestionCategoryDao> questionCategoryDaos = transform(questionCategoryDTO);
+            //参数判断
+            if(Strings.isNullOrEmpty(categrateInsertDTO.getCategoryDesc())||Strings.isNullOrEmpty(categrateInsertDTO.getCategoryDetail())){
+                throw new RuntimeException("参数为空");
+            }
+            CategoryModel categoryModel = new CategoryModel();
+            categoryModel.buildDao(categrateInsertDTO);
+            List<QuestionCategoryDao> questionCategoryDaos = categoryModel.getQuestionCategoryDaos();
             qaEventEntity.insertQuestionCategory(questionCategoryDaos);
             return Result.success();
         } catch (Exception e) {
@@ -48,7 +52,14 @@ public class QuestionManger {
      */
     public Result updateQuestionCategory(QuestionCategoryDTO questionCategoryDTO) {
         try {
-            List<QuestionCategoryDao> questionCategoryDaos = transform(questionCategoryDTO);
+            CategoryModel categoryModel = new CategoryModel();
+            List<QuestionCategoryDTO> questionCategoryDTOS = new ArrayList<QuestionCategoryDTO>() {{
+                add(questionCategoryDTO);
+            }};
+            categoryModel.build(questionCategoryDTOS);
+            categoryModel.buildQuestionCategoryDaos();
+
+            List<QuestionCategoryDao> questionCategoryDaos = categoryModel.getQuestionCategoryDaos();
             qaEventEntity.updateQuestionCategory(questionCategoryDaos);
             return Result.success();
         } catch (Exception e) {
@@ -58,21 +69,21 @@ public class QuestionManger {
 
     }
 
-    /**
-     * 数据转换 dto2dao
-     *
-     * @param questionCategoryDTO
-     * @return
-     */
-    private List<QuestionCategoryDao> transform(QuestionCategoryDTO questionCategoryDTO) {
-        CategoryModel categoryModel = new CategoryModel();
-        List<QuestionCategoryDTO> questionCategoryDTOS = new ArrayList<QuestionCategoryDTO>() {{
-            add(questionCategoryDTO);
-        }};
-        categoryModel.build(questionCategoryDTOS);
-        categoryModel.buildQuestionCategoryDaos();
-        return categoryModel.getQuestionCategoryDaos();
-    }
+//    /**
+//     * 数据转换 dto2dao
+//     *
+//     * @param questionCategoryDTO
+//     * @return
+//     */
+//    private List<QuestionCategoryDao> transform(QuestionCategoryDTO questionCategoryDTO) {
+//        CategoryModel categoryModel = new CategoryModel();
+//        List<QuestionCategoryDTO> questionCategoryDTOS = new ArrayList<QuestionCategoryDTO>() {{
+//            add(questionCategoryDTO);
+//        }};
+//        categoryModel.build(questionCategoryDTOS);
+//        categoryModel.buildQuestionCategoryDaos();
+//        return categoryModel.getQuestionCategoryDaos();
+//    }
 
 
     /**
@@ -91,9 +102,9 @@ public class QuestionManger {
     /**
      * 查询问题分类
      */
-    public Result selectQuestionCategory(String categoryId, String categoryDesc) {
+    public Result selectQuestionCategory(String categoryId, String categoryDesc ,boolean available) {
         try {
-            List<QuestionCategoryDao> questionCategoryDaos = qaQueryEntity.selectQuestionCategory(categoryId, categoryDesc);
+            List<QuestionCategoryDao> questionCategoryDaos = qaQueryEntity.selectQuestionCategory(categoryId, categoryDesc,available);
             CategoryModel categoryModel = new CategoryModel(questionCategoryDaos);
             categoryModel.buildQuestionCategoryDTOS();
             return Result.success(categoryModel.getQuestionCategoryDTOS());

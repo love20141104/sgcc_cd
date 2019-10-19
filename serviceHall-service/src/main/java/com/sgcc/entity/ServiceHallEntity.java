@@ -2,8 +2,10 @@ package com.sgcc.entity;
 
 import com.sgcc.dao.ServiceHallDao;
 import com.sgcc.repository.ServiceHallRepository;
+import com.sgcc.repository.ServiceHallsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,9 @@ import java.util.List;
 public class ServiceHallEntity {
 
     @Autowired
-    private ServiceHallRepository repository;
+    private ServiceHallsRepository repository;
+    @Autowired
+    private ServiceHallRepository serviceHallRepository;
 
     private List<ServiceHallDao> m_hallDaoList = new ArrayList<>();
 
@@ -33,6 +37,15 @@ public class ServiceHallEntity {
         return hallDaoList;
     }
 
+    public List<ServiceHallDao> findHalls(){
+        return repository.findHallList();
+    }
+
+    public List<ServiceHallDao> findHallById(String id){
+        List<ServiceHallDao> list = repository.findHallById(id);
+        return list;
+    }
+
     /**
      * 批量新增网点
      * @param list
@@ -45,7 +58,9 @@ public class ServiceHallEntity {
      * @param dao
      */
     public void saveServiceHall(ServiceHallDao dao){
-        repository.saveServiceHalls(new ArrayList<ServiceHallDao>(){{add(dao);}});
+        int[] res = repository.saveServiceHalls(new ArrayList<ServiceHallDao>(){{add(dao);}});
+        if (res.length > 0)
+            m_hallDaoList.add(0,findHallById(dao.getId()).get(0));
     }
     /**
      * 删除网点
@@ -53,6 +68,7 @@ public class ServiceHallEntity {
      */
     public void delServiceHalls(List<String> ids){
         repository.delServiceHalls(ids);
+        m_hallDaoList.clear();
     }
     /**
      * 批量修改网点
@@ -60,12 +76,15 @@ public class ServiceHallEntity {
      */
     public void updateServiceHalls(List<ServiceHallDao> list){
         repository.updateServiceHall(list);
+        m_hallDaoList.clear();
     }
     /**
      * 修改网点
      * @param dao
      */
     public void updateServiceHall(ServiceHallDao dao){
-        repository.updateServiceHall(new ArrayList<ServiceHallDao>(){{add(dao);}});
+//        repository.updateServiceHall(new ArrayList<ServiceHallDao>(){{add(dao);}});
+        serviceHallRepository.updateServiceHall(dao);
+        m_hallDaoList.clear();
     }
 }

@@ -230,8 +230,7 @@ public class ProbookService {
         //根据preBookDaos构造preBookDTOs
         prebookModel.buildPrebookDTOS(serviceHallDaos);
         //清洗营业厅预约信息,返回营业厅的预约状态
-        ServiceHallPrebookStatusDTO serviceHallPrebookStatus = prebookModel
-                .getServiceHallPrebookStatus(serviceHallId, prebookDate);
+        ServiceHallPrebookStatusDTO serviceHallPrebookStatus = prebookModel.getServiceHallPrebookStatus(serviceHallId, prebookDate);
         return Result.success(serviceHallPrebookStatus);
 
     }

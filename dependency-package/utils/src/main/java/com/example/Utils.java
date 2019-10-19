@@ -83,11 +83,20 @@ public class Utils {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df.format(date);
     }
+
     public static String GetCurrentTime()
     {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df.format(new Date());
     }
+
+    public static Date GetCurTime()
+    {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String hms = df.format(new Date());
+        return GetDate(hms);
+    }
+
     public static java.util.Date GetDate(String time )
     {
         try {
@@ -99,6 +108,8 @@ public class Utils {
             return new Date();
         }
     }
+
+
     public static String GetSQLDateStr(String field)
     {
         return "DATE_FORMAT("+field+" ,'%Y-%m-%d %H:%m:%s') AS " +field+ "";

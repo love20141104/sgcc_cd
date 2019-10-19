@@ -3,7 +3,7 @@ package com.sgcc.entity.event;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.repository.SuggestionRedisRepository;
-import com.sgcc.repository.SuggestionRepository;
+import com.sgcc.repository.SuggestionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class SuggestionQueryEntity {
     @Autowired
-    private SuggestionRepository suggestionRepository;
+    private SuggestionsRepository suggestionsRepository;
     @Autowired
     private SuggestionRedisRepository suggestionRedisRepository;
 
@@ -23,7 +23,7 @@ public class SuggestionQueryEntity {
 
     public List<SuggestionDao> GetAllSuggestions(String userId )
     {
-        return suggestionRepository.findAllByUserID(userId);
+        return suggestionsRepository.findAllByUserID(userId);
     }
 
     public SuggestionRedisDao GetRedisSuggestion(String suggestionId )
@@ -33,14 +33,14 @@ public class SuggestionQueryEntity {
 
     public SuggestionDao GetSuggestion(String suggestionId )
     {
-        return suggestionRepository.findBySuggestionId(suggestionId);
+        return suggestionsRepository.findBySuggestionId(suggestionId);
     }
     public List<SuggestionDao> findAll()
     {
-        return suggestionRepository.findAll();
+        return suggestionsRepository.findAll();
     }
     public SuggestionDao findById(String id)
     {
-        return suggestionRepository.findById(id);
+        return suggestionsRepository.findById(id);
     }
 }

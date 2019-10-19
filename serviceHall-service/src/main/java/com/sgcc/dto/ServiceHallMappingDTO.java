@@ -11,9 +11,9 @@ import java.io.Serializable;
 @NoArgsConstructor  //生成无参构造函数
 public class ServiceHallMappingDTO implements Serializable {
     private static final long serialVersionUID = 1106876735915636531L;
-    private String id;
+    //private String id;
     // 营业厅id
-    private String serviceHallId;
+    //private String serviceHallId;
 
     // 营业厅名
     private String serviceHallName;

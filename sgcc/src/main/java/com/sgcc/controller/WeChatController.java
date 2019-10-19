@@ -108,4 +108,22 @@ public class WeChatController {
         }
 
     }
+
+    /**
+     * 发送模板消息
+     * @return
+     */
+    @ApiOperation(value = "sendTempMessage", notes = "")
+    @PostMapping(value = "/sendTempMessage")
+    public Result sendTempMessage(@RequestParam String openId){
+        try {
+            return weChatService.sendTempMsg(openId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+
 }
