@@ -121,6 +121,6 @@ public class ArticleService {
         if( articleIds == null || articleIds.size() < 1 )
             return;
         articleEventEntity.deletes(articleIds);
-        articleEventEntity.deleteCache(articleIds);
+        Initialize(null);
     }
 }
