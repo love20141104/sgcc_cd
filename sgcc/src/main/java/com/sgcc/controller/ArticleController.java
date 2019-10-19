@@ -24,7 +24,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @ApiOperation(value = "Get recommended articles", notes = "")
-    @GetMapping(value = "")
+    @GetMapping(value = "/articles/recommended")
     public Result GetArticles( @RequestParam("isRecommended") boolean isRecommended ) {
         List<ArticleViewDTO> dtos = articleService.GetArticles( isRecommended );
 
@@ -38,7 +38,7 @@ public class ArticleController {
     }
 
     @ApiOperation(value = "Get articles by type", notes = "")
-    @GetMapping(value = "")
+    @GetMapping(value = "/articles/type")
     public Result GetArticles( @RequestParam("articleType") String articleType ) {
         List<ArticleViewDTO> dtos = articleService.GetArticles( articleType );
 
@@ -52,7 +52,7 @@ public class ArticleController {
     }
 
     @ApiOperation(value = "Get All articles ", notes = "")
-    @GetMapping(value = "")
+    @GetMapping(value = "/articles/all")
     public Result GetArticles( ) {
         List<ArticleMappingDTO> dtos = articleService.GetArticles( );
 
@@ -66,21 +66,21 @@ public class ArticleController {
     }
 
     @ApiOperation(value = "Add article", notes = "")
-    @PostMapping(value = "")
+    @PostMapping(value = "/articles")
     public Result AddArticle( @RequestBody ArticleSubmitDTO dto ) {
         articleService.submit( dto );
         return Result.success();
     }
 
     @ApiOperation(value = "Update article", notes = "")
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/articles/{id}")
     public Result UpdatedArticle( @PathVariable String id, @RequestBody ArticleUpdateDTO dto ) {
         articleService.update( dto );
         return Result.success();
     }
 
     @ApiOperation(value = "Delete articles ", notes = "")
-    @PostMapping(value = "")
+    @PostMapping(value = "/articles/deletes")
     public Result DeleteArticles( @RequestBody List<String> ids) {
         articleService.deletes(ids);
         return Result.success();

@@ -26,6 +26,6 @@ public class ArticleDao implements Serializable {
 
     private String article_type;
 
-    private Date submitDate;
+    private Date submit_time;
 
 }

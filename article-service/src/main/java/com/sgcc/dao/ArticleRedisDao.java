@@ -22,15 +22,15 @@ public class ArticleRedisDao implements Serializable {
     @Id
     private String id;
 
-    private String article_title;
+    private String ArticleTitle;
 
-    private String article_desc;
+    private String ArticleDesc;
 
-    private String article_img;
+    private String ArticleImg;
 
-    private String article_url;
+    private String ArticleUrl;
     @Indexed
-    private boolean article_recommended;
+    private boolean ArticleRecommended;
     @Indexed
-    private String article_type;
+    private String ArticleType;
 }

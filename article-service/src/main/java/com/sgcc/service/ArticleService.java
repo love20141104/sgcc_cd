@@ -113,7 +113,7 @@ public class ArticleService {
             return;
 
         articleEventEntity.update(dao);
-        articleEventEntity.Cache(model.dao2redisdao(dao));
+        articleProducer.CacheAllArticlesMQ( null );
     }
 
     public void deletes( List<String> articleIds )

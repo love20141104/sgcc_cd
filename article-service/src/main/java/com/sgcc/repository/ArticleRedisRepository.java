@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ArticleRedisRepository extends CrudRepository<ArticleRedisDao,String> {
     Optional<ArticleRedisDao> findById(String id);
-    List<ArticleRedisDao> findAllByArticle_recommended( boolean userId );
-    List<ArticleRedisDao> findAllByArticle_type( String userId );
+    List<ArticleRedisDao> findAllByArticleRecommended( boolean userId );
+    List<ArticleRedisDao> findAllByArticleType( String userId );
     List<ArticleRedisDao> findAllByIdExists(List<String> ids);
 }

@@ -96,6 +96,15 @@ public class Utils {
         String hms = df.format(new Date());
         return GetDate(hms);
     }
+    public static int Boolean2Int(boolean b )
+    {
+        return ( b ? 1 : 0);
+    }
+
+    public static boolean Int2Boolean( int i )
+    {
+        return ( i > 0 ? true : false);
+    }
 
     public static java.util.Date GetDate(String time )
     {

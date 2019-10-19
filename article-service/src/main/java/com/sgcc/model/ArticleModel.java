@@ -21,12 +21,12 @@ public class ArticleModel {
             return null;
         ArticleRedisDao redisDao = new ArticleRedisDao();
         redisDao.setId( dao.getId() );
-        redisDao.setArticle_title( dao.getArticle_title() );
-        redisDao.setArticle_desc( dao.getArticle_desc() );
-        redisDao.setArticle_img( dao.getArticle_img() );
-        redisDao.setArticle_recommended( dao.isArticle_recommended() );
-        redisDao.setArticle_url( dao.getArticle_url() );
-        redisDao.setArticle_type( dao.getArticle_type() );
+        redisDao.setArticleTitle( dao.getArticle_title() );
+        redisDao.setArticleDesc( dao.getArticle_desc() );
+        redisDao.setArticleImg( dao.getArticle_img() );
+        redisDao.setArticleRecommended( dao.isArticle_recommended() );
+        redisDao.setArticleUrl( dao.getArticle_url() );
+        redisDao.setArticleType( dao.getArticle_type() );
         return redisDao;
     }
     public List<ArticleRedisDao> daos2listredisdao( List<ArticleDao> daos )
@@ -68,12 +68,12 @@ public class ArticleModel {
             return null;
         ArticleViewDTO dto = new ArticleViewDTO();
         dto.setId( redisDao.getId() );
-        dto.setArticle_title( redisDao.getArticle_title() );
-        dto.setArticle_desc( redisDao.getArticle_desc() );
-        dto.setArticle_img( redisDao.getArticle_img() );
-        dto.setArticle_recommended( redisDao.isArticle_recommended() );
-        dto.setArticle_url( redisDao.getArticle_url() );
-        dto.setArticle_type( redisDao.getArticle_type() );
+        dto.setArticle_title( redisDao.getArticleTitle() );
+        dto.setArticle_desc( redisDao.getArticleDesc() );
+        dto.setArticle_img( redisDao.getArticleImg() );
+        dto.setArticle_recommended( redisDao.isArticleRecommended() );
+        dto.setArticle_url( redisDao.getArticleUrl() );
+        dto.setArticle_type( redisDao.getArticleType() );
         return dto;
     }
     public List<ArticleViewDTO> daos2listviewdto( List<ArticleDao> daos )
@@ -118,7 +118,7 @@ public class ArticleModel {
         dao.setArticle_recommended( dto.isArticle_recommended() );
         dao.setArticle_url( dto.getArticle_url() );
         dao.setArticle_type( dto.getArticle_type() );
-        dao.setSubmitDate( Utils.GetCurTime() );
+        dao.setSubmit_time( Utils.GetCurTime() );
         return dao;
     }
     public ArticleDao updatedto2dao( ArticleUpdateDTO dto )
@@ -133,7 +133,7 @@ public class ArticleModel {
         dao.setArticle_recommended( dto.isArticle_recommended() );
         dao.setArticle_url( dto.getArticle_url() );
         dao.setArticle_type( dto.getArticle_type() );
-        dao.setSubmitDate( Utils.GetCurTime() );
+        dao.setSubmit_time( Utils.GetCurTime() );
         return dao;
     }
     public ArticleMappingDTO dao2listmappingdto(ArticleDao dao ){
@@ -147,7 +147,7 @@ public class ArticleModel {
         dto.setArticle_recommended( dao.isArticle_recommended() );
         dto.setArticle_url( dao.getArticle_url() );
         dto.setArticle_type( dao.getArticle_type() );
-        dto.setSubmitDate( dao.getSubmitDate() );
+        dto.setSubmitDate( dao.getSubmit_time() );
         return  dto;
     }
 

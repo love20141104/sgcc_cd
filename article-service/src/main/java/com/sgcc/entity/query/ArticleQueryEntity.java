@@ -20,7 +20,7 @@ public class ArticleQueryEntity {
 
     public List<ArticleRedisDao> getRedisArticles( boolean isRecommended )
     {
-        return articleRedisRepository.findAllByArticle_recommended(isRecommended);
+        return articleRedisRepository.findAllByArticleRecommended(isRecommended);
     }
     public List<ArticleRedisDao> getRedisArticles()
     {
@@ -35,7 +35,7 @@ public class ArticleQueryEntity {
 
     public List<ArticleRedisDao> getRedisArticles(String articleType )
     {
-        return articleRedisRepository.findAllByArticle_type(articleType);
+        return articleRedisRepository.findAllByArticleType(articleType);
     }
 
     public List<ArticleDao> getArticles( String articleType )

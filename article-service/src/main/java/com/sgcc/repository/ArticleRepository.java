@@ -1,5 +1,6 @@
 package com.sgcc.repository;
 import com.example.Utils;
+import com.google.common.base.Converter;
 import com.sgcc.dao.ArticleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -7,6 +8,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.xml.bind.DatatypeConverter;
 import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +27,7 @@ public class ArticleRepository {
 
     public List<ArticleDao> findAll( ){
         String sql = "select id,article_title,article_desc,article_img,article_url," +
-                "article_recommended,article_type" + Utils.GetSQLDateStr("submit_date")+ " from b_article";
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from b_article";
         try{
             return jdbcTemplate.query(sql,new articleRowMapper());
         }
@@ -36,8 +39,8 @@ public class ArticleRepository {
 
     public List<ArticleDao> findAllByRecommended( Boolean isRecommended ){
         String sql = "select id,article_title,article_desc,article_img,article_url," +
-                "article_recommended,article_type" + Utils.GetSQLDateStr("submit_date")+ " from b_article";
-        sql = sql + " where article_recommended = '" + isRecommended + "'";
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from b_article";
+        sql = sql + " where article_recommended = '" + Utils.Boolean2Int(isRecommended) + "'";
         try{
             return jdbcTemplate.query(sql,new articleRowMapper());
         }
@@ -49,7 +52,7 @@ public class ArticleRepository {
 
     public List<ArticleDao> findAllByArticleType( String articleType ){
         String sql = "select id,article_title,article_desc,article_img,article_url," +
-                "article_recommended,article_type" + Utils.GetSQLDateStr("submit_date")+ " from b_article";
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from b_article";
         sql = sql + " where article_type = '" + articleType + "'";
         try{
             return jdbcTemplate.query(sql,new articleRowMapper());
@@ -61,7 +64,7 @@ public class ArticleRepository {
     }
     public ArticleDao findByID( String id ){
         String sql = "select id,article_title,article_desc,article_img,article_url," +
-                "article_recommended,article_type" + Utils.GetSQLDateStr("submit_date")+ " from b_article";
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from b_article";
         sql = sql + " where id = '" + id + "'";
         try{
             return jdbcTemplate.queryForObject(sql,new articleRowMapper());
@@ -77,8 +80,8 @@ public class ArticleRepository {
         String sql = "insert into b_article(id,article_title,article_desc,article_img,article_url," +
                 "article_recommended,article_type,submit_time) values('"+dao.getId()+"'" +
                 ",'"+dao.getArticle_title()+"','"+dao.getArticle_desc()+"','"+dao.getArticle_img()+"'" +
-                ",'"+ dao.getArticle_url() +"','"+dao.isArticle_recommended()+"'" +
-                ",'"+dao.getArticle_type()+"','"+dao.getSubmitDate()+"')";
+                ",'"+ dao.getArticle_url() +"','"+ Utils.Boolean2Int(dao.isArticle_recommended()) +"'" +
+                ",'"+dao.getArticle_type()+"','"+Utils.GetTime(dao.getSubmit_time())+"')";
         jdbcTemplate.execute(sql);
     }
 
@@ -87,10 +90,10 @@ public class ArticleRepository {
         String sql = "update b_article set article_title='"+dao.getArticle_title()+"'" +
                 ",article_desc='"+dao.getArticle_desc()+"',article_img='"+dao.getArticle_img()+"'" +
                 ",article_url='"+ dao.getArticle_url()+"'" +
-                ",article_recommended='"+dao.isArticle_recommended()+
-                ",article_type='"+dao.getArticle_type()+
-                ",submit_time='"+dao.getSubmitDate()+
-                "' where id='"+dao.getId()+"'";
+                ",article_recommended='"+Utils.Boolean2Int(dao.isArticle_recommended())+"'" +
+                ",article_type='"+dao.getArticle_type()+"'" +
+                ",submit_time='"+Utils.GetTime(dao.getSubmit_time())+"'" +
+                " where id='"+dao.getId()+"'";
         jdbcTemplate.update(sql);
         return findByID(dao.getId());
     }
@@ -111,13 +114,13 @@ public class ArticleRepository {
                     rs.getString("article_desc"),
                     rs.getString("article_img"),
                     rs.getString("article_url"),
-                    rs.getBoolean("article_recommended"),
+                    Utils.Int2Boolean(rs.getInt("article_recommended")),
                     rs.getString("article_type"),
                     null
             );
-            if( rs.getDate("submit_date") != null )
+            if( rs.getDate("submit_time") != null )
             {
-                dao.setSubmitDate( Utils.GetDate( rs.getString("submit_date")) );
+                dao.setSubmit_time( Utils.GetDate( rs.getString("submit_time")) );
             }
 
             return dao;
