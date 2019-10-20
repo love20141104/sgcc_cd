@@ -48,8 +48,8 @@ public class ArticleService {
         ArticleRedisDao redisdao = model.dao2redisdao(dao);
         articleEventEntity.Cache(redisdao);
     }
-
-    public List<ArticleMappingDTO> GetArticles()
+    // 后台管理使用
+    public List<ArticleMappingDTO> GetAllArticles()
     {
         ArticleModel model = new ArticleModel();
         List<ArticleDao> daos = articleQueryEntity.getArticles();
@@ -59,7 +59,29 @@ public class ArticleService {
         }
         return model.daos2listmappingdtos(daos);
     }
-
+    // 后台管理使用
+    public List<ArticleMappingDTO> GetArticlesByRecommended(boolean isRecommended)
+    {
+        ArticleModel model = new ArticleModel();
+        List<ArticleDao> daos = articleQueryEntity.getArticles(isRecommended);
+        if( daos == null || daos.size() < 1 )
+        {
+            return null;
+        }
+        return model.daos2listmappingdtos(daos);
+    }
+    // 后台管理使用
+    public List<ArticleMappingDTO> GetArticlesByArticleType(String article_type)
+    {
+        ArticleModel model = new ArticleModel();
+        List<ArticleDao> daos = articleQueryEntity.getArticles(article_type);
+        if( daos == null || daos.size() < 1 )
+        {
+            return null;
+        }
+        return model.daos2listmappingdtos(daos);
+    }
+    // 微信前端使用
     public List<ArticleViewDTO> GetArticles(String article_type)
     {
         ArticleModel model = new ArticleModel();
@@ -76,7 +98,7 @@ public class ArticleService {
         articleProducer.CacheAllArticlesMQ( model.listdao2daos(daos) );
         return model.daos2listviewdto(daos);
     }
-
+    // 微信前端使用
     public List<ArticleViewDTO> GetArticles(boolean isRecommended)
     {
         ArticleModel model = new ArticleModel();
