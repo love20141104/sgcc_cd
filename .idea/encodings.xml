@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+  <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/article-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/businessGuide-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cache-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/consumer-manager-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dependency-package/domain-model" charset="UTF-8" />
