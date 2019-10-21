@@ -1,5 +1,6 @@
 package com.sgcc.service;
 
+import com.example.Utils;
 import com.example.result.Result;
 import com.sgcc.dto.ElectricityTypeDTO;
 import com.sgcc.dto.MonthlyBillsDTO;
@@ -20,8 +21,10 @@ public class BillService {
 
             MonthlyBillsDTO monthlyBillsDTO = new MonthlyBillsDTO();
             monthlyBillsDTO.setUserName("张三");
-            monthlyBillsDTO.setUserNo("1234567890");
-            monthlyBillsDTO.setBillMonth(new Date(date*1000));
+            monthlyBillsDTO.setUserNo(userNo);
+            monthlyBillsDTO.setBillMonth(new Date(date));
+            monthlyBillsDTO.setStartDate(Utils.GetMonth(new Date(date)));
+            monthlyBillsDTO.setEndDate(Utils.GetTimeForYMD(new Date(date)));
             monthlyBillsDTO.setStartNum(16366);
             monthlyBillsDTO.setEndNum(16699);
             monthlyBillsDTO.setTotalNum(monthlyBillsDTO.getEndNum()-monthlyBillsDTO.getStartNum());

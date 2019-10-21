@@ -20,6 +20,9 @@ public class MonthlyBillsDTO implements Serializable {
 
     private Date billMonth;
 
+    private String startDate;
+    private String endDate;
+
     private double startNum;
 
     private double endNum;
