@@ -43,6 +43,12 @@ public class ManagementController {
         return prebookManager.deletePrebookDTO(prebookCode);
     }
 
+    @ApiOperation(value = "批量删除预约信息", notes = "")
+    @DeleteMapping(value = "/PrebookInfo/prebookCodes")
+    public Result deletePrebookDTOs(@RequestBody List<String> prebookCodes) {
+        return prebookManager.deletePrebookDTOs(prebookCodes);
+    }
+
     @ApiOperation(value = "新增预约信息", notes = "")
     @PostMapping(value = "/PrebookInfo/open-Id/{openId}")
     public Result insertPrebookDTO(@PathVariable String openId,@RequestBody PrebookDTO prebookDTO) {

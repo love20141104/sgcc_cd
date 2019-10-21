@@ -126,4 +126,21 @@ public class PrebookQueryEntity {
     public PreBookDao findByIdInRedis(String id) {
         return prebookRedisRepository.findById(id).orElse(null);
     }
+
+    /**
+     * 根据预约ids查找预约信息
+     *
+     * @param ids
+     * @return
+     */
+    public List<PreBookDao> findByIdsInRedis(List<String> ids) {
+        return new ArrayList<PreBookDao>() {{
+            ids.forEach(id -> {
+                add(prebookRedisRepository.findById(id).orElse(null));
+            });
+        }};
+    }
+
+
+
 }

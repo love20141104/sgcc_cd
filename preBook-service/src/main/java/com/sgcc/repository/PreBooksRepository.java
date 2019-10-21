@@ -1,5 +1,6 @@
 package com.sgcc.repository;
 
+import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
@@ -165,6 +166,24 @@ public class PreBooksRepository {
         String sql_delete = "delete from b_prebook where prebook_code =  '" + prebookCode + "'";
         jdbcTemplate.execute(sql_delete);
         return id;
+    }
+
+    /**
+     * 批量作废mysql中的预约信息
+     *
+     * @param prebookCodes
+     * @return
+     */
+    @Transactional
+    public List<String> deletePrebooks(List<String> prebookCodes) {
+        String sql_select = "select id from b_prebook where prebook_code " +
+                "in('"+ Utils.joinStrings(prebookCodes,"','") +"')";
+        List<String> ids = jdbcTemplate.queryForList(sql_select, String.class);
+
+        String sql_delete = "delete from b_prebook where prebook_code " +
+                "in('"+Utils.joinStrings(prebookCodes,"','")+"')";
+        jdbcTemplate.execute(sql_delete);
+        return ids;
     }
 
 

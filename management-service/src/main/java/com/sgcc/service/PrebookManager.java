@@ -127,6 +127,43 @@ public class PrebookManager {
         }
     }
 
+
+    /**
+     * 后台管理系统作废预约信息
+     *
+     * @param prebookCodes
+     * @return
+     */
+    public Result deletePrebookDTOs(List<String> prebookCodes) {
+
+        try {
+            //参数检查 start
+            if (prebookCodes.size() < 0)  {
+                throw new RuntimeException("prebookCode为空");
+            }
+            //参数检查 end
+            List<String> ids = prebookEventEntity.deletePrebooks(prebookCodes);
+            if (ids.size() > 0) {
+                System.out.println("id:" + ids + " 的预约信息已删除");
+            } else {
+                System.out.println("删除失败");
+                throw new RuntimeException("删除失败");
+            }
+            //如果redis中存在则删除
+            if(prebookQueryEntity.findByIdsInRedis(ids).size() > 0){
+                for (String id : ids){
+                    prebookEventEntity.deleteInRedis(id);
+                }
+            }
+            return Result.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        }
+    }
+
+
+
     /**
      * 后台管理系统增加预约信息
      *

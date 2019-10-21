@@ -79,6 +79,25 @@ public class PrebookEventEntity {
 
     }
 
+
+    /**
+     * 作废mysql中的预约信息
+     *
+     * @param prebookCodes
+     * @return
+     */
+    public List<String> deletePrebooks(List<String> prebookCodes) {
+        List<String> ids = preBooksRepository.deletePrebooks(prebookCodes);
+        if (null != ids && ids.size() > 0) {
+            return ids;
+        } else {
+            return null;
+        }
+
+    }
+
+
+
     /**
      * 删除redis中的预约信息
      *
