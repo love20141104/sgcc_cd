@@ -1,6 +1,7 @@
 package com.sgcc.service;
 
 import com.example.result.Result;
+import com.google.common.base.Strings;
 import com.sgcc.dao.BusinessCategoryDao;
 import com.sgcc.dao.BusinessCategoryRedisDao;
 import com.sgcc.dao.BusinessGuideDao;
@@ -60,9 +61,8 @@ public class BusinessGuideService {
 
     public Result getBusinessGuideList(String cid){
         List<BusinessGuideDto> businessGuideDtos;
-        List<BusinessGuideRedisDao> businessGuideRedisDaos=new ArrayList<>();
         List<BusinessGuideDao> businessGuideDaos;
-        if(null==cid) {
+        if(Strings.isNullOrEmpty(cid)) {
             List<BusinessGuideRedisDao> all = (List)bgRedisRepository.findAll();
             if(all!=null||all.size()>0) {
 
@@ -85,6 +85,15 @@ public class BusinessGuideService {
                 initRedisBusinessGuide();
             }
         }
+        return Result.success(businessGuideDtos);
+    }
+
+
+    public Result getBackstageBusinessGuideList(String cid) {
+        List<BusinessGuideDto> businessGuideDtos;
+        List<BusinessGuideDao> businessGuideDaos;
+        businessGuideDaos = businessGuideRepository.selectBusinessGuide(cid);
+        businessGuideDtos = BusinessModel.daoTodtoBG(businessGuideDaos);
         return Result.success(businessGuideDtos);
     }
 
@@ -125,4 +134,6 @@ public class BusinessGuideService {
         List<BusinessGuideRedisDao> businessGuideDaos1 = BusinessModel.daooToredisdaoBG(businessGuideDaos);
         bgRedisRepository.saveAll(businessGuideDaos1);
     }
+
+
 }

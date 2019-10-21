@@ -17,8 +17,14 @@ public class BusinessGuideController {
 
     @ApiOperation(value = "查询业务指南列表", notes = "")
     @GetMapping(value = "/businessGuides")
-    public Result find(String cid) {
+    public Result find( String cid) {
         return businessGuideService.getBusinessGuideList(cid);
+    }
+
+    @ApiOperation(value = "后台查询业务指南列表", notes = "")
+    @GetMapping(value = "/backstageBusinessGuides")
+    public Result findBackstage( String cid) {
+        return businessGuideService.getBackstageBusinessGuideList(cid);
     }
 
     @ApiOperation(value = "修改业务指南", notes = "")
@@ -58,7 +64,7 @@ public class BusinessGuideController {
     }
 
     @ApiOperation(value = "删除业务指南分类", notes = "")
-    @DeleteMapping("/category/")
+    @DeleteMapping("/category")
     public Result deleteCategory(@RequestBody BusinessCategoryDeleteDto businessCategoryDeleteDto) {
         return businessGuideService.deleteBusinessCategory(businessCategoryDeleteDto);
     }

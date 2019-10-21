@@ -24,28 +24,27 @@ public class BusinessGuideRepository {
 
     @Transactional
     public void insertBusinessGuide(BusinessGuideDao businessGuideDao){
-        String sql="insert into business_guide(id,title,content,content_url,category_id,create_date)values (?,?,?,?,?,?)";
+        String sql="insert into business_guide(id,title,content,content_url,category_id,create_date)values ( " +
+                businessGuideDao.getId() + "  , " +
+                businessGuideDao.getTitle() + "  , " +
+                businessGuideDao.getContent()+ "  , " +
+                businessGuideDao.getContentUrl()+ "  , " +
+                businessGuideDao.getCategoryId()+ "  , " +
+                businessGuideDao.getCreateDate()+ "  , " +
+                " )";
         logger.info("insertSQL:"+sql);
-        jdbcTemplate.update(sql,
-                businessGuideDao.getId(),
-                businessGuideDao.getTitle(),
-                businessGuideDao.getContent(),
-                businessGuideDao.getContentUrl(),
-                businessGuideDao.getCategoryId(),
-                businessGuideDao.getCreateDate()
-                );
+        jdbcTemplate.execute(sql);
     }
     @Transactional
     public void updateBusinessGuide(BusinessGuideDao businessGuideDao){
-        String sql="update  business_guide set title=?,content=?,content_url=?,category_id=? where id=?";
+        String sql="update  business_guide set" +
+                " title= " +businessGuideDao.getTitle()+
+                " ,content= " +businessGuideDao.getContent()+
+                " ,content_url= " +businessGuideDao.getContentUrl()+
+                " ,category_id=  " +businessGuideDao.getCategoryId()+
+                " where id= "+businessGuideDao.getId();
         logger.info("updateSQL:"+sql);
-        jdbcTemplate.update(sql,
-                businessGuideDao.getTitle(),
-                businessGuideDao.getContent(),
-                businessGuideDao.getContentUrl(),
-                businessGuideDao.getCategoryId(),
-                businessGuideDao.getId()
-        );
+        jdbcTemplate.execute(sql);
     }
     @Transactional
     public void deleteBusinessGuide(List<String> ids){
@@ -61,11 +60,12 @@ public class BusinessGuideRepository {
             return jdbcTemplate.query(sql, new BusinessGuideDaoRowMapper());
         }else {
             String sql = "select id ,title, content, content_url,category_id,create_date from business_guide  " +
-                    " where  category_id = ? ";
+                    " where  category_id = "+categoryId;
             logger.info("selectSQL:"+sql);
-            return jdbcTemplate.query(sql, new Object[]{categoryId}, new BusinessGuideDaoRowMapper());
+            return jdbcTemplate.query(sql, new BusinessGuideDaoRowMapper());
         }
     }
+
 
     class BusinessGuideDaoRowMapper implements RowMapper<BusinessGuideDao>{
 

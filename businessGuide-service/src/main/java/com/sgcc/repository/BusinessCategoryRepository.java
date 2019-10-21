@@ -24,22 +24,22 @@ public class BusinessCategoryRepository {
     private JdbcTemplate jdbcTemplate;
     @Transactional
     public void insertBusinessCategory(BusinessCategoryDao businessCategoryDao){
-        String sql="insert into business_category(id,category_name,note)values (?,?,?)";
+        String sql="insert into business_category(id,category_name,note)values ( " +
+                businessCategoryDao.getId()+" , " +
+                businessCategoryDao.getCategoryName()+" , " +
+                businessCategoryDao.getNote()+
+                " ) ";
         logger.info("insertSQL:"+sql);
-        jdbcTemplate.update(sql,
-                businessCategoryDao.getId(),
-                businessCategoryDao.getCategoryName()
-        );
+        jdbcTemplate.execute(sql);
     }
     @Transactional
     public void updateBusinessCategory(BusinessCategoryDao businessCategoryDao){
-        String sql="update  business_category set category_name=?,note=? where id=?";
+        String sql="update  business_category set " +
+                " category_name = "+businessCategoryDao.getCategoryName() +
+                " note= " +businessCategoryDao.getNote()+
+                "where id = "+businessCategoryDao.getId();
         logger.info("insertSQL:"+sql);
-        jdbcTemplate.update(sql,
-                businessCategoryDao.getCategoryName(),
-                businessCategoryDao.getNote(),
-                businessCategoryDao.getId()
-        );
+        jdbcTemplate.execute(sql);
     }
     @Transactional
     public void deleteBusinessCategory(List<String> ids){
