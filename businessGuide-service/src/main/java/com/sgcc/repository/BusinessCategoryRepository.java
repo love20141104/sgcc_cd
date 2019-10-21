@@ -36,8 +36,8 @@ public class BusinessCategoryRepository {
     public void updateBusinessCategory(BusinessCategoryDao businessCategoryDao){
         String sql="update  business_category set " +
                 " category_name = '"+businessCategoryDao.getCategoryName() +
-                "' note= '" +businessCategoryDao.getNote()+
-                "'where id = '"+businessCategoryDao.getId()+"'";
+                "', note= '" +businessCategoryDao.getNote()+
+                "' where id = '"+businessCategoryDao.getId()+"'";
         logger.info("insertSQL:"+sql);
         jdbcTemplate.execute(sql);
     }
