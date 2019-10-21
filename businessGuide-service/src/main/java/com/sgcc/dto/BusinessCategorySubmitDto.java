@@ -6,15 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class BusinessCategoryDto implements Serializable {
+public class BusinessCategorySubmitDto implements Serializable {
     private static final long serialVersionUID = -2720156418106543359L;
 
-    private String id;
     private String categoryName;
     private String note;
 }

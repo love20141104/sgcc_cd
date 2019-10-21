@@ -1,5 +1,6 @@
 package com.sgcc.repository;
 
+import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.BusinessCategoryDao;
 import com.sgcc.dto.BusinessCategoryDto;
@@ -41,16 +42,14 @@ public class BusinessCategoryRepository {
         );
     }
     @Transactional
-    public void deleteBusinessCategory(String id){
-        String sql="delete  from business_category where id=?";
-        logger.info("updateSQL:"+sql);
-        jdbcTemplate.update(sql,
-                id
-        );
+    public void deleteBusinessCategory(List<String> ids){
+        String sql = "delete from business_category where id in('"+ Utils.joinStrings(ids,"','")+"')";
+        jdbcTemplate.execute(sql);
+        logger.info("deleteSQL:"+sql);
     }
 
     public List<BusinessCategoryDao> selectBusinessCategory(){
-            String sql = "select id ,category_name from business_category";
+            String sql = "select id ,category_name ,note from business_category";
             logger.info("selectSQL:"+sql);
             return jdbcTemplate.query(sql, new BusinessCategoryDaoRowMapper());
     }

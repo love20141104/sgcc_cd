@@ -5,8 +5,7 @@ import com.sgcc.dao.BusinessCategoryDao;
 import com.sgcc.dao.BusinessCategoryRedisDao;
 import com.sgcc.dao.BusinessGuideDao;
 import com.sgcc.dao.BusinessGuideRedisDao;
-import com.sgcc.dto.BusinessCategoryDto;
-import com.sgcc.dto.BusinessGuideDto;
+import com.sgcc.dto.*;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.BusinessModel;
 import com.sgcc.repository.BCRedisRepository;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BusinessGuideService {
@@ -33,9 +33,10 @@ public class BusinessGuideService {
     @Autowired
     private BGRedisRepository bgRedisRepository;
 
-    public Result saveBusinessGuide(BusinessGuideDto businessGuideDto){
-        BusinessGuideDao businessGuideDao = BusinessModel.dtotodaoBG(businessGuideDto);
+    public Result saveBusinessGuide(BusinessGuideSubmitDto businessGuideSubmitDto){
+        BusinessGuideDao businessGuideDao = BusinessModel.sbumitdtotoredisdaoBG(businessGuideSubmitDto);
         businessGuideDao.setCreateDate(new Date());
+        businessGuideDao.setId(UUID.randomUUID().toString());
         businessGuideRepository.insertBusinessGuide(businessGuideDao);
         initRedisBusinessGuide();
         return Result.success();
@@ -48,12 +49,12 @@ public class BusinessGuideService {
         return Result.success();
     }
 
-    public Result deleteBusinessGuide(String id){
-        if(null==id){
+    public Result deleteBusinessGuide(BusinessGuideDeleteDto businessGuideDeleteDto){
+        if(businessGuideDeleteDto.getBusinessGuideIds().size()==0){
             return Result.failure(TopErrorCode.INVALID_PARAMS);
         }
-        businessGuideRepository.deleteBusinessGuide(id);
-        bgRedisRepository.deleteById(id);
+        businessGuideRepository.deleteBusinessGuide(businessGuideDeleteDto.getBusinessGuideIds());
+        initRedisBusinessGuide();
         return Result.success();
     }
 
@@ -90,9 +91,9 @@ public class BusinessGuideService {
 
     //分类
 
-    public Result saveBusinessCategory(BusinessCategoryDto businessCategoryDto){
-        BusinessCategoryDao businessCategoryDao = new BusinessCategoryDao();
-        BeanUtils.copyProperties(businessCategoryDto,businessCategoryDao);
+    public Result saveBusinessCategory(BusinessCategorySubmitDto BusinessCategorySubmitDto){
+        BusinessCategoryDao businessCategoryDao = BusinessModel.sbumitdtotodaoBC(BusinessCategorySubmitDto);
+        businessCategoryDao.setId(UUID.randomUUID().toString());
         businessCategoryRepository.insertBusinessCategory(businessCategoryDao);
         return Result.success();
     }
@@ -104,11 +105,11 @@ public class BusinessGuideService {
         return Result.success();
     }
 
-    public Result deleteBusinessCategory(String id){
-        if(null==id){
+    public Result deleteBusinessCategory(BusinessCategoryDeleteDto businessCategoryDeleteDto){
+        if(businessCategoryDeleteDto.getBusinessCategoryIds().size()==0){
             return Result.failure(TopErrorCode.INVALID_PARAMS);
         }
-        businessCategoryRepository.deleteBusinessCategory(id);
+        businessCategoryRepository.deleteBusinessCategory(businessCategoryDeleteDto.getBusinessCategoryIds());
         return Result.success();
     }
 

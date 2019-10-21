@@ -12,13 +12,12 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class BusinessGuideDto implements Serializable {
-    private static final long serialVersionUID = -2820156438106643259L;
+public class BusinessGuideSubmitDto implements Serializable {
+    private static final long serialVersionUID = -28201564381066259L;
 
-    public String id;
     public String title;
     public String content;
     public String contentUrl;
     public String categoryId;
-    public Date createDate;
+
 }

@@ -19,7 +19,7 @@ spring:
   ### Redis
   redis:
     #    database: 1
-    host: 127.0.0.1
+    host: 119.23.22.176
     port: 6379
     password:
     jedis:
@@ -30,7 +30,7 @@ spring:
   ### mysql
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/sgcc_cd
+    url: jdbc:mysql://119.23.22.176:3306/sgcc_cd
     username: root
     password: root@123
   activemq:

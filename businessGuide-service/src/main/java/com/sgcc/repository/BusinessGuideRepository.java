@@ -24,7 +24,7 @@ public class BusinessGuideRepository {
 
     @Transactional
     public void insertBusinessGuide(BusinessGuideDao businessGuideDao){
-        String sql="insert into business_guide(id,titil,content,content_url,category_id,create_date)values (?,?,?,?,?,?)";
+        String sql="insert into business_guide(id,title,content,content_url,category_id,create_date)values (?,?,?,?,?,?)";
         logger.info("insertSQL:"+sql);
         jdbcTemplate.update(sql,
                 businessGuideDao.getId(),
@@ -37,7 +37,7 @@ public class BusinessGuideRepository {
     }
     @Transactional
     public void updateBusinessGuide(BusinessGuideDao businessGuideDao){
-        String sql="update  business_guide set titil=?,content=?,content_url=?,category_id=? where id=?";
+        String sql="update  business_guide set title=?,content=?,content_url=?,category_id=? where id=?";
         logger.info("updateSQL:"+sql);
         jdbcTemplate.update(sql,
                 businessGuideDao.getTitle(),
@@ -48,12 +48,10 @@ public class BusinessGuideRepository {
         );
     }
     @Transactional
-    public void deleteBusinessGuide(String id){
-        String sql="delete  from business_guide where id=?";
-        logger.info("updateSQL:"+sql);
-        jdbcTemplate.update(sql,
-                id
-        );
+    public void deleteBusinessGuide(List<String> ids){
+        String sql = "delete from business_guide where id in('"+ Utils.joinStrings(ids,"','")+"')";
+        jdbcTemplate.execute(sql);
+        logger.info("deleteSQL:"+sql);
     }
 
     public List<BusinessGuideDao> selectBusinessGuide(String categoryId){

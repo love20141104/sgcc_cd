@@ -4,7 +4,9 @@ import com.sgcc.dao.BusinessCategoryDao;
 import com.sgcc.dao.BusinessGuideDao;
 import com.sgcc.dao.BusinessGuideRedisDao;
 import com.sgcc.dto.BusinessCategoryDto;
+import com.sgcc.dto.BusinessCategorySubmitDto;
 import com.sgcc.dto.BusinessGuideDto;
+import com.sgcc.dto.BusinessGuideSubmitDto;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
@@ -68,6 +70,16 @@ public class BusinessModel {
         BusinessGuideRedisDao businessGuideDao = new BusinessGuideRedisDao();
         BeanUtils.copyProperties(businessGuideDto,businessGuideDao);
         return businessGuideDao;
+    }
+    public static BusinessGuideDao sbumitdtotoredisdaoBG(BusinessGuideSubmitDto businessGuideSubmitDto){
+        BusinessGuideDao businessGuideDao = new BusinessGuideDao();
+        BeanUtils.copyProperties(businessGuideSubmitDto,businessGuideDao);
+        return businessGuideDao;
+    }
+    public static BusinessCategoryDao sbumitdtotodaoBC(BusinessCategorySubmitDto businessCategorySubmitDto){
+        BusinessCategoryDao businessCategoryDao = new BusinessCategoryDao();
+        BeanUtils.copyProperties(businessCategorySubmitDto,businessCategoryDao);
+        return businessCategoryDao;
     }
 
 }

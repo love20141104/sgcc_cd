@@ -1,8 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
-import com.sgcc.dto.BusinessCategoryDto;
-import com.sgcc.dto.BusinessGuideDto;
+import com.sgcc.dto.*;
 import com.sgcc.service.BusinessGuideService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,19 +23,19 @@ public class BusinessGuideController {
 
     @ApiOperation(value = "修改业务指南", notes = "")
     @PutMapping
-    public Result update(BusinessGuideDto businessGuideDto) {
+    public Result update(@RequestBody BusinessGuideDto businessGuideDto) {
         return businessGuideService.updateBusinessGuide(businessGuideDto);
     }
     @ApiOperation(value = "添加业务指南", notes = "")
     @PostMapping
-    public Result save(BusinessGuideDto businessGuideDto) {
-        return businessGuideService.saveBusinessGuide(businessGuideDto);
+    public Result save(@RequestBody BusinessGuideSubmitDto businessGuideSubmitDto) {
+        return businessGuideService.saveBusinessGuide(businessGuideSubmitDto);
     }
 
     @ApiOperation(value = "删除业务指南", notes = "")
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable("id")String cid) {
-        return businessGuideService.deleteBusinessGuide(cid);
+    @DeleteMapping("")
+    public Result delete(@RequestBody BusinessGuideDeleteDto businessGuideDeleteDto) {
+        return businessGuideService.deleteBusinessGuide(businessGuideDeleteDto);
     }
 
 
@@ -49,18 +48,18 @@ public class BusinessGuideController {
 
     @ApiOperation(value = "修改业务指南分类", notes = "")
     @PutMapping("/category")
-    public Result updateCategory(BusinessCategoryDto businessCategoryDto) {
+    public Result updateCategory(@RequestBody BusinessCategoryDto businessCategoryDto) {
         return businessGuideService.updateBusinessCategory(businessCategoryDto);
     }
     @ApiOperation(value = "添加业务指南分类", notes = "")
     @PostMapping("/category")
-    public Result saveCategory(BusinessCategoryDto businessCategoryDto) {
-        return businessGuideService.saveBusinessCategory(businessCategoryDto);
+    public Result saveCategory(@RequestBody BusinessCategorySubmitDto businessCategorySubmitDto) {
+        return businessGuideService.saveBusinessCategory(businessCategorySubmitDto);
     }
 
     @ApiOperation(value = "删除业务指南分类", notes = "")
-    @DeleteMapping("/category/{id}")
-    public Result deleteCategory(@PathVariable("id")String id) {
-        return businessGuideService.deleteBusinessCategory(id);
+    @DeleteMapping("/category/")
+    public Result deleteCategory(@RequestBody BusinessCategoryDeleteDto businessCategoryDeleteDto) {
+        return businessGuideService.deleteBusinessCategory(businessCategoryDeleteDto);
     }
 }
