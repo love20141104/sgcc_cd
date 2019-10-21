@@ -10,7 +10,7 @@ import java.io.Serializable;
 @NoArgsConstructor  //生成无参构造函数
 public class RecordDetailDTO implements Serializable {
 
-    private String typeId;
+    private Integer typeId;
 
     private String typeName;
 
@@ -18,7 +18,7 @@ public class RecordDetailDTO implements Serializable {
 
     private String paymentTime;     //缴费时间
 
-    public RecordDetailDTO(String typeId, String typeName, double paymentAmount, String paymentTime) {
+    public RecordDetailDTO(Integer typeId, String typeName, double paymentAmount, String paymentTime) {
         this.typeId = typeId;
         this.typeName = typeName;
         this.paymentAmount = paymentAmount;
