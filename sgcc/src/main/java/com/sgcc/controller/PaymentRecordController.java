@@ -1,7 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
-import com.sgcc.service.BillService;
+import com.sgcc.dto.OrderTransDTO;
 import com.sgcc.service.RecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +24,10 @@ public class PaymentRecordController {
         return recordService.queryRecordInfo(userNo);
     }
 
-
+    @ApiOperation(value = "订单信息", notes = "")
+    @PostMapping(value = "/orderInfo")
+    public Result orderInfo(@RequestBody(required = true) OrderTransDTO orderTransDTO) {
+        return recordService.queryOrderInfo(orderTransDTO);
+    }
 
 }
