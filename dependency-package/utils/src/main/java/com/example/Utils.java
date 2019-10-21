@@ -119,6 +119,25 @@ public class Utils {
     }
 
 
+    public static String GetTimeForYMD(Date date )
+    {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return df.format(date);
+    }
+
+    public static String GetMonth(Date date )
+    {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.MONTH, -1);
+        Date m = c.getTime();
+        String mon = format.format(m);
+        System.out.println("过去一个月："+mon);
+        return mon;
+    }
+
+
     public static String GetSQLDateStr(String field)
     {
         return "DATE_FORMAT("+field+" ,'%Y-%m-%d %H:%m:%s') AS " +field+ "";

@@ -3,7 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/article-service" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/bill-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/businessGuide-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cache-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/consumer-manager-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dependency-package/domain-model" charset="UTF-8" />
@@ -18,6 +18,7 @@
     <file url="file://$PROJECT_DIR$/sgcc" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/suggestion-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/test-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/user-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/util-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/wechat-service" charset="UTF-8" />
   </component>
