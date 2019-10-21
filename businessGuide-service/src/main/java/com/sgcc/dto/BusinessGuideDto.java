@@ -15,10 +15,11 @@ import java.util.Date;
 public class BusinessGuideDto implements Serializable {
     private static final long serialVersionUID = -2820156438106643259L;
 
-    public String id;
-    public String title;
-    public String content;
-    public String contentUrl;
-    public String categoryId;
-    public Date createDate;
+    private String id;
+    private String title;
+    private String content;
+    private String contentUrl;
+    private String categoryId;
+    private String categoryName;
+    private Date createDate;
 }

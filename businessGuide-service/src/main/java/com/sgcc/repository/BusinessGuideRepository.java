@@ -25,24 +25,24 @@ public class BusinessGuideRepository {
     @Transactional
     public void insertBusinessGuide(BusinessGuideDao businessGuideDao){
         String sql="insert into business_guide(id,title,content,content_url,category_id,create_date)values ( " +
-                businessGuideDao.getId() + "  , " +
-                businessGuideDao.getTitle() + "  , " +
-                businessGuideDao.getContent()+ "  , " +
-                businessGuideDao.getContentUrl()+ "  , " +
-                businessGuideDao.getCategoryId()+ "  , " +
-                businessGuideDao.getCreateDate()+ "  , " +
-                " )";
+                "'"+businessGuideDao.getId() + "'  , '" +
+                businessGuideDao.getTitle() + "'  , '" +
+                businessGuideDao.getContent()+ "'  , '" +
+                businessGuideDao.getContentUrl()+ "'  , '" +
+                businessGuideDao.getCategoryId()+ "'  , '" +
+                Utils.GetTime(businessGuideDao.getCreateDate()) +
+                "' )";
         logger.info("insertSQL:"+sql);
         jdbcTemplate.execute(sql);
     }
     @Transactional
     public void updateBusinessGuide(BusinessGuideDao businessGuideDao){
         String sql="update  business_guide set" +
-                " title= " +businessGuideDao.getTitle()+
-                " ,content= " +businessGuideDao.getContent()+
-                " ,content_url= " +businessGuideDao.getContentUrl()+
-                " ,category_id=  " +businessGuideDao.getCategoryId()+
-                " where id= "+businessGuideDao.getId();
+                " title= '" +businessGuideDao.getTitle()+
+                "' ,content= '" +businessGuideDao.getContent()+
+                "' ,content_url= '" +businessGuideDao.getContentUrl()+
+                "' ,category_id=  '" +businessGuideDao.getCategoryId()+
+                "' where id= '"+businessGuideDao.getId()+"'";
         logger.info("updateSQL:"+sql);
         jdbcTemplate.execute(sql);
     }
@@ -55,12 +55,16 @@ public class BusinessGuideRepository {
 
     public List<BusinessGuideDao> selectBusinessGuide(String categoryId){
         if(Strings.isNullOrEmpty(categoryId)){
-            String sql = "select id ,title, content, content_url,category_id ,create_date from business_guide";
+            String sql = "select bg.id id ,bg.title title, bg.content content, bg.content_url content_url," +
+                    "bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from" +
+                    " business_guide bg left join business_category bc on bc.id=bg.category_id";
             logger.info("selectSQL:"+sql);
             return jdbcTemplate.query(sql, new BusinessGuideDaoRowMapper());
         }else {
-            String sql = "select id ,title, content, content_url,category_id,create_date from business_guide  " +
-                    " where  category_id = "+categoryId;
+            String sql = "select bg.id id ,bg.title title, bg.content content, bg.content_url content_url," +
+                    "bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from" +
+                    " business_guide bg left join business_category bc on bc.id=bg.category_id" +
+                    " where  category_id = '"+categoryId+"'";
             logger.info("selectSQL:"+sql);
             return jdbcTemplate.query(sql, new BusinessGuideDaoRowMapper());
         }
@@ -77,6 +81,7 @@ public class BusinessGuideRepository {
                     rs.getString("content"),
                     rs.getString("content_url"),
                     rs.getString("category_id"),
+                    rs.getString("category_name"),
                     null
             );
             businessGuideDao.setCreateDate(Utils.GetDate( rs.getString("create_date")));
