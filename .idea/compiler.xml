@@ -55,6 +55,7 @@
       <module name="article-service" options="-parameters" />
       <module name="bill-service" options="-parameters" />
       <module name="cache-service" options="-parameters" />
+      <module name="consumer-manager-service" options="-parameters" />
       <module name="domain-model" options="-parameters" />
       <module name="dto-model" options="-parameters" />
       <module name="exception" options="-parameters" />
