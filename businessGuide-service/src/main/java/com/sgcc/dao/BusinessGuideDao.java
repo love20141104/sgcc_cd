@@ -18,6 +18,7 @@ public class BusinessGuideDao {
     private String content;
     private String contentUrl;
     private String categoryId;
+    private String categoryName;
     private Date createDate;
 
 }

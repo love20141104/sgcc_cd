@@ -29,5 +29,6 @@ public class BusinessGuideRedisDao implements Serializable {
     private String contentUrl;
     @Indexed
     private String categoryId;
+    private String categoryName;
     private Date createDate;
 }

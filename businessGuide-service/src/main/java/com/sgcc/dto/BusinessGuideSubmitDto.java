@@ -15,9 +15,9 @@ import java.util.Date;
 public class BusinessGuideSubmitDto implements Serializable {
     private static final long serialVersionUID = -28201564381066259L;
 
-    public String title;
-    public String content;
-    public String contentUrl;
-    public String categoryId;
+    private String title;
+    private String content;
+    private String contentUrl;
+    private String categoryId;
 
 }

@@ -25,19 +25,19 @@ public class BusinessCategoryRepository {
     @Transactional
     public void insertBusinessCategory(BusinessCategoryDao businessCategoryDao){
         String sql="insert into business_category(id,category_name,note)values ( " +
-                businessCategoryDao.getId()+" , " +
-                businessCategoryDao.getCategoryName()+" , " +
+                "'"+businessCategoryDao.getId()+"' , '" +
+                businessCategoryDao.getCategoryName()+"' , '" +
                 businessCategoryDao.getNote()+
-                " ) ";
+                "' ) ";
         logger.info("insertSQL:"+sql);
         jdbcTemplate.execute(sql);
     }
     @Transactional
     public void updateBusinessCategory(BusinessCategoryDao businessCategoryDao){
         String sql="update  business_category set " +
-                " category_name = "+businessCategoryDao.getCategoryName() +
-                " note= " +businessCategoryDao.getNote()+
-                "where id = "+businessCategoryDao.getId();
+                " category_name = '"+businessCategoryDao.getCategoryName() +
+                "', note= '" +businessCategoryDao.getNote()+
+                "' where id = '"+businessCategoryDao.getId()+"'";
         logger.info("insertSQL:"+sql);
         jdbcTemplate.execute(sql);
     }
