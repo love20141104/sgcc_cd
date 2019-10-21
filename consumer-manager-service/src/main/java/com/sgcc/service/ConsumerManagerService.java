@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.result.Result;
 
-import javax.naming.NamingEnumeration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -211,7 +210,7 @@ public class ConsumerManagerService {
             //清洗
             ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerDaos);
             consumerManagerDomainModel.selectAllTransform();
-            return Result.success(consumerManagerDomainModel.getConsumerManagerListDTO());
+            return Result.success(consumerManagerDomainModel.getConsumerManagerGroupDTO());
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.SQL_ERR);

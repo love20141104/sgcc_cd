@@ -3,15 +3,11 @@ package com.sgcc.model;
 import com.sgcc.dao.ConsumerManagerDao;
 import com.sgcc.dto.ConsumerManagerDTO;
 import com.sgcc.dto.ConsumerManagerInsertDTO;
-import com.sgcc.dto.ConsumerManagerListDTO;
+import com.sgcc.dto.ConsumerManagerGroupDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.omg.PortableServer.THREAD_POLICY_ID;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @NoArgsConstructor
 @Data
@@ -28,7 +24,7 @@ public class ConsumerManagerDomainModel {
     private List<ConsumerManagerDao> consumerManagerDaos = new ArrayList<>();
 
     //返回全部客户经理信息时用DTO
-    private ConsumerManagerListDTO consumerManagerListDTO;
+    private ConsumerManagerGroupDTO consumerManagerGroupDTO;
 
 
     public ConsumerManagerDomainModel(ConsumerManagerInsertDTO consumerManagerInsertDTO){
@@ -70,9 +66,20 @@ public class ConsumerManagerDomainModel {
               )
             );
         });
+        Map<String,List<ConsumerManagerDTO>> hmap = new HashMap<>();
+        consumerManagerDTOList.forEach(consumerManagerDTO -> {
+            if( !hmap.containsKey(consumerManagerDTO.getConsumerManagerAdministrativeRegion()) )
+            {
+                hmap.put(consumerManagerDTO.getConsumerManagerAdministrativeRegion(),new ArrayList<ConsumerManagerDTO>());
+            }
+            List<ConsumerManagerDTO> list = hmap.get(consumerManagerDTO.getConsumerManagerAdministrativeRegion());
+            if( list == null )
+                list = new ArrayList<>();
+            list.add(consumerManagerDTO);
+        });
         //排序
-        Collections.sort(consumerManagerDTOList);
-        this.consumerManagerListDTO = new ConsumerManagerListDTO(consumerManagerDTOList);
+        //Collections.sort(consumerManagerDTOList);
+        this.consumerManagerGroupDTO = new ConsumerManagerGroupDTO(hmap);
     }
 
     /**
