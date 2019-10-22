@@ -133,22 +133,11 @@
         </dependency>
         <dependency>
             <groupId>com.sgcc</groupId>
-            <artifactId>management-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sgcc</groupId>
             <artifactId>article-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.sgcc</groupId>
-            <artifactId>bill-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>com.sgcc</groupId>
             <artifactId>consumer-manager-service</artifactId>
@@ -159,6 +148,12 @@
             <groupId>com.sgcc</groupId>
             <artifactId>businessGuide-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sgcc</groupId>
+            <artifactId>bill-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

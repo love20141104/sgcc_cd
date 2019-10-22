@@ -1,13 +1,13 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
+import com.sgcc.Service.QuestionService;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
 
 import com.sgcc.dtomodel.question.CategrateInsertDTO;
 import com.sgcc.dtomodel.question.QADTO;
 import com.sgcc.dtomodel.question.QuestionCategoryDTO;
-import com.sgcc.service.PrebookManager;
-import com.sgcc.service.QuestionManger;
+import com.sgcc.service.PrebookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -23,10 +23,10 @@ import java.util.List;
 @Controller
 public class ManagementController {
     @Autowired
-    private PrebookManager prebookManager;
+    private PrebookService prebookManager;
 
     @Autowired
-    private QuestionManger questionManger;
+    private QuestionService questionManger;
 
     /**
      *  ================================= 预约信息start =================================
@@ -49,12 +49,6 @@ public class ManagementController {
         return prebookManager.deletePrebookDTOs(prebookCodes);
     }
 
-    @ApiOperation(value = "新增预约信息", notes = "")
-    @PostMapping(value = "/PrebookInfo/open-Id/{openId}")
-    public Result insertPrebookDTO(@PathVariable String openId,@RequestBody PrebookDTO prebookDTO) {
-        return prebookManager.insertPrebookDTO(prebookDTO,openId);
-    }
-
     @ApiOperation(value = "查询预约信息", notes = "")
     @GetMapping(value = "/PrebookInfo")
     public Result selectPrebookDTO(
@@ -67,13 +61,6 @@ public class ManagementController {
     ) {
         return prebookManager.selectPrebookDTO(user_open_id,service_hall_id,prebook_code,prebook_date_start,prebook_date_end);
     }
-    /**
-     *  ================================= 预约信息end +=================================
-     */
-
-    /**
-     *  ================================= 常见问题start =================================
-     */
 
     @ApiOperation(value = "新增问题分类", notes = "")
     @PostMapping(value = "/SuggestionInfo/addQCategory")

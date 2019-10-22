@@ -1,28 +1,17 @@
 package com.sgcc.controller;
 import com.example.result.Result;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sgcc.dto.ServiceHallDeleteDTO;
 import com.sgcc.dto.ServiceHallMappingDTO;
 import com.sgcc.dto.UpdateServiceHallDTO;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
 import com.sgcc.service.*;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-import javax.websocket.server.PathParam;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 @Api(value = "", tags = "地图接口")
 @RestController
@@ -32,7 +21,7 @@ public class ServiceHallController {
     @Autowired
     private ServiceHallService serviceHallService;
     @Autowired
-    private ProbookService probookService;
+    private PrebookService prebookService;
 
 
     /**
@@ -66,7 +55,7 @@ public class ServiceHallController {
     @ApiOperation(value = "查询用户的预约信息", notes = "")
     @GetMapping(value = "/PrebookInfos/user/{openId}")
     public Result getPrebookInfos(@PathVariable String openId) {
-        return probookService.getPrebookInfosByUser(openId);
+        return prebookService.getPrebookInfosByUser(openId);
     }
 
     /**
@@ -77,7 +66,7 @@ public class ServiceHallController {
     @PostMapping(value = "/PrebookInfos/user/{openId}")
     public Result submitPrebookInfo(@RequestBody PrebookDTO prebookDTO,@PathVariable String openId) {
         System.out.println("controller:threadID : "+Thread.currentThread().getId());
-        return probookService.submitPrebookInfo(prebookDTO,openId);
+        return prebookService.submitPrebookInfo(prebookDTO,openId);
     }
 
 
@@ -93,7 +82,7 @@ public class ServiceHallController {
             ,@RequestParam
                     String prebookDate
     ) {
-        return probookService.getPrebookInfosByServiceHall(serviceHallId,prebookDate);
+        return prebookService.getPrebookInfosByServiceHall(serviceHallId,prebookDate);
     }
 
     /**

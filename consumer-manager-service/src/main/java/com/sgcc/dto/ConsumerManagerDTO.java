@@ -34,7 +34,7 @@ public class ConsumerManagerDTO implements Serializable,Comparable<ConsumerManag
             //服务区域
             String consumerManagerServiceArea,
 
-                    //所属行政区域
+            //所属行政区域
             String consumerManagerAdministrativeRegion,
             String consumerManagerDuty,
             String consumerManagerWorkTime,

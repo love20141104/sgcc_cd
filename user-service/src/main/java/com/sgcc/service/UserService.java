@@ -4,17 +4,13 @@ import com.example.Utils;
 import com.example.result.Result;
 import com.sgcc.dto.ElectricityTypeDTO;
 import com.sgcc.dto.MonthlyBillsDTO;
-import com.sgcc.entity.BillInfoEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
-public class BillService {
+public class UserService {
 
-    @Autowired
-    private BillInfoEntity billInfoEntity;
 
     public Result queryBillInfoById(String userNo,long date){
         try {
