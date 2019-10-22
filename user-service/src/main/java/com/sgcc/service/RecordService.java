@@ -75,8 +75,8 @@ public class RecordService {
      * @return
      */
     public Result queryOrderInfo(OrderTransDTO orderTransDTO){
-        if (Strings.isNullOrEmpty(orderTransDTO.getUserNo())  &&
-                Strings.isNullOrEmpty(orderTransDTO.getDateTime())&&
+        if (!Strings.isNullOrEmpty(orderTransDTO.getUserNo())  &&
+                !Strings.isNullOrEmpty(orderTransDTO.getDateTime())&&
                 orderTransDTO.getTypeId() != null){
 
             OrderDetailDTO orderDetailDTO = new OrderDetailDTO("051454522581","刘德华",
