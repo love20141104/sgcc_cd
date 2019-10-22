@@ -17,16 +17,12 @@ public class RecordTypeDTO implements Serializable {
 
     private Double money;
 
-    private List<PaymentChannelDTO> paymentChannelDTOS = new ArrayList<>();
-
     private List<RecordDetailDTO> recordTypeDTOS = new ArrayList<>();
 
 
-    public RecordTypeDTO(String dateTime, Double money, List<RecordDetailDTO> recordTypeDTOS,
-                         List<PaymentChannelDTO> paymentChannelDTOS) {
+    public RecordTypeDTO(String dateTime, Double money, List<RecordDetailDTO> recordTypeDTOS) {
         this.dateTime = dateTime;
         this.money = money;
         this.recordTypeDTOS = recordTypeDTOS;
-        this.paymentChannelDTOS=paymentChannelDTOS;
     }
 }

@@ -39,7 +39,6 @@ public class RecordService {
 
 
         List<PaymentChannelDTO> paymentChannelDTOS = new ArrayList<>();
-        List<PaymentChannelDTO> paymentChannelDTOS2 = new ArrayList<>();
         PaymentChannelDTO paymentChannelDTO1 = new PaymentChannelDTO("微信支付",200d);
         PaymentChannelDTO paymentChannelDTO2 = new PaymentChannelDTO("支付宝支付",200d);
         PaymentChannelDTO paymentChannelDTO3 = new PaymentChannelDTO("营业厅",30d);
@@ -47,18 +46,14 @@ public class RecordService {
         paymentChannelDTOS.add(paymentChannelDTO2);
         paymentChannelDTOS.add(paymentChannelDTO3);
 
+        RecordTypeDTO recordTypeDTO1 = new RecordTypeDTO("2019-10",500d,recordTypeDTOS);
+        RecordTypeDTO recordTypeDTO2 = new RecordTypeDTO("2019-09",400d,recordTypeDTOS);
+        RecordTypeDTO recordTypeDTO3 = new RecordTypeDTO("2019-08",300d,recordTypeDTOS);
+        RecordTypeDTO recordTypeDTO4 = new RecordTypeDTO("2019-07",250d,recordTypeDTOS);
+        RecordTypeDTO recordTypeDTO5 = new RecordTypeDTO("2019-06",350d,recordTypeDTOS);
+        RecordTypeDTO recordTypeDTO6 = new RecordTypeDTO("2019-05",100d,recordTypeDTOS2);
 
-        PaymentChannelDTO paymentChannelDTO4 = new PaymentChannelDTO("微信支付",200d);
-        PaymentChannelDTO paymentChannelDTO5 = new PaymentChannelDTO("支付宝支付",200d);
-        paymentChannelDTOS2.add(paymentChannelDTO4);
-        paymentChannelDTOS2.add(paymentChannelDTO5);
 
-        RecordTypeDTO recordTypeDTO1 = new RecordTypeDTO("2019-10",500d,recordTypeDTOS,paymentChannelDTOS2);
-        RecordTypeDTO recordTypeDTO2 = new RecordTypeDTO("2019-09",400d,recordTypeDTOS,paymentChannelDTOS2);
-        RecordTypeDTO recordTypeDTO3 = new RecordTypeDTO("2019-08",300d,recordTypeDTOS,paymentChannelDTOS2);
-        RecordTypeDTO recordTypeDTO4 = new RecordTypeDTO("2019-07",250d,recordTypeDTOS,paymentChannelDTOS2);
-        RecordTypeDTO recordTypeDTO5 = new RecordTypeDTO("2019-06",350d,recordTypeDTOS,paymentChannelDTOS2);
-        RecordTypeDTO recordTypeDTO6 = new RecordTypeDTO("2019-05",100d,recordTypeDTOS2,paymentChannelDTOS);
 
         List<RecordTypeDTO> recordDTOs = new ArrayList<>();
         recordDTOs.add(recordTypeDTO1);
@@ -68,10 +63,10 @@ public class RecordService {
         recordDTOs.add(recordTypeDTO5);
         recordDTOs.add(recordTypeDTO6);
 
-//        RecordDTO recordDTO = new RecordDTO("刘德华",userNo,recordDTOs);
+        RecordViewDTO recordViewDTO = new RecordViewDTO(paymentChannelDTOS,recordDTOs);
 
 
-        return Result.success(recordDTOs);
+        return Result.success(recordViewDTO);
     }
 
     /**
