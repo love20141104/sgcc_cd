@@ -31,14 +31,14 @@ public class NoticeController {
 
 
     @ApiOperation(value = "新增停电公告", notes = "")
-    @PutMapping(value = "/noticeInfo")
+    @PostMapping(value = "/noticeInfo")
     public Result addNoticeInfo(@RequestBody AddFormDTO addFormDTO) {
         return noticeService.insertNoticeInfo(addFormDTO);
     }
 
 
     @ApiOperation(value = "修改停电公告", notes = "")
-    @PostMapping(value = "/noticeInfo")
+    @PutMapping(value = "/noticeInfo")
     public Result updateNoticeInfo(@RequestBody UpdateFormDTO updateFormDTO) {
         return noticeService.updateNoticeInfo(updateFormDTO);
     }
