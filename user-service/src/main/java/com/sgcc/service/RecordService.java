@@ -81,7 +81,7 @@ public class RecordService {
 
             OrderDetailDTO orderDetailDTO = new OrderDetailDTO("051454522581","刘德华",
                     orderTransDTO.getUserNo(),"高新区天府五街美年广场A座1144号",100d,
-                    "微信",orderTransDTO.getDateTime());
+                    "微信",orderTransDTO.getDateTime(),1);
             return Result.success(orderDetailDTO);
         }else {
             return Result.failure(TopErrorCode.NO_DATAS);

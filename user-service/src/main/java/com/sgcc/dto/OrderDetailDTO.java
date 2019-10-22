@@ -25,9 +25,12 @@ public class OrderDetailDTO implements Serializable {
 
     private String orderSubmitTime;
 
+    private Integer orderStatus;
+
 
     public OrderDetailDTO(String orderNo, String userName, String userNo,
-                          String orderAddress, double money, String paymentChannel, String orderSubmitTime) {
+                          String orderAddress, double money, String paymentChannel,
+                          String orderSubmitTime,Integer orderStatus) {
         this.orderNo = orderNo;
         this.userName = userName;
         this.userNo = userNo;
@@ -35,5 +38,6 @@ public class OrderDetailDTO implements Serializable {
         this.money = money;
         this.paymentChannel = paymentChannel;
         this.orderSubmitTime = orderSubmitTime;
+        this.orderStatus=orderStatus;
     }
 }
