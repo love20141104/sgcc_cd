@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="mq-service" />
         <module name="user-service" />
         <module name="businessGuide-service" />
         <module name="mq_service" />
         <module name="consumer-manager-service" />
-        <module name="management-service" />
         <module name="domain-model" />
         <module name="serviceHall-service" />
         <module name="wechat-service" />
@@ -20,18 +20,15 @@
         <module name="suggestion-service" />
         <module name="sgcc" />
         <module name="util-service" />
-        <module name="preBook-service" />
-        <module name="bill-service" />
         <module name="question-service" />
         <module name="dto-model" />
         <module name="utils" />
-        <module name="mq-service" />
+        <module name="preBook-service" />
         <module name="exception" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="article-service" target="1.8" />
-      <module name="bill-service" target="1.8" />
       <module name="businessGuide-service" target="1.8" />
       <module name="cache-service" target="1.8" />
       <module name="consumer-manager-service" target="1.8" />
@@ -57,7 +54,6 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="article-service" options="-parameters" />
-      <module name="bill-service" options="-parameters" />
       <module name="businessGuide-service" options="-parameters" />
       <module name="cache-service" options="-parameters" />
       <module name="consumer-manager-service" options="-parameters" />

@@ -1,7 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
-import com.sgcc.service.BillService;
+import com.sgcc.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +15,16 @@ import java.util.Date;
 @RestController
 @RequestMapping(value = "/bill")
 @Controller
-public class BillController {
+public class UserController {
 
     @Autowired
-    private BillService billService;
+    private UserService userService;
 
     @ApiOperation(value = "查询月度账单", notes = "")
     @GetMapping(value = "/billInfo/{userNo}")
     public Result queryBillInfo(@PathVariable(required = true) String userNo,
                                 @RequestParam(required = true) long date) {
-        return billService.queryBillInfoById(userNo,date);
+        return userService.queryBillInfoById(userNo,date);
     }
 
 

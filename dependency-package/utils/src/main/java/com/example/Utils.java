@@ -60,6 +60,10 @@ public class Utils {
         }
         return string1;
     }
+    public static String getValidUrl(String url)
+    {
+        return  url.substring(url.indexOf("/")+1);
+    }
     public static boolean verifyUrl(String url){
         if( Strings.isNullOrEmpty(url) )
             return false;
