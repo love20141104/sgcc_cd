@@ -6,7 +6,7 @@ server:
   port: 18624
   ssl:
     #    证书路径
-    key-store: 0_cdgd.pryun.vip.jks
+    key-store: 0_sgcc.link.jks
     key-store-type: JKS
     #      key-alias: tomcat
     #    配置密码，就是在生成证书的时候输入的密码
