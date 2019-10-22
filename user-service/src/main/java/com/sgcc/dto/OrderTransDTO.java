@@ -17,7 +17,7 @@ public class OrderTransDTO implements Serializable {
 
     private String dateTime;
 
-    public OrderTransDTO(String userNo, int typeId, String dateTime) {
+    public OrderTransDTO(String userNo, Integer typeId, String dateTime) {
         this.userNo = userNo;
         this.typeId = typeId;
         this.dateTime = dateTime;

@@ -38,7 +38,7 @@
         <module>consumer-manager-service</module>
         <module>util-service</module>
         <module>businessGuide-service</module>
-
+        <module>notice-service</module>
     </modules>
 
 
