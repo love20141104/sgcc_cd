@@ -1,4 +1,4 @@
-package com.sgcc.dao;
+package com.sgcc.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,11 +7,9 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-public class NoticeDao implements Serializable {
+public class UpdateFormDTO implements Serializable {
 
-    private static final long serialVersionUID = -6436241340803665322L;
-
-    private String id;
+    private static final long serialVersionUID = 4716469677203124951L;
 
     private String noticeId;
 
@@ -20,16 +18,10 @@ public class NoticeDao implements Serializable {
     private String typeName;    // 停电类型
 
     private String range;       // 抢修范围
-//
-//    private String progress;    // 抢修进度
-//
-//    private String progressTime;    //抢修进度对应时间
 
     private String noticeDate;  // 停电时间
 
-    public NoticeDao(String id, String noticeId, String noticeDistrict, String typeName,
-                     String range, String noticeDate) {
-        this.id = id;
+    public UpdateFormDTO(String noticeId, String noticeDistrict, String typeName, String range, String noticeDate) {
         this.noticeId = noticeId;
         this.noticeDistrict = noticeDistrict;
         this.typeName = typeName;

@@ -19,8 +19,9 @@ public class NoticeFormDTO implements Serializable {
 
     private String range;
 
-    private String progress;
-
-    private String progressTime;
-
+    public NoticeFormDTO(String typeName, String time, String range) {
+        this.typeName = typeName;
+        this.time = time;
+        this.range = range;
+    }
 }
