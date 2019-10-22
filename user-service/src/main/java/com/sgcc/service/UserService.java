@@ -2,8 +2,10 @@ package com.sgcc.service;
 
 import com.example.Utils;
 import com.example.result.Result;
+import com.google.common.base.Strings;
 import com.sgcc.dto.ElectricityTypeDTO;
 import com.sgcc.dto.MonthlyBillsDTO;
+import com.sgcc.exception.TopErrorCode;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -13,6 +15,9 @@ public class UserService {
 
 
     public Result queryBillInfoById(String userNo,long date){
+        if (Strings.isNullOrEmpty(userNo))
+            return Result.failure(TopErrorCode.NO_DATAS);
+
         try {
 
             MonthlyBillsDTO monthlyBillsDTO = new MonthlyBillsDTO();

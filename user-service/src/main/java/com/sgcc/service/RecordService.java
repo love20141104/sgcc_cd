@@ -37,12 +37,28 @@ public class RecordService {
         recordTypeDTOS2.add(recordDetailDTO5);
 
 
-        RecordTypeDTO recordTypeDTO1 = new RecordTypeDTO("2019-10",200.00,recordTypeDTOS);
-        RecordTypeDTO recordTypeDTO2 = new RecordTypeDTO("2019-09",200.00,recordTypeDTOS);
-        RecordTypeDTO recordTypeDTO3 = new RecordTypeDTO("2019-08",200.00,recordTypeDTOS);
-        RecordTypeDTO recordTypeDTO4 = new RecordTypeDTO("2019-07",200.00,recordTypeDTOS);
-        RecordTypeDTO recordTypeDTO5 = new RecordTypeDTO("2019-06",200.00,recordTypeDTOS);
-        RecordTypeDTO recordTypeDTO6 = new RecordTypeDTO("2019-05",200.00,recordTypeDTOS2);
+
+        List<PaymentChannelDTO> paymentChannelDTOS = new ArrayList<>();
+        List<PaymentChannelDTO> paymentChannelDTOS2 = new ArrayList<>();
+        PaymentChannelDTO paymentChannelDTO1 = new PaymentChannelDTO("微信支付",200d);
+        PaymentChannelDTO paymentChannelDTO2 = new PaymentChannelDTO("支付宝支付",200d);
+        PaymentChannelDTO paymentChannelDTO3 = new PaymentChannelDTO("营业厅",30d);
+        paymentChannelDTOS.add(paymentChannelDTO1);
+        paymentChannelDTOS.add(paymentChannelDTO2);
+        paymentChannelDTOS.add(paymentChannelDTO3);
+
+
+        PaymentChannelDTO paymentChannelDTO4 = new PaymentChannelDTO("微信支付",200d);
+        PaymentChannelDTO paymentChannelDTO5 = new PaymentChannelDTO("支付宝支付",200d);
+        paymentChannelDTOS2.add(paymentChannelDTO4);
+        paymentChannelDTOS2.add(paymentChannelDTO5);
+
+        RecordTypeDTO recordTypeDTO1 = new RecordTypeDTO("2019-10",500d,recordTypeDTOS,paymentChannelDTOS2);
+        RecordTypeDTO recordTypeDTO2 = new RecordTypeDTO("2019-09",400d,recordTypeDTOS,paymentChannelDTOS2);
+        RecordTypeDTO recordTypeDTO3 = new RecordTypeDTO("2019-08",300d,recordTypeDTOS,paymentChannelDTOS2);
+        RecordTypeDTO recordTypeDTO4 = new RecordTypeDTO("2019-07",250d,recordTypeDTOS,paymentChannelDTOS2);
+        RecordTypeDTO recordTypeDTO5 = new RecordTypeDTO("2019-06",350d,recordTypeDTOS,paymentChannelDTOS2);
+        RecordTypeDTO recordTypeDTO6 = new RecordTypeDTO("2019-05",100d,recordTypeDTOS2,paymentChannelDTOS);
 
         List<RecordTypeDTO> recordDTOs = new ArrayList<>();
         recordDTOs.add(recordTypeDTO1);

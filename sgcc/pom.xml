@@ -151,9 +151,14 @@
         </dependency>
         <dependency>
             <groupId>com.sgcc</groupId>
-            <artifactId>bill-service</artifactId>
+            <artifactId>user-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sgcc</groupId>
+            <artifactId>notice-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
