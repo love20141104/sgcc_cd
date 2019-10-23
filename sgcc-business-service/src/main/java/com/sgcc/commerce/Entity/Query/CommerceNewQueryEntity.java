@@ -1,13 +1,20 @@
 package com.sgcc.commerce.Entity.Query;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.sgcc.commerce.dao.CommerceNewDao;
+import com.sgcc.commerce.repository.CommerceNewRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.Serializable;
+import java.util.List;
 
 @Component
 public class CommerceNewQueryEntity {
-
+    @Autowired
+    private CommerceNewRepository commerceNewRepository;
+    public List<CommerceNewDao> GetAll()
+    {
+        return commerceNewRepository.findAll();
+    }
+    public CommerceNewDao GetById(String id )
+    {
+        return commerceNewRepository.findById(id);
+    }
 }

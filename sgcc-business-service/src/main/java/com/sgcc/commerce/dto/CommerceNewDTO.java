@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor //生成全参数构造函数
@@ -36,7 +37,7 @@ public class CommerceNewDTO implements Serializable {
     String invoice_bank_account;
     String invoice_regist_addr;
     String invoice_phone;
-    String invoice_date;
+    Date invoice_date;
     String invoice_img;
     String new_install_apply_person;
     String new_install_transactor;
