@@ -17,11 +17,11 @@ public class InhabitantNewEventEntity  {
     private InhabitantNewRepository inhabitantNewRepository;
     public void UpdateInhabitantNew( InhabitantNewDao dao )
     {
-        inhabitantNewRepository.save(dao );
+        inhabitantNewRepository.update(dao );
     }
     public void SaveInhabitantNew( InhabitantNewDao dao )
     {
-        inhabitantNewRepository.update( dao );
+        inhabitantNewRepository.save( dao );
     }
     public void Deletes( List<String> ids )
     {

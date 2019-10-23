@@ -11,11 +11,11 @@ public class CommerceNewEventEntity {
     private CommerceNewRepository commerceNewRepository;
     public void UpdateCommerceNew( CommerceNewDao dao )
     {
-        commerceNewRepository.save(dao );
+        commerceNewRepository.update(dao );
     }
     public void SaveCommerceNew( CommerceNewDao dao )
     {
-        commerceNewRepository.update( dao );
+        commerceNewRepository.save( dao );
     }
     public void Deletes( List<String> ids )
     {

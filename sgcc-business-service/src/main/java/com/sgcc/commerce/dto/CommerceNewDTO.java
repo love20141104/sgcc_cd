@@ -30,7 +30,7 @@ public class CommerceNewDTO implements Serializable {
     String cq_idcard_back_img;
     String new_install_idcard;
     String new_install_telphone;
-    String new_install_invoice;
+    boolean new_install_invoice;
     String invoice_company;
     String invoice_number;
     String invoice_bank;
@@ -45,5 +45,5 @@ public class CommerceNewDTO implements Serializable {
     String sq_idcard_back_img;
     String new_install_transactor_idcard;
     String new_install_transactor_tel;
-    String submit_date;
+    Date submit_date;
 }

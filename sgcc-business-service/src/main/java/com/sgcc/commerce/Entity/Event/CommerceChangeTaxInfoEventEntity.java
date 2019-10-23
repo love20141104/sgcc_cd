@@ -17,11 +17,11 @@ public class CommerceChangeTaxInfoEventEntity {
     private CommerceChangeTaxInfoRepository commerceChangeTaxInfoRepository;
     public void UpdateCommerceChangeTaxInfo( CommerceChangeTaxInfoDao dao )
     {
-        commerceChangeTaxInfoRepository.save(dao );
+        commerceChangeTaxInfoRepository.update(dao );
     }
     public void SaveCommerceChangeTaxInfo( CommerceChangeTaxInfoDao dao )
     {
-        commerceChangeTaxInfoRepository.update( dao );
+        commerceChangeTaxInfoRepository.save( dao );
     }
     public void Deletes( List<String> ids )
     {

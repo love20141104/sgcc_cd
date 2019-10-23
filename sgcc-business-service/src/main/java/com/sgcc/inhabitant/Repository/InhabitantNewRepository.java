@@ -18,13 +18,12 @@ public class InhabitantNewRepository {
 
     public void save( InhabitantNewDao dao )
     {
-        String sql = "insert into b_new_install_inhabitant ( id,user_open_id,new_install_company_name,new_install_district,new_install_address," +
-                "     new_install_capacity,new_install_license_img,propertyRight_img1,propertyRight_img2," +
-                "     propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6,new_install_name," +
-                "     cq_idcard_positive_img,cq_idcard_back_img,new_install_idcard,new_install_telphone,new_install_invoice," +
-                "     invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
-                "     invoice_date,invoice_img,new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
-                "     sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date) values('" +
+        String sql = "insert into b_new_install_inhabitant ( id,user_open_id,new_install_district,new_install_address," +
+                "new_install_capacity,propertyRight_img1,propertyRight_img2," +
+                "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
+                "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
+                "new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
+                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date) values('" +
                 dao.getId()+"','" + dao.getUser_open_id() + "','" + dao.getNew_install_district()+ "','" +
                 dao.getNew_install_address()+ "','" + dao.getNew_install_capacity() + "','" +
                 dao.getPropertyRight_img1() + "','" + dao.getPropertyRight_img2() + "','" + dao.getPropertyRight_img3() + "','" +
@@ -74,11 +73,11 @@ public class InhabitantNewRepository {
     public List<InhabitantNewDao> findAll()
     {
         String sql = "select id,user_open_id,new_install_district,new_install_address," +
-                "     new_install_capacity,propertyRight_img1,propertyRight_img2," +
-                "     propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
-                "     cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
-                "     new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
-                "     sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_inhabitant";
+                "new_install_capacity,propertyRight_img1,propertyRight_img2," +
+                "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
+                "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
+                "new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
+                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_inhabitant";
 
         try {
             return jdbcTemplate.query(sql, new InhabitantNewRowMapper());
@@ -91,11 +90,11 @@ public class InhabitantNewRepository {
     public InhabitantNewDao findById(String id )
     {
         String sql = "select id,user_open_id,new_install_district,new_install_address," +
-                "     new_install_capacity,propertyRight_img1,propertyRight_img2," +
-                "     propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
-                "     cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
-                "     new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
-                "     sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_inhabitant where id ='" + id + "'";
+                "new_install_capacity,propertyRight_img1,propertyRight_img2," +
+                "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
+                "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
+                "new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
+                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_inhabitant where id ='" + id + "'";
 
         try {
             return jdbcTemplate.queryForObject(sql, new InhabitantNewRowMapper());
