@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor //生成全参数构造函数
@@ -33,5 +34,5 @@ public class InhabitantNewDTO implements Serializable {
     String sq_idcard_back_img;
     String new_install_transactor_idcard;
     String new_install_transactor_tel;
-    String submit_date;
+    Date submit_date;
 }

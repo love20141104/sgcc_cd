@@ -1,4 +1,4 @@
-package com.sgcc.commerce.dao;
+package com.sgcc.commerce.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,13 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
-
 @Data
 @AllArgsConstructor //生成全参数构造函数
 @NoArgsConstructor  //生成无参构造函数
-public class CommerceChangeTaxInfoDao implements Serializable {
-    private static final long serialVersionUID = 7915805112297299845L;
-    String id;
+public class CommerceChangeTaxInfoSubmitDTO implements Serializable {
+    private static final long serialVersionUID = 3859551880595498765L;
     String user_open_id;
     String new_install_company_name;
     String new_install_address;
@@ -43,5 +41,4 @@ public class CommerceChangeTaxInfoDao implements Serializable {
     String sq_idcard_back_img;
     String new_install_transactor_idcard;
     String new_install_transactor_tel;
-    Date submit_date;
 }
