@@ -1,9 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
-import com.sgcc.commerce.dto.CommerceNewDTO;
-import com.sgcc.commerce.dto.CommerceNewSubmitDTO;
-import com.sgcc.commerce.dto.DeleteDTO;
+import com.sgcc.commerce.dto.*;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.inhabitant.dto.InhabitantNewDTO;
 import com.sgcc.inhabitant.dto.InhabitantSubmitDTO;
@@ -112,5 +110,38 @@ public class BusinessServiceController {
         sgccBusinessService.DeleteInhabitantNewRecors(dto);
         return Result.success();
     }
+    // -------------------------税票变更--------------------------------------
+    // -------------------------税票变更--------------------------------------
+    @ApiOperation(value = "税票变更提交", notes = "")
+    @PostMapping(value = "/CommerceChangeTaxInfo")
+    public Result SubmitCommerceChangeTaxInfo(@RequestBody CommerceChangeTaxInfoSubmitDTO dto ) {
+        sgccBusinessService.SubmitCommerceChangeTaxInfo(dto);
+        return Result.success();
+    }
 
+    @ApiOperation(value = "税票变更更新", notes = "")
+    @PutMapping(value = "/CommerceChangeTaxInfo")
+    public Result UpdateCommerceChangeTaxInfo(@RequestBody CommerceChangeTaxInfoDTO dto ) {
+        sgccBusinessService.UpdateCommerceChangeTaxInfo(dto);
+        return Result.success();
+    }
+
+    @ApiOperation(value = "税票变更查询", notes = "")
+    @GetMapping(value = "/CommerceChangeTaxInfo")
+    public Result GetCommerceChangeTaxInfos() {
+        return Result.success( sgccBusinessService.GetAllCommerceChangeTaxInfoRecords() );
+    }
+
+    @ApiOperation(value = "税票变更查询", notes = "")
+    @GetMapping(value = "/CommerceChangeTaxInfo/{id}")
+    public Result GetCommerceChangeTaxInfo(@PathVariable("id") String id ) {
+        return Result.success(sgccBusinessService.GetCommerceChangeTaxInfoRecord(id));
+    }
+
+    @ApiOperation(value = "税票变更删除", notes = "")
+    @PostMapping(value = "/CommerceChangeTaxInfo/Deletes")
+    public Result DeleteCommerceChangeTaxInfos(@RequestBody DeleteDTO dto ) {
+        sgccBusinessService.DeleteCommerceChangeTaxInfoRecors(dto);
+        return Result.success();
+    }
 }
