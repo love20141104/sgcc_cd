@@ -1,12 +1,13 @@
 package com.sgcc.service;
 
+import com.sgcc.commerce.Entity.Event.CommerceChangeTaxInfoEventEntity;
 import com.sgcc.commerce.Entity.Event.CommerceNewEventEntity;
+import com.sgcc.commerce.Entity.Query.CommerceChangeTaxInfoQueryEntity;
 import com.sgcc.commerce.Entity.Query.CommerceNewQueryEntity;
 import com.sgcc.commerce.Model.CommerceModel;
+import com.sgcc.commerce.dao.CommerceChangeTaxInfoDao;
 import com.sgcc.commerce.dao.CommerceNewDao;
-import com.sgcc.commerce.dto.CommerceNewDTO;
-import com.sgcc.commerce.dto.CommerceNewSubmitDTO;
-import com.sgcc.commerce.dto.DeleteDTO;
+import com.sgcc.commerce.dto.*;
 import com.sgcc.inhabitant.Entity.Event.InhabitantNewEventEntity;
 import com.sgcc.inhabitant.Entity.Query.InhabitantNewQueryEntity;
 import com.sgcc.inhabitant.Model.InhabitantModel;
@@ -28,7 +29,11 @@ public class SgccBusinessService {
     private InhabitantNewEventEntity inhabitantNewEventEntity;
     @Autowired
     private InhabitantNewQueryEntity inhabitantNewQueryEntity;
-
+    @Autowired
+    private CommerceChangeTaxInfoEventEntity commerceChangeTaxInfoEventEntity;
+    @Autowired
+    private CommerceChangeTaxInfoQueryEntity commerceChangeTaxInfoQueryEntity;
+//CommerceChangeTaxInfoEventEntity
     // -------------------------个体工商业新装--------------------------------------
     // 微信端用
     public void SubmitCommerceNew( CommerceNewSubmitDTO dto )
@@ -117,5 +122,49 @@ public class SgccBusinessService {
         if( dto == null || dto.getIds() == null || dto.getIds().size() < 1)
             return;
         inhabitantNewEventEntity.Deletes(dto.getIds());
+    }
+    // -------------------------税票变更--------------------------------------
+    // 微信端用
+    public void SubmitCommerceChangeTaxInfo( CommerceChangeTaxInfoSubmitDTO dto )
+    {
+        CommerceModel model = new CommerceModel();
+        CommerceChangeTaxInfoDao dao = model.CommerceChangeTaxInfoSubmitDTO2Dao(dto);
+        if( dao == null )
+            return;
+        commerceChangeTaxInfoEventEntity.SaveCommerceChangeTaxInfo(dao);
+    }
+
+    public void UpdateCommerceChangeTaxInfo( CommerceChangeTaxInfoDTO dto )
+    {
+        CommerceModel model = new CommerceModel();
+        CommerceChangeTaxInfoDao dao = model.CommerceChangeTaxInfoDTO2Dao(dto);
+        if( dao == null )
+            return;
+        commerceChangeTaxInfoEventEntity.UpdateCommerceChangeTaxInfo(dao);
+    }
+
+    public List<CommerceChangeTaxInfoDTO> GetAllCommerceChangeTaxInfoRecords()
+    {
+        List<CommerceChangeTaxInfoDao> daos = commerceChangeTaxInfoQueryEntity.GetAll();
+        if( daos ==null || daos.size() < 1 )
+            return null;
+        CommerceModel model = new CommerceModel();
+        return model.CommerceChangeTaxInfoDaos2Dtos(daos);
+    }
+
+    public CommerceChangeTaxInfoDTO GetCommerceChangeTaxInfoRecord(String id)
+    {
+        CommerceChangeTaxInfoDao dao = commerceChangeTaxInfoQueryEntity.GetById(id);
+        if( dao ==null )
+            return null;
+        CommerceModel model = new CommerceModel();
+        return model.CommerceChangeTaxInfoDao2DTO(dao);
+    }
+
+    public void DeleteCommerceChangeTaxInfoRecors( DeleteDTO dto )
+    {
+        if( dto == null || dto.getIds() == null || dto.getIds().size() < 1)
+            return;
+        commerceChangeTaxInfoEventEntity.Deletes(dto.getIds());
     }
 }
