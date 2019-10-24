@@ -7,25 +7,28 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="article-service" />
-        <module name="businessGuide-service" />
-        <module name="cache-service" />
-        <module name="consumer-manager-service" />
-        <module name="domain-model" />
-        <module name="dto-model" />
-        <module name="exception" />
-        <module name="mq-service" />
-        <module name="mq_service" />
-        <module name="preBook-service" />
-        <module name="question-service" />
-        <module name="serviceHall-service" />
-        <module name="sgcc" />
-        <module name="suggestion-service" />
         <module name="test-service" />
         <module name="user-service" />
-        <module name="util-service" />
-        <module name="utils" />
+        <module name="businessGuide-service" />
+        <module name="mq_service" />
+        <module name="consumer-manager-service" />
+        <module name="domain-model" />
+        <module name="serviceHall-service" />
         <module name="wechat-service" />
+        <module name="statistics-service" />
+        <module name="util-service" />
+        <module name="cache-service" />
+        <module name="article-service" />
+        <module name="suggestion-service" />
+        <module name="sgcc" />
+        <module name="sgcc-business-service" />
+        <module name="notice-service" />
+        <module name="exception" />
+        <module name="question-service" />
+        <module name="dto-model" />
+        <module name="utils" />
+        <module name="preBook-service" />
+        <module name="mq-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -39,11 +42,14 @@
       <module name="management-service" target="1.8" />
       <module name="mq-service" target="1.8" />
       <module name="mq_service" target="1.8" />
+      <module name="notice-service" target="1.8" />
       <module name="preBook-service" target="1.8" />
       <module name="question-service" target="1.8" />
       <module name="serviceHall-service" target="1.8" />
       <module name="sgcc" target="1.8" />
+      <module name="sgcc-business-service" target="1.8" />
       <module name="sgcc_cd" target="1.8" />
+      <module name="statistics-service" target="1.8" />
       <module name="suggestion-service" target="1.8" />
       <module name="test-service" target="1.8" />
       <module name="user-service" target="1.8" />
@@ -63,10 +69,13 @@
       <module name="exception" options="-parameters" />
       <module name="management-service" options="-parameters" />
       <module name="mq-service" options="-parameters" />
+      <module name="notice-service" options="-parameters" />
       <module name="preBook-service" options="-parameters" />
       <module name="question-service" options="-parameters" />
       <module name="serviceHall-service" options="-parameters" />
       <module name="sgcc" options="-parameters" />
+      <module name="sgcc-business-service" options="-parameters" />
+      <module name="statistics-service" options="-parameters" />
       <module name="suggestion-service" options="-parameters" />
       <module name="test-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
