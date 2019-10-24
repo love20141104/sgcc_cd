@@ -25,7 +25,7 @@ public class CommerceIncreaseCapacityRepository {
      */
     public int addIncreaseCapacityOrder(CommerceIncreaseCapacityDao dao){
 
-        String sql = "insert into b_increase_capacity_commerce(id,in_order_no,user_open_id,in_company_name," +
+        String sql = "insert into b_increase_capacity_commerce(id,user_open_id,in_company_name," +
                 "in_current_capacity,in_name,in_idcard,in_telphone,cq_idcard_positive_img,cq_idcard_back_img," +
                 "in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4," +
                 "propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard," +
@@ -89,7 +89,12 @@ public class CommerceIncreaseCapacityRepository {
      */
     public int updateIncreaseCapacity(CommerceIncreaseCapacityDao dao){
 
-        String sql = "update b_increase_capacity_commerce set in_current_capacity='"+dao.getCurrentCapacity()+"'";
+        String sql = "update b_increase_capacity_commerce set id,user_open_id,in_company_name,\" +\n" +
+                "                \"in_current_capacity,in_name,in_idcard,in_telphone,cq_idcard_positive_img,cq_idcard_back_img,\" +\n" +
+                "                \"in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4,\" +\n" +
+                "                \"propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard,\" +\n" +
+                "                \"sq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank,\" +\n" +
+                "                \"invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date";
 
         StringBuffer stringBuffer = new StringBuffer();
         String whereSql = " where id='"+dao.getId()+"'";
