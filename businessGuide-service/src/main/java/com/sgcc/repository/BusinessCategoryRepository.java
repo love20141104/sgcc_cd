@@ -24,7 +24,7 @@ public class BusinessCategoryRepository {
     private JdbcTemplate jdbcTemplate;
     @Transactional
     public void insertBusinessCategory(BusinessCategoryDao businessCategoryDao){
-        String sql="insert into business_category(id,category_name,note)values ( " +
+        String sql="insert into d_business_category(id,category_name,note)values ( " +
                 "'"+businessCategoryDao.getId()+"' , '" +
                 businessCategoryDao.getCategoryName()+"' , '" +
                 businessCategoryDao.getNote()+
@@ -34,7 +34,7 @@ public class BusinessCategoryRepository {
     }
     @Transactional
     public void updateBusinessCategory(BusinessCategoryDao businessCategoryDao){
-        String sql="update  business_category set " +
+        String sql="update  d_business_category set " +
                 " category_name = '"+businessCategoryDao.getCategoryName() +
                 "', note= '" +businessCategoryDao.getNote()+
                 "' where id = '"+businessCategoryDao.getId()+"'";
@@ -43,13 +43,13 @@ public class BusinessCategoryRepository {
     }
     @Transactional
     public void deleteBusinessCategory(List<String> ids){
-        String sql = "delete from business_category where id in('"+ Utils.joinStrings(ids,"','")+"')";
+        String sql = "delete from d_business_category where id in('"+ Utils.joinStrings(ids,"','")+"')";
         jdbcTemplate.execute(sql);
         logger.info("deleteSQL:"+sql);
     }
 
     public List<BusinessCategoryDao> selectBusinessCategory(){
-            String sql = "select id ,category_name ,note from business_category";
+            String sql = "select id ,category_name ,note from d_business_category";
             logger.info("selectSQL:"+sql);
             return jdbcTemplate.query(sql, new BusinessCategoryDaoRowMapper());
     }

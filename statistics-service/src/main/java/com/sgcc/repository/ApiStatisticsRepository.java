@@ -27,7 +27,7 @@ public class ApiStatisticsRepository {
 
     @Transactional
     public void saveApiStatistics(ApiStatisticsDao apiStatisticsDao){
-        String sql="insert into api_statistics(id,api_url,user_open_id,visit_date,client_ip)" +
+        String sql="insert into b_api_statistics(id,api_url,user_open_id,visit_date,client_ip)" +
                 "values ('"+apiStatisticsDao.getId()+"','"
                 +apiStatisticsDao.getApiUrl()+"','"
                 +apiStatisticsDao.getUserOpenId()+"','"
@@ -44,7 +44,7 @@ public class ApiStatisticsRepository {
     *@date: 2019/10/18 0018
     */
     public List<ApiStatisticsQueryDto> getApiStatisticsQuery(String visit_date_begin, String visit_date_end){
-        String sql="select api_url,count(id) call_num from api_statistics ";
+        String sql="select api_url,count(id) call_num from b_api_statistics ";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(visit_date_begin)){
             sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
@@ -67,7 +67,7 @@ public class ApiStatisticsRepository {
      *@date: 2019/10/18 0018
      */
     public ApiStatistcsMonthDto getApiStatisticsCount(String visit_date_begin, String visit_date_end){
-        String sql="select count(id) num ,count(distinct client_ip) client_ip_num,count(distinct user_open_id) user_open_id_num from api_statistics ";
+        String sql="select count(id) num ,count(distinct client_ip) client_ip_num,count(distinct user_open_id) user_open_id_num from b_api_statistics ";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(visit_date_begin)){
             sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
@@ -93,7 +93,7 @@ public class ApiStatisticsRepository {
     *@date: 2019/10/18 0018
     */
     public List<ApiStatisticsDto> getApiStatistics(String visit_date_begin, String visit_date_end){
-        String sql="select id, api_url,user_open_id,visit_date,client_ip from api_statistics ";
+        String sql="select id, api_url,user_open_id,visit_date,client_ip from b_api_statistics ";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(visit_date_begin)){
             sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
@@ -115,7 +115,7 @@ public class ApiStatisticsRepository {
      *@date: 2019/10/18 0018
      */
     public Integer getApiStatisticsOpenIdNum(String visit_date_begin, String visit_date_end){
-        String sql="select count(DISTINCT(user_open_id)) usernum from api_statistics ";
+        String sql="select count(DISTINCT(user_open_id)) usernum from b_api_statistics ";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(visit_date_begin)){
             sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
@@ -188,7 +188,7 @@ public class ApiStatisticsRepository {
                 apiStatistcsMonthDto.setUserOpenIdNum(0);
             }
             apiStatistcsMonthDto.setUrlNum(rs.getInt("num"));
-            apiStatistcsMonthDto.setUserOpenIdNum(rs.getInt("client_ip_num"));
+            apiStatistcsMonthDto.setClientIpNum(rs.getInt("client_ip_num"));
             apiStatistcsMonthDto.setUserOpenIdNum(rs.getInt("user_open_id_num"));
             return apiStatistcsMonthDto;
         }

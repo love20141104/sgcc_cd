@@ -24,7 +24,7 @@ public class BusinessGuideRepository {
 
     @Transactional
     public void insertBusinessGuide(BusinessGuideDao businessGuideDao){
-        String sql="insert into business_guide(id,title,content,content_url,category_id,create_date)values ( " +
+        String sql="insert into d_business_guide(id,title,content,content_url,category_id,create_date)values ( " +
                 "'"+businessGuideDao.getId() + "'  , '" +
                 businessGuideDao.getTitle() + "'  , '" +
                 businessGuideDao.getContent()+ "'  , '" +
@@ -37,7 +37,7 @@ public class BusinessGuideRepository {
     }
     @Transactional
     public void updateBusinessGuide(BusinessGuideDao businessGuideDao){
-        String sql="update  business_guide set" +
+        String sql="update  d_business_guide set" +
                 " title= '" +businessGuideDao.getTitle()+
                 "' ,content= '" +businessGuideDao.getContent()+
                 "' ,content_url= '" +businessGuideDao.getContentUrl()+
@@ -48,7 +48,7 @@ public class BusinessGuideRepository {
     }
     @Transactional
     public void deleteBusinessGuide(List<String> ids){
-        String sql = "delete from business_guide where id in('"+ Utils.joinStrings(ids,"','")+"')";
+        String sql = "delete from d_business_guide where id in('"+ Utils.joinStrings(ids,"','")+"')";
         jdbcTemplate.execute(sql);
         logger.info("deleteSQL:"+sql);
     }
@@ -56,14 +56,14 @@ public class BusinessGuideRepository {
     public List<BusinessGuideDao> selectBusinessGuide(String categoryId){
         if(Strings.isNullOrEmpty(categoryId)){
             String sql = "select bg.id id ,bg.title title, bg.content content, bg.content_url content_url," +
-                    "bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from" +
-                    " business_guide bg left join business_category bc on bc.id=bg.category_id";
+                    " bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from" +
+                    " d_business_guide bg left join d_business_category bc on bc.id=bg.category_id";
             logger.info("selectSQL:"+sql);
             return jdbcTemplate.query(sql, new BusinessGuideDaoRowMapper());
         }else {
             String sql = "select bg.id id ,bg.title title, bg.content content, bg.content_url content_url," +
-                    "bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from" +
-                    " business_guide bg left join business_category bc on bc.id=bg.category_id" +
+                    " bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from" +
+                    " d_business_guide bg left join d_business_category bc on bc.id=bg.category_id" +
                     " where  category_id = '"+categoryId+"'";
             logger.info("selectSQL:"+sql);
             return jdbcTemplate.query(sql, new BusinessGuideDaoRowMapper());
