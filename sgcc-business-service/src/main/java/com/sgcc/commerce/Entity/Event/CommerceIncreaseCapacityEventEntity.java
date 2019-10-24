@@ -25,7 +25,6 @@ public class CommerceIncreaseCapacityEventEntity  {
 
         CommerceIncreaseCapacityDao dao = new CommerceIncreaseCapacityDao();
         dao.setCurrentCapacity(capacity);
-        dao.setOrderNo(orderNo);
         return commerceIncreaseCapacityRepository.updateIncreaseCapacity(dao);
     }
 
