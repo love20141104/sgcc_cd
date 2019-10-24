@@ -41,6 +41,7 @@
         <module>notice-service</module>
         <module>statistics-service</module>
         <module>sgcc-business-service</module>
+        <module>sys-settings</module>
     </modules>
 
 
