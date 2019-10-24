@@ -13,9 +13,7 @@ import com.sgcc.inhabitant.Entity.Query.InhabitantIncreaseCapacityQueryEntity;
 import com.sgcc.inhabitant.Entity.Query.InhabitantRenameQueryEntity;
 import com.sgcc.inhabitant.Model.InhabitantModel;
 import com.sgcc.inhabitant.dao.InhabitantRenameDao;
-import com.sgcc.inhabitant.dto.InhabitantIncreaseCapacityDTO;
-import com.sgcc.inhabitant.dto.InhabitantRenameDTO;
-import com.sgcc.inhabitant.dto.InhabitantRenameOrderListDTO;
+import com.sgcc.inhabitant.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.sgcc.commerce.Entity.Event.CommerceChangeTaxInfoEventEntity;
 import com.sgcc.commerce.Entity.Event.CommerceNewEventEntity;
@@ -29,7 +27,6 @@ import com.sgcc.inhabitant.Entity.Event.InhabitantNewEventEntity;
 import com.sgcc.inhabitant.Entity.Query.InhabitantNewQueryEntity;
 import com.sgcc.inhabitant.Model.InhabitantModel;
 import com.sgcc.inhabitant.dao.InhabitantNewDao;
-import com.sgcc.inhabitant.dto.InhabitantNewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
