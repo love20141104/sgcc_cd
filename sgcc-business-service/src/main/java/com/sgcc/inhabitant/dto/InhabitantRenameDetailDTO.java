@@ -1,5 +1,6 @@
 package com.sgcc.inhabitant.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,19 +10,15 @@ import java.util.Date;
 @Data
 @NoArgsConstructor  //生成无参构造函数
 public class InhabitantRenameDetailDTO implements Serializable {
-    private static final long serialVersionUID = 8259578234317479309L;
 
-    private String orderNo;          // 工单编号
+    private static final long serialVersionUID = -2581692864245278918L;
+    private String id;
 
-    private String userNo;
-
-    private String userName;
-
-    private String address;
-
-    private String progress;
+    private String infoId;
 
     private String houseId;          // 户号信息id
+
+    private String openId;
 
     private Boolean change;         // 产权是否变更
 
@@ -37,4 +34,19 @@ public class InhabitantRenameDetailDTO implements Serializable {
 
     private Date submitDate;
 
+    public InhabitantRenameDetailDTO(String id, String infoId, String houseId, String openId, Boolean change,
+                                     String houseName, String idCard, String contactTel, String idCardPositiveImg,
+                                     String idCardBackImg, Date submitDate) {
+        this.id = id;
+        this.infoId = infoId;
+        this.houseId = houseId;
+        this.openId = openId;
+        this.change = change;
+        this.houseName = houseName;
+        this.idCard = idCard;
+        this.contactTel = contactTel;
+        this.idCardPositiveImg = idCardPositiveImg;
+        this.idCardBackImg = idCardBackImg;
+        this.submitDate = submitDate;
+    }
 }

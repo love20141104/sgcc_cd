@@ -232,8 +232,13 @@ public class SgccBusinessService {
         try {
             InhabitantModel model = new InhabitantModel();
             InhabitantRenameDao dao = model.updateRenameTransform(dto,infoId);
-            inhabitantRenameEventEntity.updateRenameOrder(dao);
-            return Result.success();
+            int count = inhabitantRenameEventEntity.updateRenameOrder(dao);
+            if (count > 0){
+                return Result.success();
+            }else {
+                return Result.failure(TopErrorCode.GENERAL_ERR);
+            }
+
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -304,8 +309,8 @@ public class SgccBusinessService {
         try {
             List<InhabitantRenameDao> inhabitantRenameDaos = inhabitantRenameQueryEntity.queryAll();
             InhabitantModel inhabitantModel = new InhabitantModel(inhabitantRenameDaos);
-            inhabitantModel.queryRenameTransform();
-            return Result.success(inhabitantModel.getInhabitantRenameSubmitDTOS());
+            inhabitantModel.queryRenameAllTransform();
+            return Result.success(inhabitantModel.getInhabitantRenameDetailDTOs());
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.NO_DATAS);
@@ -325,7 +330,7 @@ public class SgccBusinessService {
         try {
             List<InhabitantRenameDao> daos = inhabitantRenameQueryEntity.queryRenameByInfoId(infoId);
             InhabitantModel inhabitantModel = new InhabitantModel(daos);
-            inhabitantModel.queryRenameTransform();
+            inhabitantModel.queryRenameByIdTransform();
             return Result.success(inhabitantModel.getInhabitantRenameSubmitDTOS());
         }catch (Exception e){
             e.printStackTrace();

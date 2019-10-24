@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RepairSubmitDTO implements Serializable {
+public class RepairEditDTO implements Serializable {
 
     private static final long serialVersionUID = -6165795304311113089L;
 
@@ -21,14 +21,6 @@ public class RepairSubmitDTO implements Serializable {
     private String repairTel;
 
     private String repairAddr;
-
-    private String repairImg1;
-
-    private String repairImg2;
-
-    private String repairImg3;
-
-    private Date submitDate;
 
 
 

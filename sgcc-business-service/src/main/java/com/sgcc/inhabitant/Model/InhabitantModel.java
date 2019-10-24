@@ -20,6 +20,33 @@ import java.util.Date;
 @NoArgsConstructor
 public class InhabitantModel {
 
+    private String openId;
+
+    private InhabitantRenameDao inhabitantRenameDao;
+
+    private List<InhabitantRenameDetailDTO> inhabitantRenameDetailDTOs = new ArrayList<>();
+
+    private InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO;
+
+    private InhabitantIncreaseCapacityDTO inhabitantIncreaseCapacityDTO;
+
+    private InhabitantIncreaseCapacityDao inhabitantIncreaseCapacityDao;
+
+    private List<InhabitantRenameOrderListDTO> inhabitantRenameOrderListDTOS =new ArrayList<>();
+
+    private List<InhabitantRenameDao> inhabitantRenameDaos = new ArrayList<>();
+
+    private List<InhabitantRenameSubmitDTO> inhabitantRenameSubmitDTOS = new ArrayList<>();
+
+    public InhabitantModel(InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO, String openId) {
+        this.inhabitantRenameSubmitDTO = inhabitantRenameSubmitDTO;
+        this.openId = openId;
+    }
+
+    public InhabitantModel(List<InhabitantRenameDao> inhabitantRenameDaos) {
+        this.inhabitantRenameDaos = inhabitantRenameDaos;
+    }
+
     public InhabitantNewDTO InhabitantNewDao2DTO(InhabitantNewDao dao )
     {
         InhabitantNewDTO dto = new InhabitantNewDTO();
@@ -51,41 +78,15 @@ public class InhabitantModel {
         return dtos;
     }
 
-    private String openId;
-
-    private InhabitantRenameDao inhabitantRenameDao;
-
-    private InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO;
-
-    private InhabitantIncreaseCapacityDTO inhabitantIncreaseCapacityDTO;
-
-    private InhabitantIncreaseCapacityDao inhabitantIncreaseCapacityDao;
-
-    private List<InhabitantRenameOrderListDTO> inhabitantRenameOrderListDTOS;
-
-    private List<InhabitantRenameDao> inhabitantRenameDaos = new ArrayList<>();
-
-    private List<InhabitantRenameSubmitDTO> inhabitantRenameSubmitDTOS = new ArrayList<>();
 
 
-    public InhabitantModel(InhabitantRenameDao inhabitantRenameDao) {
-        this.inhabitantRenameDao = inhabitantRenameDao;
-    }
-
-    public InhabitantModel(InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO, String openId) {
-        this.inhabitantRenameSubmitDTO = inhabitantRenameSubmitDTO;
-        this.openId = openId;
-    }
-
-    public InhabitantModel(List<InhabitantRenameDao> inhabitantRenameDaos) {
-        this.inhabitantRenameDaos = inhabitantRenameDaos;
-    }
 
 
-    public InhabitantModel(InhabitantIncreaseCapacityDTO inhabitantIncreaseCapacityDTO,String openId) {
-        this.inhabitantIncreaseCapacityDTO = inhabitantIncreaseCapacityDTO;
-        this.openId = openId;
-    }
+
+
+
+
+
 
 
 
@@ -111,10 +112,31 @@ public class InhabitantModel {
 
     }
 
+
+    public void queryRenameAllTransform(){
+        this.inhabitantRenameDaos.forEach(dao -> {
+            this.inhabitantRenameDetailDTOs.add(new InhabitantRenameDetailDTO(
+                    dao.getId(),
+                    dao.getInfoId(),
+                    dao.getHouseId(),
+                    dao.getOpenId(),
+                    dao.getChange(),
+                    dao.getHouseName(),
+                    dao.getIdCard(),
+                    dao.getContactTel(),
+                    dao.getIdCardPositiveImg(),
+                    dao.getIdCardBackImg(),
+                    dao.getSubmitDate()
+            ));
+        });
+
+    }
+
+
     /**
      * 查询更名过户订单daos转dtos
      */
-    public void queryRenameTransform(){
+    public void queryRenameByIdTransform(){
         this.inhabitantRenameDaos.forEach(inhabitantRenameDao->{
             this.inhabitantRenameSubmitDTOS.add(new InhabitantRenameSubmitDTO(
                     inhabitantRenameDao.getHouseId(),

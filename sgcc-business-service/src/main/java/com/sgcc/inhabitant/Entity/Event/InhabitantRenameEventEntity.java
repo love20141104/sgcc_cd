@@ -35,8 +35,8 @@ public class InhabitantRenameEventEntity {
      * @param dao
      * @param
      */
-    public void updateRenameOrder(InhabitantRenameDao dao){
-        inhabitantRenameRepository.updateRenameOrderList(dao);
+    public int updateRenameOrder(InhabitantRenameDao dao){
+       return inhabitantRenameRepository.updateRenameOrderList(dao);
     }
 
 }

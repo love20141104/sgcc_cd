@@ -54,13 +54,13 @@ public class InhabitantRenameRepository {
     /**
      *修改
      */
-    public void updateRenameOrderList(InhabitantRenameDao dao){
+    public int updateRenameOrderList(InhabitantRenameDao dao){
         String sql = "update b_rename_transfer set info_change="+dao.getChange()+",info_name='"+dao.getHouseName()+"'," +
                 "info_idcard='"+dao.getIdCard()+"',info_telphone='"+dao.getContactTel()+"'," +
                 "cq_idcard_img_positive='"+dao.getIdCardPositiveImg()+"'," +
                 "cq_idcard_img_back='"+dao.getIdCardBackImg()+"' " +
                 "where info_id='"+dao.getInfoId()+"'";
-        jdbcTemplate.execute(sql);
+        return jdbcTemplate.update(sql);
     }
 
     /**
