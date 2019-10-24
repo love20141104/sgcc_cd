@@ -135,6 +135,7 @@ public class BusinessGuideService {
     public void initRedisBusinessGuide(){
         List<BusinessGuideDao> businessGuideDaos = businessGuideRepository.selectBusinessGuide(null);
         List<BusinessGuideRedisDao> businessGuideDaos1 = BusinessModel.daooToredisdaoBG(businessGuideDaos);
+        bgRedisRepository.deleteAll();
         bgRedisRepository.saveAll(businessGuideDaos1);
     }
 
