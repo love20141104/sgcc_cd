@@ -142,9 +142,14 @@ public class InhabitantModel {
 
 
     /**
-     * 查询更名过户订单列表daos转dtos
+     * 修改更名过户订单列表dto转dao
      */
+    public InhabitantRenameDao updateRenameTransform(InhabitantRenameDTO dto){
 
+        InhabitantRenameDao dao = new InhabitantRenameDao();
+        BeanUtils.copyProperties(dto,dao);
+        return dao;
+    }
 
 
 

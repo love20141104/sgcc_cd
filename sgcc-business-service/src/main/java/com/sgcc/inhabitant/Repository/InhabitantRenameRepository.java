@@ -31,13 +31,13 @@ public class InhabitantRenameRepository {
 
     /**
      * 根据当前户号信息查询更名过户订单
-     * @param houseId
+     * @param infoId
      * @return
      */
-    public List<InhabitantRenameDao> findRenameOrderList(String houseId){
+    public List<InhabitantRenameDao> findRenameOrderList(String infoId){
         String sql = "select id,info_id,house_id,user_open_id,info_change,info_name,info_idcard," +
                 "info_telphone,cq_idcard_img_positive,cq_idcard_img_back,info_submit_date from b_rename_transfer" +
-                " where house_id='"+houseId+"'";
+                " where info_id='"+infoId+"'";
 
         return jdbcTemplate.query(sql,new RenameRowMapper());
     }
@@ -54,8 +54,14 @@ public class InhabitantRenameRepository {
     /**
      *修改
      */
-    public void updateRenameOrderList(String infoId,String name){
-        String sql = "update b_rename_transfer set info_name='"+name+"' where info_id='"+infoId+"'";
+    public void updateRenameOrderList(InhabitantRenameDao dao){
+        String sql = "update b_rename_transfer set user_open_id='"+dao.getOpenId()+"'," +
+                "info_change='"+dao.getChange()+"',info_name='"+dao.getHouseName()+"'," +
+                "info_idcard='"+dao.getIdCard()+"',info_telphone='"+dao.getContactTel()+"'," +
+                "cq_idcard_img_positive='"+dao.getIdCardPositiveImg()+"'," +
+                "cq_idcard_img_back='"+dao.getIdCardBackImg()+"'," +
+                "info_submit_date='"+Utils.GetTime(dao.getSubmitDate())+"' " +
+                "where info_id='"+dao.getInfoId()+"'";
         jdbcTemplate.execute(sql);
     }
 

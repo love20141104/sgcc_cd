@@ -89,23 +89,37 @@ public class CommerceIncreaseCapacityRepository {
      */
     public int updateIncreaseCapacity(CommerceIncreaseCapacityDao dao){
 
-        String sql = "update b_increase_capacity_commerce set id,user_open_id,in_company_name,\" +\n" +
-                "                \"in_current_capacity,in_name,in_idcard,in_telphone,cq_idcard_positive_img,cq_idcard_back_img,\" +\n" +
-                "                \"in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4,\" +\n" +
-                "                \"propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard,\" +\n" +
-                "                \"sq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank,\" +\n" +
-                "                \"invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date";
-
-        StringBuffer stringBuffer = new StringBuffer();
-        String whereSql = " where id='"+dao.getId()+"'";
-        if (!Strings.isNullOrEmpty(dao.getCompanyName()))
-            stringBuffer.append(",").append("in_company_name='"+dao.getCompanyName()+"'");
-
-        if (!Strings.isNullOrEmpty(stringBuffer.toString())){
-            sql += stringBuffer+whereSql;
-        }else {
-            sql += whereSql;
-        }
+        String sql = "update b_increase_capacity_commerce set user_open_id='"+dao.getOpenId()+"'," +
+                "in_company_name='"+dao.getCompanyName()+"'," +
+                "in_current_capacity="+dao.getCurrentCapacity()+"," +
+                "in_name='"+dao.getName()+"'," +
+                "in_idcard='"+dao.getIdcard()+"'," +
+                "in_telphone='"+dao.getContactTel()+"'," +
+                "cq_idcard_positive_img='"+dao.getCqIdcardPositiveImg()+"'," +
+                "cq_idcard_back_img='"+dao.getCqIdcardBackImg()+"'," +
+                "in_license_img='"+dao.getLicenseImg()+"'," +
+                "propertyRight_img1='"+dao.getSecuritiesImg1()+"'," +
+                "propertyRight_img2='"+dao.getSecuritiesImg2()+"'," +
+                "propertyRight_img3='"+dao.getSecuritiesImg3()+"'," +
+                "propertyRight_img4='"+dao.getSecuritiesImg4()+"'," +
+                "propertyRight_img5='"+dao.getSecuritiesImg5()+"'," +
+                "propertyRight_img6='"+dao.getSecuritiesImg6()+"'," +
+                "in_apply_person='"+dao.getAplicant()+"'," +
+                "in_transactor='"+dao.getTransactor()+"'," +
+                "in_transactor_idcard='"+dao.getTransactorIdcard()+"'," +
+                "sq_idcard_positive_img='"+dao.getSqIdcardPositiveImg()+"'," +
+                "sq_idcard_back_img='"+dao.getSqIdcardBackImg()+"'," +
+                "in_invoice="+dao.getInvoiceFlag()+"," +
+                "invoice_company='"+dao.getCompanyName()+"'," +
+                "invoice_number='"+dao.getInvoiceNum()+"'," +
+                "invoice_bank='"+dao.getInvoiceBank()+"'," +
+                "invoice_bank_account='"+dao.getInvoiceBankAccount()+"'," +
+                "invoice_regist_addr='"+dao.getInvoiceRegistAddr()+"'," +
+                "invoice_phone='"+dao.getInvoiceContactTel()+"'," +
+                "invoice_date='"+Utils.GetTime(dao.getInvoiceDate())+"'," +
+                "invoice_img='"+dao.getInvoiceImg()+"'," +
+                "in_submit_date='"+Utils.GetTime(dao.getSubmitDate())+"' " +
+                "where id='"+dao.getId()+"'";
 
         return jdbcTemplate.update(sql);
 
@@ -146,7 +160,7 @@ public class CommerceIncreaseCapacityRepository {
                 rs.getString("invoice_bank_account"),
                 rs.getString("invoice_regist_addr"),
                 rs.getString("invoice_phone"),
-                rs.getString("invoice_date"),
+                rs.getDate("invoice_date"),
                 rs.getString("propertyRight_img1"),
                 rs.getString("propertyRight_img2"),
                 rs.getString("propertyRight_img3"),

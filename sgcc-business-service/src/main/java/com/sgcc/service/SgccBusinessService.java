@@ -85,18 +85,18 @@ public class SgccBusinessService {
 
     /**
      * 修改个体增容订单
-     * @param capacity
-     * @param orderNo
+     * @param dto
+     * @param id
      * @return
      */
-    public Result updateIncreaseCapacityOrders(Double capacity, String orderNo){
+    public Result updateIncreaseCapacityOrders(CommerceIncreaseCapacityDTO dto, String id){
 
-        if (capacity == null || Strings.isNullOrEmpty(orderNo))
+        if (dto == null || Strings.isNullOrEmpty(id))
             return Result.failure(TopErrorCode.NO_DATAS);
 
         try {
 
-            int count = commerceIncreaseCapacityEventEntity.updateIncreaseCapacityOrder(capacity,orderNo);
+            int count = commerceIncreaseCapacityEventEntity.updateIncreaseCapacityOrder(dto,id);
             if (count > 0){
                 return Result.success("修改成功");
             }else {
@@ -225,13 +225,16 @@ public class SgccBusinessService {
      * 修改更名过户订单列表
      * @return
      */
-    public Result updateRenameOrder(String infoId,String name){
+    public Result updateRenameOrder(String infoId,InhabitantRenameDTO dto){
 
-        if (Strings.isNullOrEmpty(infoId) || Strings.isNullOrEmpty(name))
+        if (Strings.isNullOrEmpty(infoId) || dto == null)
             return Result.failure(TopErrorCode.NO_DATAS);
 
         try {
-            inhabitantRenameEventEntity.updateRenameOrder(infoId,name);
+            InhabitantModel model = new InhabitantModel();
+            InhabitantRenameDao dao = model.updateRenameTransform(dto);
+            dao.setInfoId(infoId);
+            inhabitantRenameEventEntity.updateRenameOrder(dao);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
@@ -295,11 +298,11 @@ public class SgccBusinessService {
     }
 
     /**
-     * 查询更名过户订单
+     * 查询所有更名过户订单
      * @param
      * @return
      */
-    public Result queryRenameOrder(){
+    public Result queryRenameAll(){
         try {
             List<InhabitantRenameDao> inhabitantRenameDaos = inhabitantRenameQueryEntity.queryAll();
             InhabitantModel inhabitantModel = new InhabitantModel(inhabitantRenameDaos);
@@ -312,12 +315,36 @@ public class SgccBusinessService {
     }
 
     /**
+     * 根据infoId查询更名过户表单
+     * @param infoId
+     * @return
+     */
+    public Result queryRenameByInfoId(String infoId){
+
+        if (Strings.isNullOrEmpty(infoId))
+            return Result.failure(TopErrorCode.NO_DATAS);
+
+        try {
+            List<InhabitantRenameDao> daos = inhabitantRenameQueryEntity.queryRenameByInfoId(infoId);
+            InhabitantModel inhabitantModel = new InhabitantModel(daos);
+            inhabitantModel.queryRenameTransform();
+            return Result.success(inhabitantModel.getInhabitantRenameDTOS());
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.NO_DATAS);
+        }
+
+    }
+
+
+
+    /**
      * 查询当前用户所有更名过户订单列表
      * @return
      */
-    public Result queryRenameOrderList(String orderNo){
+    public Result queryRenameOrderList(String infoId){
 
-        if (Strings.isNullOrEmpty(orderNo))
+        if (Strings.isNullOrEmpty(infoId))
             return Result.failure(TopErrorCode.NO_DATAS);
 
         List<InhabitantRenameOrderListDTO> dtos = new ArrayList<>();

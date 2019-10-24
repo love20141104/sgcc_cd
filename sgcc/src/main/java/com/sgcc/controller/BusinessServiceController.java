@@ -4,6 +4,7 @@ import com.example.result.Result;
 import com.sgcc.commerce.dto.*;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.inhabitant.dto.InhabitantNewDTO;
+import com.sgcc.inhabitant.dto.InhabitantRenameDTO;
 import com.sgcc.inhabitant.dto.InhabitantSubmitDTO;
 import com.sgcc.service.SgccBusinessService;
 import io.swagger.annotations.Api;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Api(value = "", tags = "电力业务办理接口")
@@ -44,6 +46,78 @@ public class BusinessServiceController {
 //        }
 //        return Result.failure(TopErrorCode.PARAMETER_ERR);
 //    }
+
+
+
+
+
+
+    // -------------------------居民更名过户--------------------------------------
+
+    @ApiOperation(value = "更名过户-新增", notes = "")
+    @PostMapping(value = "/renameAndTransfer/inhabitant/{openId}")
+    public Result addRenameAndTransferOrder(@RequestBody InhabitantRenameDTO inhabitantRenameDTO, @PathVariable String openId) {
+        return  sgccBusinessService.addRenameOrder(inhabitantRenameDTO,openId);
+    }
+
+    @ApiOperation(value = "更名过户-查询", notes = "")
+    @GetMapping(value = "/renameAndTransfer/inhabitant/")
+    public Result queryRenameAndTransferAll() {
+        return  sgccBusinessService.queryRenameAll();
+    }
+
+    @ApiOperation(value = "更名过户-查询", notes = "")
+    @GetMapping(value = "/renameAndTransfer/inhabitant/{orderNo}")
+    public Result queryRenameAndTransferOrderList(@PathVariable String infoId) {
+        return  sgccBusinessService.queryRenameByInfoId(infoId);
+    }
+
+    @ApiOperation(value = "更名过户-删除", notes = "")
+    @DeleteMapping(value = "/renameAndTransfer/inhabitant")
+    public Result delRenameAndTransferOrder(@RequestParam List<String> ids) {
+        return  sgccBusinessService.delRenameOrder(ids);
+    }
+
+    @ApiOperation(value = "更名过户-修改", notes = "")
+    @PutMapping(value = "/renameAndTransfer/inhabitant/{infoId}")
+    public Result updateIncreaseCapacity(@PathVariable String infoId,@RequestBody InhabitantRenameDTO dto) {
+        return  sgccBusinessService.updateRenameOrder(infoId,dto);
+    }
+
+
+    // -------------------------个体工商业增容--------------------------------------
+
+    @ApiOperation(value = "增容提交-个体工商业", notes = "")
+    @PostMapping(value = "/increaseCapacity/order/{openId}")
+    public Result addIncreaseCapacity(@RequestBody CommerceIncreaseCapacityDTO dto, @PathVariable String openId) {
+        return  sgccBusinessService.addIncreaseCapacityOrders(dto,openId);
+    }
+
+    @ApiOperation(value = "增容查询-个体工商业", notes = "")
+    @GetMapping(value = "/increaseCapacity/commerce/{openId}")
+    public Result queryIncreaseCapacityListById(@PathVariable String openId) {
+        return  sgccBusinessService.queryIncreaseCapacityAllByOpenId(openId);
+    }
+
+    @ApiOperation(value = "增容查询-个体工商业", notes = "")
+    @GetMapping(value = "/increaseCapacity/commerce")
+    public Result queryIncreaseCapacityList() {
+        return  sgccBusinessService.findIncreaseCapacityAll();
+    }
+
+    @ApiOperation(value = "增容修改-个体工商业", notes = "")
+    @PutMapping(value = "/increaseCapacity/commerce/{orderNo}")
+    public Result updateIncreaseCapacityForGeOrderList(@RequestBody CommerceIncreaseCapacityDTO dto,
+                                                       @PathVariable String id) {
+        return  sgccBusinessService.updateIncreaseCapacityOrders(dto,id);
+    }
+
+    @ApiOperation(value = "增容删除-个体工商业", notes = "")
+    @DeleteMapping(value = "/increaseCapacity/commerce")
+    public Result updateIncreaseCapacityForGeOrderList(@RequestParam List<String> ids) {
+        return  sgccBusinessService.delIncreaseCapacityOrders(ids);
+    }
+
 
     // -------------------------个体工商业新装--------------------------------------
     // -------------------------个体工商业新装--------------------------------------

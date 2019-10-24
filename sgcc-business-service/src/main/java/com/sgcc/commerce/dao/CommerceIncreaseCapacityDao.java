@@ -31,7 +31,7 @@ public class CommerceIncreaseCapacityDao implements Serializable {
     private String invoiceBankAccount;        // 银行账号
     private String invoiceRegistAddr;        // 注册地址
     private String invoiceContactTel;        // 联系电话
-    private String invoiceDate;        // 开征起始日期
+    private Date invoiceDate;        // 开征起始日期
 
     private String securitiesImg1;   // 产权证明
     private String securitiesImg2;
@@ -52,7 +52,7 @@ public class CommerceIncreaseCapacityDao implements Serializable {
                                        String licenseImg, String aplicant, String transactor, String transactorIdcard,
                                        Boolean invoiceFlag, String invoiceNum, String invoiceBank,
                                        String invoiceBankAccount, String invoiceRegistAddr, String invoiceContactTel,
-                                       String invoiceDate, String securitiesImg1, String securitiesImg2,
+                                       Date invoiceDate, String securitiesImg1, String securitiesImg2,
                                        String securitiesImg3, String securitiesImg4, String securitiesImg5,
                                        String securitiesImg6, String cqIdcardPositiveImg, String cqIdcardBackImg,
                                        String sqIdcardPositiveImg, String sqIdcardBackImg, String invoiceImg,

@@ -18,12 +18,12 @@ public class InhabitantRenameQueryEntity {
     private InhabitantRenameRepository inhabitantRenameRepository;
 
     /**
-     * 根据当前户号信息查询更名过户订单
-     * @param houseId
+     * 根据当前id查询更名过户订单
+     * @param infoId
      * @return
      */
-    public List<InhabitantRenameDao> queryRenameOrder(String houseId){
-        return inhabitantRenameRepository.findRenameOrderList(houseId);
+    public List<InhabitantRenameDao> queryRenameByInfoId(String infoId){
+        return inhabitantRenameRepository.findRenameOrderList(infoId);
     }
 
     /**

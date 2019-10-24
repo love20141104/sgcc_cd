@@ -1,7 +1,9 @@
 package com.sgcc.inhabitant.Entity.Event;
 
+import com.sgcc.inhabitant.Model.InhabitantModel;
 import com.sgcc.inhabitant.Repository.InhabitantRenameRepository;
 import com.sgcc.inhabitant.dao.InhabitantRenameDao;
+import com.sgcc.inhabitant.dto.InhabitantRenameDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,11 +38,11 @@ public class InhabitantRenameEventEntity {
 
     /**
      * 修改
-     * @param infoId
-     * @param name
+     * @param dao
+     * @param
      */
-    public void updateRenameOrder(String infoId,String name){
-        inhabitantRenameRepository.updateRenameOrderList(infoId,name);
+    public void updateRenameOrder(InhabitantRenameDao dao){
+        inhabitantRenameRepository.updateRenameOrderList(dao);
     }
 
 }
