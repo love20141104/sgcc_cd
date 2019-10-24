@@ -70,19 +70,12 @@ public class InhabitantModel {
 
     private InhabitantIncreaseCapacityDao inhabitantIncreaseCapacityDao;
 
-    private CommerceIncreaseCapacityDao commerceIncreaseCapacityDao;
-
-    private CommerceIncreaseCapacityDTO commerceIncreaseCapacityDTO;
-
     private List<InhabitantRenameOrderListDTO> inhabitantRenameOrderListDTOS;
 
     private List<InhabitantRenameDao> inhabitantRenameDaos = new ArrayList<>();
 
     private List<InhabitantRenameDTO> inhabitantRenameDTOS = new ArrayList<>();
 
-    private List<CommerceIncreaseCapacityDao> commerceIncreaseCapacityDaos = new ArrayList<>();
-
-    private List<CommerceIncreaseCapacityDTO> commerceIncreaseCapacityDTOS = new ArrayList<>();
 
     public InhabitantModel(InhabitantRenameDao inhabitantRenameDao) {
         this.inhabitantRenameDao = inhabitantRenameDao;
@@ -103,120 +96,6 @@ public class InhabitantModel {
         this.openId = openId;
     }
 
-    public InhabitantModel(String openId, CommerceIncreaseCapacityDTO commerceIncreaseCapacityDTO) {
-        this.openId = openId;
-        this.commerceIncreaseCapacityDTO = commerceIncreaseCapacityDTO;
-    }
-
-    public InhabitantModel(String openId, List<CommerceIncreaseCapacityDao> commerceIncreaseCapacityDaos) {
-        this.openId = openId;
-        this.commerceIncreaseCapacityDaos = commerceIncreaseCapacityDaos;
-    }
-
-
-
-    public void queryIncreaseCapacityByGeTransform(){
-        this.commerceIncreaseCapacityDaos.forEach(commerceIncreaseCapacityDao->{
-            this.commerceIncreaseCapacityDTOS.add(new CommerceIncreaseCapacityDTO(
-                    commerceIncreaseCapacityDao.getCompanyName(),
-                    commerceIncreaseCapacityDao.getCurrentCapacity(),
-                    commerceIncreaseCapacityDao.getName(),
-                    commerceIncreaseCapacityDao.getIdcard(),
-                    commerceIncreaseCapacityDao.getContactTel(),
-                    commerceIncreaseCapacityDao.getLicenseImg(),
-                    commerceIncreaseCapacityDao.getAplicant(),
-                    commerceIncreaseCapacityDao.getTransactor(),
-                    commerceIncreaseCapacityDao.getTransactorIdcard(),
-                    commerceIncreaseCapacityDao.getInvoiceFlag(),
-                    commerceIncreaseCapacityDao.getInvoiceNum(),
-                    commerceIncreaseCapacityDao.getInvoiceBank(),
-                    commerceIncreaseCapacityDao.getInvoiceBankAccount(),
-                    commerceIncreaseCapacityDao.getInvoiceRegistAddr(),
-                    commerceIncreaseCapacityDao.getInvoiceContactTel(),
-                    commerceIncreaseCapacityDao.getInvoiceDate(),
-                    commerceIncreaseCapacityDao.getSecuritiesImg1(),
-                    commerceIncreaseCapacityDao.getSecuritiesImg2(),
-                    commerceIncreaseCapacityDao.getSecuritiesImg3(),
-                    commerceIncreaseCapacityDao.getSecuritiesImg4(),
-                    commerceIncreaseCapacityDao.getSecuritiesImg5(),
-                    commerceIncreaseCapacityDao.getSecuritiesImg6(),
-                    commerceIncreaseCapacityDao.getCqIdcardPositiveImg(),
-                    commerceIncreaseCapacityDao.getCqIdcardBackImg(),
-                    commerceIncreaseCapacityDao.getSqIdcardPositiveImg(),
-                    commerceIncreaseCapacityDao.getSqIdcardBackImg(),
-                    commerceIncreaseCapacityDao.getInvoiceImg()
-            ));
-        });
-
-    }
-
-
-
-    public void insertIncreaseCapacityByGeTransform(){
-        String id = UUID.randomUUID().toString();
-        this.commerceIncreaseCapacityDao = new CommerceIncreaseCapacityDao(
-                id,
-                id.replace("-",""),
-                this.getOpenId(),
-                this.commerceIncreaseCapacityDTO.getCompanyName(),
-                this.commerceIncreaseCapacityDTO.getCurrentCapacity(),
-                this.commerceIncreaseCapacityDTO.getName(),
-                this.commerceIncreaseCapacityDTO.getIdcard(),
-                this.commerceIncreaseCapacityDTO.getContactTel(),
-                this.commerceIncreaseCapacityDTO.getLicenseImg(),
-                this.commerceIncreaseCapacityDTO.getAplicant(),
-                this.commerceIncreaseCapacityDTO.getTransactor(),
-                this.commerceIncreaseCapacityDTO.getTransactorIdcard(),
-                this.commerceIncreaseCapacityDTO.getInvoiceFlag(),
-                this.commerceIncreaseCapacityDTO.getInvoiceNum(),
-                this.commerceIncreaseCapacityDTO.getInvoiceBank(),
-                this.commerceIncreaseCapacityDTO.getInvoiceBankAccount(),
-                this.commerceIncreaseCapacityDTO.getInvoiceRegistAddr(),
-                this.commerceIncreaseCapacityDTO.getInvoiceContactTel(),
-                this.commerceIncreaseCapacityDTO.getInvoiceDate(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg1(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg2(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg3(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg4(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg5(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg6(),
-                this.commerceIncreaseCapacityDTO.getCqIdcardPositiveImg(),
-                this.commerceIncreaseCapacityDTO.getCqIdcardBackImg(),
-                this.commerceIncreaseCapacityDTO.getSqIdcardPositiveImg(),
-                this.commerceIncreaseCapacityDTO.getSqIdcardBackImg(),
-                this.commerceIncreaseCapacityDTO.getInvoiceImg(),
-                new Date()
-        );
-
-    }
-
-
-
-
-    /**
-     * 新增增容订单dto转dao
-     */
-    public void insertIncreaseCapacityTransform(){
-        String id = UUID.randomUUID().toString();
-        this.inhabitantIncreaseCapacityDao = new InhabitantIncreaseCapacityDao(
-                id,
-                id.replace("-",""),
-                this.getOpenId(),
-                this.inhabitantIncreaseCapacityDTO.getCurrentCapacity(),
-                this.inhabitantIncreaseCapacityDTO.getName(),
-                this.inhabitantIncreaseCapacityDTO.getIdcard(),
-                this.inhabitantIncreaseCapacityDTO.getContactTel(),
-                this.inhabitantIncreaseCapacityDTO.getAplicant(),
-                this.inhabitantIncreaseCapacityDTO.getTransactor(),
-                this.inhabitantIncreaseCapacityDTO.getTransactorIdcard(),
-                this.inhabitantIncreaseCapacityDTO.getCqIdcardPositiveImg(),
-                this.inhabitantIncreaseCapacityDTO.getCqIdcardBackImg(),
-                this.inhabitantIncreaseCapacityDTO.getSqIdcardPositiveImg(),
-                this.inhabitantIncreaseCapacityDTO.getSqIdcardBackImg(),
-                new Date()
-        );
-
-    }
 
 
 

@@ -2,23 +2,122 @@ package com.sgcc.commerce.Model;
 
 import com.example.Utils;
 import com.sgcc.commerce.dao.CommerceChangeTaxInfoDao;
+import com.sgcc.commerce.dao.CommerceIncreaseCapacityDao;
 import com.sgcc.commerce.dao.CommerceNewDao;
 import com.sgcc.commerce.dao.CommerceRenameDao;
-import com.sgcc.commerce.dto.CommerceChangeTaxInfoDTO;
-import com.sgcc.commerce.dto.CommerceChangeTaxInfoSubmitDTO;
-import com.sgcc.commerce.dto.CommerceNewDTO;
-import com.sgcc.commerce.dto.CommerceNewSubmitDTO;
+import com.sgcc.commerce.dto.*;
 import com.sgcc.inhabitant.dao.InhabitantNewDao;
 import com.sgcc.inhabitant.dto.InhabitantNewDTO;
 import com.sgcc.inhabitant.dto.InhabitantSubmitDTO;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
+@Data
+@NoArgsConstructor
 public class CommerceModel {
 
+    private String openId;
+
+    private CommerceIncreaseCapacityDao commerceIncreaseCapacityDao;
+
+    private CommerceIncreaseCapacityDTO commerceIncreaseCapacityDTO;
+
+    private List<CommerceIncreaseCapacityDao> commerceIncreaseCapacityDaos = new ArrayList<>();
+
+    private List<CommerceIncreaseCapacityDTO> commerceIncreaseCapacityDTOS = new ArrayList<>();
+
+    public CommerceModel(String openId, CommerceIncreaseCapacityDTO commerceIncreaseCapacityDTO) {
+        this.openId = openId;
+        this.commerceIncreaseCapacityDTO = commerceIncreaseCapacityDTO;
+    }
+
+    public CommerceModel(String openId, List<CommerceIncreaseCapacityDao> commerceIncreaseCapacityDaos) {
+        this.openId = openId;
+        this.commerceIncreaseCapacityDaos = commerceIncreaseCapacityDaos;
+    }
+
+    public void queryIncreaseCapacityByGeTransform(){
+        this.commerceIncreaseCapacityDaos.forEach(commerceIncreaseCapacityDao->{
+            this.commerceIncreaseCapacityDTOS.add(new CommerceIncreaseCapacityDTO(
+                    commerceIncreaseCapacityDao.getCompanyName(),
+                    commerceIncreaseCapacityDao.getCurrentCapacity(),
+                    commerceIncreaseCapacityDao.getName(),
+                    commerceIncreaseCapacityDao.getIdcard(),
+                    commerceIncreaseCapacityDao.getContactTel(),
+                    commerceIncreaseCapacityDao.getLicenseImg(),
+                    commerceIncreaseCapacityDao.getAplicant(),
+                    commerceIncreaseCapacityDao.getTransactor(),
+                    commerceIncreaseCapacityDao.getTransactorIdcard(),
+                    commerceIncreaseCapacityDao.getInvoiceFlag(),
+                    commerceIncreaseCapacityDao.getInvoiceNum(),
+                    commerceIncreaseCapacityDao.getInvoiceBank(),
+                    commerceIncreaseCapacityDao.getInvoiceBankAccount(),
+                    commerceIncreaseCapacityDao.getInvoiceRegistAddr(),
+                    commerceIncreaseCapacityDao.getInvoiceContactTel(),
+                    commerceIncreaseCapacityDao.getInvoiceDate(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg1(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg2(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg3(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg4(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg5(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg6(),
+                    commerceIncreaseCapacityDao.getCqIdcardPositiveImg(),
+                    commerceIncreaseCapacityDao.getCqIdcardBackImg(),
+                    commerceIncreaseCapacityDao.getSqIdcardPositiveImg(),
+                    commerceIncreaseCapacityDao.getSqIdcardBackImg(),
+                    commerceIncreaseCapacityDao.getInvoiceImg()
+            ));
+        });
+
+    }
+
+
+
+    public void insertIncreaseCapacityByGeTransform(){
+        String id = UUID.randomUUID().toString();
+        this.commerceIncreaseCapacityDao = new CommerceIncreaseCapacityDao(
+                id,
+                this.getOpenId(),
+                this.commerceIncreaseCapacityDTO.getCompanyName(),
+                this.commerceIncreaseCapacityDTO.getCurrentCapacity(),
+                this.commerceIncreaseCapacityDTO.getName(),
+                this.commerceIncreaseCapacityDTO.getIdcard(),
+                this.commerceIncreaseCapacityDTO.getContactTel(),
+                this.commerceIncreaseCapacityDTO.getLicenseImg(),
+                this.commerceIncreaseCapacityDTO.getAplicant(),
+                this.commerceIncreaseCapacityDTO.getTransactor(),
+                this.commerceIncreaseCapacityDTO.getTransactorIdcard(),
+                this.commerceIncreaseCapacityDTO.getInvoiceFlag(),
+                this.commerceIncreaseCapacityDTO.getInvoiceNum(),
+                this.commerceIncreaseCapacityDTO.getInvoiceBank(),
+                this.commerceIncreaseCapacityDTO.getInvoiceBankAccount(),
+                this.commerceIncreaseCapacityDTO.getInvoiceRegistAddr(),
+                this.commerceIncreaseCapacityDTO.getInvoiceContactTel(),
+                this.commerceIncreaseCapacityDTO.getInvoiceDate(),
+                this.commerceIncreaseCapacityDTO.getSecuritiesImg1(),
+                this.commerceIncreaseCapacityDTO.getSecuritiesImg2(),
+                this.commerceIncreaseCapacityDTO.getSecuritiesImg3(),
+                this.commerceIncreaseCapacityDTO.getSecuritiesImg4(),
+                this.commerceIncreaseCapacityDTO.getSecuritiesImg5(),
+                this.commerceIncreaseCapacityDTO.getSecuritiesImg6(),
+                this.commerceIncreaseCapacityDTO.getCqIdcardPositiveImg(),
+                this.commerceIncreaseCapacityDTO.getCqIdcardBackImg(),
+                this.commerceIncreaseCapacityDTO.getSqIdcardPositiveImg(),
+                this.commerceIncreaseCapacityDTO.getSqIdcardBackImg(),
+                this.commerceIncreaseCapacityDTO.getInvoiceImg(),
+                new Date()
+        );
+
+    }
+
+
+
+    // --------------------------------------------------------------------------
     public CommerceNewDTO CommerceNewDao2DTO(CommerceNewDao dao )
     {
         CommerceNewDTO dto = new CommerceNewDTO();

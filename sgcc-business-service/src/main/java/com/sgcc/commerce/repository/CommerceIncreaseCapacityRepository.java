@@ -31,7 +31,7 @@ public class CommerceIncreaseCapacityRepository {
                 "propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard," +
                 "sq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank," +
                 "invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date) values(" +
-                "'"+dao.getId()+"','"+dao.getOrderNo()+"','"+dao.getOpenId()+"','"+dao.getCompanyName()+"'," +
+                "'"+dao.getId()+"','"+dao.getOpenId()+"','"+dao.getCompanyName()+"'," +
                 ""+dao.getCurrentCapacity()+",'"+dao.getName()+"','"+dao.getIdcard()+"','"+dao.getContactTel()+"'," +
                 "'"+dao.getCqIdcardPositiveImg()+"','"+dao.getCqIdcardBackImg()+"','"+dao.getLicenseImg()+"'," +
                 "'"+dao.getSecuritiesImg1()+"','"+dao.getSecuritiesImg2()+"','"+dao.getSecuritiesImg3()+"'," +
@@ -52,16 +52,35 @@ public class CommerceIncreaseCapacityRepository {
      */
     public List<CommerceIncreaseCapacityDao> findIncreaseCapacityOrderList(String openId){
 
-        String sql = "select id,in_order_no,user_open_id,in_company_name," +
-                "in_current_capacity,in_name,in_idcard,in_telphone,cq_idcard_positive_img,cq_idcard_back_img," +
-                "in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4," +
-                "propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard," +
-                "sq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank," +
-                "invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date from " +
-                "b_increase_capacity_commerce where user_open_id='"+openId+"'";
+        String sql = "select id,user_open_id,in_company_name,in_current_capacity,in_name,in_idcard,in_telphone," +
+                "cq_idcard_positive_img,cq_idcard_back_img,in_license_img,propertyRight_img1,propertyRight_img2," +
+                "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6,in_apply_person," +
+                "in_transactor,in_transactor_idcard,sq_idcard_positive_img,sq_idcard_back_img,in_invoice," +
+                "invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
+                "invoice_date,invoice_img,in_submit_date from b_increase_capacity_commerce " +
+                "where user_open_id='"+openId+"'";
         return jdbcTemplate.query(sql,new IncreaseCapacityRowMapper());
 
     }
+
+    /**
+     *查询所有增容详情
+     * @return
+     */
+    public List<CommerceIncreaseCapacityDao> findIncreaseCapacityAll(){
+
+        String sql = "select id,user_open_id,in_company_name," +
+                "in_current_capacity,in_name,in_idcard,in_telphone,cq_idcard_positive_img,cq_idcard_back_img," +
+                "in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4," +
+                "propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard," +
+                "sq_idcard_positive_img,sq_idcard_back_img,invo,invoice_company,invoice_number,invoice_bank," +
+                "invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date from " +
+                "b_increase_capacity_commerce";
+        return jdbcTemplate.query(sql,new IncreaseCapacityRowMapper());
+
+    }
+
+
 
     /**
      * 修改增容详情
@@ -73,7 +92,7 @@ public class CommerceIncreaseCapacityRepository {
         String sql = "update b_increase_capacity_commerce set in_current_capacity='"+dao.getCurrentCapacity()+"'";
 
         StringBuffer stringBuffer = new StringBuffer();
-        String whereSql = " where in_order_no='"+dao.getOrderNo()+"'";
+        String whereSql = " where id='"+dao.getId()+"'";
         if (!Strings.isNullOrEmpty(dao.getCompanyName()))
             stringBuffer.append(",").append("in_company_name='"+dao.getCompanyName()+"'");
 
@@ -106,7 +125,6 @@ public class CommerceIncreaseCapacityRepository {
         public CommerceIncreaseCapacityDao mapRow(ResultSet rs, int i) throws SQLException {
             return new CommerceIncreaseCapacityDao(
                 rs.getString("id"),
-                rs.getString("in_order_no"),
                 rs.getString("user_open_id"),
                 rs.getString("in_company_name"),
                 rs.getDouble("in_current_capacity"),

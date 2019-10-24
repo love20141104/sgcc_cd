@@ -9,7 +9,6 @@ import java.io.Serializable;
 @NoArgsConstructor  //生成无参构造函数
 public class CommerceIncreaseCapacityDTO implements Serializable {
     private static final long serialVersionUID = -2768189117712127898L;
-//    private String openId;
     private String companyName;
     private Double currentCapacity;
     private String name;

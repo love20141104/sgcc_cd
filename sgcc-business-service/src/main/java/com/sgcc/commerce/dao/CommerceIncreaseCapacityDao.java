@@ -12,7 +12,7 @@ import java.util.Date;
 public class CommerceIncreaseCapacityDao implements Serializable {
     private static final long serialVersionUID = -4788799188392273837L;
     private String id;
-    private String orderNo;         // 订单号
+//    private String orderNo;         // 订单号
     private String openId;
     private String companyName;
     private Double currentCapacity;
@@ -47,7 +47,7 @@ public class CommerceIncreaseCapacityDao implements Serializable {
     private Date submitDate;
 
 
-    public CommerceIncreaseCapacityDao(String id, String orderNo, String openId, String companyName,
+    public CommerceIncreaseCapacityDao(String id, String openId, String companyName,
                                        Double currentCapacity, String name, String idcard, String contactTel,
                                        String licenseImg, String aplicant, String transactor, String transactorIdcard,
                                        Boolean invoiceFlag, String invoiceNum, String invoiceBank,
@@ -58,7 +58,7 @@ public class CommerceIncreaseCapacityDao implements Serializable {
                                        String sqIdcardPositiveImg, String sqIdcardBackImg, String invoiceImg,
                                        Date submitDate) {
         this.id = id;
-        this.orderNo = orderNo;
+//        this.orderNo = orderNo;
         this.openId = openId;
         this.companyName = companyName;
         this.currentCapacity = currentCapacity;

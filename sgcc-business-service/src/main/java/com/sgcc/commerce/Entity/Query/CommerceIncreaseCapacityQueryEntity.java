@@ -23,4 +23,9 @@ public class CommerceIncreaseCapacityQueryEntity {
     }
 
 
+    public List<CommerceIncreaseCapacityDao> findIncreaseCapacityAll(){
+        return commerceIncreaseCapacityRepository.findIncreaseCapacityAll();
+    }
+
+
 }
