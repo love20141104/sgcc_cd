@@ -42,6 +42,7 @@ public class CommerceChangeTaxInfoDTO implements Serializable {
     String sq_idcard_positive_img;
     String sq_idcard_back_img;
     String new_install_transactor_idcard;
+    String sq_attorney_img;
     String new_install_transactor_tel;
     Date submit_date;
 }

@@ -24,7 +24,7 @@ public class CommerceChangeTaxInfoRepository {
                 "cq_idcard_positive_img,cq_idcard_back_img,new_install_idcard,new_install_telphone,new_install_invoice," +
                 "invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
                 "invoice_date,invoice_img,new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
-                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date) values('" +
+                "sq_idcard_back_img,new_install_transactor_idcard,sq_attorney_img,new_install_transactor_tel,submit_date) values('" +
                 dao.getId()+"','" + dao.getUser_open_id() + "','" + dao.getNew_install_company_name() + "','" +
                 dao.getNew_install_address() + "','" + dao.getNew_install_license_img() + "','" +
                 dao.getPropertyRight_img1() + "','" + dao.getPropertyRight_img2() + "','" + dao.getPropertyRight_img3() + "','" +
@@ -34,8 +34,8 @@ public class CommerceChangeTaxInfoRepository {
                 dao.getInvoice_company()+ "','" +dao.getInvoice_number() + "','" + dao.getInvoice_bank() + "','" + dao.getInvoice_bank_account()
                 + "','" + dao.getInvoice_regist_addr() + "','" + dao.getInvoice_phone() + "','" + Utils.GetTime(dao.getInvoice_date()) + "','" +
                 dao.getInvoice_img() + "','" + dao.getNew_install_apply_person() + "','" + dao.getNew_install_transactor()+ "','" +
-                dao.getNew_install_transactor_idcard() + "','" + dao.getSq_idcard_positive_img() + "','" + dao.getSq_idcard_back_img()+ "','" +
-                dao.getNew_install_transactor_tel()+ "','" + Utils.GetTime(dao.getSubmit_date()) +"')";
+                dao.getSq_idcard_positive_img() + "','" + dao.getSq_idcard_back_img()+ "','" + dao.getNew_install_transactor_idcard() + "','" +
+                dao.getSq_attorney_img()+ "','" +dao.getNew_install_transactor_tel()+ "','" + Utils.GetTime(dao.getSubmit_date()) +"')";
         jdbcTemplate.execute(sql);
     }
 
@@ -71,6 +71,7 @@ public class CommerceChangeTaxInfoRepository {
                 "sq_idcard_positive_img= '" + dao.getSq_idcard_positive_img() +"',"+
                 "sq_idcard_back_img= '" + dao.getSq_idcard_back_img() +"',"+
                 "new_install_transactor_idcard= '" + dao.getNew_install_transactor_idcard() +"',"+
+                "sq_attorney_img= '" + dao.getSq_attorney_img() +"',"+
                 "new_install_transactor_tel= '" + dao.getNew_install_transactor_tel() +"',"+
                 "submit_date= '" + Utils.GetTime(dao.getSubmit_date()) +"' where id='" + dao.getId() + "'";
         jdbcTemplate.execute(sql);
@@ -91,7 +92,7 @@ public class CommerceChangeTaxInfoRepository {
                 "     cq_idcard_positive_img,cq_idcard_back_img,new_install_idcard,new_install_telphone,new_install_invoice," +
                 "     invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
                 "     invoice_date,invoice_img,new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
-                "     sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_change_taxticket";
+                "     sq_idcard_back_img,new_install_transactor_idcard,sq_attorney_img,new_install_transactor_tel,submit_date from b_change_taxticket";
 
         try {
             return jdbcTemplate.query(sql, new CommerceChangeTaxInfoRowMapper());
@@ -109,7 +110,7 @@ public class CommerceChangeTaxInfoRepository {
                 "     cq_idcard_positive_img,cq_idcard_back_img,new_install_idcard,new_install_telphone,new_install_invoice," +
                 "     invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
                 "     invoice_date,invoice_img,new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
-                "     sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_change_taxticket where id ='" + id + "'";
+                "     sq_idcard_back_img,new_install_transactor_idcard,sq_attorney_img,new_install_transactor_tel,submit_date from b_change_taxticket where id ='" + id + "'";
 
         try {
             return jdbcTemplate.queryForObject(sql, new CommerceChangeTaxInfoRowMapper());
@@ -153,6 +154,7 @@ public class CommerceChangeTaxInfoRepository {
                     rs.getString("sq_idcard_positive_img"),
                     rs.getString("sq_idcard_back_img"),
                     rs.getString("new_install_transactor_idcard"),
+                    rs.getString("sq_attorney_img"),
                     rs.getString("new_install_transactor_tel"),
                     null
             );
