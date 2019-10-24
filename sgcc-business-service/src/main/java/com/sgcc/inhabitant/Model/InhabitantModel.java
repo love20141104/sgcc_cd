@@ -2,28 +2,19 @@ package com.sgcc.inhabitant.Model;
 
 import com.example.Utils;
 import com.sgcc.inhabitant.dao.InhabitantNewDao;
-import com.sgcc.inhabitant.dto.InhabitantNewDTO;
-import com.sgcc.inhabitant.dto.InhabitantSubmitDTO;
+import com.sgcc.inhabitant.dto.*;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.sgcc.commerce.dao.CommerceIncreaseCapacityDao;
-import com.sgcc.commerce.dto.CommerceIncreaseCapacityDTO;
 import com.sgcc.inhabitant.dao.InhabitantIncreaseCapacityDao;
 import com.sgcc.inhabitant.dao.InhabitantRenameDao;
-import com.sgcc.inhabitant.dto.InhabitantIncreaseCapacityDTO;
-import com.sgcc.inhabitant.dto.InhabitantRenameDTO;
-import com.sgcc.inhabitant.dto.InhabitantRenameOrderListDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -64,7 +55,7 @@ public class InhabitantModel {
 
     private InhabitantRenameDao inhabitantRenameDao;
 
-    private InhabitantRenameDTO inhabitantRenameDTO;
+    private InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO;
 
     private InhabitantIncreaseCapacityDTO inhabitantIncreaseCapacityDTO;
 
@@ -74,15 +65,15 @@ public class InhabitantModel {
 
     private List<InhabitantRenameDao> inhabitantRenameDaos = new ArrayList<>();
 
-    private List<InhabitantRenameDTO> inhabitantRenameDTOS = new ArrayList<>();
+    private List<InhabitantRenameSubmitDTO> inhabitantRenameSubmitDTOS = new ArrayList<>();
 
 
     public InhabitantModel(InhabitantRenameDao inhabitantRenameDao) {
         this.inhabitantRenameDao = inhabitantRenameDao;
     }
 
-    public InhabitantModel(InhabitantRenameDTO inhabitantRenameDTO, String openId) {
-        this.inhabitantRenameDTO = inhabitantRenameDTO;
+    public InhabitantModel(InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO, String openId) {
+        this.inhabitantRenameSubmitDTO = inhabitantRenameSubmitDTO;
         this.openId = openId;
     }
 
@@ -107,14 +98,14 @@ public class InhabitantModel {
         this.inhabitantRenameDao = new InhabitantRenameDao(
                 id,
                 id,
-                this.inhabitantRenameDTO.getHouseId(),
+                this.inhabitantRenameSubmitDTO.getHouseId(),
                 this.getOpenId(),
-                this.inhabitantRenameDTO.getChange(),
-                this.inhabitantRenameDTO.getHouseName(),
-                this.inhabitantRenameDTO.getIdCard(),
-                this.inhabitantRenameDTO.getContactTel(),
-                this.inhabitantRenameDTO.getIdCardPositiveImg(),
-                this.inhabitantRenameDTO.getIdCardBackImg(),
+                this.inhabitantRenameSubmitDTO.getChange(),
+                this.inhabitantRenameSubmitDTO.getHouseName(),
+                this.inhabitantRenameSubmitDTO.getIdCard(),
+                this.inhabitantRenameSubmitDTO.getContactTel(),
+                this.inhabitantRenameSubmitDTO.getIdCardPositiveImg(),
+                this.inhabitantRenameSubmitDTO.getIdCardBackImg(),
                 new Date()
         );
 
@@ -125,7 +116,7 @@ public class InhabitantModel {
      */
     public void queryRenameTransform(){
         this.inhabitantRenameDaos.forEach(inhabitantRenameDao->{
-            this.inhabitantRenameDTOS.add(new InhabitantRenameDTO(
+            this.inhabitantRenameSubmitDTOS.add(new InhabitantRenameSubmitDTO(
                     inhabitantRenameDao.getInfoId(),
                     inhabitantRenameDao.getHouseId(),
                     inhabitantRenameDao.getChange(),
@@ -144,10 +135,11 @@ public class InhabitantModel {
     /**
      * 修改更名过户订单列表dto转dao
      */
-    public InhabitantRenameDao updateRenameTransform(InhabitantRenameDTO dto){
+    public InhabitantRenameDao updateRenameTransform(InhabitantRenameUpdateDTO dto,String infoId){
 
         InhabitantRenameDao dao = new InhabitantRenameDao();
         BeanUtils.copyProperties(dto,dao);
+        dao.setInfoId(infoId);
         return dao;
     }
 

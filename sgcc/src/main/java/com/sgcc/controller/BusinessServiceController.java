@@ -2,21 +2,18 @@ package com.sgcc.controller;
 
 import com.example.result.Result;
 import com.sgcc.commerce.dto.*;
-import com.sgcc.exception.TopErrorCode;
 import com.sgcc.inhabitant.dto.InhabitantNewDTO;
-import com.sgcc.inhabitant.dto.InhabitantRenameDTO;
+import com.sgcc.inhabitant.dto.InhabitantRenameSubmitDTO;
+import com.sgcc.inhabitant.dto.InhabitantRenameUpdateDTO;
 import com.sgcc.inhabitant.dto.InhabitantSubmitDTO;
 import com.sgcc.service.SgccBusinessService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Api(value = "", tags = "电力业务办理接口")
 @RestController
@@ -56,8 +53,9 @@ public class BusinessServiceController {
 
     @ApiOperation(value = "更名过户-新增", notes = "")
     @PostMapping(value = "/renameAndTransfer/inhabitant/{openId}")
-    public Result addRenameAndTransferOrder(@PathVariable String openId,@RequestBody InhabitantRenameDTO inhabitantRenameDTO) {
-        return  sgccBusinessService.addRenameOrder(inhabitantRenameDTO,openId);
+    public Result addRenameAndTransferOrder(@PathVariable String openId,
+                                            @RequestBody InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO) {
+        return  sgccBusinessService.addRenameOrder(inhabitantRenameSubmitDTO,openId);
     }
 
     @ApiOperation(value = "更名过户-查询", notes = "")
@@ -80,7 +78,7 @@ public class BusinessServiceController {
 
     @ApiOperation(value = "更名过户-修改", notes = "")
     @PutMapping(value = "/renameAndTransfer/inhabitant/{infoId}")
-    public Result updateIncreaseCapacity(@PathVariable String infoId,@RequestBody InhabitantRenameDTO dto) {
+    public Result updateIncreaseCapacity(@PathVariable String infoId,@RequestBody InhabitantRenameUpdateDTO dto) {
         return  sgccBusinessService.updateRenameOrder(infoId,dto);
     }
 
@@ -89,7 +87,7 @@ public class BusinessServiceController {
 
     @ApiOperation(value = "增容提交-个体工商业", notes = "")
     @PostMapping(value = "/increaseCapacity/order/{openId}")
-    public Result addIncreaseCapacity(@PathVariable String openId,@RequestBody CommerceIncreaseCapacityDTO dto) {
+    public Result addIncreaseCapacity(@PathVariable String openId,@RequestBody CommerceIncreaseCapacitySubmitDTO dto) {
         return  sgccBusinessService.addIncreaseCapacityOrders(dto,openId);
     }
 
@@ -108,7 +106,7 @@ public class BusinessServiceController {
     @ApiOperation(value = "增容修改-个体工商业", notes = "")
     @PutMapping(value = "/increaseCapacity/commerce/{id}")
     public Result updateIncreaseCapacityForGeOrderList(@PathVariable String id,
-                                                       @RequestBody CommerceIncreaseCapacityDTO dto) {
+                                                       @RequestBody CommerceIncreaseCapacityUpdateDTO dto) {
         return  sgccBusinessService.updateIncreaseCapacityOrders(dto,id);
     }
 

@@ -1,17 +1,10 @@
 package com.sgcc.commerce.Entity.Event;
 
-import com.example.Utils;
 import com.sgcc.commerce.dao.CommerceIncreaseCapacityDao;
-import com.sgcc.commerce.dto.CommerceIncreaseCapacityDTO;
 import com.sgcc.commerce.repository.CommerceIncreaseCapacityRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Component
@@ -24,12 +17,7 @@ public class CommerceIncreaseCapacityEventEntity  {
         return commerceIncreaseCapacityRepository.addIncreaseCapacityOrder(dao);
     }
 
-    public int updateIncreaseCapacityOrder(CommerceIncreaseCapacityDTO dto, String id){
-
-        CommerceIncreaseCapacityDao dao = new CommerceIncreaseCapacityDao();
-        BeanUtils.copyProperties(dto,dao);
-        dao.setInvoiceDate(Utils.GetDate(dto.getInvoiceDate()));
-        dao.setId(id);
+    public int updateIncreaseCapacityOrder(CommerceIncreaseCapacityDao dao){
         return commerceIncreaseCapacityRepository.updateIncreaseCapacity(dao);
     }
 

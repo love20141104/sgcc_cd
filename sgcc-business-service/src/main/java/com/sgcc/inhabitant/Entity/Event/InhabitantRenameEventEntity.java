@@ -1,16 +1,10 @@
 package com.sgcc.inhabitant.Entity.Event;
 
-import com.sgcc.inhabitant.Model.InhabitantModel;
 import com.sgcc.inhabitant.Repository.InhabitantRenameRepository;
 import com.sgcc.inhabitant.dao.InhabitantRenameDao;
-import com.sgcc.inhabitant.dto.InhabitantRenameDTO;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Component

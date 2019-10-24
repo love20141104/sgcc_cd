@@ -4,11 +4,7 @@ import com.example.Utils;
 import com.sgcc.commerce.dao.CommerceChangeTaxInfoDao;
 import com.sgcc.commerce.dao.CommerceIncreaseCapacityDao;
 import com.sgcc.commerce.dao.CommerceNewDao;
-import com.sgcc.commerce.dao.CommerceRenameDao;
 import com.sgcc.commerce.dto.*;
-import com.sgcc.inhabitant.dao.InhabitantNewDao;
-import com.sgcc.inhabitant.dto.InhabitantNewDTO;
-import com.sgcc.inhabitant.dto.InhabitantSubmitDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -25,15 +21,15 @@ public class CommerceModel {
 
     private CommerceIncreaseCapacityDao commerceIncreaseCapacityDao;
 
-    private CommerceIncreaseCapacityDTO commerceIncreaseCapacityDTO;
+    private CommerceIncreaseCapacitySubmitDTO commerceIncreaseCapacitySubmitDTO;
 
     private List<CommerceIncreaseCapacityDao> commerceIncreaseCapacityDaos = new ArrayList<>();
 
-    private List<CommerceIncreaseCapacityDTO> commerceIncreaseCapacityDTOS = new ArrayList<>();
+    private List<CommerceIncreaseCapacitySubmitDTO> commerceIncreaseCapacitySubmitDTOS = new ArrayList<>();
 
-    public CommerceModel(String openId, CommerceIncreaseCapacityDTO commerceIncreaseCapacityDTO) {
+    public CommerceModel(String openId, CommerceIncreaseCapacitySubmitDTO commerceIncreaseCapacitySubmitDTO) {
         this.openId = openId;
-        this.commerceIncreaseCapacityDTO = commerceIncreaseCapacityDTO;
+        this.commerceIncreaseCapacitySubmitDTO = commerceIncreaseCapacitySubmitDTO;
     }
 
     public CommerceModel(String openId, List<CommerceIncreaseCapacityDao> commerceIncreaseCapacityDaos) {
@@ -43,7 +39,7 @@ public class CommerceModel {
 
     public void queryIncreaseCapacityByGeTransform(){
         this.commerceIncreaseCapacityDaos.forEach(commerceIncreaseCapacityDao->{
-            this.commerceIncreaseCapacityDTOS.add(new CommerceIncreaseCapacityDTO(
+            this.commerceIncreaseCapacitySubmitDTOS.add(new CommerceIncreaseCapacitySubmitDTO(
                     commerceIncreaseCapacityDao.getCompanyName(),
                     commerceIncreaseCapacityDao.getCurrentCapacity(),
                     commerceIncreaseCapacityDao.getName(),
@@ -83,38 +79,45 @@ public class CommerceModel {
         this.commerceIncreaseCapacityDao = new CommerceIncreaseCapacityDao(
                 id,
                 this.getOpenId(),
-                this.commerceIncreaseCapacityDTO.getCompanyName(),
-                this.commerceIncreaseCapacityDTO.getCurrentCapacity(),
-                this.commerceIncreaseCapacityDTO.getName(),
-                this.commerceIncreaseCapacityDTO.getIdcard(),
-                this.commerceIncreaseCapacityDTO.getContactTel(),
-                this.commerceIncreaseCapacityDTO.getLicenseImg(),
-                this.commerceIncreaseCapacityDTO.getAplicant(),
-                this.commerceIncreaseCapacityDTO.getTransactor(),
-                this.commerceIncreaseCapacityDTO.getTransactorIdcard(),
-                this.commerceIncreaseCapacityDTO.getInvoiceFlag(),
-                this.commerceIncreaseCapacityDTO.getInvoiceNum(),
-                this.commerceIncreaseCapacityDTO.getInvoiceBank(),
-                this.commerceIncreaseCapacityDTO.getInvoiceBankAccount(),
-                this.commerceIncreaseCapacityDTO.getInvoiceRegistAddr(),
-                this.commerceIncreaseCapacityDTO.getInvoiceContactTel(),
-                Utils.GetDate(this.commerceIncreaseCapacityDTO.getInvoiceDate()),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg1(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg2(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg3(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg4(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg5(),
-                this.commerceIncreaseCapacityDTO.getSecuritiesImg6(),
-                this.commerceIncreaseCapacityDTO.getCqIdcardPositiveImg(),
-                this.commerceIncreaseCapacityDTO.getCqIdcardBackImg(),
-                this.commerceIncreaseCapacityDTO.getSqIdcardPositiveImg(),
-                this.commerceIncreaseCapacityDTO.getSqIdcardBackImg(),
-                this.commerceIncreaseCapacityDTO.getInvoiceImg(),
+                this.commerceIncreaseCapacitySubmitDTO.getCompanyName(),
+                this.commerceIncreaseCapacitySubmitDTO.getCurrentCapacity(),
+                this.commerceIncreaseCapacitySubmitDTO.getName(),
+                this.commerceIncreaseCapacitySubmitDTO.getIdcard(),
+                this.commerceIncreaseCapacitySubmitDTO.getContactTel(),
+                this.commerceIncreaseCapacitySubmitDTO.getLicenseImg(),
+                this.commerceIncreaseCapacitySubmitDTO.getAplicant(),
+                this.commerceIncreaseCapacitySubmitDTO.getTransactor(),
+                this.commerceIncreaseCapacitySubmitDTO.getTransactorIdcard(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoiceFlag(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoiceNum(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoiceBank(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoiceBankAccount(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoiceRegistAddr(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoiceContactTel(),
+                Utils.GetDate(this.commerceIncreaseCapacitySubmitDTO.getInvoiceDate()),
+                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg1(),
+                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg2(),
+                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg3(),
+                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg4(),
+                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg5(),
+                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg6(),
+                this.commerceIncreaseCapacitySubmitDTO.getCqIdcardPositiveImg(),
+                this.commerceIncreaseCapacitySubmitDTO.getCqIdcardBackImg(),
+                this.commerceIncreaseCapacitySubmitDTO.getSqIdcardPositiveImg(),
+                this.commerceIncreaseCapacitySubmitDTO.getSqIdcardBackImg(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoiceImg(),
                 new Date()
         );
 
     }
 
+
+    public CommerceIncreaseCapacityDao updateIncreaseCapacityTransform(CommerceIncreaseCapacityUpdateDTO dto, String id){
+        CommerceIncreaseCapacityDao dao = new CommerceIncreaseCapacityDao();
+        BeanUtils.copyProperties(dto,dao);
+        dao.setId(id);
+        return dao;
+    }
 
 
     // --------------------------------------------------------------------------

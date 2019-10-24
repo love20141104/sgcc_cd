@@ -1,13 +1,13 @@
 package com.sgcc.commerce.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+
 @Data
 @NoArgsConstructor  //生成无参构造函数
-public class CommerceIncreaseCapacityDTO implements Serializable {
+public class CommerceIncreaseCapacityUpdateDTO implements Serializable {
     private static final long serialVersionUID = -2768189117712127898L;
     private String companyName;
     private Double currentCapacity;
@@ -26,7 +26,6 @@ public class CommerceIncreaseCapacityDTO implements Serializable {
     private String invoiceBankAccount;        // 银行账号
     private String invoiceRegistAddr;        // 注册地址
     private String invoiceContactTel;        // 联系电话
-    private String invoiceDate;        // 开征起始日期
 
     private String securitiesImg1;   // 产权证明
     private String securitiesImg2;
@@ -41,16 +40,15 @@ public class CommerceIncreaseCapacityDTO implements Serializable {
     private String invoiceImg;              // 一般纳税人资格证明
 
 
-    public CommerceIncreaseCapacityDTO(String companyName, Double currentCapacity,
-                                       String name, String idcard, String contactTel, String licenseImg,
-                                       String aplicant, String transactor, String transactorIdcard,
-                                       Boolean invoiceFlag, String invoiceNum, String invoiceBank,
-                                       String invoiceBankAccount, String invoiceRegistAddr, String invoiceContactTel,
-                                       String invoiceDate, String securitiesImg1, String securitiesImg2,
-                                       String securitiesImg3, String securitiesImg4, String securitiesImg5,
-                                       String securitiesImg6, String cqIdcardPositiveImg, String cqIdcardBackImg,
-                                       String sqIdcardPositiveImg, String sqIdcardBackImg, String invoiceImg) {
-//        this.openId = openId;
+    public CommerceIncreaseCapacityUpdateDTO(String companyName, Double currentCapacity,
+                                             String name, String idcard, String contactTel, String licenseImg,
+                                             String aplicant, String transactor, String transactorIdcard,
+                                             Boolean invoiceFlag, String invoiceNum, String invoiceBank,
+                                             String invoiceBankAccount, String invoiceRegistAddr, String invoiceContactTel,
+                                             String securitiesImg1, String securitiesImg2,
+                                             String securitiesImg3, String securitiesImg4, String securitiesImg5,
+                                             String securitiesImg6, String cqIdcardPositiveImg, String cqIdcardBackImg,
+                                             String sqIdcardPositiveImg, String sqIdcardBackImg, String invoiceImg) {
         this.companyName = companyName;
         this.currentCapacity = currentCapacity;
         this.name = name;
@@ -66,7 +64,6 @@ public class CommerceIncreaseCapacityDTO implements Serializable {
         this.invoiceBankAccount = invoiceBankAccount;
         this.invoiceRegistAddr = invoiceRegistAddr;
         this.invoiceContactTel = invoiceContactTel;
-        this.invoiceDate = invoiceDate;
         this.securitiesImg1 = securitiesImg1;
         this.securitiesImg2 = securitiesImg2;
         this.securitiesImg3 = securitiesImg3;

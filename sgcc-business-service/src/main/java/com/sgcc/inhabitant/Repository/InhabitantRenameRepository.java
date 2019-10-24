@@ -55,12 +55,10 @@ public class InhabitantRenameRepository {
      *修改
      */
     public void updateRenameOrderList(InhabitantRenameDao dao){
-        String sql = "update b_rename_transfer set user_open_id='"+dao.getOpenId()+"'," +
-                "info_change="+dao.getChange()+",info_name='"+dao.getHouseName()+"'," +
+        String sql = "update b_rename_transfer set info_change="+dao.getChange()+",info_name='"+dao.getHouseName()+"'," +
                 "info_idcard='"+dao.getIdCard()+"',info_telphone='"+dao.getContactTel()+"'," +
                 "cq_idcard_img_positive='"+dao.getIdCardPositiveImg()+"'," +
-                "cq_idcard_img_back='"+dao.getIdCardBackImg()+"'," +
-                "info_submit_date='"+Utils.GetTime(dao.getSubmitDate())+"' " +
+                "cq_idcard_img_back='"+dao.getIdCardBackImg()+"' " +
                 "where info_id='"+dao.getInfoId()+"'";
         jdbcTemplate.execute(sql);
     }

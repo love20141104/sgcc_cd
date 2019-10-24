@@ -1,11 +1,8 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
-import com.sgcc.commerce.dto.CommerceIncreaseCapacityDTO;
 import com.sgcc.dto.OrderTransDTO;
 import com.sgcc.dto.PayResultDTO;
-import com.sgcc.inhabitant.dto.InhabitantIncreaseCapacityDTO;
-import com.sgcc.inhabitant.dto.InhabitantRenameDTO;
 import com.sgcc.service.RecordService;
 import com.sgcc.service.SgccBusinessService;
 import com.sgcc.service.UserService;
@@ -15,9 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
 
 
 @Api(value = "", tags = "用户相关业务接口")

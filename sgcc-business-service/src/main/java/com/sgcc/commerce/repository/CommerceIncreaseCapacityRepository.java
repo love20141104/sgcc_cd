@@ -40,7 +40,7 @@ public class CommerceIncreaseCapacityRepository {
                 "'"+dao.getSqIdcardPositiveImg()+"','"+dao.getSqIdcardBackImg()+"',"+dao.getInvoiceFlag()+"," +
                 "'"+dao.getCompanyName()+"','"+dao.getInvoiceNum()+"','"+dao.getInvoiceBank()+"'," +
                 "'"+dao.getInvoiceBankAccount()+"','"+dao.getInvoiceRegistAddr()+"','"+dao.getInvoiceContactTel()+"'," +
-                "'"+dao.getInvoiceDate()+"','"+dao.getInvoiceImg()+"','"+Utils.GetTime(dao.getSubmitDate())+"')";
+                "'"+Utils.GetTime(dao.getInvoiceDate())+"','"+dao.getInvoiceImg()+"','"+Utils.GetTime(dao.getSubmitDate())+"')";
         return jdbcTemplate.update(sql);
 
     }
@@ -116,7 +116,6 @@ public class CommerceIncreaseCapacityRepository {
                 "invoice_bank_account='"+dao.getInvoiceBankAccount()+"'," +
                 "invoice_regist_addr='"+dao.getInvoiceRegistAddr()+"'," +
                 "invoice_phone='"+dao.getInvoiceContactTel()+"'," +
-                "invoice_date='"+Utils.GetTime(dao.getInvoiceDate())+"'," +
                 "invoice_img='"+dao.getInvoiceImg()+"' " +
                 "where id='"+dao.getId()+"'";
 
