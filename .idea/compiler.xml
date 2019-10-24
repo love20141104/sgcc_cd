@@ -18,6 +18,7 @@
         <module name="notice-service" />
         <module name="preBook-service" />
         <module name="question-service" />
+        <module name="repair-service" />
         <module name="serviceHall-service" />
         <module name="sgcc" />
         <module name="sgcc-business-service" />
@@ -45,6 +46,7 @@
       <module name="notice-service" target="1.8" />
       <module name="preBook-service" target="1.8" />
       <module name="question-service" target="1.8" />
+      <module name="repair-service" target="1.8" />
       <module name="serviceHall-service" target="1.8" />
       <module name="sgcc" target="1.8" />
       <module name="sgcc-business-service" target="1.8" />
@@ -73,6 +75,7 @@
       <module name="notice-service" options="-parameters" />
       <module name="preBook-service" options="-parameters" />
       <module name="question-service" options="-parameters" />
+      <module name="repair-service" options="-parameters" />
       <module name="serviceHall-service" options="-parameters" />
       <module name="sgcc" options="-parameters" />
       <module name="sgcc-business-service" options="-parameters" />
