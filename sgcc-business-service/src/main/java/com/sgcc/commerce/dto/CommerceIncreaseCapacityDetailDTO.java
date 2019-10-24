@@ -1,6 +1,5 @@
-package com.sgcc.commerce.dao;
+package com.sgcc.commerce.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,10 +8,9 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor  //生成无参构造函数
-public class CommerceIncreaseCapacityDao implements Serializable {
+public class CommerceIncreaseCapacityDetailDTO implements Serializable {
     private static final long serialVersionUID = -4788799188392273837L;
-    private String id;
-    private String orderNo;         // 订单号
+    private String orderNo;
     private String openId;
     private String companyName;
     private Double currentCapacity;
@@ -44,20 +42,18 @@ public class CommerceIncreaseCapacityDao implements Serializable {
     private String sqIdcardPositiveImg;     // 代办人
     private String sqIdcardBackImg;
     private String invoiceImg;              // 一般纳税人资格证明
-    private Date submitDate;
 
-
-    public CommerceIncreaseCapacityDao(String id, String orderNo, String openId, String companyName,
-                                       Double currentCapacity, String name, String idcard, String contactTel,
-                                       String licenseImg, String aplicant, String transactor, String transactorIdcard,
-                                       Boolean invoiceFlag, String invoiceNum, String invoiceBank,
-                                       String invoiceBankAccount, String invoiceRegistAddr, String invoiceContactTel,
-                                       String invoiceDate, String securitiesImg1, String securitiesImg2,
-                                       String securitiesImg3, String securitiesImg4, String securitiesImg5,
-                                       String securitiesImg6, String cqIdcardPositiveImg, String cqIdcardBackImg,
-                                       String sqIdcardPositiveImg, String sqIdcardBackImg, String invoiceImg,
-                                       Date submitDate) {
-        this.id = id;
+    public CommerceIncreaseCapacityDetailDTO(String orderNo, String openId, String companyName,
+                                             Double currentCapacity, String name, String idcard,
+                                             String contactTel, String licenseImg, String aplicant,
+                                             String transactor, String transactorIdcard, Boolean invoiceFlag,
+                                             String invoiceNum, String invoiceBank, String invoiceBankAccount,
+                                             String invoiceRegistAddr, String invoiceContactTel, String invoiceDate,
+                                             String securitiesImg1, String securitiesImg2, String securitiesImg3,
+                                             String securitiesImg4, String securitiesImg5, String securitiesImg6,
+                                             String cqIdcardPositiveImg, String cqIdcardBackImg,
+                                             String sqIdcardPositiveImg, String sqIdcardBackImg,
+                                             String invoiceImg) {
         this.orderNo = orderNo;
         this.openId = openId;
         this.companyName = companyName;
@@ -87,8 +83,5 @@ public class CommerceIncreaseCapacityDao implements Serializable {
         this.sqIdcardPositiveImg = sqIdcardPositiveImg;
         this.sqIdcardBackImg = sqIdcardBackImg;
         this.invoiceImg = invoiceImg;
-        this.submitDate = submitDate;
-
-
     }
 }
