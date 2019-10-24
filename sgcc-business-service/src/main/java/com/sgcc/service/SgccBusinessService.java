@@ -140,19 +140,19 @@ public class SgccBusinessService {
 
     /**
      *根据openId查询所有个体增容提交单
-     * @param openId
+     * @param id
      * @return
      */
-    public Result queryIncreaseCapacityAllByOpenId(String openId){
+    public Result queryIncreaseCapacityAllById(String id){
 
-        if (Strings.isNullOrEmpty(openId))
+        if (Strings.isNullOrEmpty(id))
             return Result.failure(TopErrorCode.NO_DATAS);
         try {
 
             List<CommerceIncreaseCapacityDao> daos = commerceIncreaseCapacityQueryEntity.
-                    findIncreaseCapacityOrderList(openId);
+                    findIncreaseCapacityOrderList(id);
 
-            CommerceModel commerceModel = new CommerceModel(openId,daos);
+            CommerceModel commerceModel = new CommerceModel(null,daos);
             commerceModel.queryIncreaseCapacityByGeTransform();
             return Result.success(commerceModel.getCommerceIncreaseCapacityDTOS());
         }catch (Exception e){

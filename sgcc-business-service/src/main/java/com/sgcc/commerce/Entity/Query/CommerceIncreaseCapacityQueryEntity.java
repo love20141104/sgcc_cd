@@ -18,8 +18,8 @@ public class CommerceIncreaseCapacityQueryEntity {
     @Autowired
     private CommerceIncreaseCapacityRepository commerceIncreaseCapacityRepository;
 
-    public List<CommerceIncreaseCapacityDao> findIncreaseCapacityOrderList(String openId){
-        return commerceIncreaseCapacityRepository.findIncreaseCapacityOrderList(openId);
+    public List<CommerceIncreaseCapacityDao> findIncreaseCapacityOrderList(String id){
+        return commerceIncreaseCapacityRepository.findIncreaseCapacityOrderList(id);
     }
 
 

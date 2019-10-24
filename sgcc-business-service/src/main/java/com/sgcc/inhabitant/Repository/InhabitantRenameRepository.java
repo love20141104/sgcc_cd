@@ -56,7 +56,7 @@ public class InhabitantRenameRepository {
      */
     public void updateRenameOrderList(InhabitantRenameDao dao){
         String sql = "update b_rename_transfer set user_open_id='"+dao.getOpenId()+"'," +
-                "info_change='"+dao.getChange()+"',info_name='"+dao.getHouseName()+"'," +
+                "info_change="+dao.getChange()+",info_name='"+dao.getHouseName()+"'," +
                 "info_idcard='"+dao.getIdCard()+"',info_telphone='"+dao.getContactTel()+"'," +
                 "cq_idcard_img_positive='"+dao.getIdCardPositiveImg()+"'," +
                 "cq_idcard_img_back='"+dao.getIdCardBackImg()+"'," +

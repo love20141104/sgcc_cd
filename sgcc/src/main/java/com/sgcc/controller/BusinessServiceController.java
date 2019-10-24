@@ -56,7 +56,7 @@ public class BusinessServiceController {
 
     @ApiOperation(value = "更名过户-新增", notes = "")
     @PostMapping(value = "/renameAndTransfer/inhabitant/{openId}")
-    public Result addRenameAndTransferOrder(@RequestBody InhabitantRenameDTO inhabitantRenameDTO, @PathVariable String openId) {
+    public Result addRenameAndTransferOrder(@PathVariable String openId,@RequestBody InhabitantRenameDTO inhabitantRenameDTO) {
         return  sgccBusinessService.addRenameOrder(inhabitantRenameDTO,openId);
     }
 
@@ -67,14 +67,14 @@ public class BusinessServiceController {
     }
 
     @ApiOperation(value = "更名过户-查询", notes = "")
-    @GetMapping(value = "/renameAndTransfer/inhabitant/{orderNo}")
+    @GetMapping(value = "/renameAndTransfer/inhabitant/{infoId}")
     public Result queryRenameAndTransferOrderList(@PathVariable String infoId) {
         return  sgccBusinessService.queryRenameByInfoId(infoId);
     }
 
     @ApiOperation(value = "更名过户-删除", notes = "")
     @DeleteMapping(value = "/renameAndTransfer/inhabitant")
-    public Result delRenameAndTransferOrder(@RequestParam List<String> ids) {
+    public Result delRenameAndTransferOrder(@RequestBody List<String> ids) {
         return  sgccBusinessService.delRenameOrder(ids);
     }
 
@@ -89,14 +89,14 @@ public class BusinessServiceController {
 
     @ApiOperation(value = "增容提交-个体工商业", notes = "")
     @PostMapping(value = "/increaseCapacity/order/{openId}")
-    public Result addIncreaseCapacity(@RequestBody CommerceIncreaseCapacityDTO dto, @PathVariable String openId) {
+    public Result addIncreaseCapacity(@PathVariable String openId,@RequestBody CommerceIncreaseCapacityDTO dto) {
         return  sgccBusinessService.addIncreaseCapacityOrders(dto,openId);
     }
 
     @ApiOperation(value = "增容查询-个体工商业", notes = "")
-    @GetMapping(value = "/increaseCapacity/commerce/{openId}")
-    public Result queryIncreaseCapacityListById(@PathVariable String openId) {
-        return  sgccBusinessService.queryIncreaseCapacityAllByOpenId(openId);
+    @GetMapping(value = "/increaseCapacity/commerce/{id}")
+    public Result queryIncreaseCapacityListById(@PathVariable String id) {
+        return  sgccBusinessService.queryIncreaseCapacityAllById(id);
     }
 
     @ApiOperation(value = "增容查询-个体工商业", notes = "")
@@ -106,15 +106,15 @@ public class BusinessServiceController {
     }
 
     @ApiOperation(value = "增容修改-个体工商业", notes = "")
-    @PutMapping(value = "/increaseCapacity/commerce/{orderNo}")
-    public Result updateIncreaseCapacityForGeOrderList(@RequestBody CommerceIncreaseCapacityDTO dto,
-                                                       @PathVariable String id) {
+    @PutMapping(value = "/increaseCapacity/commerce/{id}")
+    public Result updateIncreaseCapacityForGeOrderList(@PathVariable String id,
+                                                       @RequestBody CommerceIncreaseCapacityDTO dto) {
         return  sgccBusinessService.updateIncreaseCapacityOrders(dto,id);
     }
 
     @ApiOperation(value = "增容删除-个体工商业", notes = "")
     @DeleteMapping(value = "/increaseCapacity/commerce")
-    public Result updateIncreaseCapacityForGeOrderList(@RequestParam List<String> ids) {
+    public Result updateIncreaseCapacityForGeOrderList(@RequestBody List<String> ids) {
         return  sgccBusinessService.delIncreaseCapacityOrders(ids);
     }
 

@@ -1,5 +1,6 @@
 package com.sgcc.commerce.Entity.Event;
 
+import com.example.Utils;
 import com.sgcc.commerce.dao.CommerceIncreaseCapacityDao;
 import com.sgcc.commerce.dto.CommerceIncreaseCapacityDTO;
 import com.sgcc.commerce.repository.CommerceIncreaseCapacityRepository;
@@ -27,6 +28,7 @@ public class CommerceIncreaseCapacityEventEntity  {
 
         CommerceIncreaseCapacityDao dao = new CommerceIncreaseCapacityDao();
         BeanUtils.copyProperties(dto,dao);
+        dao.setInvoiceDate(Utils.GetDate(dto.getInvoiceDate()));
         dao.setId(id);
         return commerceIncreaseCapacityRepository.updateIncreaseCapacity(dao);
     }
