@@ -40,6 +40,7 @@
         <module>businessGuide-service</module>
         <module>notice-service</module>
         <module>statistics-service</module>
+        <module>sgcc-business-service</module>
     </modules>
 
 

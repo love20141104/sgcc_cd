@@ -165,6 +165,11 @@
             <artifactId>statistics-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.sgcc</groupId>
+            <artifactId>sgcc-business-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 

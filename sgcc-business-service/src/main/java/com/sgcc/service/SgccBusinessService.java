@@ -13,9 +13,7 @@ import com.sgcc.inhabitant.Entity.Query.InhabitantIncreaseCapacityQueryEntity;
 import com.sgcc.inhabitant.Entity.Query.InhabitantRenameQueryEntity;
 import com.sgcc.inhabitant.Model.InhabitantModel;
 import com.sgcc.inhabitant.dao.InhabitantRenameDao;
-import com.sgcc.inhabitant.dto.InhabitantIncreaseCapacityDTO;
-import com.sgcc.inhabitant.dto.InhabitantRenameDTO;
-import com.sgcc.inhabitant.dto.InhabitantRenameOrderListDTO;
+import com.sgcc.inhabitant.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.sgcc.commerce.Entity.Event.CommerceChangeTaxInfoEventEntity;
 import com.sgcc.commerce.Entity.Event.CommerceNewEventEntity;
@@ -29,7 +27,6 @@ import com.sgcc.inhabitant.Entity.Event.InhabitantNewEventEntity;
 import com.sgcc.inhabitant.Entity.Query.InhabitantNewQueryEntity;
 import com.sgcc.inhabitant.Model.InhabitantModel;
 import com.sgcc.inhabitant.dao.InhabitantNewDao;
-import com.sgcc.inhabitant.dto.InhabitantNewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,17 +44,24 @@ public class SgccBusinessService {
     private InhabitantRenameQueryEntity inhabitantRenameQueryEntity;
 
     @Autowired
-    private InhabitantIncreaseCapacityEventEntity inhabitantIncreaseCapacityEventEntity;
-
-    @Autowired
-    private InhabitantIncreaseCapacityQueryEntity inhabitantIncreaseCapacityQueryEntity;
-
-    @Autowired
     private CommerceIncreaseCapacityEventEntity commerceIncreaseCapacityEventEntity;
 
     @Autowired
     private CommerceIncreaseCapacityQueryEntity commerceIncreaseCapacityQueryEntity;
 
+
+    @Autowired
+    private CommerceNewQueryEntity commerceNewQueryEntity;
+    @Autowired
+    private CommerceNewEventEntity commerceNewEventEntity;
+    @Autowired
+    private InhabitantNewEventEntity inhabitantNewEventEntity;
+    @Autowired
+    private InhabitantNewQueryEntity inhabitantNewQueryEntity;
+    @Autowired
+    private CommerceChangeTaxInfoEventEntity commerceChangeTaxInfoEventEntity;
+    @Autowired
+    private CommerceChangeTaxInfoQueryEntity commerceChangeTaxInfoQueryEntity;
 
     /**
      *删除个体增容订单
@@ -118,10 +122,10 @@ public class SgccBusinessService {
 
         try {
 
-            InhabitantModel inhabitantModel = new InhabitantModel(openId,dto);
-            inhabitantModel.insertIncreaseCapacityByGeTransform();
+            CommerceModel commerceModel = new CommerceModel(openId,dto);
+            commerceModel.insertIncreaseCapacityByGeTransform();
             int count = commerceIncreaseCapacityEventEntity.addIncreaseCapacityOrder(
-                    inhabitantModel.getCommerceIncreaseCapacityDao());
+                    commerceModel.getCommerceIncreaseCapacityDao());
             if (count > 0){
                 return Result.success("新增成功");
             }else {
@@ -139,7 +143,7 @@ public class SgccBusinessService {
      * @param openId
      * @return
      */
-    public Result queryIncreaseCapacityAll(String openId){
+    public Result queryIncreaseCapacityAllByOpenId(String openId){
 
         if (Strings.isNullOrEmpty(openId))
             return Result.failure(TopErrorCode.NO_DATAS);
@@ -148,9 +152,9 @@ public class SgccBusinessService {
             List<CommerceIncreaseCapacityDao> daos = commerceIncreaseCapacityQueryEntity.
                     findIncreaseCapacityOrderList(openId);
 
-            InhabitantModel inhabitantModel = new InhabitantModel(openId,daos);
-            inhabitantModel.queryIncreaseCapacityByGeTransform();
-            return Result.success(inhabitantModel.getCommerceIncreaseCapacityDTOS());
+            CommerceModel commerceModel = new CommerceModel(openId,daos);
+            commerceModel.queryIncreaseCapacityByGeTransform();
+            return Result.success(commerceModel.getCommerceIncreaseCapacityDTOS());
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.NO_DATAS);
@@ -160,45 +164,65 @@ public class SgccBusinessService {
 
     }
 
+    /**
+     查询所有个体增容提交单
+     * @return
+     */
+    public Result findIncreaseCapacityAll(){
+
+        try {
+
+            List<CommerceIncreaseCapacityDao> daos = commerceIncreaseCapacityQueryEntity.findIncreaseCapacityAll();
+            CommerceModel commerceModel = new CommerceModel(null,daos);
+            commerceModel.queryIncreaseCapacityByGeTransform();
+            return Result.success(commerceModel.getCommerceIncreaseCapacityDTOS());
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.NO_DATAS);
+        }
 
 
+
+    }
+
+    /****************************************************************************************************************/
 
     /**
-     * 新增增容订单
+     * 新增居民增容订单
      * @param dto
      * @param openId
      * @return
      */
-    public Result addIncreaseCapacityOrder(InhabitantIncreaseCapacityDTO dto,String openId){
-
-        if (Strings.isNullOrEmpty(dto.getHouseId()) ||
-                Strings.isNullOrEmpty(dto.getContactTel()) ||
-                Strings.isNullOrEmpty(dto.getName()) ||
-                Strings.isNullOrEmpty(dto.getIdcard()) ||
-                Strings.isNullOrEmpty(dto.getAplicant()) ||
-                dto.getCurrentCapacity() == null)
-            return Result.failure(TopErrorCode.NO_DATAS);
-
-        try {
-
-            InhabitantModel inhabitantModel = new InhabitantModel(dto,openId);
-            inhabitantModel.insertIncreaseCapacityTransform();
-            int count = inhabitantIncreaseCapacityEventEntity.addIncreaseCapacityOrder(
-                    inhabitantModel.getInhabitantIncreaseCapacityDao());
-            if (count > 0){
-                return Result.success("新增成功");
-            }else {
-                return Result.failure(TopErrorCode.SAVE_OBJ_ERR);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.SAVE_OBJ_ERR);
-        }
-    }
+//    public Result addIncreaseCapacityOrder(InhabitantIncreaseCapacityDTO dto,String openId){
+//
+//        if (Strings.isNullOrEmpty(dto.getHouseId()) ||
+//                Strings.isNullOrEmpty(dto.getContactTel()) ||
+//                Strings.isNullOrEmpty(dto.getName()) ||
+//                Strings.isNullOrEmpty(dto.getIdcard()) ||
+//                Strings.isNullOrEmpty(dto.getAplicant()) ||
+//                dto.getCurrentCapacity() == null)
+//            return Result.failure(TopErrorCode.NO_DATAS);
+//
+//        try {
+//
+//            InhabitantModel inhabitantModel = new InhabitantModel(dto,openId);
+//            inhabitantModel.insertIncreaseCapacityTransform();
+//            int count = inhabitantIncreaseCapacityEventEntity.addIncreaseCapacityOrder(
+//                    inhabitantModel.getInhabitantIncreaseCapacityDao());
+//            if (count > 0){
+//                return Result.success("新增成功");
+//            }else {
+//                return Result.failure(TopErrorCode.SAVE_OBJ_ERR);
+//            }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return Result.failure(TopErrorCode.SAVE_OBJ_ERR);
+//        }
+//    }
 
 
     /**
-     * 修改增容订单列表
+     * 修改更名过户订单列表
      * @return
      */
     public Result updateRenameOrder(String infoId,String name){
@@ -319,19 +343,9 @@ public class SgccBusinessService {
     }
 
 
-    @Autowired
-    private CommerceNewQueryEntity commerceNewQueryEntity;
-    @Autowired
-    private CommerceNewEventEntity commerceNewEventEntity;
-    @Autowired
-    private InhabitantNewEventEntity inhabitantNewEventEntity;
-    @Autowired
-    private InhabitantNewQueryEntity inhabitantNewQueryEntity;
-    @Autowired
-    private CommerceChangeTaxInfoEventEntity commerceChangeTaxInfoEventEntity;
-    @Autowired
-    private CommerceChangeTaxInfoQueryEntity commerceChangeTaxInfoQueryEntity;
-//CommerceChangeTaxInfoEventEntity
+
+
+
     // -------------------------个体工商业新装--------------------------------------
     // 微信端用
     public void SubmitCommerceNew( CommerceNewSubmitDTO dto )
