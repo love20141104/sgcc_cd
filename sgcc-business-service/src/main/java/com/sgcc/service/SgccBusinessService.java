@@ -337,12 +337,12 @@ public class SgccBusinessService {
 
 
     /**
-     * 查询当前用户所有更名过户订单列表
+     * 查询当前用户所有订单列表
      * @return
      */
-    public Result queryRenameOrderList(String infoId){
+    public Result queryOrderByOpenIdAll(String openId){
 
-        if (Strings.isNullOrEmpty(infoId))
+        if (Strings.isNullOrEmpty(openId))
             return Result.failure(TopErrorCode.NO_DATAS);
 
         List<InhabitantRenameOrderListDTO> dtos = new ArrayList<>();

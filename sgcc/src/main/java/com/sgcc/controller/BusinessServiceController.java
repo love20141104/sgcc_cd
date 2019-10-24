@@ -47,6 +47,12 @@ public class BusinessServiceController {
 
 
 
+    @ApiOperation(value = "查询当前用户所有订单列表", notes = "")
+    @GetMapping(value = "/orderList/{openId}")
+    public Result queryOrderByOpenIdAll(@PathVariable String openId) {
+        return  sgccBusinessService.queryOrderByOpenIdAll(openId);
+    }
+
 
 
     // -------------------------居民更名过户--------------------------------------

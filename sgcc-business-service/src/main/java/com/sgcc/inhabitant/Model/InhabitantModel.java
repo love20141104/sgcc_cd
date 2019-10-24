@@ -117,15 +117,13 @@ public class InhabitantModel {
     public void queryRenameTransform(){
         this.inhabitantRenameDaos.forEach(inhabitantRenameDao->{
             this.inhabitantRenameSubmitDTOS.add(new InhabitantRenameSubmitDTO(
-                    inhabitantRenameDao.getInfoId(),
                     inhabitantRenameDao.getHouseId(),
                     inhabitantRenameDao.getChange(),
                     inhabitantRenameDao.getHouseName(),
                     inhabitantRenameDao.getIdCard(),
                     inhabitantRenameDao.getContactTel(),
                     inhabitantRenameDao.getIdCardPositiveImg(),
-                    inhabitantRenameDao.getIdCardBackImg(),
-                    inhabitantRenameDao.getSubmitDate()
+                    inhabitantRenameDao.getIdCardBackImg()
             ));
         });
 

@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor  //生成无参构造函数
 public class InhabitantRenameSubmitDTO implements Serializable {
     private static final long serialVersionUID = 8259578234317479309L;
-    private String infoId;
+//    private String infoId;
 
     private String houseId;          // 户号信息id
 
@@ -27,11 +27,8 @@ public class InhabitantRenameSubmitDTO implements Serializable {
 
     private String idCardBackImg;
 
-    private Date submitDate;
-
-    public InhabitantRenameSubmitDTO(String infoId, String houseId, Boolean change, String houseName, String idCard,
-                                     String contactTel, String idCardPositiveImg, String idCardBackImg, Date submitDate) {
-        this.infoId = infoId;
+    public InhabitantRenameSubmitDTO(String houseId, Boolean change, String houseName, String idCard,
+                                     String contactTel, String idCardPositiveImg, String idCardBackImg) {
         this.houseId = houseId;
         this.change = change;
         this.houseName = houseName;
@@ -39,6 +36,5 @@ public class InhabitantRenameSubmitDTO implements Serializable {
         this.contactTel = contactTel;
         this.idCardPositiveImg = idCardPositiveImg;
         this.idCardBackImg = idCardBackImg;
-        this.submitDate=submitDate;
     }
 }
