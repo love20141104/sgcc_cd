@@ -46,11 +46,11 @@ public class CommerceIncreaseCapacityRepository {
     }
 
     /**
-     *根据订单号查询增容详情
-     * @param openId
+     *根据id查询增容详情
+     * @param id
      * @return
      */
-    public List<CommerceIncreaseCapacityDao> findIncreaseCapacityOrderList(String openId){
+    public List<CommerceIncreaseCapacityDao> findIncreaseCapacityOrderList(String id){
 
         String sql = "select id,user_open_id,in_company_name,in_current_capacity,in_name,in_idcard,in_telphone," +
                 "cq_idcard_positive_img,cq_idcard_back_img,in_license_img,propertyRight_img1,propertyRight_img2," +
@@ -58,7 +58,7 @@ public class CommerceIncreaseCapacityRepository {
                 "in_transactor,in_transactor_idcard,sq_idcard_positive_img,sq_idcard_back_img,in_invoice," +
                 "invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
                 "invoice_date,invoice_img,in_submit_date from b_increase_capacity_commerce " +
-                "where user_open_id='"+openId+"'";
+                "where id='"+id+"'";
         return jdbcTemplate.query(sql,new IncreaseCapacityRowMapper());
 
     }
@@ -73,7 +73,7 @@ public class CommerceIncreaseCapacityRepository {
                 "in_current_capacity,in_name,in_idcard,in_telphone,cq_idcard_positive_img,cq_idcard_back_img," +
                 "in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4," +
                 "propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard," +
-                "sq_idcard_positive_img,sq_idcard_back_img,invo,invoice_company,invoice_number,invoice_bank," +
+                "sq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank," +
                 "invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date from " +
                 "b_increase_capacity_commerce";
         return jdbcTemplate.query(sql,new IncreaseCapacityRowMapper());
@@ -117,8 +117,7 @@ public class CommerceIncreaseCapacityRepository {
                 "invoice_regist_addr='"+dao.getInvoiceRegistAddr()+"'," +
                 "invoice_phone='"+dao.getInvoiceContactTel()+"'," +
                 "invoice_date='"+Utils.GetTime(dao.getInvoiceDate())+"'," +
-                "invoice_img='"+dao.getInvoiceImg()+"'," +
-                "in_submit_date='"+Utils.GetTime(dao.getSubmitDate())+"' " +
+                "invoice_img='"+dao.getInvoiceImg()+"' " +
                 "where id='"+dao.getId()+"'";
 
         return jdbcTemplate.update(sql);
