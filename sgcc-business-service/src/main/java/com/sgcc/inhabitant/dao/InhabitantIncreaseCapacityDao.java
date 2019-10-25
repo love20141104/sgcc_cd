@@ -1,5 +1,6 @@
 package com.sgcc.inhabitant.dao;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor  //生成无参构造函数
+@AllArgsConstructor
 public class InhabitantIncreaseCapacityDao implements Serializable {
     private static final long serialVersionUID = 5576275212099527076L;
     private String id;
@@ -30,12 +32,13 @@ public class InhabitantIncreaseCapacityDao implements Serializable {
 //    private String securitiesImg6;
     private String cqIdcardPositiveImg;     // 产权人
     private String cqIdcardBackImg;
+    private String sq_arttorney_img;
     private String sqIdcardPositiveImg;     // 代办人
     private String sqIdcardBackImg;
 
     private Date submitDate;
 
-    public InhabitantIncreaseCapacityDao(String id, String orderNo,String openId, Double currentCapacity, String name,
+/*    public InhabitantIncreaseCapacityDao(String id, String orderNo,String openId, Double currentCapacity, String name,
                                          String idcard, String contactTel, String aplicant,
                                          String transactor, String transactorIdcard,
                                          String cqIdcardPositiveImg, String cqIdcardBackImg, String sqIdcardPositiveImg,
@@ -55,5 +58,5 @@ public class InhabitantIncreaseCapacityDao implements Serializable {
         this.sqIdcardPositiveImg = sqIdcardPositiveImg;
         this.sqIdcardBackImg = sqIdcardBackImg;
         this.submitDate = submitDate;
-    }
+    }*/
 }

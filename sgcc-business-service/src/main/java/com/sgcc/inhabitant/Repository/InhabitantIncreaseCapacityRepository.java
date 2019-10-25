@@ -26,7 +26,7 @@ public class InhabitantIncreaseCapacityRepository {
 
         String sql = "select id,in_order_no,user_open_id,in_current_capacity," +
                 "in_name,in_idcard,in_telphone,in_apply_person,in_transactor,in_transactor_idcard,cq_idcard_positive_img,"+
-                "cq_idcard_back_img,sq_idcard_positive_img,sq_idcard_back_img,in_submit_date " +
+                "cq_idcard_back_img,sq_arttorney_img,sq_idcard_positive_img,sq_idcard_back_img,in_submit_date " +
                 "from b_increase_capacity_inhabitant where in_order_no='"+orderNo+"'";
         return jdbcTemplate.query(sql,new IncreaseCapacityRowMapper());
     }
@@ -40,11 +40,11 @@ public class InhabitantIncreaseCapacityRepository {
 
         String sql = "insert into b_increase_capacity_inhabitant(id,in_order_no,user_open_id,in_current_capacity," +
                 "in_name,in_idcard,in_telphone,in_apply_person,in_transactor,in_transactor_idcard,cq_idcard_positive_img,"+
-                "cq_idcard_back_img,sq_idcard_positive_img,sq_idcard_back_img,in_submit_date) values(" +
+                "cq_idcard_back_img,sq_arttorney_img,sq_idcard_positive_img,sq_idcard_back_img,in_submit_date) values(" +
                 "'"+dao.getId()+"','"+dao.getOrderNo()+"','"+dao.getOpenId()+"',"+dao.getCurrentCapacity()+"," +
                 "'"+dao.getName()+"','"+dao.getIdcard()+"','"+dao.getContactTel()+"','"+dao.getAplicant()+"'," +
                 "'"+dao.getTransactor()+"','"+dao.getTransactorIdcard()+"','"+dao.getCqIdcardPositiveImg()+"'," +
-                "'"+dao.getCqIdcardBackImg()+"','"+dao.getSqIdcardPositiveImg()+"','"+dao.getSqIdcardBackImg()+"'," +
+                "'"+dao.getCqIdcardBackImg()+"','"+dao.getSq_arttorney_img()+"','"+dao.getSqIdcardPositiveImg()+"','"+dao.getSqIdcardBackImg()+"'," +
                 "'"+ Utils.GetTime(dao.getSubmitDate()) +"')";
         return jdbcTemplate.update(sql);
     }
@@ -67,6 +67,7 @@ public class InhabitantIncreaseCapacityRepository {
                     rs.getString("in_transactor_idcard"),
                     rs.getString("cq_idcard_positive_img"),
                     rs.getString("cq_idcard_back_img"),
+                    rs.getString("sq_arttorney_img;"),
                     rs.getString("sq_idcard_positive_img"),
                     rs.getString("sq_idcard_back_img"),
                     rs.getDate("in_submit_date")

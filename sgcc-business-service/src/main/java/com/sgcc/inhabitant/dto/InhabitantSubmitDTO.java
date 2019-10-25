@@ -27,6 +27,7 @@ public class InhabitantSubmitDTO implements Serializable {
     String new_install_telphone;
     String new_install_apply_person;
     String new_install_transactor;
+    String sq_arttorney_img;
     String sq_idcard_positive_img;
     String sq_idcard_back_img;
     String new_install_transactor_idcard;

@@ -9,6 +9,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor  //生成无参构造函数
+@AllArgsConstructor
 public class InhabitantIncreaseCapacityDTO implements Serializable {
     private static final long serialVersionUID = 9056114743993976844L;
     private String houseId;
@@ -27,6 +28,7 @@ public class InhabitantIncreaseCapacityDTO implements Serializable {
 //    private String securitiesImg4;   // 产权证明
 //    private String securitiesImg5;
 //    private String securitiesImg6;
+    private String sq_arttorney_img;
     private String cqIdcardPositiveImg;     // 产权人
     private String cqIdcardBackImg;
     private String sqIdcardPositiveImg;     // 代办人
@@ -34,7 +36,7 @@ public class InhabitantIncreaseCapacityDTO implements Serializable {
 
     private Date submitDate;
 
-    public InhabitantIncreaseCapacityDTO(String houseId,Double currentCapacity, String name, String idcard,
+/*    public InhabitantIncreaseCapacityDTO(String houseId,Double currentCapacity, String name, String idcard,
                                          String contactTel,String aplicant, String transactor, String transactorIdcard,
                                          String cqIdcardPositiveImg, String cqIdcardBackImg, String sqIdcardPositiveImg,
                                          String sqIdcardBackImg, Date submitDate) {
@@ -51,5 +53,5 @@ public class InhabitantIncreaseCapacityDTO implements Serializable {
         this.sqIdcardPositiveImg = sqIdcardPositiveImg;
         this.sqIdcardBackImg = sqIdcardBackImg;
         this.submitDate = submitDate;
-    }
+    }*/
 }
