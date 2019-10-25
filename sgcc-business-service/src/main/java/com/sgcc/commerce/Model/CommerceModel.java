@@ -19,16 +19,21 @@ public class CommerceModel {
 
     private String openId;
 
+    private String id;
+
     private CommerceIncreaseCapacityDao commerceIncreaseCapacityDao;
 
     private CommerceIncreaseCapacitySubmitDTO commerceIncreaseCapacitySubmitDTO;
+
+    private CommerceIncreaseCapacityUpdateDTO commerceIncreaseCapacityUpdateDTO;
 
     private List<CommerceIncreaseCapacityDao> commerceIncreaseCapacityDaos = new ArrayList<>();
 
     private List<CommerceIncreaseCapacitySubmitDTO> commerceIncreaseCapacitySubmitDTOS = new ArrayList<>();
 
-    public CommerceModel(String openId, CommerceIncreaseCapacitySubmitDTO commerceIncreaseCapacitySubmitDTO) {
-        this.openId = openId;
+    private List<CommerceIncreaseCapacityDetailDTO> detailDTOS = new ArrayList<>();
+
+    public CommerceModel(CommerceIncreaseCapacitySubmitDTO commerceIncreaseCapacitySubmitDTO) {
         this.commerceIncreaseCapacitySubmitDTO = commerceIncreaseCapacitySubmitDTO;
     }
 
@@ -37,9 +42,15 @@ public class CommerceModel {
         this.commerceIncreaseCapacityDaos = commerceIncreaseCapacityDaos;
     }
 
-    public void queryIncreaseCapacityByGeTransform(){
+    public CommerceModel(CommerceIncreaseCapacityUpdateDTO commerceIncreaseCapacityUpdateDTO) {
+        this.commerceIncreaseCapacityUpdateDTO = commerceIncreaseCapacityUpdateDTO;
+    }
+
+    public void queryIncreaseCapacityAllTransform(){
         this.commerceIncreaseCapacityDaos.forEach(commerceIncreaseCapacityDao->{
-            this.commerceIncreaseCapacitySubmitDTOS.add(new CommerceIncreaseCapacitySubmitDTO(
+            this.detailDTOS.add(new CommerceIncreaseCapacityDetailDTO(
+                    commerceIncreaseCapacityDao.getId(),
+                    commerceIncreaseCapacityDao.getOpenId(),
                     commerceIncreaseCapacityDao.getCompanyName(),
                     commerceIncreaseCapacityDao.getCurrentCapacity(),
                     commerceIncreaseCapacityDao.getName(),
@@ -66,7 +77,49 @@ public class CommerceModel {
                     commerceIncreaseCapacityDao.getCqIdcardBackImg(),
                     commerceIncreaseCapacityDao.getSqIdcardPositiveImg(),
                     commerceIncreaseCapacityDao.getSqIdcardBackImg(),
-                    commerceIncreaseCapacityDao.getInvoiceImg()
+                    commerceIncreaseCapacityDao.getInvoiceImg(),
+                    commerceIncreaseCapacityDao.getSubmitDate(),
+                    commerceIncreaseCapacityDao.getTransactorTel(),
+                    commerceIncreaseCapacityDao.getSqAttorneyImg()
+            ));
+        });
+
+    }
+
+
+    public void queryIncreaseCapacityByGeTransform(){
+        this.commerceIncreaseCapacityDaos.forEach(commerceIncreaseCapacityDao->{
+            this.commerceIncreaseCapacitySubmitDTOS.add(new CommerceIncreaseCapacitySubmitDTO(
+                    commerceIncreaseCapacityDao.getOpenId(),
+                    commerceIncreaseCapacityDao.getCompanyName(),
+                    commerceIncreaseCapacityDao.getCurrentCapacity(),
+                    commerceIncreaseCapacityDao.getName(),
+                    commerceIncreaseCapacityDao.getIdcard(),
+                    commerceIncreaseCapacityDao.getContactTel(),
+                    commerceIncreaseCapacityDao.getLicenseImg(),
+                    commerceIncreaseCapacityDao.getAplicant(),
+                    commerceIncreaseCapacityDao.getTransactor(),
+                    commerceIncreaseCapacityDao.getTransactorIdcard(),
+                    commerceIncreaseCapacityDao.getInvoiceFlag(),
+                    commerceIncreaseCapacityDao.getInvoiceNum(),
+                    commerceIncreaseCapacityDao.getInvoiceBank(),
+                    commerceIncreaseCapacityDao.getInvoiceBankAccount(),
+                    commerceIncreaseCapacityDao.getInvoiceRegistAddr(),
+                    commerceIncreaseCapacityDao.getInvoiceContactTel(),
+                    Utils.GetTime(commerceIncreaseCapacityDao.getInvoiceDate()),
+                    commerceIncreaseCapacityDao.getSecuritiesImg1(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg2(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg3(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg4(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg5(),
+                    commerceIncreaseCapacityDao.getSecuritiesImg6(),
+                    commerceIncreaseCapacityDao.getCqIdcardPositiveImg(),
+                    commerceIncreaseCapacityDao.getCqIdcardBackImg(),
+                    commerceIncreaseCapacityDao.getSqIdcardPositiveImg(),
+                    commerceIncreaseCapacityDao.getSqIdcardBackImg(),
+                    commerceIncreaseCapacityDao.getInvoiceImg(),
+                    commerceIncreaseCapacityDao.getTransactorTel(),
+                    commerceIncreaseCapacityDao.getSqAttorneyImg()
             ));
         });
 
@@ -78,45 +131,77 @@ public class CommerceModel {
         String id = UUID.randomUUID().toString();
         this.commerceIncreaseCapacityDao = new CommerceIncreaseCapacityDao(
                 id,
-                this.getOpenId(),
-                this.commerceIncreaseCapacitySubmitDTO.getCompanyName(),
-                this.commerceIncreaseCapacitySubmitDTO.getCurrentCapacity(),
-                this.commerceIncreaseCapacitySubmitDTO.getName(),
-                this.commerceIncreaseCapacitySubmitDTO.getIdcard(),
-                this.commerceIncreaseCapacitySubmitDTO.getContactTel(),
-                this.commerceIncreaseCapacitySubmitDTO.getLicenseImg(),
-                this.commerceIncreaseCapacitySubmitDTO.getAplicant(),
-                this.commerceIncreaseCapacitySubmitDTO.getTransactor(),
-                this.commerceIncreaseCapacitySubmitDTO.getTransactorIdcard(),
-                this.commerceIncreaseCapacitySubmitDTO.getInvoiceFlag(),
-                this.commerceIncreaseCapacitySubmitDTO.getInvoiceNum(),
-                this.commerceIncreaseCapacitySubmitDTO.getInvoiceBank(),
-                this.commerceIncreaseCapacitySubmitDTO.getInvoiceBankAccount(),
-                this.commerceIncreaseCapacitySubmitDTO.getInvoiceRegistAddr(),
-                this.commerceIncreaseCapacitySubmitDTO.getInvoiceContactTel(),
-                Utils.GetDate(this.commerceIncreaseCapacitySubmitDTO.getInvoiceDate()),
-                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg1(),
-                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg2(),
-                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg3(),
-                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg4(),
-                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg5(),
-                this.commerceIncreaseCapacitySubmitDTO.getSecuritiesImg6(),
-                this.commerceIncreaseCapacitySubmitDTO.getCqIdcardPositiveImg(),
-                this.commerceIncreaseCapacitySubmitDTO.getCqIdcardBackImg(),
-                this.commerceIncreaseCapacitySubmitDTO.getSqIdcardPositiveImg(),
-                this.commerceIncreaseCapacitySubmitDTO.getSqIdcardBackImg(),
-                this.commerceIncreaseCapacitySubmitDTO.getInvoiceImg(),
+                this.commerceIncreaseCapacitySubmitDTO.getUser_open_id(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_company_name(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_current_capacity(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_name(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_idcard(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_telphone(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_license_img(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_apply_person(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_transactor(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_transactor_idcard(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_transactor_tel(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_invoice(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoice_number(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoice_bank(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoice_bank_account(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoice_regist_addr(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoice_phone(),
+                Utils.GetDate(this.commerceIncreaseCapacitySubmitDTO.getInvoice_date()),
+                this.commerceIncreaseCapacitySubmitDTO.getPropertyRight_img1(),
+                this.commerceIncreaseCapacitySubmitDTO.getPropertyRight_img2(),
+                this.commerceIncreaseCapacitySubmitDTO.getPropertyRight_img3(),
+                this.commerceIncreaseCapacitySubmitDTO.getPropertyRight_img4(),
+                this.commerceIncreaseCapacitySubmitDTO.getPropertyRight_img5(),
+                this.commerceIncreaseCapacitySubmitDTO.getPropertyRight_img6(),
+                this.commerceIncreaseCapacitySubmitDTO.getCq_idcard_positive_img(),
+                this.commerceIncreaseCapacitySubmitDTO.getCq_idcard_back_img(),
+                this.commerceIncreaseCapacitySubmitDTO.getSq_idcard_positive_img(),
+                this.commerceIncreaseCapacitySubmitDTO.getSq_idcard_back_img(),
+                this.commerceIncreaseCapacitySubmitDTO.getInvoice_img(),
+                this.commerceIncreaseCapacitySubmitDTO.getSq_attorney_img(),
                 new Date()
         );
 
     }
 
 
-    public CommerceIncreaseCapacityDao updateIncreaseCapacityTransform(CommerceIncreaseCapacityUpdateDTO dto, String id){
-        CommerceIncreaseCapacityDao dao = new CommerceIncreaseCapacityDao();
-        BeanUtils.copyProperties(dto,dao);
-        dao.setId(id);
-        return dao;
+    public void updateIncreaseCapacityTransform(){
+        this.commerceIncreaseCapacityDao = new CommerceIncreaseCapacityDao(
+                this.commerceIncreaseCapacityUpdateDTO.getId(),
+                this.commerceIncreaseCapacityUpdateDTO.getUser_open_id(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_company_name(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_current_capacity(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_name(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_idcard(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_telphone(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_license_img(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_apply_person(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_transactor(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_transactor_idcard(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_transactor_tel(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_invoice(),
+                this.commerceIncreaseCapacityUpdateDTO.getInvoice_number(),
+                this.commerceIncreaseCapacityUpdateDTO.getInvoice_bank(),
+                this.commerceIncreaseCapacityUpdateDTO.getInvoice_bank_account(),
+                this.commerceIncreaseCapacityUpdateDTO.getInvoice_regist_addr(),
+                this.commerceIncreaseCapacityUpdateDTO.getInvoice_phone(),
+                null,
+                this.commerceIncreaseCapacityUpdateDTO.getPropertyRight_img1(),
+                this.commerceIncreaseCapacityUpdateDTO.getPropertyRight_img2(),
+                this.commerceIncreaseCapacityUpdateDTO.getPropertyRight_img3(),
+                this.commerceIncreaseCapacityUpdateDTO.getPropertyRight_img4(),
+                this.commerceIncreaseCapacityUpdateDTO.getPropertyRight_img5(),
+                this.commerceIncreaseCapacityUpdateDTO.getPropertyRight_img6(),
+                this.commerceIncreaseCapacityUpdateDTO.getCq_idcard_positive_img(),
+                this.commerceIncreaseCapacityUpdateDTO.getCq_idcard_back_img(),
+                this.commerceIncreaseCapacityUpdateDTO.getSq_idcard_positive_img(),
+                this.commerceIncreaseCapacityUpdateDTO.getSq_idcard_back_img(),
+                this.commerceIncreaseCapacityUpdateDTO.getInvoice_img(),
+                this.commerceIncreaseCapacitySubmitDTO.getSq_attorney_img(),
+                null
+        );
     }
 
 
