@@ -22,16 +22,32 @@ public class InhabitantNewRepository {
                 "new_install_capacity,propertyRight_img1,propertyRight_img2," +
                 "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
                 "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
-                "new_install_apply_person,new_install_transactor,sq_arttorney_img,sq_idcard_positive_img," +
-                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date) values('" +
-                dao.getId()+"','" + dao.getUser_open_id() + "','" + dao.getNew_install_district()+ "','" +
-                dao.getNew_install_address()+ "','" + dao.getNew_install_capacity() + "','" +
-                dao.getPropertyRight_img1() + "','" + dao.getPropertyRight_img2() + "','" + dao.getPropertyRight_img3() + "','" +
-                dao.getPropertyRight_img4() + "','" + dao.getPropertyRight_img5() + "','" + dao.getPropertyRight_img6() + "','" +
-                dao.getCq_idcard_positive_img()+ "','" + dao.getCq_idcard_back_img() + "','" + dao.getNew_install_name() + "','" +
-                dao.getNew_install_idcard() + "','" + dao.getNew_install_telphone() + "','" + dao.getNew_install_apply_person() + "','" + dao.getNew_install_transactor()+ "','" +
-                dao.getNew_install_transactor_idcard() + "','"+dao.getSq_arttorney_img()+ "','"+ dao.getSq_idcard_positive_img() + "','" + dao.getSq_idcard_back_img()+ "','" +
-                dao.getNew_install_transactor_tel()+ "','" + Utils.GetTime(dao.getSubmit_date()) +"')";
+                "new_install_apply_person,new_install_transactor,new_install_transactor_idcard,sq_arttorney_img,sq_idcard_positive_img," +
+                "sq_idcard_back_img,new_install_transactor_tel,submit_date) values('" +
+                dao.getId()+"','" +
+                dao.getUser_open_id() + "','" +
+                dao.getNew_install_district()+ "','" +
+                dao.getNew_install_address()+ "','" +
+                dao.getNew_install_capacity() + "','" +
+                dao.getPropertyRight_img1() + "','" +
+                dao.getPropertyRight_img2() + "','" +
+                dao.getPropertyRight_img3() + "','" +
+                dao.getPropertyRight_img4() + "','" +
+                dao.getPropertyRight_img5() + "','" +
+                dao.getPropertyRight_img6() + "','" +
+                dao.getCq_idcard_positive_img()+ "','" +
+                dao.getCq_idcard_back_img() + "','" +
+                dao.getNew_install_name() + "','" +
+                dao.getNew_install_idcard() + "','" +
+                dao.getNew_install_telphone() + "','" +
+                dao.getNew_install_apply_person() + "','" +
+                dao.getNew_install_transactor()+ "','" +
+                dao.getNew_install_transactor_idcard() + "','"+
+                dao.getSq_arttorney_img()+ "','"+
+                dao.getSq_idcard_positive_img() + "','" +
+                dao.getSq_idcard_back_img()+ "','" +
+                dao.getNew_install_transactor_tel()+ "','" +
+                Utils.GetTime(dao.getSubmit_date()) +"')";
         jdbcTemplate.execute(sql);
     }
 
@@ -112,7 +128,7 @@ public class InhabitantNewRepository {
                 "new_install_capacity,propertyRight_img1,propertyRight_img2," +
                 "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
                 "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
-                "new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
+                "new_install_apply_person,new_install_transactor,sq_arttorney_img,sq_idcard_positive_img," +
                 "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_inhabitant where user_open_id ='" + id + "'";
 
         try {
