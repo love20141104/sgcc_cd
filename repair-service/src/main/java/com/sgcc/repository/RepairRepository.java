@@ -34,13 +34,23 @@ public class RepairRepository {
      * @param repairId
      * @return
      */
-    public List<RepairDao> findRepairOrderById(String repairId){
+    public RepairDao findRepairOrderById(String repairId){
 
         String sql = "select id,repair_id,user_open_id,repair_content,repair_contact,repair_tel," +
                 "repair_address,repair_img1,repair_img2,repair_img3,repair_submit_date from b_repair " +
                 "where repair_id='"+repairId+"'";
+        return jdbcTemplate.queryForObject(sql,new RepairRowMapper());
+    }
+
+
+    public List<RepairDao> findRepairOrderByOpenId(String openId){
+
+        String sql = "select id,repair_id,user_open_id,repair_content,repair_contact,repair_tel," +
+                "repair_address,repair_img1,repair_img2,repair_img3,repair_submit_date from b_repair " +
+                "where user_open_id='"+openId+"'";
         return jdbcTemplate.query(sql,new RepairRowMapper());
     }
+
 
 
     /**
@@ -54,7 +64,7 @@ public class RepairRepository {
                 "repair_address,repair_img1,repair_img2,repair_img3,repair_submit_date) values('"+dao.getId()+"'," +
                 "'"+dao.getRepairId()+"','"+dao.getOpenId()+"','"+dao.getRepairContent()+"','"+dao.getRepairContact()+"'," +
                 "'"+dao.getRepairTel()+"','"+dao.getRepairAddr()+"','"+dao.getRepairImg1()+"','"+dao.getRepairImg2()+"'," +
-                "'"+dao.getRepairImg3()+"','"+dao.getSubmitDate()+"')";
+                "'"+dao.getRepairImg3()+"','"+ Utils.GetTime(dao.getSubmitDate())+"')";
         return jdbcTemplate.update(sql);
     }
 
@@ -64,13 +74,21 @@ public class RepairRepository {
         String sql = "update b_repair set repair_content='"+dao.getRepairContent()+"'";
 
         StringBuffer stringBuffer = new StringBuffer();
-        String whereSql = " where repair_id = '"+dao.getId()+"'";
+        String whereSql = " where repair_id = '"+dao.getRepairId()+"'";
+        if (!Strings.isNullOrEmpty(dao.getOpenId()))
+            stringBuffer.append(",").append("user_open_id='"+dao.getOpenId()+"'");
         if (!Strings.isNullOrEmpty(dao.getRepairContact()))
             stringBuffer.append(",").append("repair_contact='"+dao.getRepairContact()+"'");
         if (!Strings.isNullOrEmpty(dao.getRepairTel()))
             stringBuffer.append(",").append("repair_tel='"+dao.getRepairTel()+"'");
         if (!Strings.isNullOrEmpty(dao.getRepairAddr()))
             stringBuffer.append(",").append("repair_address='"+dao.getRepairAddr()+"'");
+        if (!Strings.isNullOrEmpty(dao.getRepairImg1()))
+            stringBuffer.append(",").append("repair_img1='"+dao.getRepairImg1()+"'");
+        if (!Strings.isNullOrEmpty(dao.getRepairImg2()))
+            stringBuffer.append(",").append("repair_img2='"+dao.getRepairImg2()+"'");
+        if (!Strings.isNullOrEmpty(dao.getRepairImg3()))
+            stringBuffer.append(",").append("repair_img3='"+dao.getRepairImg3()+"'");
 
         if (!Strings.isNullOrEmpty(stringBuffer.toString())){
             sql += stringBuffer+whereSql;

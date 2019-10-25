@@ -1,9 +1,10 @@
 package com.sgcc.service;
 
 import com.example.result.Result;
+import com.google.common.base.Strings;
 import com.sgcc.dao.RepairDao;
+import com.sgcc.dto.RepairEditDTO;
 import com.sgcc.dto.RepairSubmitDTO;
-import com.sgcc.dto.RepairViewDTO;
 import com.sgcc.entity.event.RepairEventEntity;
 import com.sgcc.entity.query.RepairQueryEntity;
 import com.sgcc.exception.TopErrorCode;
@@ -21,6 +22,30 @@ public class RepairService {
 
     @Autowired
     private RepairEventEntity repairEventEntity;
+
+
+    /**
+     * 查询故障报修订单列表
+     * @return
+     */
+    public Result findRepairOrderList(String openId){
+        if (Strings.isNullOrEmpty(openId))
+            return Result.failure(TopErrorCode.ZERO_OBJ);
+
+        try {
+            List<RepairDao> repairDaos = repairQueryEntity.findRepairOrderByOpenId(openId);
+            RepairModel repairModel = new RepairModel();
+            repairModel.queryByOpenIdTransform(repairDaos);
+            if (repairModel.getOrderDTOS().size() > 0){
+                return Result.success(repairModel.getOrderDTOS());
+            }else {
+                return Result.failure(TopErrorCode.NO_DATAS);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
 
 
     /**
@@ -56,7 +81,7 @@ public class RepairService {
             RepairModel repairModel = new RepairModel(repairDao);
             repairModel.queryByIdTransform();
             if (repairModel.getRepairViewDTO() != null){
-                return Result.success(repairModel.getRepairViewDTOS());
+                return Result.success(repairModel.getRepairViewDTO());
             }else {
                 return Result.failure(TopErrorCode.NO_DATAS);
             }
@@ -78,8 +103,12 @@ public class RepairService {
         try {
             RepairModel model = new RepairModel();
             model.addRepairTransform(dto);
-            repairEventEntity.addRepairOrder(model.getRepairDao());
-            return Result.success();
+            int count = repairEventEntity.addRepairOrder(model.getRepairDao());
+            if (count > 0){
+                return Result.success("新增成功！");
+            }else {
+                return Result.failure(TopErrorCode.SAVE_OBJ_ERR);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -91,9 +120,24 @@ public class RepairService {
      * @param
      * @return
      */
-    public Result updateRepairOrder(){
+    public Result updateRepairOrder(RepairEditDTO dto){
 
-        return Result.success();
+        if (dto == null)
+            return Result.failure(TopErrorCode.ZERO_OBJ);
+
+        try {
+            RepairModel model = new RepairModel();
+            model.updateRepairTransform(dto);
+            int count = repairEventEntity.updateRepairOrder(model.getRepairDao());
+            if (count > 0){
+                return Result.success("修改成功！");
+            }else {
+                return Result.failure(TopErrorCode.GENERAL_ERR);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
     }
 
     /**
@@ -101,9 +145,21 @@ public class RepairService {
      * @param
      * @return
      */
-    public Result delRepairOrder(){
+    public Result delRepairOrder(List<String> ids){
+        if (ids.size() <= 0)
+            return Result.failure(TopErrorCode.ZERO_OBJ);
 
-        return Result.success();
+        try {
+            int count = repairEventEntity.delRepairOrder(ids);
+            if (count > 0){
+                return Result.success("删除成功！");
+            }else {
+                return Result.failure(TopErrorCode.GENERAL_ERR);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
     }
 
 
