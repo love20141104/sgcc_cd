@@ -77,14 +77,13 @@ public class RepairService {
 
         try {
             RepairModel model = new RepairModel();
-
-
+            model.addRepairTransform(dto);
+            repairEventEntity.addRepairOrder(model.getRepairDao());
+            return Result.success();
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
-
-        return Result.success();
     }
 
     /**

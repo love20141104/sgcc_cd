@@ -50,7 +50,7 @@ public class FastDFSClient {
                 FilenameUtils.getExtension(file.getOriginalFilename()),null);
         String url = getResAccessUrl(storePath);
         if( Utils.verifyUrl(url) )
-            return storePath.getFullPath();
+            return url;
         return "";
     }
 
