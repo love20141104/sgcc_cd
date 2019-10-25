@@ -34,7 +34,7 @@ public class ApiStatisticsRepository {
                 +Utils.GetTime(apiStatisticsDao.getVisitDate())+"','"
                 +apiStatisticsDao.getClientIp()+"')";
         logger.info("insertSQL:"+sql);
-        jdbcTemplate.update(sql);
+        jdbcTemplate.execute(sql);
     }
     /**
     *@Description: 查询ApiStatisticsQueryDto结果集
