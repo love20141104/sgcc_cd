@@ -38,7 +38,6 @@ public class FastDFSClient {
 
     @Autowired
     private FdfsWebServer fdfsWebServer;
-
     /**
      * 上传文件
      * @param file 文件对象
@@ -98,9 +97,7 @@ public class FastDFSClient {
 
     // 封装图片完整URL地址
     private String getResAccessUrl(StorePath storePath) {
-        String httpUrl = fdfsWebServer.getWebServerUrl();
-        String fileUrl = httpUrl.substring(0,httpUrl.indexOf("/")) +":18625/"+ storePath.getFullPath();
-        return fileUrl;
+        return fdfsWebServer.getWebServerUrl() + storePath.getFullPath() ;
     }
 
     /**

@@ -19,7 +19,7 @@ spring:
   ### Redis
   redis:
     #    database: 1
-    host: 192.168.0.108
+    host: 127.0.0.1
     port: 6379
     password:
     jedis:
@@ -30,11 +30,11 @@ spring:
   ### mysql
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.0.108:3306/sgcc_cd
+    url: jdbc:mysql://127.0.0.1:3306/sgcc_cd
     username: root
     password: root@123
   activemq:
-    broker-url: tcp://192.168.0.108:61616
+    broker-url: tcp://127.0.0.1:61616
     in-memory: false
     pool:
       enabled: false #如果此处设置为true，需要加如下的依赖包，否则会自动配置失败，报JmsMessagingTemplate注入失败
@@ -47,7 +47,7 @@ fdfs:
   thumb-image:             #缩略图生成参数
     width: 150
     height: 150
-  web-server-url: 119.23.22.176/
+  web-server-url: https://www.sgcc.link:18625/
   tracker-list: 119.23.22.176:22122
 
   ### Data
