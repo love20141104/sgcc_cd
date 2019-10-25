@@ -72,7 +72,17 @@ public class RepairService {
      * @return
      */
     public Result addRepairOrder(RepairSubmitDTO dto){
+        if (dto == null)
+            return Result.failure(TopErrorCode.ZERO_OBJ);
 
+        try {
+            RepairModel model = new RepairModel();
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
 
         return Result.success();
     }

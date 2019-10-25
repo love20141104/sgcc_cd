@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -35,6 +37,25 @@ public class RepairModel {
 
     public RepairModel(List<RepairDao> repairDaos) {
         this.repairDaos = repairDaos;
+    }
+
+
+    public void addRepairTransform(RepairSubmitDTO dto){
+        String id = UUID.randomUUID().toString();
+        this.repairDao = new RepairDao(
+                id,
+                id,
+                dto.getOpenId(),
+                dto.getRepairContent(),
+                dto.getRepairContact(),
+                dto.getRepairTel(),
+                dto.getRepairAddr(),
+                dto.getRepairImg1(),
+                dto.getRepairImg2(),
+                dto.getRepairImg3(),
+                new Date()
+        );
+
     }
 
 

@@ -14,6 +14,8 @@ public class RepairSubmitDTO implements Serializable {
 
     private static final long serialVersionUID = -6165795304311113089L;
 
+    private String openId;
+
     private String repairContent;
 
     private String repairContact;
@@ -27,8 +29,6 @@ public class RepairSubmitDTO implements Serializable {
     private String repairImg2;
 
     private String repairImg3;
-
-    private Date submitDate;
 
 
 
