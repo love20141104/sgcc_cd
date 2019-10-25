@@ -23,4 +23,12 @@ public class CommerceChangeTaxInfoQueryEntity {
     {
         return commerceChangeTaxInfoRepository.findById(id);
     }
+
+
+    public List<CommerceChangeTaxInfoDao> findChangeTaxInfoByOpenId(String id )
+    {
+        return commerceChangeTaxInfoRepository.findByOpenId(id);
+    }
+
+
 }

@@ -12,6 +12,7 @@ import com.sgcc.inhabitant.Entity.Query.InhabitantRenameQueryEntity;
 import com.sgcc.inhabitant.Model.InhabitantModel;
 import com.sgcc.inhabitant.dao.InhabitantRenameDao;
 import com.sgcc.inhabitant.dto.*;
+import com.sgcc.model.OrderModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.sgcc.commerce.Entity.Event.CommerceChangeTaxInfoEventEntity;
 import com.sgcc.commerce.Entity.Event.CommerceNewEventEntity;
@@ -58,6 +59,83 @@ public class SgccBusinessService {
     private CommerceChangeTaxInfoEventEntity commerceChangeTaxInfoEventEntity;
     @Autowired
     private CommerceChangeTaxInfoQueryEntity commerceChangeTaxInfoQueryEntity;
+
+
+    public Result findRenameByOpenId(String openId)
+    {
+        if (Strings.isNullOrEmpty(openId))
+            return Result.failure(TopErrorCode.NO_DATAS);
+        try {
+
+            List<InhabitantRenameDao> daos = inhabitantRenameQueryEntity.
+                    queryByOpenId(openId);
+            CommerceModel commerceModel = new CommerceModel();
+            commerceModel.queryRenameByOpenIdTransform(daos);
+            return Result.success(commerceModel.getOrderDTOS());
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.NO_DATAS);
+        }
+    }
+
+
+    public Result findChangeTaxInfoByOpenId(String openId)
+    {
+        if (Strings.isNullOrEmpty(openId))
+            return Result.failure(TopErrorCode.NO_DATAS);
+        try {
+
+            List<CommerceChangeTaxInfoDao> daos = commerceChangeTaxInfoQueryEntity.
+                    findChangeTaxInfoByOpenId(openId);
+
+            CommerceModel commerceModel = new CommerceModel();
+            commerceModel.queryChangeTaxByOpenIdTransform(daos);
+            return Result.success(commerceModel.getOrderDTOS());
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.NO_DATAS);
+        }
+    }
+
+
+
+    public Result findIncreaseCapacityByOpenId(String openId)
+    {
+        if (Strings.isNullOrEmpty(openId))
+            return Result.failure(TopErrorCode.NO_DATAS);
+        try {
+
+            List<CommerceIncreaseCapacityDao> daos = commerceIncreaseCapacityQueryEntity.
+                    findIncreaseCapacityByOpenId(openId);
+
+            CommerceModel commerceModel = new CommerceModel(daos);
+            commerceModel.queryIncreaseByOpenIdTransform();
+            return Result.success(commerceModel.getOrderDTOS());
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.NO_DATAS);
+        }
+    }
+
+
+    public Result findByOpenId(String id)
+    {
+        List<InhabitantNewDao> inhabitantNewDaos = inhabitantNewQueryEntity.findByOpenId(id);
+        List<CommerceNewDao> commerceNewDaos = commerceNewQueryEntity.findByOpenId(id);
+        if( inhabitantNewDaos.size() <= 0 || commerceNewDaos.size() <= 0)
+            return null;
+        OrderModel model = new OrderModel(inhabitantNewDaos,commerceNewDaos);
+        model.queryOrderByOpenIdTransform();
+
+        return Result.success(model.getOrderDTOS());
+    }
+
+
+
+
+
+
+
 
     /**
      *删除个体增容订单
@@ -176,8 +254,6 @@ public class SgccBusinessService {
             e.printStackTrace();
             return Result.failure(TopErrorCode.NO_DATAS);
         }
-
-
 
     }
 
@@ -342,32 +418,32 @@ public class SgccBusinessService {
      * 查询当前用户所有订单列表
      * @return
      */
-    public Result queryOrderByOpenIdAll(String openId){
-
-        if (Strings.isNullOrEmpty(openId))
-            return Result.failure(TopErrorCode.NO_DATAS);
-
-        List<InhabitantRenameOrderListDTO> dtos = new ArrayList<>();
-        InhabitantRenameOrderListDTO dto1 = new InhabitantRenameOrderListDTO(
-                UUID.randomUUID().toString().replace("-","6"),
-                "0481234590",
-                "刘德华",
-                "高新区天府五街美年广场A座1144号",
-                "已提交"
-        );
-
-        InhabitantRenameOrderListDTO dto2 = new InhabitantRenameOrderListDTO(
-                UUID.randomUUID().toString().replace("-","6"),
-                "0485432190",
-                "梁朝伟",
-                "高新区天府五街美年广场A座1144号",
-                "已提交"
-        );
-        dtos.add(dto1);
-        dtos.add(dto2);
-
-        return Result.success(dtos);
-    }
+//    public Result queryOrderByOpenIdAll(String openId){
+//
+//        if (Strings.isNullOrEmpty(openId))
+//            return Result.failure(TopErrorCode.NO_DATAS);
+//
+//        List<InhabitantRenameOrderListDTO> dtos = new ArrayList<>();
+//        InhabitantRenameOrderListDTO dto1 = new InhabitantRenameOrderListDTO(
+//                UUID.randomUUID().toString().replace("-","6"),
+//                "0481234590",
+//                "刘德华",
+//                "高新区天府五街美年广场A座1144号",
+//                "已提交"
+//        );
+//
+//        InhabitantRenameOrderListDTO dto2 = new InhabitantRenameOrderListDTO(
+//                UUID.randomUUID().toString().replace("-","6"),
+//                "0485432190",
+//                "梁朝伟",
+//                "高新区天府五街美年广场A座1144号",
+//                "已提交"
+//        );
+//        dtos.add(dto1);
+//        dtos.add(dto2);
+//
+//        return Result.success(dtos);
+//    }
 
 
 
@@ -455,6 +531,7 @@ public class SgccBusinessService {
         InhabitantModel model = new InhabitantModel();
         return model.InhabitantNewDao2DTO(dao);
     }
+
 
     public void DeleteInhabitantNewRecors( DeleteDTO dto )
     {

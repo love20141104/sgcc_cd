@@ -104,6 +104,25 @@ public class InhabitantNewRepository {
         }
     }
 
+
+    public List<InhabitantNewDao> findByOpenId(String id )
+    {
+        String sql = "select id,user_open_id,new_install_district,new_install_address," +
+                "new_install_capacity,propertyRight_img1,propertyRight_img2," +
+                "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
+                "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
+                "new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
+                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_inhabitant where user_open_id ='" + id + "'";
+
+        try {
+            return jdbcTemplate.query(sql, new InhabitantNewRowMapper());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("失败！！");
+        }
+    }
+
+
     class InhabitantNewRowMapper implements RowMapper<InhabitantNewDao> {
         @Override
         public InhabitantNewDao mapRow(ResultSet rs, int i) throws SQLException {

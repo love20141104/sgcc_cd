@@ -121,6 +121,28 @@ public class CommerceNewRepository {
             throw new RuntimeException("失败！！");
         }
     }
+
+
+    public List<CommerceNewDao> findByOpenId(String id )
+    {
+        String sql = "select id,user_open_id,new_install_company_name,new_install_district,new_install_address," +
+                "new_install_capacity,new_install_license_img,propertyRight_img1,propertyRight_img2," +
+                "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6,new_install_name," +
+                "cq_idcard_positive_img,cq_idcard_back_img,new_install_idcard,new_install_telphone,new_install_invoice," +
+                "invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
+                "invoice_date,invoice_img,new_install_apply_person,new_install_transactor,sq_idcard_positive_img," +
+                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_commerce where user_open_id ='" + id + "'";
+
+        try {
+            return jdbcTemplate.query(sql, new CommerceNewRowMapper());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("失败！！");
+        }
+    }
+
+
+
     public CommerceNewDao findByUserOpenId(String user_open_id )
     {
         String sql = "select id,user_open_id,new_install_company_name,new_install_district,new_install_address," +

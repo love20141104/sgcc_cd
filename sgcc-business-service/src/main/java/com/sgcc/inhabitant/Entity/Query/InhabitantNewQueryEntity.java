@@ -23,4 +23,13 @@ public class InhabitantNewQueryEntity {
     {
         return inhabitantNewRepository.findById(id);
     }
+
+
+    public List<InhabitantNewDao> findByOpenId(String id )
+    {
+        return inhabitantNewRepository.findByOpenId(id);
+    }
+
+
+
 }

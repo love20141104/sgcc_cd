@@ -5,6 +5,8 @@ import com.sgcc.commerce.dao.CommerceChangeTaxInfoDao;
 import com.sgcc.commerce.dao.CommerceIncreaseCapacityDao;
 import com.sgcc.commerce.dao.CommerceNewDao;
 import com.sgcc.commerce.dto.*;
+import com.sgcc.dto.OrderDTO;
+import com.sgcc.inhabitant.dao.InhabitantRenameDao;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -21,7 +23,11 @@ public class CommerceModel {
 
     private String id;
 
+    private List<OrderDTO> orderDTOS = new ArrayList<>();
+
     private CommerceIncreaseCapacityDao commerceIncreaseCapacityDao;
+
+    private List<CommerceChangeTaxInfoDao> daos = new ArrayList<>();
 
     private CommerceIncreaseCapacitySubmitDTO commerceIncreaseCapacitySubmitDTO;
 
@@ -33,6 +39,8 @@ public class CommerceModel {
 
     private List<CommerceIncreaseCapacityDetailDTO> detailDTOS = new ArrayList<>();
 
+
+
     public CommerceModel(CommerceIncreaseCapacitySubmitDTO commerceIncreaseCapacitySubmitDTO) {
         this.commerceIncreaseCapacitySubmitDTO = commerceIncreaseCapacitySubmitDTO;
     }
@@ -41,10 +49,70 @@ public class CommerceModel {
         this.openId = openId;
         this.commerceIncreaseCapacityDaos = commerceIncreaseCapacityDaos;
     }
+    public CommerceModel( List<CommerceIncreaseCapacityDao> commerceIncreaseCapacityDaos) {
+        this.commerceIncreaseCapacityDaos = commerceIncreaseCapacityDaos;
+    }
 
     public CommerceModel(CommerceIncreaseCapacityUpdateDTO commerceIncreaseCapacityUpdateDTO) {
         this.commerceIncreaseCapacityUpdateDTO = commerceIncreaseCapacityUpdateDTO;
     }
+
+
+    public void queryRenameByOpenIdTransform(List<InhabitantRenameDao> daos){
+        String addr = "高新区天府五街美年广场A座1144号";
+        String progress = "已提交";
+        String userType = "居民";
+        daos.forEach(dao->{
+            this.orderDTOS.add(new OrderDTO(
+                    dao.getId().replace("-",""),
+                    Utils.GetTime(dao.getSubmitDate()),
+                    dao.getOpenId(),
+                    dao.getHouseName(),
+                    addr,
+                    progress,
+                    userType
+            ));
+        });
+
+    }
+
+
+    public void queryChangeTaxByOpenIdTransform(List<CommerceChangeTaxInfoDao> daos){
+        String progress = "已提交";
+        String userType = "个体工商户";
+        daos.forEach(dao->{
+            this.orderDTOS.add(new OrderDTO(
+                    dao.getId().replace("-",""),
+                    Utils.GetTime(dao.getSubmit_date()),
+                    dao.getUser_open_id(),
+                    dao.getNew_install_company_name(),
+                    dao.getNew_install_address(),
+                    progress,
+                    userType
+            ));
+        });
+
+    }
+
+
+    public void queryIncreaseByOpenIdTransform(){
+        String progress = "已提交";
+        String userType = "个体工商户";
+        this.commerceIncreaseCapacityDaos.forEach(dao->{
+            this.orderDTOS.add(new OrderDTO(
+                    dao.getId().replace("-",""),
+                    Utils.GetTime(dao.getSubmitDate()),
+                    dao.getOpenId(),
+                    dao.getCompanyName(),
+                    dao.getInvoiceRegistAddr(),
+                    progress,
+                    userType
+            ));
+        });
+
+    }
+
+
 
     public void queryIncreaseCapacityAllTransform(){
         this.commerceIncreaseCapacityDaos.forEach(commerceIncreaseCapacityDao->{

@@ -46,7 +46,8 @@ public class FastDFSClient {
      * @throws IOException
      */
     public String uploadFile(MultipartFile file) throws IOException {
-        StorePath storePath = storageClient.uploadFile(file.getInputStream(),file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()),null);
+        StorePath storePath = storageClient.uploadFile(file.getInputStream(),file.getSize(),
+                FilenameUtils.getExtension(file.getOriginalFilename()),null);
         String url = getResAccessUrl(storePath);
         if( Utils.verifyUrl(url) )
             return storePath.getFullPath();

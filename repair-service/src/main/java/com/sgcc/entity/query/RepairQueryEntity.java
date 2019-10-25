@@ -18,8 +18,8 @@ public class RepairQueryEntity {
         return repairRepository.findRepairOrderAll();
     }
 
-    public List<RepairDao> findRepairOrderById(String repairId){
-        return repairRepository.findRepairOrderById(repairId);
+    public RepairDao findRepairOrderById(String repairId){
+        return repairRepository.findRepairOrderById(repairId).get(0);
     }
 
 

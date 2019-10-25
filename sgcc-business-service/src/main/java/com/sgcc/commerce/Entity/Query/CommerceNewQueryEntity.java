@@ -17,4 +17,11 @@ public class CommerceNewQueryEntity {
     {
         return commerceNewRepository.findById(id);
     }
+
+
+    public List<CommerceNewDao> findByOpenId(String openId )
+    {
+        return commerceNewRepository.findByOpenId(openId);
+    }
+
 }

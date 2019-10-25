@@ -42,6 +42,17 @@ public class InhabitantRenameRepository {
         return jdbcTemplate.query(sql,new RenameRowMapper());
     }
 
+
+    public List<InhabitantRenameDao> findRenameById(String openId){
+        String sql = "select id,info_id,house_id,user_open_id,info_change,info_name,info_idcard," +
+                "info_telphone,cq_idcard_img_positive,cq_idcard_img_back,info_submit_date from b_rename_transfer" +
+                " where user_open_id='"+openId+"'";
+
+        return jdbcTemplate.query(sql,new RenameRowMapper());
+    }
+
+
+
     /**
      * 删除
      * @param ids

@@ -65,6 +65,22 @@ public class CommerceIncreaseCapacityRepository {
 
     }
 
+
+    public List<CommerceIncreaseCapacityDao> findIncreaseCapacityByOpenId(String openId){
+
+        String sql = "select id,user_open_id,in_company_name,in_current_capacity,in_name,in_idcard,in_telphone," +
+                "sq_idcard_positive_img,cq_idcard_back_img,in_license_img,propertyRight_img1,propertyRight_img2," +
+                "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6,in_apply_person," +
+                "in_transactor,in_transactor_idcard,cq_idcard_positive_img,sq_idcard_back_img,in_invoice," +
+                "invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
+                "invoice_date,invoice_img,in_submit_date,sq_attorney_img,in_transactor_tel from b_increase_capacity_commerce " +
+                "where user_open_id='"+openId+"'";
+        return jdbcTemplate.query(sql,new IncreaseCapacityRowMapper());
+
+    }
+
+
+
     /**
      *查询所有增容详情
      * @return

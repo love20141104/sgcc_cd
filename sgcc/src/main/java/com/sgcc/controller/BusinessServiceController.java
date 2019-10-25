@@ -47,10 +47,29 @@ public class BusinessServiceController {
 
 
 
-    @ApiOperation(value = "查询当前用户所有订单列表", notes = "")
-    @GetMapping(value = "/orderList/{openId}")
-    public Result queryOrderByOpenIdAll(@PathVariable String openId) {
-        return  sgccBusinessService.queryOrderByOpenIdAll(openId);
+    @ApiOperation(value = "更名过户表单列表查询", notes = "")
+    @GetMapping(value = "/renameAndTransfer/orderList/{openId}")
+    public Result findByOpenIdForRename(@PathVariable String openId) {
+        return  sgccBusinessService.findRenameByOpenId(openId);
+    }
+    @ApiOperation(value = "新装表单列表查询", notes = "")
+    @GetMapping(value = "/NewInstall/orderList/{openId}")
+    public Result findByOpenIdForNew(@PathVariable String openId ) {
+        return Result.success(sgccBusinessService.findByOpenId(openId));
+    }
+
+
+    @ApiOperation(value = "增容表单列表查询", notes = "")
+    @GetMapping(value = "/increaseCapacity/orderList/{openId}")
+    public Result findByOpenIdForIncrease(@PathVariable String openId ) {
+        return Result.success(sgccBusinessService.findIncreaseCapacityByOpenId(openId));
+    }
+
+
+    @ApiOperation(value = "税票变更表单列表查询", notes = "")
+    @GetMapping(value = "/CommerceChangeTaxInfo/orderList/{openId}")
+    public Result findByOpenIdForChangeTax(@PathVariable String openId ) {
+        return Result.success(sgccBusinessService.findChangeTaxInfoByOpenId(openId));
     }
 
 

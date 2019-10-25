@@ -2,6 +2,7 @@ package com.sgcc.service;
 
 import com.example.result.Result;
 import com.sgcc.dao.RepairDao;
+import com.sgcc.dto.RepairSubmitDTO;
 import com.sgcc.dto.RepairViewDTO;
 import com.sgcc.entity.event.RepairEventEntity;
 import com.sgcc.entity.query.RepairQueryEntity;
@@ -30,10 +31,10 @@ public class RepairService {
 
         try {
             List<RepairDao> repairDaos = repairQueryEntity.findRepairOrderAll();
-            RepairModel repairModel = new RepairModel();
-            List<RepairViewDTO> repairViewDTOS = repairModel.queryAllTransform(repairDaos);
-            if (repairViewDTOS.size() > 0){
-                return Result.success(repairViewDTOS);
+            RepairModel repairModel = new RepairModel(repairDaos);
+            repairModel.queryAllTransform();
+            if (repairModel.getRepairViewDTOS().size() > 0){
+                return Result.success(repairModel.getRepairViewDTOS());
             }else {
                 return Result.failure(TopErrorCode.NO_DATAS);
             }
@@ -48,9 +49,21 @@ public class RepairService {
      * @param
      * @return
      */
-    public Result findRepairOrderById(){
+    public Result findRepairOrderById(String repairId){
 
-        return Result.success();
+        try {
+            RepairDao repairDao = repairQueryEntity.findRepairOrderById(repairId);
+            RepairModel repairModel = new RepairModel(repairDao);
+            repairModel.queryByIdTransform();
+            if (repairModel.getRepairViewDTO() != null){
+                return Result.success(repairModel.getRepairViewDTOS());
+            }else {
+                return Result.failure(TopErrorCode.NO_DATAS);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
     }
 
     /**
@@ -58,7 +71,8 @@ public class RepairService {
      * @param
      * @return
      */
-    public Result addRepairOrder(){
+    public Result addRepairOrder(RepairSubmitDTO dto){
+
 
         return Result.success();
     }

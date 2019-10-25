@@ -28,4 +28,9 @@ public class CommerceIncreaseCapacityQueryEntity {
     }
 
 
+    public List<CommerceIncreaseCapacityDao> findIncreaseCapacityByOpenId(String openId){
+        return commerceIncreaseCapacityRepository.findIncreaseCapacityByOpenId(openId);
+    }
+
+
 }

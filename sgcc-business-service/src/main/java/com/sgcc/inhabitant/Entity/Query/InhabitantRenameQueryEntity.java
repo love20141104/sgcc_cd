@@ -35,4 +35,10 @@ public class InhabitantRenameQueryEntity {
     }
 
 
+
+    public List<InhabitantRenameDao> queryByOpenId(String openId){
+        return inhabitantRenameRepository.findRenameById(openId);
+    }
+
+
 }
