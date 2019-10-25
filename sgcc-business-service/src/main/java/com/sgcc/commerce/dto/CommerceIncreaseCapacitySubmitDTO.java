@@ -40,8 +40,7 @@ public class CommerceIncreaseCapacitySubmitDTO implements Serializable {
 //    private String sqIdcardBackImg;
 //    private String invoiceImg;              // 一般纳税人资格证明
 
-
-
+    private String user_open_id;
     private String in_company_name;
     private Double in_current_capacity;
     private String in_name;
@@ -69,8 +68,10 @@ public class CommerceIncreaseCapacitySubmitDTO implements Serializable {
     private String sq_idcard_positive_img;
     private String sq_idcard_back_img;
     private String invoice_img;              // 一般纳税人资格证明
+    private String in_transactor_tel;
+    private String sq_attorney_img;
 
-    public CommerceIncreaseCapacitySubmitDTO(String in_company_name, Double in_current_capacity, String in_name,
+    public CommerceIncreaseCapacitySubmitDTO(String user_open_id,String in_company_name, Double in_current_capacity, String in_name,
                                              String in_idcard, String in_telphone, String in_license_img,
                                              String in_apply_person, String in_transactor, String in_transactor_idcard,
                                              Boolean in_invoice, String invoice_number, String invoice_bank,
@@ -80,7 +81,8 @@ public class CommerceIncreaseCapacitySubmitDTO implements Serializable {
                                              String propertyRight_img5, String propertyRight_img6,
                                              String cq_idcard_positive_img, String cq_idcard_back_img,
                                              String sq_idcard_positive_img, String sq_idcard_back_img,
-                                             String invoice_img) {
+                                             String invoice_img,String in_transactor_tel,String sq_attorney_img) {
+        this.user_open_id = user_open_id;
         this.in_company_name = in_company_name;
         this.in_current_capacity = in_current_capacity;
         this.in_name = in_name;
@@ -108,6 +110,9 @@ public class CommerceIncreaseCapacitySubmitDTO implements Serializable {
         this.sq_idcard_positive_img = sq_idcard_positive_img;
         this.sq_idcard_back_img = sq_idcard_back_img;
         this.invoice_img = invoice_img;
+        this.in_transactor_tel = in_transactor_tel;
+        this.sq_attorney_img = sq_attorney_img;
+
     }
 
 

@@ -92,9 +92,9 @@ public class BusinessServiceController {
     // -------------------------个体工商业增容--------------------------------------
 
     @ApiOperation(value = "增容提交-个体工商业", notes = "")
-    @PostMapping(value = "/increaseCapacity/order/{openId}")
-    public Result addIncreaseCapacity(@PathVariable String openId,@RequestBody CommerceIncreaseCapacitySubmitDTO dto) {
-        return  sgccBusinessService.addIncreaseCapacityOrders(dto,openId);
+    @PostMapping(value = "/increaseCapacity/order")
+    public Result addIncreaseCapacity(@RequestBody CommerceIncreaseCapacitySubmitDTO dto) {
+        return  sgccBusinessService.addIncreaseCapacityOrders(dto);
     }
 
     @ApiOperation(value = "增容查询-个体工商业", notes = "")
@@ -110,10 +110,9 @@ public class BusinessServiceController {
     }
 
     @ApiOperation(value = "增容修改-个体工商业", notes = "")
-    @PutMapping(value = "/increaseCapacity/commerce/{id}")
-    public Result updateIncreaseCapacityForGeOrderList(@PathVariable String id,
-                                                       @RequestBody CommerceIncreaseCapacityUpdateDTO dto) {
-        return  sgccBusinessService.updateIncreaseCapacityOrders(dto,id);
+    @PutMapping(value = "/increaseCapacity/commerce")
+    public Result updateIncreaseCapacityForGeOrderList(@RequestBody CommerceIncreaseCapacityUpdateDTO dto) {
+        return  sgccBusinessService.updateIncreaseCapacityOrders(dto);
     }
 
     @ApiOperation(value = "增容删除-个体工商业", notes = "")

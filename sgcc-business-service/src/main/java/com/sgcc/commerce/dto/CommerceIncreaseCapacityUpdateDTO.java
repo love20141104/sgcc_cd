@@ -9,6 +9,8 @@ import java.io.Serializable;
 @NoArgsConstructor  //生成无参构造函数
 public class CommerceIncreaseCapacityUpdateDTO implements Serializable {
     private static final long serialVersionUID = -2768189117712127898L;
+    private String id;
+    private String user_open_id;
     private String in_company_name;
     private Double in_current_capacity;
     private String in_name;
@@ -35,9 +37,11 @@ public class CommerceIncreaseCapacityUpdateDTO implements Serializable {
     private String sq_idcard_positive_img;
     private String sq_idcard_back_img;
     private String invoice_img;              // 一般纳税人
+    private String in_submit_date;
+    private String in_transactor_tel;
+    private String sq_attorney_img;
 
-
-    public CommerceIncreaseCapacityUpdateDTO(String in_company_name, Double in_current_capacity, String in_name,
+    public CommerceIncreaseCapacityUpdateDTO(String id,String user_open_id,String in_company_name, Double in_current_capacity, String in_name,
                                              String in_idcard, String in_telphone, String in_license_img,
                                              String in_apply_person, String in_transactor, String in_transactor_idcard,
                                              Boolean in_invoice, String invoice_number, String invoice_bank,
@@ -47,7 +51,9 @@ public class CommerceIncreaseCapacityUpdateDTO implements Serializable {
                                              String propertyRight_img5, String propertyRight_img6,
                                              String cq_idcard_positive_img, String cq_idcard_back_img,
                                              String sq_idcard_positive_img, String sq_idcard_back_img,
-                                             String invoice_img) {
+                                             String invoice_img,String in_submit_date,String in_transactor_tel,String sq_attorney_img) {
+        this.id = id;
+        this.user_open_id = user_open_id;
         this.in_company_name = in_company_name;
         this.in_current_capacity = in_current_capacity;
         this.in_name = in_name;
@@ -74,5 +80,9 @@ public class CommerceIncreaseCapacityUpdateDTO implements Serializable {
         this.sq_idcard_positive_img = sq_idcard_positive_img;
         this.sq_idcard_back_img = sq_idcard_back_img;
         this.invoice_img = invoice_img;
+        this.in_submit_date = in_submit_date;
+        this.in_transactor_tel = in_transactor_tel;
+        this.sq_attorney_img = sq_attorney_img;
+
     }
 }

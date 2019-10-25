@@ -33,8 +33,7 @@ public class CommerceModel {
 
     private List<CommerceIncreaseCapacityDetailDTO> detailDTOS = new ArrayList<>();
 
-    public CommerceModel(String openId, CommerceIncreaseCapacitySubmitDTO commerceIncreaseCapacitySubmitDTO) {
-        this.openId = openId;
+    public CommerceModel(CommerceIncreaseCapacitySubmitDTO commerceIncreaseCapacitySubmitDTO) {
         this.commerceIncreaseCapacitySubmitDTO = commerceIncreaseCapacitySubmitDTO;
     }
 
@@ -43,9 +42,8 @@ public class CommerceModel {
         this.commerceIncreaseCapacityDaos = commerceIncreaseCapacityDaos;
     }
 
-    public CommerceModel(CommerceIncreaseCapacityUpdateDTO commerceIncreaseCapacityUpdateDTO ,String id) {
+    public CommerceModel(CommerceIncreaseCapacityUpdateDTO commerceIncreaseCapacityUpdateDTO) {
         this.commerceIncreaseCapacityUpdateDTO = commerceIncreaseCapacityUpdateDTO;
-        this.id = id;
     }
 
     public void queryIncreaseCapacityAllTransform(){
@@ -80,7 +78,9 @@ public class CommerceModel {
                     commerceIncreaseCapacityDao.getSqIdcardPositiveImg(),
                     commerceIncreaseCapacityDao.getSqIdcardBackImg(),
                     commerceIncreaseCapacityDao.getInvoiceImg(),
-                    commerceIncreaseCapacityDao.getSubmitDate()
+                    commerceIncreaseCapacityDao.getSubmitDate(),
+                    commerceIncreaseCapacityDao.getTransactorTel(),
+                    commerceIncreaseCapacityDao.getSqAttorneyImg()
             ));
         });
 
@@ -90,6 +90,7 @@ public class CommerceModel {
     public void queryIncreaseCapacityByGeTransform(){
         this.commerceIncreaseCapacityDaos.forEach(commerceIncreaseCapacityDao->{
             this.commerceIncreaseCapacitySubmitDTOS.add(new CommerceIncreaseCapacitySubmitDTO(
+                    commerceIncreaseCapacityDao.getOpenId(),
                     commerceIncreaseCapacityDao.getCompanyName(),
                     commerceIncreaseCapacityDao.getCurrentCapacity(),
                     commerceIncreaseCapacityDao.getName(),
@@ -116,7 +117,9 @@ public class CommerceModel {
                     commerceIncreaseCapacityDao.getCqIdcardBackImg(),
                     commerceIncreaseCapacityDao.getSqIdcardPositiveImg(),
                     commerceIncreaseCapacityDao.getSqIdcardBackImg(),
-                    commerceIncreaseCapacityDao.getInvoiceImg()
+                    commerceIncreaseCapacityDao.getInvoiceImg(),
+                    commerceIncreaseCapacityDao.getTransactorTel(),
+                    commerceIncreaseCapacityDao.getSqAttorneyImg()
             ));
         });
 
@@ -128,7 +131,7 @@ public class CommerceModel {
         String id = UUID.randomUUID().toString();
         this.commerceIncreaseCapacityDao = new CommerceIncreaseCapacityDao(
                 id,
-                this.getOpenId(),
+                this.commerceIncreaseCapacitySubmitDTO.getUser_open_id(),
                 this.commerceIncreaseCapacitySubmitDTO.getIn_company_name(),
                 this.commerceIncreaseCapacitySubmitDTO.getIn_current_capacity(),
                 this.commerceIncreaseCapacitySubmitDTO.getIn_name(),
@@ -138,6 +141,7 @@ public class CommerceModel {
                 this.commerceIncreaseCapacitySubmitDTO.getIn_apply_person(),
                 this.commerceIncreaseCapacitySubmitDTO.getIn_transactor(),
                 this.commerceIncreaseCapacitySubmitDTO.getIn_transactor_idcard(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_transactor_tel(),
                 this.commerceIncreaseCapacitySubmitDTO.getIn_invoice(),
                 this.commerceIncreaseCapacitySubmitDTO.getInvoice_number(),
                 this.commerceIncreaseCapacitySubmitDTO.getInvoice_bank(),
@@ -156,6 +160,7 @@ public class CommerceModel {
                 this.commerceIncreaseCapacitySubmitDTO.getSq_idcard_positive_img(),
                 this.commerceIncreaseCapacitySubmitDTO.getSq_idcard_back_img(),
                 this.commerceIncreaseCapacitySubmitDTO.getInvoice_img(),
+                this.commerceIncreaseCapacitySubmitDTO.getSq_attorney_img(),
                 new Date()
         );
 
@@ -164,8 +169,8 @@ public class CommerceModel {
 
     public void updateIncreaseCapacityTransform(){
         this.commerceIncreaseCapacityDao = new CommerceIncreaseCapacityDao(
-                this.id,
-                null,
+                this.commerceIncreaseCapacityUpdateDTO.getId(),
+                this.commerceIncreaseCapacityUpdateDTO.getUser_open_id(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_company_name(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_current_capacity(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_name(),
@@ -175,6 +180,7 @@ public class CommerceModel {
                 this.commerceIncreaseCapacityUpdateDTO.getIn_apply_person(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_transactor(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_transactor_idcard(),
+                this.commerceIncreaseCapacitySubmitDTO.getIn_transactor_tel(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_invoice(),
                 this.commerceIncreaseCapacityUpdateDTO.getInvoice_number(),
                 this.commerceIncreaseCapacityUpdateDTO.getInvoice_bank(),
@@ -193,6 +199,7 @@ public class CommerceModel {
                 this.commerceIncreaseCapacityUpdateDTO.getSq_idcard_positive_img(),
                 this.commerceIncreaseCapacityUpdateDTO.getSq_idcard_back_img(),
                 this.commerceIncreaseCapacityUpdateDTO.getInvoice_img(),
+                this.commerceIncreaseCapacitySubmitDTO.getSq_attorney_img(),
                 null
         );
     }

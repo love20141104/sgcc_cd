@@ -74,6 +74,8 @@ public class CommerceIncreaseCapacityDetailDTO implements Serializable {
     private String sq_idcard_back_img;
     private String invoice_img;              // 一般纳税人资格证明
     private Date in_submit_date;
+    private String in_transactor_tel;
+    private String sq_attorney_img;
 
     public CommerceIncreaseCapacityDetailDTO(String id, String user_open_id, String in_company_name,
                                              Double in_current_capacity, String in_name, String in_idcard,
@@ -86,7 +88,7 @@ public class CommerceIncreaseCapacityDetailDTO implements Serializable {
                                              String propertyRight_img5, String propertyRight_img6,
                                              String cq_idcard_positive_img, String cq_idcard_back_img,
                                              String sq_idcard_positive_img, String sq_idcard_back_img,
-                                             String invoice_img, Date in_submit_date) {
+                                             String invoice_img, Date in_submit_date,String in_transactor_tel,String sq_attorney_img) {
         this.id = id;
         this.user_open_id = user_open_id;
         this.in_company_name = in_company_name;
@@ -117,5 +119,7 @@ public class CommerceIncreaseCapacityDetailDTO implements Serializable {
         this.sq_idcard_back_img = sq_idcard_back_img;
         this.invoice_img = invoice_img;
         this.in_submit_date = in_submit_date;
+        this.in_transactor_tel = in_transactor_tel;
+        this.sq_attorney_img = sq_attorney_img;
     }
 }

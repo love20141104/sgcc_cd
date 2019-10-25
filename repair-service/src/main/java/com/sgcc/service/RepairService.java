@@ -1,11 +1,16 @@
 package com.sgcc.service;
 
 import com.example.result.Result;
+import com.sgcc.dao.RepairDao;
+import com.sgcc.dto.RepairViewDTO;
 import com.sgcc.entity.event.RepairEventEntity;
 import com.sgcc.entity.query.RepairQueryEntity;
 import com.sgcc.exception.TopErrorCode;
+import com.sgcc.model.RepairModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RepairService {
@@ -24,13 +29,18 @@ public class RepairService {
     public Result findRepairOrderAll(){
 
         try {
-
+            List<RepairDao> repairDaos = repairQueryEntity.findRepairOrderAll();
+            RepairModel repairModel = new RepairModel();
+            List<RepairViewDTO> repairViewDTOS = repairModel.queryAllTransform(repairDaos);
+            if (repairViewDTOS.size() > 0){
+                return Result.success(repairViewDTOS);
+            }else {
+                return Result.failure(TopErrorCode.NO_DATAS);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
-
-        return Result.success();
     }
 
     /**

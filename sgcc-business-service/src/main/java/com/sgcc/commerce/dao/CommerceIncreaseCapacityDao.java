@@ -23,6 +23,7 @@ public class CommerceIncreaseCapacityDao implements Serializable {
     private String aplicant;        // 申请人
     private String transactor;      // 代办人
     private String transactorIdcard;
+    private String transactorTel;
 
     private Boolean invoiceFlag;        // 是否开发票
     private String invoiceNum;        // 纳税人识别号
@@ -43,21 +44,21 @@ public class CommerceIncreaseCapacityDao implements Serializable {
     private String sqIdcardPositiveImg;     // 代办人
     private String sqIdcardBackImg;
     private String invoiceImg;              // 一般纳税人资格证明
+    private String sqAttorneyImg;           // 申请人委托书
     private Date submitDate;
 
 
-    public CommerceIncreaseCapacityDao(String id, String openId, String companyName,
-                                       Double currentCapacity, String name, String idcard, String contactTel,
-                                       String licenseImg, String aplicant, String transactor, String transactorIdcard,
+    public CommerceIncreaseCapacityDao(String id, String openId, String companyName, Double currentCapacity,
+                                       String name, String idcard, String contactTel, String licenseImg,
+                                       String aplicant, String transactor, String transactorIdcard, String transactorTel,
                                        Boolean invoiceFlag, String invoiceNum, String invoiceBank,
                                        String invoiceBankAccount, String invoiceRegistAddr, String invoiceContactTel,
                                        Date invoiceDate, String securitiesImg1, String securitiesImg2,
                                        String securitiesImg3, String securitiesImg4, String securitiesImg5,
                                        String securitiesImg6, String cqIdcardPositiveImg, String cqIdcardBackImg,
                                        String sqIdcardPositiveImg, String sqIdcardBackImg, String invoiceImg,
-                                       Date submitDate) {
+                                       String sqAttorneyImg, Date submitDate) {
         this.id = id;
-//        this.orderNo = orderNo;
         this.openId = openId;
         this.companyName = companyName;
         this.currentCapacity = currentCapacity;
@@ -68,6 +69,7 @@ public class CommerceIncreaseCapacityDao implements Serializable {
         this.aplicant = aplicant;
         this.transactor = transactor;
         this.transactorIdcard = transactorIdcard;
+        this.transactorTel = transactorTel;
         this.invoiceFlag = invoiceFlag;
         this.invoiceNum = invoiceNum;
         this.invoiceBank = invoiceBank;
@@ -86,8 +88,7 @@ public class CommerceIncreaseCapacityDao implements Serializable {
         this.sqIdcardPositiveImg = sqIdcardPositiveImg;
         this.sqIdcardBackImg = sqIdcardBackImg;
         this.invoiceImg = invoiceImg;
+        this.sqAttorneyImg = sqAttorneyImg;
         this.submitDate = submitDate;
-
-
     }
 }
