@@ -1,12 +1,13 @@
 package com.sgcc.model;
 
+import com.example.Utils;
 import com.sgcc.dao.RepairDao;
+import com.sgcc.dto.OrderDTO;
 import com.sgcc.dto.RepairEditDTO;
 import com.sgcc.dto.RepairSubmitDTO;
 import com.sgcc.dto.RepairViewDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,11 +22,15 @@ public class RepairModel {
 
     private RepairDao repairDao;
 
+    private OrderDTO orderDTO;
+
     private RepairSubmitDTO repairSubmitDTO;
 
     private RepairViewDTO repairViewDTO;
 
     private RepairEditDTO repairEditDTO;
+
+    private List<OrderDTO> orderDTOS = new ArrayList<>();
 
     private List<RepairDao> repairDaos = new ArrayList<>();
 
@@ -37,6 +42,40 @@ public class RepairModel {
 
     public RepairModel(List<RepairDao> repairDaos) {
         this.repairDaos = repairDaos;
+    }
+
+
+    public void queryByOpenIdTransform(List<RepairDao> repairDaos){
+        String progress = "抢修中";
+        repairDaos.forEach(dao->{
+            this.orderDTO = new OrderDTO();
+            orderDTO.setOrderNo(dao.getRepairId());
+            orderDTO.setAddress(dao.getRepairAddr());
+            orderDTO.setApplyDate(Utils.GetTime(dao.getSubmitDate()));
+            orderDTO.setProgress(progress);
+            orderDTO.setUserName(dao.getRepairContact());
+            orderDTO.setUserNo(dao.getOpenId());
+            this.orderDTOS.add(orderDTO);
+        });
+    }
+
+
+
+    public void updateRepairTransform(RepairEditDTO dto){
+        this.repairDao = new RepairDao(
+                null,
+                dto.getRepairId(),
+                dto.getOpenId(),
+                dto.getRepairContent(),
+                dto.getRepairContact(),
+                dto.getRepairTel(),
+                dto.getRepairAddr(),
+                dto.getRepairImg1(),
+                dto.getRepairImg2(),
+                dto.getRepairImg3(),
+                null
+        );
+
     }
 
 

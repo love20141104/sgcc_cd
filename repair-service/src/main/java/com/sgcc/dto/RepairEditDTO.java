@@ -14,6 +14,10 @@ public class RepairEditDTO implements Serializable {
 
     private static final long serialVersionUID = -6165795304311113089L;
 
+    private String repairId;
+
+    private String openId;
+
     private String repairContent;
 
     private String repairContact;
@@ -22,6 +26,10 @@ public class RepairEditDTO implements Serializable {
 
     private String repairAddr;
 
+    private String repairImg1;
 
+    private String repairImg2;
+
+    private String repairImg3;
 
 }
