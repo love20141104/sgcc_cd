@@ -3,17 +3,16 @@ package com.sgcc.service;
 import com.example.Utils;
 import com.example.result.Result;
 import com.sgcc.dao.ApiStatisticsDao;
-import com.sgcc.dto.ApiStatistcsMonthDto;
 import com.sgcc.dto.ApiStatisticsActiveDto;
-import com.sgcc.dto.ApiStatisticsQueryDto;
 import com.sgcc.entity.ApiStatisticsEntity;
+import com.sgcc.exception.TopErrorCode;
+import com.sgcc.sgccenum.DatetypeEnum;
 import com.sgcc.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 
 @Service
 public class ApiStatisticsService {
@@ -50,8 +49,22 @@ public class ApiStatisticsService {
         return divide.doubleValue();
     }
 
-    public Result getApiStatistcsMonthDtoList(){
-        return  Result.success(apiStatisticsEntity.getApiStatistcsMonthDtoList());
+    public Result getApiStatistcsDateDtoList(String tpye){
+        if(DatetypeEnum.MONTH.name().equalsIgnoreCase(tpye)){
+            return  Result.success(apiStatisticsEntity.getApiStatistcsMonthDtoList());
+        }
+        if(DatetypeEnum.WEEK.name().equalsIgnoreCase(tpye)){
+            return  Result.success(apiStatisticsEntity.getApiStatistcsWeekDtoList());
+        }
+        if(DatetypeEnum.DAY.name().equalsIgnoreCase(tpye)){
+            return  Result.success(apiStatisticsEntity.getApiStatistcsDayDtoList());
+        }
+        if(DatetypeEnum.HOUR.name().equalsIgnoreCase(tpye)){
+            return  Result.success(apiStatisticsEntity.getApiStatistcsHourDtoList());
+        }else {
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        }
+
     }
 
 

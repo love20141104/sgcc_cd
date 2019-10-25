@@ -3,7 +3,7 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.ApiStatisticsDao;
-import com.sgcc.dto.ApiStatistcsMonthDto;
+import com.sgcc.dto.ApiStatistcsDateDto;
 import com.sgcc.dto.ApiStatisticsActiveDto;
 import com.sgcc.dto.ApiStatisticsDto;
 import com.sgcc.dto.ApiStatisticsQueryDto;
@@ -66,7 +66,7 @@ public class ApiStatisticsRepository {
      *@Author: raphealxx
      *@date: 2019/10/18 0018
      */
-    public ApiStatistcsMonthDto getApiStatisticsCount(String visit_date_begin, String visit_date_end){
+    public ApiStatistcsDateDto getApiStatisticsCount(String visit_date_begin, String visit_date_end){
         String sql="select count(id) num ,count(distinct client_ip) client_ip_num,count(distinct user_open_id) user_open_id_num from b_api_statistics ";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(visit_date_begin)){
@@ -79,9 +79,9 @@ public class ApiStatisticsRepository {
             sql +=" where " + sql_where.toString();
         }
         logger.info("select:"+sql);
-        ApiStatistcsMonthDto query = jdbcTemplate.queryForObject(sql, new ApiStatistcsMonthDtoRowMapper());
+        ApiStatistcsDateDto query = jdbcTemplate.queryForObject(sql, new ApiStatistcsMonthDtoRowMapper());
         if(query==null){
-            return new ApiStatistcsMonthDto(null,0,0,0);
+            return new ApiStatistcsDateDto(null,0,0,0);
         }
         return query;
     }
@@ -173,24 +173,24 @@ public class ApiStatisticsRepository {
             );
         }
     }
-    class ApiStatistcsMonthDtoRowMapper implements RowMapper<ApiStatistcsMonthDto>{
+    class ApiStatistcsMonthDtoRowMapper implements RowMapper<ApiStatistcsDateDto>{
 
         @Override
-        public ApiStatistcsMonthDto mapRow(ResultSet rs, int i) throws SQLException {
-            ApiStatistcsMonthDto apiStatistcsMonthDto = new ApiStatistcsMonthDto();
+        public ApiStatistcsDateDto mapRow(ResultSet rs, int i) throws SQLException {
+            ApiStatistcsDateDto apiStatistcsDateDto = new ApiStatistcsDateDto();
             if(null==rs.getString("num")){
-                apiStatistcsMonthDto.setUrlNum(0);
+                apiStatistcsDateDto.setUrlNum(0);
             }
             if(null==rs.getString("client_ip_num")){
-                apiStatistcsMonthDto.setClientIpNum(0);
+                apiStatistcsDateDto.setClientIpNum(0);
             }
             if(null==rs.getString("user_open_id_num")){
-                apiStatistcsMonthDto.setUserOpenIdNum(0);
+                apiStatistcsDateDto.setUserOpenIdNum(0);
             }
-            apiStatistcsMonthDto.setUrlNum(rs.getInt("num"));
-            apiStatistcsMonthDto.setClientIpNum(rs.getInt("client_ip_num"));
-            apiStatistcsMonthDto.setUserOpenIdNum(rs.getInt("user_open_id_num"));
-            return apiStatistcsMonthDto;
+            apiStatistcsDateDto.setUrlNum(rs.getInt("num"));
+            apiStatistcsDateDto.setClientIpNum(rs.getInt("client_ip_num"));
+            apiStatistcsDateDto.setUserOpenIdNum(rs.getInt("user_open_id_num"));
+            return apiStatistcsDateDto;
         }
     }
 }

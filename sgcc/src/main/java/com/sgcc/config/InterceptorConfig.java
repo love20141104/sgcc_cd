@@ -28,7 +28,11 @@ public class InterceptorConfig  extends WebMvcConfigurationSupport {
         String osname = System.getProperty("os.name");
         if( osname.toLowerCase().contains("win") )
         {
-
+            registry.addResourceHandler("swagger-ui.html")
+                    .addResourceLocations("classpath:/META-INF/resources/")
+                    .addResourceLocations("classpath:/BOOT-INF/lib/");
+            registry.addResourceHandler("/webjars/**")
+                    .addResourceLocations("classpath:/META-INF/resources/webjars/");
         }
         else
         {

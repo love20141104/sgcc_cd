@@ -89,12 +89,93 @@ public class DateUtil {
         return date;
     }
 
+
+    //今天 n:00:00
+    public static Date getnHourFirst(int n) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,n);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        long tt = calendar.getTime().getTime();
+        Date date = new Date(tt);
+        return date;
+    }
+
+    //今天 n:59:59
+    public static Date getnHourLast(int n) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,n);
+        calendar.set(Calendar.MINUTE,59);
+        calendar.set(Calendar.SECOND,59);
+
+        long tt = calendar.getTime().getTime();
+        Date date = new Date(tt);
+        return date;
+    }
+
+    //本周星期 n 00:00:00
+    public static Date getnweekFirst(int n) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK,n);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        long tt = calendar.getTime().getTime();
+        Date date = new Date(tt);
+        return date;
+    }
+
+    //本周星期 n 23:59:59
+    public static Date getnweekLast(int n) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK,n);
+        calendar.set(Calendar.HOUR_OF_DAY,23);
+        calendar.set(Calendar.MINUTE,59);
+        calendar.set(Calendar.SECOND,59);
+        long tt = calendar.getTime().getTime();
+        Date date = new Date(tt);
+        return date;
+    }
+
+    //本月第 n 天 00:00:00
+    public static Date getndayFirst(int n) {
+        Calendar calendar = Calendar.getInstance();
+        int actualMaximum = calendar.getActualMaximum(Calendar.DATE);
+        if(n>actualMaximum){
+            return null;
+        }
+        calendar.set(Calendar.DAY_OF_MONTH,n);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        long tt = calendar.getTime().getTime();
+        Date date = new Date(tt);
+        return date;
+    }
+
+    //本月第 n 天 23:59:59
+    public static Date getndayLast(int n) {
+        Calendar calendar = Calendar.getInstance();
+        int actualMaximum = calendar.getActualMaximum(Calendar.DATE);
+        if(n>actualMaximum){
+            return null;
+        }
+        calendar.set(Calendar.DAY_OF_MONTH,n);
+        calendar.set(Calendar.HOUR_OF_DAY,23);
+        calendar.set(Calendar.MINUTE,59);
+        calendar.set(Calendar.SECOND,59);
+        long tt = calendar.getTime().getTime();
+        Date date = new Date(tt);
+        return date;
+    }
     public static void main(String[] args) {
         /*System.out.println(Utils.GetTime(getnMonthFirst(0)));
         System.out.println(Utils.GetTime(getnMonthLast(0)));*/
-        for (int i = 1; i <=11 ; i++) {
-            System.out.println(Utils.GetTime(getnMonthFirst(i)));
-            System.out.println(Utils.GetTime(getnMonthLast(i)));
+        for (int i = 1; i <=31 ; i++) {
+            if(null!=getndayFirst(i)){
+                System.out.println(Utils.GetTime(getndayFirst(i)));
+                System.out.println(Utils.GetTime(getndayLast(i)));
+            }
         }
     }
 }
