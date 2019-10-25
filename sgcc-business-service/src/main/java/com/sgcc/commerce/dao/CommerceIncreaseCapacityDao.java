@@ -12,7 +12,6 @@ import java.util.Date;
 public class CommerceIncreaseCapacityDao implements Serializable {
     private static final long serialVersionUID = -4788799188392273837L;
     private String id;
-//    private String orderNo;         // 订单号
     private String openId;
     private String companyName;
     private Double currentCapacity;

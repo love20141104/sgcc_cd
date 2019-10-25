@@ -47,7 +47,7 @@ public class InhabitantRenameRepository {
      * @param ids
      */
     public void delRenameOrderList(List<String> ids){
-        String sql = "delete from b_rename_transfer where info_id='"+Utils.joinStrings(ids,"','")+"'";
+        String sql = "delete from b_rename_transfer where info_id in('"+Utils.joinStrings(ids,"','")+"')";
         jdbcTemplate.execute(sql);
     }
 

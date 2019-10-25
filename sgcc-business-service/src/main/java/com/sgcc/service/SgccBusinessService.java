@@ -91,11 +91,10 @@ public class SgccBusinessService {
             return Result.failure(TopErrorCode.NO_DATAS);
 
         try {
-            CommerceModel commerceModel = new CommerceModel();
-            CommerceIncreaseCapacityDao commerceIncreaseCapacityDao =
-                    commerceModel.updateIncreaseCapacityTransform(dto,id);
-            commerceIncreaseCapacityDao.setId(id);
-            int count = commerceIncreaseCapacityEventEntity.updateIncreaseCapacityOrder(commerceIncreaseCapacityDao);
+            CommerceModel commerceModel = new CommerceModel(dto,id);
+            commerceModel.updateIncreaseCapacityTransform();
+            int count = commerceIncreaseCapacityEventEntity.updateIncreaseCapacityOrder(
+                    commerceModel.getCommerceIncreaseCapacityDao());
             if (count > 0){
                 return Result.success("修改成功");
             }else {
@@ -173,8 +172,8 @@ public class SgccBusinessService {
 
             List<CommerceIncreaseCapacityDao> daos = commerceIncreaseCapacityQueryEntity.findIncreaseCapacityAll();
             CommerceModel commerceModel = new CommerceModel(null,daos);
-            commerceModel.queryIncreaseCapacityByGeTransform();
-            return Result.success(commerceModel.getCommerceIncreaseCapacitySubmitDTOS());
+            commerceModel.queryIncreaseCapacityAllTransform();
+            return Result.success(commerceModel.getDetailDTOS());
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.NO_DATAS);

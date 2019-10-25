@@ -26,10 +26,10 @@ public class CommerceIncreaseCapacityRepository {
     public int addIncreaseCapacityOrder(CommerceIncreaseCapacityDao dao){
 
         String sql = "insert into b_increase_capacity_commerce(id,user_open_id,in_company_name," +
-                "in_current_capacity,in_name,in_idcard,in_telphone,cq_idcard_positive_img,cq_idcard_back_img," +
+                "in_current_capacity,in_name,in_idcard,in_telphone,sq_idcard_positive_img,cq_idcard_back_img," +
                 "in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4," +
                 "propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard," +
-                "sq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank," +
+                "cq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank," +
                 "invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date) values(" +
                 "'"+dao.getId()+"','"+dao.getOpenId()+"','"+dao.getCompanyName()+"'," +
                 ""+dao.getCurrentCapacity()+",'"+dao.getName()+"','"+dao.getIdcard()+"','"+dao.getContactTel()+"'," +
@@ -53,9 +53,9 @@ public class CommerceIncreaseCapacityRepository {
     public List<CommerceIncreaseCapacityDao> findIncreaseCapacityOrderList(String id){
 
         String sql = "select id,user_open_id,in_company_name,in_current_capacity,in_name,in_idcard,in_telphone," +
-                "cq_idcard_positive_img,cq_idcard_back_img,in_license_img,propertyRight_img1,propertyRight_img2," +
+                "sq_idcard_positive_img,cq_idcard_back_img,in_license_img,propertyRight_img1,propertyRight_img2," +
                 "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6,in_apply_person," +
-                "in_transactor,in_transactor_idcard,sq_idcard_positive_img,sq_idcard_back_img,in_invoice," +
+                "in_transactor,in_transactor_idcard,cq_idcard_positive_img,sq_idcard_back_img,in_invoice," +
                 "invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
                 "invoice_date,invoice_img,in_submit_date from b_increase_capacity_commerce " +
                 "where id='"+id+"'";
@@ -70,10 +70,10 @@ public class CommerceIncreaseCapacityRepository {
     public List<CommerceIncreaseCapacityDao> findIncreaseCapacityAll(){
 
         String sql = "select id,user_open_id,in_company_name," +
-                "in_current_capacity,in_name,in_idcard,in_telphone,cq_idcard_positive_img,cq_idcard_back_img," +
+                "in_current_capacity,in_name,in_idcard,in_telphone,sq_idcard_positive_img,cq_idcard_back_img," +
                 "in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4," +
                 "propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard," +
-                "sq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank," +
+                "cq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank," +
                 "invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date from " +
                 "b_increase_capacity_commerce";
         return jdbcTemplate.query(sql,new IncreaseCapacityRowMapper());
@@ -95,7 +95,7 @@ public class CommerceIncreaseCapacityRepository {
                 "in_name='"+dao.getName()+"'," +
                 "in_idcard='"+dao.getIdcard()+"'," +
                 "in_telphone='"+dao.getContactTel()+"'," +
-                "cq_idcard_positive_img='"+dao.getCqIdcardPositiveImg()+"'," +
+                "sq_idcard_positive_img='"+dao.getCqIdcardPositiveImg()+"'," +
                 "cq_idcard_back_img='"+dao.getCqIdcardBackImg()+"'," +
                 "in_license_img='"+dao.getLicenseImg()+"'," +
                 "propertyRight_img1='"+dao.getSecuritiesImg1()+"'," +
@@ -107,7 +107,7 @@ public class CommerceIncreaseCapacityRepository {
                 "in_apply_person='"+dao.getAplicant()+"'," +
                 "in_transactor='"+dao.getTransactor()+"'," +
                 "in_transactor_idcard='"+dao.getTransactorIdcard()+"'," +
-                "sq_idcard_positive_img='"+dao.getSqIdcardPositiveImg()+"'," +
+                "cq_idcard_positive_img='"+dao.getSqIdcardPositiveImg()+"'," +
                 "sq_idcard_back_img='"+dao.getSqIdcardBackImg()+"'," +
                 "in_invoice="+dao.getInvoiceFlag()+"," +
                 "invoice_company='"+dao.getCompanyName()+"'," +
