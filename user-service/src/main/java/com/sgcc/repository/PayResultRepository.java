@@ -27,7 +27,7 @@ public class PayResultRepository {
                 "user_open_id,pay_totalFee,pay_date,payment_channel) values('"+payResultDao.getId()+"'," +
                 "'"+payResultDao.getPayId()+"','"+payResultDao.getOrderNo()+"'," +
                 "'"+payResultDao.getUserNo()+"','"+payResultDao.getOpenId()+"',"+payResultDao.getMoney()+"," +
-                "'"+ Utils.GetTime(payResultDao.getOrderSubmitTime()) +"'," +
+                "'"+ payResultDao.getOrderSubmitTime() +"'," +
                 "'"+payResultDao.getPaymentChannel()+"')";
 
         return jdbcTemplate.update(sql);
@@ -55,7 +55,7 @@ public class PayResultRepository {
                     rs.getString("user_open_id"),
                     rs.getDouble("pay_totalFee"),
                     rs.getString("payment_channel"),
-                    rs.getDate("pay_date")
+                    Utils.GetDate(rs.getString("pay_date"))
             );
         }
     }

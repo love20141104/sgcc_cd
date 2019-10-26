@@ -2,7 +2,7 @@ package com.sgcc.model;
 
 import com.example.Utils;
 import com.sgcc.dao.RepairDao;
-import com.sgcc.dto.OrderDTO;
+import com.sgcc.dto.RepairOrderDTO;
 import com.sgcc.dto.RepairEditDTO;
 import com.sgcc.dto.RepairSubmitDTO;
 import com.sgcc.dto.RepairViewDTO;
@@ -22,15 +22,13 @@ public class RepairModel {
 
     private RepairDao repairDao;
 
-    private OrderDTO orderDTO;
-
     private RepairSubmitDTO repairSubmitDTO;
 
     private RepairViewDTO repairViewDTO;
 
     private RepairEditDTO repairEditDTO;
 
-    private List<OrderDTO> orderDTOS = new ArrayList<>();
+    private List<RepairOrderDTO> repairOrderDTOS = new ArrayList<>();
 
     private List<RepairDao> repairDaos = new ArrayList<>();
 
@@ -48,16 +46,17 @@ public class RepairModel {
     public void queryByOpenIdTransform(List<RepairDao> repairDaos){
         String progress = "抢修中";
         repairDaos.forEach(dao->{
-            this.orderDTO = new OrderDTO();
-            orderDTO.setOrderNo(dao.getRepairId());
-            orderDTO.setAddress(dao.getRepairAddr());
-            orderDTO.setApplyDate(Utils.GetTime(dao.getSubmitDate()));
-            orderDTO.setProgress(progress);
-            orderDTO.setUserName(dao.getRepairContact());
-            orderDTO.setUserNo(dao.getOpenId());
-            this.orderDTOS.add(orderDTO);
+            this.repairOrderDTOS.add(new RepairOrderDTO(
+                    dao.getRepairId(),
+                    dao.getRepairAddr(),
+                    dao.getOpenId(),
+                    dao.getRepairContact(),
+                    Utils.GetTime(dao.getSubmitDate()),
+                    progress
+            ));
         });
     }
+
 
 
 
@@ -111,7 +110,7 @@ public class RepairModel {
                 this.repairDao.getRepairImg1(),
                 this.repairDao.getRepairImg2(),
                 this.repairDao.getRepairImg3(),
-                this.repairDao.getSubmitDate()
+                Utils.GetTime(this.repairDao.getSubmitDate())
         );
     }
 
@@ -129,7 +128,7 @@ public class RepairModel {
                     dao.getRepairImg1(),
                     dao.getRepairImg2(),
                     dao.getRepairImg3(),
-                    dao.getSubmitDate()
+                    Utils.GetTime(dao.getSubmitDate())
             ));
         });
     }

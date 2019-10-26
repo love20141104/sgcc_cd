@@ -36,8 +36,8 @@ public class RepairService {
             List<RepairDao> repairDaos = repairQueryEntity.findRepairOrderByOpenId(openId);
             RepairModel repairModel = new RepairModel();
             repairModel.queryByOpenIdTransform(repairDaos);
-            if (repairModel.getOrderDTOS().size() > 0){
-                return Result.success(repairModel.getOrderDTOS());
+            if (repairModel.getRepairOrderDTOS().size() > 0){
+                return Result.success(repairModel.getRepairOrderDTOS());
             }else {
                 return Result.failure(TopErrorCode.NO_DATAS);
             }
