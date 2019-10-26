@@ -12,13 +12,13 @@ public class PayResultDTO implements Serializable {
 
     private String orderNo;
 
-    private String userName;
+//    private String userName;
 
     private String userNo;
 
     private String openId;
 
-    private String orderAddress;
+//    private String orderAddress;
 
     private double money;
 
@@ -26,13 +26,11 @@ public class PayResultDTO implements Serializable {
 
     private String orderSubmitTime;
 
-    public PayResultDTO(String orderNo, String userName, String userNo, String openId,
-                        String orderAddress, double money, String paymentChannel, String orderSubmitTime) {
+    public PayResultDTO(String orderNo,String userNo, String openId,
+                        double money, String paymentChannel, String orderSubmitTime) {
         this.orderNo = orderNo;
-        this.userName = userName;
         this.userNo = userNo;
         this.openId = openId;
-        this.orderAddress = orderAddress;
         this.money = money;
         this.paymentChannel = paymentChannel;
         this.orderSubmitTime = orderSubmitTime;

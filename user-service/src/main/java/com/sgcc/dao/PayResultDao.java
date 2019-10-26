@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -17,30 +18,28 @@ public class PayResultDao implements Serializable {
 
     private String orderNo;
 
-    private String userName;
+//    private String userName;
 
     private String userNo;
 
     private String openId;
 
-    private String orderAddress;
+//    private String orderAddress;
 
     private double money;
 
     private String paymentChannel;  // 缴费渠道
 
-    private String orderSubmitTime;
+    private Date orderSubmitTime;
 
-    public PayResultDao(String id, String payId, String orderNo, String userName,
-                        String userNo, String openId, String orderAddress, double money,
-                        String paymentChannel, String orderSubmitTime) {
+    public PayResultDao(String id, String payId, String orderNo,
+                        String userNo, String openId, double money,
+                        String paymentChannel, Date orderSubmitTime) {
         this.id = id;
         this.payId=payId;
         this.orderNo = orderNo;
-        this.userName = userName;
         this.userNo = userNo;
         this.openId = openId;
-        this.orderAddress = orderAddress;
         this.money = money;
         this.paymentChannel = paymentChannel;
         this.orderSubmitTime = orderSubmitTime;

@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * 缴费记录详情页面DTO
+ */
 @Data
 @NoArgsConstructor
 public class OrderDetailDTO implements Serializable {
