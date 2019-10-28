@@ -46,13 +46,26 @@ public class PayResultRepository {
     }
 
     /**
+     * 根据月份查询缴费结果
+     * @return
+     */
+    public PayQueryStatisticsDTO findPayResultByMonth(String date){
+
+        String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee" +
+                " from b_pay_info WHERE date_sub('"+date+"', interval 30 day ) <= pay_date;";
+
+        return jdbcTemplate.queryForObject(sql,new PayStatisticsRowMapper());
+    }
+
+
+    /**
      * 根据月份查询今年缴费结果
      * @return
      */
-    public List<PayQueryStatisticsDTO> findPayResultByMonth(){
+    public List<PayQueryStatisticsDTO> findPayResultByCurrentMonth(String date){
 
-        String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee,DATE_FORMAT(pay_date,'%m') as conditions " +
-                "from b_pay_info where YEAR(pay_date)=YEAR(NOW()) group by DATE_FORMAT(pay_date ,'%m')";
+        String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee " +
+                "from b_pay_info where YEAR(pay_date)=YEAR('"+date+"') group by DATE_FORMAT(pay_date ,'%m')";
 
         return jdbcTemplate.query(sql,new PayStatisticsRowMapper());
     }
@@ -70,6 +83,14 @@ public class PayResultRepository {
     }
 
 
+    public PayQueryStatisticsDTO findPayResultByCurrentYear(String date){
+
+        String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee" +
+                " from b_pay_info where YEAR(pay_date) = year('"+date+"') group by DATE_FORMAT(pay_date ,'%Y');";
+
+        return jdbcTemplate.queryForObject(sql,new PayStatisticsRowMapper());
+    }
+
 
 
 
@@ -78,8 +99,7 @@ public class PayResultRepository {
         public PayQueryStatisticsDTO mapRow(ResultSet rs, int i) throws SQLException {
             return new PayQueryStatisticsDTO(
                     rs.getInt("count"),
-                    rs.getDouble("pay_totalFee"),
-                    rs.getString("conditions")
+                    rs.getDouble("pay_totalFee")
             );
         }
     }

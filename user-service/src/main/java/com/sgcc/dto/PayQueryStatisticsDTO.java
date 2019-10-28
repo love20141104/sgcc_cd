@@ -15,7 +15,5 @@ public class PayQueryStatisticsDTO implements Serializable {
     private static final long serialVersionUID = 5968338848265502740L;
     private int PayTotal; //支付笔数
     private Double PaySum; // 支付总额
-    private String DateUnit;
-
 
 }

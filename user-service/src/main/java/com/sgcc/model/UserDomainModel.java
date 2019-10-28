@@ -17,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserDomainModel {
 
+    private PayStatisticsDTO payStatisticsDTO;
     private PayResultSubmitDTO payResultSubmitDTO;
     private PayResultDao payResultDao;
     private List<PayResultDao> payResultDaos = new ArrayList<>();
@@ -39,16 +40,36 @@ public class UserDomainModel {
 
 
 
-    public void findResultStatisticsByMonth(List<PayQueryStatisticsDTO> dtos,Date StartDate){
-        dtos.forEach(dto -> {
+    public void findResultStatisticsByMonth(PayQueryStatisticsDTO dto,String StartDate,String dateUnit){
+            this.payStatisticsDTO = new PayStatisticsDTO(
+                    StartDate,
+                    dateUnit,
+                    dto.getPayTotal(),
+                    dto.getPaySum(),
+                    null
+            );
+    }
+
+    public void findResultStatisticsByYear(PayQueryStatisticsDTO payQueryStatisticsDTO,
+                                           List<PayQueryStatisticsDTO> payQueryStatisticsDTOS,
+            String StartDate,String dateUnit){
+        payQueryStatisticsDTOS.forEach(dto -> {
             this.payStatisticsDTOS.add(new PayStatisticsDTO(
                     StartDate,
-                    dto.getDateUnit(),
+                    dateUnit,
                     dto.getPayTotal(),
-                    dto.getPaySum()
+                    dto.getPaySum(),
+                    null
             ));
         });
 
+        this.payStatisticsDTO = new PayStatisticsDTO(
+                StartDate,
+                dateUnit,
+                payQueryStatisticsDTO.getPayTotal(),
+                payQueryStatisticsDTO.getPaySum(),
+                this.getPayStatisticsDTOS()
+        );
 
     }
 

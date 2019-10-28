@@ -23,13 +23,24 @@ public class PayResultEntity {
     }
 
 
-    public List<PayQueryStatisticsDTO> findPayResultByMonth(){
-        return payResultRepository.findPayResultByMonth();
+    public PayQueryStatisticsDTO findPayResultByMonth(String date){
+        return payResultRepository.findPayResultByMonth(date);
     }
 
 
     public List<PayQueryStatisticsDTO> findPayResultByYear(){
         return payResultRepository.findPayResultByYear();
     }
+
+
+    public List<PayQueryStatisticsDTO> findPayResultByCurrentMonth(String date){
+        return payResultRepository.findPayResultByCurrentMonth(date);
+    }
+
+
+    public PayQueryStatisticsDTO findPayResultByCurrentYear(String date){
+        return payResultRepository.findPayResultByCurrentYear(date);
+    }
+
 
 }

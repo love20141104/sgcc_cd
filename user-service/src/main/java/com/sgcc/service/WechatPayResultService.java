@@ -27,25 +27,40 @@ public class WechatPayResultService {
             return Result.failure(TopErrorCode.ZERO_OBJ);
 
         List<PayQueryStatisticsDTO> payQueryStatisticsDTOS = null;
+        PayQueryStatisticsDTO payQueryStatisticsDTO = null;
+        UserDomainModel userDomainModel = new UserDomainModel();
         try {
            if (DatetypeEnum.MONTH.name().equals(payQueryDTO.getDateUnit())){
-               payQueryStatisticsDTOS = payResultEntity.findPayResultByMonth();
+               payQueryStatisticsDTO = payResultEntity.findPayResultByMonth(payQueryDTO.getStartDate());
+               userDomainModel.findResultStatisticsByMonth(payQueryStatisticsDTO,payQueryDTO.getStartDate(),
+                       payQueryDTO.getDateUnit());
 
+               if (userDomainModel.getPayStatisticsDTO() != null){
+                   return Result.success(userDomainModel.getPayStatisticsDTO());
+               }else {
+                   return Result.failure(TopErrorCode.NO_DATAS);
+               }
            }else if (DatetypeEnum.YEAR.name().equals(payQueryDTO.getDateUnit())){
-               payQueryStatisticsDTOS = payResultEntity.findPayResultByYear();
+               payQueryStatisticsDTO = payResultEntity.findPayResultByCurrentYear(payQueryDTO.getStartDate());
+               payQueryStatisticsDTOS = payResultEntity.findPayResultByCurrentMonth(payQueryDTO.getStartDate());
+
+               userDomainModel.findResultStatisticsByYear(payQueryStatisticsDTO,payQueryStatisticsDTOS,
+                       payQueryDTO.getStartDate(),
+                       payQueryDTO.getDateUnit());
+
+               if (userDomainModel.getPayStatisticsDTO() != null){
+                   return Result.success(userDomainModel.getPayStatisticsDTO());
+               }else {
+                   return Result.failure(TopErrorCode.NO_DATAS);
+               }
+
            }else {
                return Result.failure(TopErrorCode.ZERO_OBJ);
            }
 
-            UserDomainModel userDomainModel = new UserDomainModel();
-            userDomainModel.findResultStatisticsByMonth(
-                    payQueryStatisticsDTOS,payQueryDTO.getStartDate());
 
-            if (userDomainModel.getPayStatisticsDTOS().size() > 0){
-                return Result.success(userDomainModel.getPayStatisticsDTOS());
-            }else {
-                return Result.failure(TopErrorCode.NO_DATAS);
-            }
+
+
 
 
         }catch (Exception e){
