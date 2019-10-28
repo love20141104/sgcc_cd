@@ -46,7 +46,7 @@ public class PayResultRepository {
     }
 
     /**
-     * 根据月份查询缴费结果
+     * 根据当前时间查询最近30天缴费结果
      * @return
      */
     public PayQueryStatisticsDTO findPayResultByMonth(String date){
@@ -59,7 +59,7 @@ public class PayResultRepository {
 
 
     /**
-     * 根据月份查询今年缴费结果
+     * 根据当前时间查询每月缴费结果
      * @return
      */
     public List<PayQueryStatisticsDTO> findPayResultByCurrentMonth(String date){
@@ -83,6 +83,11 @@ public class PayResultRepository {
     }
 
 
+    /**
+     * 根据当前时间查询当前年份的缴费结果
+     * @param date
+     * @return
+     */
     public PayQueryStatisticsDTO findPayResultByCurrentYear(String date){
 
         String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee" +
