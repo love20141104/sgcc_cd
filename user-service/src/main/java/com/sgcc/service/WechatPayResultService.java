@@ -2,7 +2,7 @@ package com.sgcc.service;
 
 import com.example.result.Result;
 import com.sgcc.dao.PayResultDao;
-import com.sgcc.dto.PayResultDTO;
+import com.sgcc.dto.PayResultSubmitDTO;
 import com.sgcc.entity.PayResultEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.UserDomainModel;
@@ -24,8 +24,8 @@ public class WechatPayResultService {
             UserDomainModel userDomainModel = new UserDomainModel(payResultDaos);
             userDomainModel.findTransform();
 
-            if (userDomainModel.getPayResultDTOS().size() > 0){
-                return Result.success(userDomainModel.getPayResultDTOS());
+            if (userDomainModel.getPayResultViewDTOS().size() > 0){
+                return Result.success(userDomainModel.getPayResultViewDTOS());
             }else {
                 return Result.failure(TopErrorCode.NO_DATAS);
             }
@@ -39,13 +39,13 @@ public class WechatPayResultService {
     }
 
 
-    public Result insertPayResult(PayResultDTO payResultDTO){
-        if (payResultDTO == null)
+    public Result insertPayResult(PayResultSubmitDTO payResultSubmitDTO){
+        if (payResultSubmitDTO == null)
             return Result.failure(TopErrorCode.NULL_OBJ);
 
         try {
 
-            UserDomainModel userDomainModel = new UserDomainModel(payResultDTO);
+            UserDomainModel userDomainModel = new UserDomainModel(payResultSubmitDTO);
             userDomainModel.insertTransform();
             int count = payResultEntity.insertPayResult(userDomainModel.getPayResultDao());
             if (count > 0){

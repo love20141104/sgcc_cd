@@ -2,7 +2,7 @@ package com.sgcc.controller;
 
 import com.example.result.Result;
 import com.sgcc.dto.OrderTransDTO;
-import com.sgcc.dto.PayResultDTO;
+import com.sgcc.dto.PayResultSubmitDTO;
 import com.sgcc.service.RecordService;
 import com.sgcc.service.SgccBusinessService;
 import com.sgcc.service.UserService;
@@ -63,8 +63,8 @@ public class UserController {
 
     @ApiOperation(value = "新增缴费结果", notes = "")
     @PostMapping(value = "/payResult/payInfo")
-    public Result addpayResult(@RequestBody PayResultDTO payResultDTO) {
-        return  wechatPayResultService.insertPayResult(payResultDTO);
+    public Result addpayResult(@RequestBody PayResultSubmitDTO payResultSubmitDTO) {
+        return  wechatPayResultService.insertPayResult(payResultSubmitDTO);
     }
 
 

@@ -27,7 +27,7 @@ public class PayResultRepository {
                 "user_open_id,pay_totalFee,pay_date,payment_channel) values('"+payResultDao.getId()+"'," +
                 "'"+payResultDao.getPayId()+"','"+payResultDao.getOrderNo()+"'," +
                 "'"+payResultDao.getUserNo()+"','"+payResultDao.getOpenId()+"',"+payResultDao.getMoney()+"," +
-                "'"+ payResultDao.getOrderSubmitTime() +"'," +
+                "'"+ Utils.GetTime(payResultDao.getOrderSubmitTime()) +"'," +
                 "'"+payResultDao.getPaymentChannel()+"')";
 
         return jdbcTemplate.update(sql);

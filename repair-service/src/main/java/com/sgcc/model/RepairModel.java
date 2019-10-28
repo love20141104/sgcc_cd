@@ -48,10 +48,10 @@ public class RepairModel {
         repairDaos.forEach(dao->{
             this.repairOrderDTOS.add(new RepairOrderDTO(
                     dao.getRepairId(),
-                    dao.getRepairAddr(),
+                    Utils.GetTime(dao.getSubmitDate()),
                     dao.getOpenId(),
                     dao.getRepairContact(),
-                    Utils.GetTime(dao.getSubmitDate()),
+                    dao.getRepairAddr(),
                     progress
             ));
         });

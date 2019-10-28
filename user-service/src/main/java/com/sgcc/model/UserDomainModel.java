@@ -2,7 +2,8 @@ package com.sgcc.model;
 
 import com.example.Utils;
 import com.sgcc.dao.PayResultDao;
-import com.sgcc.dto.PayResultDTO;
+import com.sgcc.dto.PayResultSubmitDTO;
+import com.sgcc.dto.PayResultViewDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,14 +14,15 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserDomainModel {
 
-    private PayResultDTO payResultDTO;
+    private PayResultSubmitDTO payResultSubmitDTO;
     private PayResultDao payResultDao;
     private List<PayResultDao> payResultDaos = new ArrayList<>();
-    private List<PayResultDTO> payResultDTOS = new ArrayList<>();
+    private List<PayResultSubmitDTO> payResultSubmitDTOS = new ArrayList<>();
 
+    private List<PayResultViewDTO> payResultViewDTOS = new ArrayList<>();
 
-    public UserDomainModel(PayResultDTO payResultDTO) {
-        this.payResultDTO = payResultDTO;
+    public UserDomainModel(PayResultSubmitDTO payResultSubmitDTO) {
+        this.payResultSubmitDTO = payResultSubmitDTO;
     }
 
     public UserDomainModel(PayResultDao payResultDao) {
@@ -39,12 +41,12 @@ public class UserDomainModel {
         this.payResultDao = new PayResultDao(
                 id,
                 id,
-                this.payResultDTO.getOrderNo(),
-                this.payResultDTO.getUserNo(),
-                this.payResultDTO.getOpenId(),
-                this.payResultDTO.getMoney(),
-                this.payResultDTO.getPaymentChannel(),
-                Utils.GetDate(this.payResultDTO.getOrderSubmitTime())
+                this.payResultSubmitDTO.getOrderNo(),
+                this.payResultSubmitDTO.getUserNo(),
+                this.payResultSubmitDTO.getOpenId(),
+                this.payResultSubmitDTO.getMoney(),
+                "微信",
+                Utils.GetCurTime()
         );
 
 
@@ -55,7 +57,8 @@ public class UserDomainModel {
      */
     public void findTransform(){
         this.payResultDaos.forEach(payResultDao->{
-            this.payResultDTOS.add(new PayResultDTO(
+            this.payResultViewDTOS.add(new PayResultViewDTO(
+                    payResultDao.getPayId(),
                     payResultDao.getOrderNo(),
                     payResultDao.getUserNo(),
                     payResultDao.getOpenId(),
