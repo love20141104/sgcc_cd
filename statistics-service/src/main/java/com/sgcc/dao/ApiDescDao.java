@@ -7,31 +7,21 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ApiStatisticsDao implements Serializable {
+public class ApiDescDao implements Serializable {
     private static final long serialVersionUID = -2720156418106643259L;
 
     private String id;
 
-    //接口地址
-    private String apiUrl;
+    //
+    private String requestMapping;
 
     private String requestMethod;
-
-    private String requestURI;
     //
-    private String userOpenId;
+    private String requestDesc;
 
-    //调用时间
-    private Date visitDate;
-
-    //客户端ip
-    private String clientIp;
-
-    private String apiUrlDesc;
 
 }

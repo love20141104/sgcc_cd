@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ApiStatisticsInterceptor implements HandlerInterceptor {
     @Autowired
@@ -37,17 +39,55 @@ public class ApiStatisticsInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
         String userOpenId=request.getParameter("userOpenId");
         String apiUrl=request.getRequestURL().toString();
-//        if(!Strings.isNullOrEmpty(userOpenId)&&!apiUrl.contains("Statistics"))
-        {
+       // if(!Strings.isNullOrEmpty(userOpenId)&&!apiUrl.contains("Statistics")){
             // 记录下请求内容
+            String requestMethod=request.getMethod();
+        String requestURI = request.getRequestURI();
 
-            String clientIp=getIpAddress();
-            ApiStatisticsDao apiStatisticsDao = new ApiStatisticsDao(UUID.randomUUID().toString(), apiUrl, userOpenId, new Date(), clientIp);
+        int startIndex = requestURI.lastIndexOf("/") + 1;
+
+        String substring = requestURI.substring(startIndex);
+        if(isValidUUID(substring)||isInteger(substring)){
+            requestURI=requestURI.substring(0,startIndex-1);
+        }
+
+
+        String clientIp=getIpAddress();
+            ApiStatisticsDao apiStatisticsDao = new ApiStatisticsDao(UUID.randomUUID().toString(), apiUrl,requestMethod,requestURI, userOpenId, new Date(), clientIp,null);
             //发mq
             apiStatisticsProducer.apiStatisticsMQ(apiStatisticsDao);
             logger.info(apiStatisticsDao.toString());
-        }
+       // }
 
+    }
+
+    /**
+     * 标准的UUID
+     * 32位16进制的数字，用分隔符分成8-4-4-4-12的格式
+     */
+    private static final Pattern UUID_PATTERN = Pattern.compile("[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}");
+    public final static String REGEX_INTEGER = "^[-\\+]?\\d+$";
+
+    /**
+     * 判断一个字符串是否是有效的UUID
+     *
+     * @param uuid
+     * @return
+     */
+    public static boolean isValidUUID(String uuid) {
+        Matcher matcher = UUID_PATTERN.matcher(uuid);
+        return matcher.matches();
+    }
+    public static boolean isInteger(String orginal) {
+        return isMatch(REGEX_INTEGER, orginal);
+    }
+    private static boolean isMatch(String regex, String orginal) {
+        if (orginal == null || orginal.trim().equals("")) { //$NON-NLS-1$
+            return false;
+        }
+        Pattern pattern = Pattern.compile(regex);
+        Matcher isNum = pattern.matcher(orginal);
+        return isNum.matches();
     }
 
     public static HttpServletRequest getHttpServletRequest() {

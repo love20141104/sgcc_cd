@@ -16,6 +16,8 @@ public class PageStatisticsDto implements Serializable {
     //页面地址
     private String pageUrl;
 
+    private String pageName;
+
     //
     private String userOpenId;
 

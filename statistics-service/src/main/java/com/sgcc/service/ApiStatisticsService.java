@@ -2,10 +2,12 @@ package com.sgcc.service;
 
 import com.example.Utils;
 import com.example.result.Result;
+import com.sgcc.dao.ApiDescDao;
 import com.sgcc.dao.ApiStatisticsDao;
 import com.sgcc.dto.ApiStatisticsActiveDto;
 import com.sgcc.entity.ApiStatisticsEntity;
 import com.sgcc.exception.TopErrorCode;
+import com.sgcc.repository.ApiDescRepository;
 import com.sgcc.sgccenum.DatetypeEnum;
 import com.sgcc.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,14 @@ import java.math.RoundingMode;
 public class ApiStatisticsService {
     @Autowired
     private ApiStatisticsEntity apiStatisticsEntity;
+    @Autowired
+    private ApiDescRepository apiDescRepository;
 
     public void saveApiStatistics(ApiStatisticsDao apiStatisticsDao){
+        ApiDescDao apiDesc = apiDescRepository.getApiDesc(apiStatisticsDao.getRequestURI(), apiStatisticsDao.getRequestMethod());
+        if(null!=apiDesc) {
+            apiStatisticsDao.setApiUrlDesc(apiDesc.getRequestDesc());
+        }
         apiStatisticsEntity.saveApiStatistics(apiStatisticsDao);
     }
     public Result getApiStatisticsQuery(String visit_date_begin, String visit_date_end){

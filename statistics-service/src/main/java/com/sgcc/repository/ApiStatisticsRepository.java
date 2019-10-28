@@ -27,12 +27,15 @@ public class ApiStatisticsRepository {
 
     @Transactional
     public void saveApiStatistics(ApiStatisticsDao apiStatisticsDao){
-        String sql="insert into b_api_statistics(id,api_url,user_open_id,visit_date,client_ip)" +
+        String sql="insert into b_api_statistics(id,api_url,request_method,user_open_id,visit_date,client_ip,api_url_desc)" +
                 "values ('"+apiStatisticsDao.getId()+"','"
                 +apiStatisticsDao.getApiUrl()+"','"
+                +apiStatisticsDao.getRequestMethod()+"','"
                 +apiStatisticsDao.getUserOpenId()+"','"
                 +Utils.GetTime(apiStatisticsDao.getVisitDate())+"','"
-                +apiStatisticsDao.getClientIp()+"')";
+                +apiStatisticsDao.getClientIp()+"','"
+                +apiStatisticsDao.getApiUrlDesc()
+                +"')";
         logger.info("insertSQL:"+sql);
         jdbcTemplate.execute(sql);
     }
