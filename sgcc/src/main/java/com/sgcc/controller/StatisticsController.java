@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = "", tags = "接口统计接口")
 @RestController
 @RequestMapping(value = "/Statistics")
-public class ApiStatisticsController {
+public class StatisticsController {
     @Autowired
     private ApiStatisticsService apiStatisticsService;
 
