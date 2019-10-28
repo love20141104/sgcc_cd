@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,4 +17,5 @@ public class PayStatisticsDTO implements Serializable {
     private String DateUnit; // 查询单位 YEAR or MONTH
     private int PayTotal; //支付笔数
     private Double PaySum; // 支付总额
+    private List<PayStatisticsDTO> payStatisticsDTOList;
 }
