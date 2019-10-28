@@ -1,5 +1,6 @@
 package com.sgcc.model;
 
+import com.example.Utils;
 import com.sgcc.dao.PayResultDao;
 import com.sgcc.dto.PayResultDTO;
 import lombok.Data;
@@ -39,13 +40,11 @@ public class UserDomainModel {
                 id,
                 id,
                 this.payResultDTO.getOrderNo(),
-                this.payResultDTO.getUserName(),
                 this.payResultDTO.getUserNo(),
                 this.payResultDTO.getOpenId(),
-                this.payResultDTO.getOrderAddress(),
                 this.payResultDTO.getMoney(),
                 this.payResultDTO.getPaymentChannel(),
-                this.payResultDTO.getOrderSubmitTime()
+                Utils.GetDate(this.payResultDTO.getOrderSubmitTime())
         );
 
 
@@ -58,13 +57,11 @@ public class UserDomainModel {
         this.payResultDaos.forEach(payResultDao->{
             this.payResultDTOS.add(new PayResultDTO(
                     payResultDao.getOrderNo(),
-                    payResultDao.getUserName(),
                     payResultDao.getUserNo(),
                     payResultDao.getOpenId(),
-                    payResultDao.getOrderAddress(),
                     payResultDao.getMoney(),
                     payResultDao.getPaymentChannel(),
-                    payResultDao.getOrderSubmitTime()
+                    Utils.GetTime(payResultDao.getOrderSubmitTime())
             ));
         });
 

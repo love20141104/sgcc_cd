@@ -23,11 +23,11 @@ public class PayResultRepository {
      * @return
      */
     public int insertPayResult(PayResultDao payResultDao){
-        String sql = "insert into b_pay_info(id,pay_id,order_number,pay_user_name,pay_household_number," +
-                "user_open_id,pay_totalFee,pay_address,pay_date,payment_channel) values('"+payResultDao.getId()+"'," +
-                "'"+payResultDao.getPayId()+"','"+payResultDao.getOrderNo()+"','"+payResultDao.getUserName()+"'," +
-                "'"+payResultDao.getUserNo()+"','"+payResultDao.getOpenId()+"','"+payResultDao.getMoney()+"'," +
-                "'"+payResultDao.getOrderAddress()+"','"+ Utils.GetSQLDateStr(payResultDao.getOrderSubmitTime()) +"'," +
+        String sql = "insert into b_pay_info(id,pay_id,order_number,pay_household_number," +
+                "user_open_id,pay_totalFee,pay_date,payment_channel) values('"+payResultDao.getId()+"'," +
+                "'"+payResultDao.getPayId()+"','"+payResultDao.getOrderNo()+"'," +
+                "'"+payResultDao.getUserNo()+"','"+payResultDao.getOpenId()+"',"+payResultDao.getMoney()+"," +
+                "'"+ payResultDao.getOrderSubmitTime() +"'," +
                 "'"+payResultDao.getPaymentChannel()+"')";
 
         return jdbcTemplate.update(sql);
@@ -37,8 +37,8 @@ public class PayResultRepository {
      * 查询所有支付结果信息
      */
     public List<PayResultDao> findPayResult(){
-        String sql = "select id,pay_id,order_number,pay_user_name,pay_household_number," +
-                "user_open_id,pay_totalFee,pay_address,pay_date,payment_channel from b_pay_info";
+        String sql = "select id,pay_id,order_number,pay_household_number," +
+                "user_open_id,pay_totalFee,pay_date,payment_channel from b_pay_info";
 
         return jdbcTemplate.query(sql,new PayResultRowMapper());
     }
@@ -51,13 +51,11 @@ public class PayResultRepository {
                     rs.getString("id"),
                     rs.getString("pay_id"),
                     rs.getString("order_number"),
-                    rs.getString("pay_user_name"),
                     rs.getString("pay_household_number"),
                     rs.getString("user_open_id"),
-                    rs.getString("pay_address"),
                     rs.getDouble("pay_totalFee"),
                     rs.getString("payment_channel"),
-                    rs.getString("pay_date")
+                    Utils.GetDate(rs.getString("pay_date"))
             );
         }
     }

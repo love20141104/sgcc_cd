@@ -130,7 +130,7 @@ public class RepairRepository {
                     rs.getString("repair_img1"),
                     rs.getString("repair_img2"),
                     rs.getString("repair_img3"),
-                    rs.getDate("repair_submit_date")
+                    Utils.GetDate(rs.getString("repair_submit_date"))
             );
         }
     }

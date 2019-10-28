@@ -52,7 +52,7 @@ public class BannerRepository {
 
     public void save(BannerDao dao )
     {
-        String sql = "insert into  d_banner_setting (id,banner_img,banner_url) values(" +dao.getId()+"','"+
+        String sql = "insert into  d_banner_setting (id,banner_img,banner_url) values('" +dao.getId()+"','"+
                 dao.getBanner_img() +"','"+ dao.getBanner_url() + "')";
         try {
             jdbcTemplate.execute(sql);

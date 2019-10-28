@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-public class OrderDTO implements Serializable {
+public class RepairOrderDTO implements Serializable {
 
     private static final long serialVersionUID = 6861434901748318598L;
 
@@ -23,8 +23,8 @@ public class OrderDTO implements Serializable {
 
     private String progress;
 
-    public OrderDTO(String orderNo, String applyDate, String userNo, String userName, String address,
-                    String progress) {
+    public RepairOrderDTO(String orderNo, String applyDate, String userNo, String userName, String address,
+                          String progress) {
         this.orderNo = orderNo;
         this.applyDate = applyDate;
         this.userNo = userNo;

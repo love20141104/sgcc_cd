@@ -34,7 +34,7 @@ public class RepairViewDTO implements Serializable {
 
     private String repairImg3;
 
-    private Date submitDate;
+    private String submitDate;
 
 
 
