@@ -41,6 +41,11 @@
             <artifactId>spring-jdbc</artifactId>
             <version>5.1.9.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>com.sgcc</groupId>
+            <artifactId>statistics-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -2,6 +2,8 @@ package com.sgcc.repository;
 
 import com.example.Utils;
 import com.sgcc.dao.PayResultDao;
+import com.sgcc.dto.PayQueryStatisticsDTO;
+import com.sgcc.dto.PayStatisticsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -42,6 +44,47 @@ public class PayResultRepository {
 
         return jdbcTemplate.query(sql,new PayResultRowMapper());
     }
+
+    /**
+     * 根据月份查询今年缴费结果
+     * @return
+     */
+    public List<PayQueryStatisticsDTO> findPayResultByMonth(){
+
+        String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee,DATE_FORMAT(pay_date,'%m') as conditions " +
+                "from b_pay_info where YEAR(pay_date)=YEAR(NOW()) group by DATE_FORMAT(pay_date ,'%m')";
+
+        return jdbcTemplate.query(sql,new PayStatisticsRowMapper());
+    }
+
+    /**
+     * 根据年份查询缴费结果
+     * @return
+     */
+    public List<PayQueryStatisticsDTO> findPayResultByYear(){
+
+        String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee,DATE_FORMAT(pay_date,'%Y') as conditions" +
+                " from b_pay_info group by DATE_FORMAT(pay_date ,'%Y');";
+
+        return jdbcTemplate.query(sql,new PayStatisticsRowMapper());
+    }
+
+
+
+
+
+    class PayStatisticsRowMapper implements RowMapper<PayQueryStatisticsDTO>{
+        @Override
+        public PayQueryStatisticsDTO mapRow(ResultSet rs, int i) throws SQLException {
+            return new PayQueryStatisticsDTO(
+                    rs.getInt("count"),
+                    rs.getDouble("pay_totalFee"),
+                    rs.getString("conditions")
+            );
+        }
+    }
+
+
 
     class PayResultRowMapper implements RowMapper<PayResultDao>{
 

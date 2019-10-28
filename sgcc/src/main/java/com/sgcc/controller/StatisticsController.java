@@ -2,8 +2,10 @@ package com.sgcc.controller;
 
 import com.example.result.Result;
 import com.sgcc.dto.PageStatisticsDto;
+import com.sgcc.dto.PayQueryDTO;
 import com.sgcc.service.ApiStatisticsService;
 import com.sgcc.service.PageStatisticsService;
+import com.sgcc.service.WechatPayResultService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,6 +22,10 @@ public class StatisticsController {
 
     @Autowired
     private PageStatisticsService pageStatisticsService;
+
+    @Autowired
+    private WechatPayResultService wechatPayResultService;
+
 
     @ApiOperation(value = "根据不同时间类型查询过去时间段的接口访问次数", notes = "")
     @ApiImplicitParams({
@@ -51,5 +57,15 @@ public class StatisticsController {
     public Result addPageStatistics(@RequestBody PageStatisticsDto pageStatisticsDto) {
         return pageStatisticsService.addPageStatistics(pageStatisticsDto);
     }
+
+
+    /******************************************缴费统计************************************************/
+    @ApiOperation(value = "缴费结果-统计", notes = "")
+    @PostMapping(value = "/payResult")
+    public Result queryPayResultByYearOrMonth(@RequestBody PayQueryDTO payQueryDTO) {
+        return wechatPayResultService.findPayResultByYearOrMonth(payQueryDTO);
+    }
+
+
 
 }

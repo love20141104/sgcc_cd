@@ -2,10 +2,13 @@ package com.sgcc.service;
 
 import com.example.result.Result;
 import com.sgcc.dao.PayResultDao;
+import com.sgcc.dto.PayQueryDTO;
+import com.sgcc.dto.PayQueryStatisticsDTO;
 import com.sgcc.dto.PayResultSubmitDTO;
 import com.sgcc.entity.PayResultEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.UserDomainModel;
+import com.sgcc.sgccenum.DatetypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,46 @@ public class WechatPayResultService {
     @Autowired
     private PayResultEntity payResultEntity;
 
+
+    public Result findPayResultByYearOrMonth(PayQueryDTO payQueryDTO){
+
+        if (payQueryDTO == null)
+            return Result.failure(TopErrorCode.ZERO_OBJ);
+
+        List<PayQueryStatisticsDTO> payQueryStatisticsDTOS = null;
+        try {
+           if (DatetypeEnum.MONTH.name().equals(payQueryDTO.getDateUnit())){
+               payQueryStatisticsDTOS = payResultEntity.findPayResultByMonth();
+
+           }else if (DatetypeEnum.YEAR.name().equals(payQueryDTO.getDateUnit())){
+               payQueryStatisticsDTOS = payResultEntity.findPayResultByYear();
+           }else {
+               return Result.failure(TopErrorCode.ZERO_OBJ);
+           }
+
+            UserDomainModel userDomainModel = new UserDomainModel();
+            userDomainModel.findResultStatisticsByMonth(
+                    payQueryStatisticsDTOS,payQueryDTO.getStartDate());
+
+            if (userDomainModel.getPayStatisticsDTOS().size() > 0){
+                return Result.success(userDomainModel.getPayStatisticsDTOS());
+            }else {
+                return Result.failure(TopErrorCode.NO_DATAS);
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+
+    }
+
+    /**
+     * 查询所有缴费成功结果
+     * @return
+     */
     public Result findPayResult(){
 
         try {
@@ -38,7 +81,11 @@ public class WechatPayResultService {
 
     }
 
-
+    /**
+     * 新增缴费成功结果
+     * @param payResultSubmitDTO
+     * @return
+     */
     public Result insertPayResult(PayResultSubmitDTO payResultSubmitDTO){
         if (payResultSubmitDTO == null)
             return Result.failure(TopErrorCode.NULL_OBJ);

@@ -2,12 +2,15 @@ package com.sgcc.model;
 
 import com.example.Utils;
 import com.sgcc.dao.PayResultDao;
+import com.sgcc.dto.PayQueryStatisticsDTO;
 import com.sgcc.dto.PayResultSubmitDTO;
 import com.sgcc.dto.PayResultViewDTO;
+import com.sgcc.dto.PayStatisticsDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 @Data
@@ -18,6 +21,7 @@ public class UserDomainModel {
     private PayResultDao payResultDao;
     private List<PayResultDao> payResultDaos = new ArrayList<>();
     private List<PayResultSubmitDTO> payResultSubmitDTOS = new ArrayList<>();
+    private List<PayStatisticsDTO> payStatisticsDTOS = new ArrayList<>();
 
     private List<PayResultViewDTO> payResultViewDTOS = new ArrayList<>();
 
@@ -32,6 +36,23 @@ public class UserDomainModel {
     public UserDomainModel(List<PayResultDao> payResultDaos) {
         this.payResultDaos = payResultDaos;
     }
+
+
+
+    public void findResultStatisticsByMonth(List<PayQueryStatisticsDTO> dtos,Date StartDate){
+        dtos.forEach(dto -> {
+            this.payStatisticsDTOS.add(new PayStatisticsDTO(
+                    StartDate,
+                    dto.getDateUnit(),
+                    dto.getPayTotal(),
+                    dto.getPaySum()
+            ));
+        });
+
+
+    }
+
+
 
     /**
      * 新增支付结果dto转dao
@@ -67,8 +88,6 @@ public class UserDomainModel {
                     Utils.GetTime(payResultDao.getOrderSubmitTime())
             ));
         });
-
-
     }
 
 

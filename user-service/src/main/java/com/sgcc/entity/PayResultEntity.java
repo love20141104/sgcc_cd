@@ -1,6 +1,7 @@
 package com.sgcc.entity;
 
 import com.sgcc.dao.PayResultDao;
+import com.sgcc.dto.PayQueryStatisticsDTO;
 import com.sgcc.repository.PayResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,16 @@ public class PayResultEntity {
 
     public List<PayResultDao> findPayResult(){
         return payResultRepository.findPayResult();
+    }
+
+
+    public List<PayQueryStatisticsDTO> findPayResultByMonth(){
+        return payResultRepository.findPayResultByMonth();
+    }
+
+
+    public List<PayQueryStatisticsDTO> findPayResultByYear(){
+        return payResultRepository.findPayResultByYear();
     }
 
 }

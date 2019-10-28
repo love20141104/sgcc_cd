@@ -1,7 +1,7 @@
 package com.sgcc.sgccenum;
 
 public enum DatetypeEnum {
-        MONTH("MONTH"),WEEK("WEEK"),DAY("DAY"),HOUR("HOUR");
+        YEAR("YEAR"),MONTH("MONTH"),WEEK("WEEK"),DAY("DAY"),HOUR("HOUR");
     //成员变量
     private String name;
 
