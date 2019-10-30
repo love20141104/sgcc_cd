@@ -77,10 +77,9 @@ public class BusinessServiceController {
     // -------------------------居民更名过户--------------------------------------
 
     @ApiOperation(value = "更名过户-新增", notes = "")
-    @PostMapping(value = "/renameAndTransfer/inhabitant/{openId}")
-    public Result addRenameAndTransferOrder(@PathVariable String openId,
-                                            @RequestBody InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO) {
-        return  sgccBusinessService.addRenameOrder(inhabitantRenameSubmitDTO,openId);
+    @PostMapping(value = "/renameAndTransfer/inhabitant")
+    public Result addRenameAndTransferOrder(@RequestBody InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO) {
+        return  sgccBusinessService.addRenameOrder(inhabitantRenameSubmitDTO);
     }
 
     @ApiOperation(value = "更名过户-查询", notes = "")
@@ -102,9 +101,9 @@ public class BusinessServiceController {
     }
 
     @ApiOperation(value = "更名过户-修改", notes = "")
-    @PutMapping(value = "/renameAndTransfer/inhabitant/{infoId}")
-    public Result updateIncreaseCapacity(@PathVariable String infoId,@RequestBody InhabitantRenameUpdateDTO dto) {
-        return  sgccBusinessService.updateRenameOrder(infoId,dto);
+    @PutMapping(value = "/renameAndTransfer/inhabitant")
+    public Result updateIncreaseCapacity(@RequestBody InhabitantRenameUpdateDTO dto) {
+        return  sgccBusinessService.updateRenameOrder(dto);
     }
 
 

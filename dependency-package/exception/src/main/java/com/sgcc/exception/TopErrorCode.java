@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 public enum TopErrorCode {
     SUCCESS( 0 , "成功" ),
+    FAILURE(12,"失败"),
     NULL_OBJ( 1 , "对象为空" ),
     INVALID_OBJ( 2 , "无效的数据" ),
     SQL_ERR( 3 , "数据库操作失败" ),

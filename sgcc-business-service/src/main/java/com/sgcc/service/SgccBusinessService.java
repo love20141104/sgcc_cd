@@ -297,14 +297,14 @@ public class SgccBusinessService {
      * 修改更名过户订单列表
      * @return
      */
-    public Result updateRenameOrder(String infoId, InhabitantRenameUpdateDTO dto){
+    public Result updateRenameOrder(InhabitantRenameUpdateDTO dto){
 
-        if (Strings.isNullOrEmpty(infoId) || dto == null)
+        if (dto == null)
             return Result.failure(TopErrorCode.NO_DATAS);
 
         try {
             InhabitantModel model = new InhabitantModel();
-            InhabitantRenameDao dao = model.updateRenameTransform(dto,infoId);
+            InhabitantRenameDao dao = model.updateRenameTransform(dto);
             int count = inhabitantRenameEventEntity.updateRenameOrder(dao);
             if (count > 0){
                 return Result.success();
@@ -345,10 +345,9 @@ public class SgccBusinessService {
     /**
      * 新增更名过户订单
      * @param inhabitantRenameSubmitDTO
-     * @param openId
      * @return
      */
-    public Result addRenameOrder(InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO, String openId){
+    public Result addRenameOrder(InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO){
 
         if (Strings.isNullOrEmpty(inhabitantRenameSubmitDTO.getContactTel()) ||
                 Strings.isNullOrEmpty(inhabitantRenameSubmitDTO.getHouseId()) ||
@@ -359,7 +358,7 @@ public class SgccBusinessService {
 
         try {
 
-            InhabitantModel inhabitantModel = new InhabitantModel(inhabitantRenameSubmitDTO,openId);
+            InhabitantModel inhabitantModel = new InhabitantModel(inhabitantRenameSubmitDTO);
             inhabitantModel.insertRenameTransform();
             int count = inhabitantRenameEventEntity.addRenameOrder(inhabitantModel.getInhabitantRenameDao());
             if (count > 0){

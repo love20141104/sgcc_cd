@@ -3,7 +3,10 @@ package com.sgcc.dao;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import java.util.List;
 public class PreSuggestionDao {
 
     // 意见id
+
     private String suggestionId;
 
     // 用户id

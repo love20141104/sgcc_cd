@@ -3,6 +3,8 @@ package com.sgcc.controller;
 import com.example.result.Result;
 import com.sgcc.dto.OrderTransDTO;
 import com.sgcc.dto.PayResultSubmitDTO;
+import com.sgcc.dto.inhabitant.InhabitantInfoCorrectEditDTO;
+import com.sgcc.dto.inhabitant.InhabitantInfoCorrectSubmitDTO;
 import com.sgcc.service.RecordService;
 import com.sgcc.service.SgccBusinessService;
 import com.sgcc.service.UserService;
@@ -12,6 +14,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Api(value = "", tags = "用户相关业务接口")
@@ -68,11 +72,33 @@ public class UserController {
     }
 
 
+    /******************************************信息修正*********************************************/
+
+    @ApiOperation(value = "信息修正-新增", notes = "")
+    @PostMapping(value = "/infoCorrect")
+    public Result addInfoCorrectOrder(@RequestBody InhabitantInfoCorrectSubmitDTO dto) {
+        return userService.addInfoCorrectOrder(dto);
+    }
 
 
+    @ApiOperation(value = "信息修正-查询", notes = "")
+    @GetMapping(value = "/infoCorrect")
+    public Result queryInfoCorrectOrder() {
+        return userService.getInfoCorrectOrderList();
+    }
 
 
+    @ApiOperation(value = "信息修正-修改", notes = "")
+    @PutMapping(value = "/infoCorrect")
+    public Result updateInfoCorrectOrder(@RequestBody InhabitantInfoCorrectEditDTO dto) {
+        return userService.updateInfoCorrectOrder(dto);
+    }
 
+    @ApiOperation(value = "信息修正-删除", notes = "")
+    @DeleteMapping(value = "/infoCorrect")
+    public Result delInfoCorrectOrder(@RequestBody List<String> ids) {
+        return userService.delInfoCorrectOrder(ids);
+    }
 
 
 

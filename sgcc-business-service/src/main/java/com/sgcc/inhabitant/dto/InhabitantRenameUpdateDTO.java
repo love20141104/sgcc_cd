@@ -11,28 +11,34 @@ import java.util.Date;
 public class InhabitantRenameUpdateDTO implements Serializable {
     private static final long serialVersionUID = 8259578234317479309L;
 
+    private String infoId;
+
     private String houseId;          // 户号信息id
 
     private Boolean change;         // 产权是否变更
 
-    private String houseName;
+    private String infoName;
 
-    private String idCard;
+    private String infoIdCard;
 
-    private String contactTel;
+    private String infoTelphone;
 
-    private String idCardPositiveImg;
+    private String cqIdCardPositiveImg;
 
-    private String idCardBackImg;
+    private String cqIdCardBackImg;
 
-    public InhabitantRenameUpdateDTO(String houseId, Boolean change, String houseName, String idCard,
-                                     String contactTel, String idCardPositiveImg, String idCardBackImg) {
-        this.houseId = houseId;
-        this.change = change;
-        this.houseName = houseName;
-        this.idCard = idCard;
-        this.contactTel = contactTel;
-        this.idCardPositiveImg = idCardPositiveImg;
-        this.idCardBackImg = idCardBackImg;
-    }
+    private String applicant;       // 申请人身份
+
+    private String transactorName;  // 经办人姓名
+
+    private String sqArttorneyImg;
+
+    private String sqIdCardPositiveImg;
+
+    private String sqIdCardBackImg;
+
+    private String transactorIdCard;
+
+    private String transactorTel;
+
 }

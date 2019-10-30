@@ -9,6 +9,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor  //生成无参构造函数
+@AllArgsConstructor
 public class InhabitantRenameDao implements Serializable {
     private static final long serialVersionUID = -4514878156199973011L;
     private String id;
@@ -21,31 +22,30 @@ public class InhabitantRenameDao implements Serializable {
 
     private Boolean change;         // 产权是否变更
 
-    private String houseName;
+    private String infoName;
 
-    private String idCard;
+    private String infoIdCard;
 
-    private String contactTel;
+    private String infoTel;
 
-    private String idCardPositiveImg;
+    private String cqIdCardPositiveImg;
 
-    private String idCardBackImg;
+    private String cqIdCardBackImg;
+
+    private String applicant;       // 申请人身份
+
+    private String transactorName;  // 经办人姓名
+
+    private String sqArttorneyImg;
+
+    private String sqIdCardPositiveImg;
+
+    private String sqIdCardBackImg;
+
+    private String transactorIdCard;
+
+    private String transactorTel;
 
     private Date submitDate;
 
-    public InhabitantRenameDao(String id, String infoId, String houseId, String openId,
-                               Boolean change, String houseName, String idCard, String contactTel,
-                               String idCardPositiveImg, String idCardBackImg, Date submitDate) {
-        this.id = id;
-        this.infoId = infoId;
-        this.houseId = houseId;
-        this.openId = openId;
-        this.change = change;
-        this.houseName = houseName;
-        this.idCard = idCard;
-        this.contactTel = contactTel;
-        this.idCardPositiveImg = idCardPositiveImg;
-        this.idCardBackImg = idCardBackImg;
-        this.submitDate = submitDate;
-    }
 }

@@ -9,6 +9,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor  //生成无参构造函数
+@AllArgsConstructor
 public class InhabitantRenameDetailDTO implements Serializable {
 
     private static final long serialVersionUID = -2581692864245278918L;
@@ -18,35 +19,34 @@ public class InhabitantRenameDetailDTO implements Serializable {
 
     private String houseId;          // 户号信息id
 
-    private String openId;
+    private String userOpenId;
 
     private Boolean change;         // 产权是否变更
 
-    private String houseName;
+    private String infoName;
 
-    private String idCard;
+    private String infoIdCard;
 
-    private String contactTel;
+    private String InfoTelphone;
 
-    private String idCardPositiveImg;
+    private String cqIdCardPositiveImg;
 
-    private String idCardBackImg;
+    private String cqIdCardBackImg;
 
-    private Date submitDate;
+    private String applicant;       // 申请人身份
 
-    public InhabitantRenameDetailDTO(String id, String infoId, String houseId, String openId, Boolean change,
-                                     String houseName, String idCard, String contactTel, String idCardPositiveImg,
-                                     String idCardBackImg, Date submitDate) {
-        this.id = id;
-        this.infoId = infoId;
-        this.houseId = houseId;
-        this.openId = openId;
-        this.change = change;
-        this.houseName = houseName;
-        this.idCard = idCard;
-        this.contactTel = contactTel;
-        this.idCardPositiveImg = idCardPositiveImg;
-        this.idCardBackImg = idCardBackImg;
-        this.submitDate = submitDate;
-    }
+    private String transactorName;  // 经办人姓名
+
+    private String sqArttorneyImg;
+
+    private String sqIdCardPositiveImg;
+
+    private String sqIdCardBackImg;
+
+    private String transactorIdCard;
+
+    private String transactorTel;
+
+    private String submitDate;
+
 }

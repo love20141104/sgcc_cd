@@ -38,9 +38,8 @@ public class InhabitantModel {
 
     private List<InhabitantRenameSubmitDTO> inhabitantRenameSubmitDTOS = new ArrayList<>();
 
-    public InhabitantModel(InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO, String openId) {
+    public InhabitantModel(InhabitantRenameSubmitDTO inhabitantRenameSubmitDTO) {
         this.inhabitantRenameSubmitDTO = inhabitantRenameSubmitDTO;
-        this.openId = openId;
     }
 
     public InhabitantModel(List<InhabitantRenameDao> inhabitantRenameDaos) {
@@ -100,13 +99,20 @@ public class InhabitantModel {
                 id,
                 id,
                 this.inhabitantRenameSubmitDTO.getHouseId(),
-                this.getOpenId(),
+                this.inhabitantRenameSubmitDTO.getOpenId(),
                 this.inhabitantRenameSubmitDTO.getChange(),
                 this.inhabitantRenameSubmitDTO.getHouseName(),
                 this.inhabitantRenameSubmitDTO.getIdCard(),
                 this.inhabitantRenameSubmitDTO.getContactTel(),
                 this.inhabitantRenameSubmitDTO.getIdCardPositiveImg(),
                 this.inhabitantRenameSubmitDTO.getIdCardBackImg(),
+                this.inhabitantRenameSubmitDTO.getApplicant(),
+                this.inhabitantRenameSubmitDTO.getTransactorName(),
+                this.inhabitantRenameSubmitDTO.getSqArttorneyImg(),
+                this.inhabitantRenameSubmitDTO.getSqIdCardPositiveImg(),
+                this.inhabitantRenameSubmitDTO.getSqIdCardBackImg(),
+                this.inhabitantRenameSubmitDTO.getTransactorIdCard(),
+                this.inhabitantRenameSubmitDTO.getTransactorTel(),
                 new Date()
         );
 
@@ -121,12 +127,19 @@ public class InhabitantModel {
                     dao.getHouseId(),
                     dao.getOpenId(),
                     dao.getChange(),
-                    dao.getHouseName(),
-                    dao.getIdCard(),
-                    dao.getContactTel(),
-                    dao.getIdCardPositiveImg(),
-                    dao.getIdCardBackImg(),
-                    dao.getSubmitDate()
+                    dao.getInfoName(),
+                    dao.getInfoIdCard(),
+                    dao.getInfoTel(),
+                    dao.getCqIdCardPositiveImg(),
+                    dao.getCqIdCardBackImg(),
+                    dao.getApplicant(),
+                    dao.getTransactorName(),
+                    dao.getSqArttorneyImg(),
+                    dao.getSqIdCardPositiveImg(),
+                    dao.getSqIdCardBackImg(),
+                    dao.getTransactorIdCard(),
+                    dao.getTransactorTel(),
+                    Utils.GetTime(dao.getSubmitDate())
             ));
         });
 
@@ -140,12 +153,20 @@ public class InhabitantModel {
         this.inhabitantRenameDaos.forEach(inhabitantRenameDao->{
             this.inhabitantRenameSubmitDTOS.add(new InhabitantRenameSubmitDTO(
                     inhabitantRenameDao.getHouseId(),
+                    inhabitantRenameDao.getOpenId(),
                     inhabitantRenameDao.getChange(),
-                    inhabitantRenameDao.getHouseName(),
-                    inhabitantRenameDao.getIdCard(),
-                    inhabitantRenameDao.getContactTel(),
-                    inhabitantRenameDao.getIdCardPositiveImg(),
-                    inhabitantRenameDao.getIdCardBackImg()
+                    inhabitantRenameDao.getInfoName(),
+                    inhabitantRenameDao.getInfoIdCard(),
+                    inhabitantRenameDao.getInfoTel(),
+                    inhabitantRenameDao.getCqIdCardPositiveImg(),
+                    inhabitantRenameDao.getCqIdCardBackImg(),
+                    inhabitantRenameDao.getApplicant(),
+                    inhabitantRenameDao.getTransactorName(),
+                    inhabitantRenameDao.getSqArttorneyImg(),
+                    inhabitantRenameDao.getSqIdCardPositiveImg(),
+                    inhabitantRenameDao.getSqIdCardBackImg(),
+                    inhabitantRenameDao.getTransactorIdCard(),
+                    inhabitantRenameDao.getTransactorTel()
             ));
         });
 
@@ -155,11 +176,28 @@ public class InhabitantModel {
     /**
      * 修改更名过户订单列表dto转dao
      */
-    public InhabitantRenameDao updateRenameTransform(InhabitantRenameUpdateDTO dto,String infoId){
+    public InhabitantRenameDao updateRenameTransform(InhabitantRenameUpdateDTO dto){
 
-        InhabitantRenameDao dao = new InhabitantRenameDao();
-        BeanUtils.copyProperties(dto,dao);
-        dao.setInfoId(infoId);
+        InhabitantRenameDao dao = new InhabitantRenameDao(
+                null,
+                dto.getInfoId(),
+                dto.getHouseId(),
+                dto.getHouseId(),
+                dto.getChange(),
+                dto.getInfoName(),
+                dto.getInfoIdCard(),
+                dto.getInfoTelphone(),
+                dto.getCqIdCardPositiveImg(),
+                dto.getCqIdCardBackImg(),
+                dto.getApplicant(),
+                dto.getTransactorName(),
+                dto.getSqArttorneyImg(),
+                dto.getSqIdCardPositiveImg(),
+                dto.getSqIdCardBackImg(),
+                dto.getTransactorIdCard(),
+                dto.getTransactorTel(),
+                null
+        );
         return dao;
     }
 

@@ -6,9 +6,9 @@ import com.sgcc.dao.PayResultDao;
 import com.sgcc.dto.PayQueryDTO;
 import com.sgcc.dto.PayQueryStatisticsDTO;
 import com.sgcc.dto.PayResultSubmitDTO;
-import com.sgcc.entity.PayResultEntity;
+import com.sgcc.entity.query.PayResultEntity;
 import com.sgcc.exception.TopErrorCode;
-import com.sgcc.model.UserDomainModel;
+import com.sgcc.model.UserModel;
 import com.sgcc.sgccenum.DatetypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,17 +33,17 @@ public class WechatPayResultService {
 
         List<PayQueryStatisticsDTO> payQueryStatisticsDTOS = null;
         PayQueryStatisticsDTO payQueryStatisticsDTO = null;
-        UserDomainModel userDomainModel = new UserDomainModel();
+        UserModel userModel = new UserModel();
         try {
             // 判断是年份或月份
            if (DatetypeEnum.MONTH.name().equals(payQueryDTO.getDateUnit())){
                // 根据当前时间做最近30天缴费统计
                payQueryStatisticsDTO = payResultEntity.findPayResultByMonth(payQueryDTO.getStartDate());
-               userDomainModel.findResultStatisticsByMonth(payQueryStatisticsDTO,payQueryDTO.getStartDate(),
+               userModel.findResultStatisticsByMonth(payQueryStatisticsDTO,payQueryDTO.getStartDate(),
                        payQueryDTO.getDateUnit());
 
-               if (userDomainModel.getPayStatisticsDTO() != null){
-                   return Result.success(userDomainModel.getPayStatisticsDTO());
+               if (userModel.getPayStatisticsDTO() != null){
+                   return Result.success(userModel.getPayStatisticsDTO());
                }else {
                    return Result.failure(TopErrorCode.NO_DATAS);
                }
@@ -52,12 +52,12 @@ public class WechatPayResultService {
                payQueryStatisticsDTO = payResultEntity.findPayResultByCurrentYear(payQueryDTO.getStartDate());
                payQueryStatisticsDTOS = payResultEntity.findPayResultByCurrentMonth(payQueryDTO.getStartDate());
 
-               userDomainModel.findResultStatisticsByYear(payQueryStatisticsDTO,payQueryStatisticsDTOS,
+               userModel.findResultStatisticsByYear(payQueryStatisticsDTO,payQueryStatisticsDTOS,
                        payQueryDTO.getStartDate(),
                        payQueryDTO.getDateUnit());
 
-               if (userDomainModel.getPayStatisticsDTO() != null){
-                   return Result.success(userDomainModel.getPayStatisticsDTO());
+               if (userModel.getPayStatisticsDTO() != null){
+                   return Result.success(userModel.getPayStatisticsDTO());
                }else {
                    return Result.failure(TopErrorCode.NO_DATAS);
                }
@@ -82,11 +82,11 @@ public class WechatPayResultService {
 
         try {
             List<PayResultDao> payResultDaos = payResultEntity.findPayResult();
-            UserDomainModel userDomainModel = new UserDomainModel(payResultDaos);
-            userDomainModel.findTransform();
+            UserModel userModel = new UserModel(payResultDaos);
+            userModel.findTransform();
 
-            if (userDomainModel.getPayResultViewDTOS().size() > 0){
-                return Result.success(userDomainModel.getPayResultViewDTOS());
+            if (userModel.getPayResultViewDTOS().size() > 0){
+                return Result.success(userModel.getPayResultViewDTOS());
             }else {
                 return Result.failure(TopErrorCode.NO_DATAS);
             }
@@ -110,9 +110,9 @@ public class WechatPayResultService {
 
         try {
 
-            UserDomainModel userDomainModel = new UserDomainModel(payResultSubmitDTO);
-            userDomainModel.insertTransform();
-            int count = payResultEntity.insertPayResult(userDomainModel.getPayResultDao());
+            UserModel userModel = new UserModel(payResultSubmitDTO);
+            userModel.insertTransform();
+            int count = payResultEntity.insertPayResult(userModel.getPayResultDao());
             if (count > 0){
                 return Result.success("新增支付结果成功！");
             }else {

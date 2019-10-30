@@ -43,6 +43,14 @@ public class Result implements Serializable {
         return result;
     }
 
+    public static Result failure( Object data  ) {
+        Result result = new Result();
+        result.resultCode = TopErrorCode.FAILURE.getErrcode();
+        result.msg = TopErrorCode.FAILURE.getDesc();
+        result.setData(data);
+        return result;
+    }
+
     public static Result failure( TopErrorCode topErrorCode  ) {
         Result result = new Result();
         result.resultCode = topErrorCode.getErrcode();

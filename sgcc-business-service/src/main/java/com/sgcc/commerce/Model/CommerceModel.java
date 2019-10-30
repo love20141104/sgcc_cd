@@ -67,7 +67,7 @@ public class CommerceModel {
                     dao.getId().replace("-",""),
                     Utils.GetTime(dao.getSubmitDate()),
                     dao.getOpenId(),
-                    dao.getHouseName(),
+                    dao.getInfoName(),
                     addr,
                     progress,
                     userType

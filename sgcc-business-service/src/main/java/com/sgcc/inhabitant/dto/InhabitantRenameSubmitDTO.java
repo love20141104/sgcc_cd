@@ -9,11 +9,14 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor  //生成无参构造函数
+@AllArgsConstructor
 public class InhabitantRenameSubmitDTO implements Serializable {
     private static final long serialVersionUID = 8259578234317479309L;
 //    private String infoId;
 
     private String houseId;          // 户号信息id
+
+    private String openId;
 
     private Boolean change;         // 产权是否变更
 
@@ -27,14 +30,20 @@ public class InhabitantRenameSubmitDTO implements Serializable {
 
     private String idCardBackImg;
 
-    public InhabitantRenameSubmitDTO(String houseId, Boolean change, String houseName, String idCard,
-                                     String contactTel, String idCardPositiveImg, String idCardBackImg) {
-        this.houseId = houseId;
-        this.change = change;
-        this.houseName = houseName;
-        this.idCard = idCard;
-        this.contactTel = contactTel;
-        this.idCardPositiveImg = idCardPositiveImg;
-        this.idCardBackImg = idCardBackImg;
-    }
+    private String applicant;       // 申请人身份
+
+    private String transactorName;  // 经办人姓名
+
+    private String sqArttorneyImg;
+
+    private String sqIdCardPositiveImg;
+
+    private String sqIdCardBackImg;
+
+    private String transactorIdCard;
+
+    private String transactorTel;
+
+
+
 }

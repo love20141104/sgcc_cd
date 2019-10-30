@@ -1,4 +1,4 @@
-package com.sgcc.entity;
+package com.sgcc.entity.query;
 
 import com.sgcc.dao.PayResultDao;
 import com.sgcc.dto.PayQueryStatisticsDTO;
