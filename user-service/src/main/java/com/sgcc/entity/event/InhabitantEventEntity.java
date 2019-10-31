@@ -8,24 +8,24 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class UserEventEntity {
+public class InhabitantEventEntity {
 
     @Autowired
     private UserRepository userRepository;
 
 
     public int addInfoCorrectOrder(InhabitantInfoCorrectDao dao){
-        return userRepository.addInfoCorrectOrder(dao);
+        return userRepository.addInhabitantInfoCorrectOrder(dao);
     }
 
 
     public int updateInfoCorrectOrder(InhabitantInfoCorrectDao dao){
-        return userRepository.updateInfoCorrect(dao);
+        return userRepository.updateInhabitantInfoCorrect(dao);
     }
 
 
     public int delInfoCorrectOrder(List<String> ids){
-        return userRepository.delCorrectIds(ids);
+        return userRepository.delInhabitantCorrectIds(ids);
     }
 
 }

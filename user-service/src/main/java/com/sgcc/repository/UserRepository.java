@@ -21,7 +21,7 @@ public class UserRepository {
      * 查询所有信息修正订单
      * @return
      */
-    public List<InhabitantInfoCorrectDao> findAll(){
+    public List<InhabitantInfoCorrectDao> findInhabitantAll(){
         String sql = "select correct_id,user_open_id,house_id,correct_name,correct_idcard,correct_tel," +
                 "correct_idcard_positive_img,correct_idcard_back_img,correct_new_name,correct_new_address," +
                 "correct_new_tel,correct_submit_date from b_info_correct_inhabitant";
@@ -35,7 +35,7 @@ public class UserRepository {
      * @param dao
      * @return
      */
-    public int addInfoCorrectOrder(InhabitantInfoCorrectDao dao){
+    public int addInhabitantInfoCorrectOrder(InhabitantInfoCorrectDao dao){
         String sql = "insert into b_info_correct_inhabitant(correct_id, user_open_id, house_id, correct_name, " +
                 "correct_idcard, correct_tel, correct_idcard_positive_img, correct_idcard_back_img, correct_new_name, " +
                 "correct_new_address, correct_new_tel, correct_submit_date) values('"+dao.getCorrectId()+"'," +
@@ -50,7 +50,7 @@ public class UserRepository {
 
 
 
-    public int updateInfoCorrect(InhabitantInfoCorrectDao dao){
+    public int updateInhabitantInfoCorrect(InhabitantInfoCorrectDao dao){
         String sql = "update b_info_correct_inhabitant set house_id= '"+dao.getHouseId()+"'," +
                 "correct_name='"+dao.getCorrectName()+"',correct_idcard='"+dao.getCorrectIdcard()+"'," +
                 "correct_tel='"+dao.getCorrectTel()+"',correct_idcard_positive_img='"+dao.getCorrectIdcardPositiveImg()+"'," +
@@ -67,7 +67,7 @@ public class UserRepository {
      * @param ids
      * @return
      */
-    public int delCorrectIds(List<String> ids){
+    public int delInhabitantCorrectIds(List<String> ids){
         String sql = "delete from b_info_correct_inhabitant where correct_id in('"+Utils.joinStrings(ids,"','")+"')";
 
         return jdbcTemplate.update(sql);

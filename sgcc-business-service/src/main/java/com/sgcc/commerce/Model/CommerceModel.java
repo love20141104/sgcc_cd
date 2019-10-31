@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -146,7 +147,7 @@ public class CommerceModel {
                     commerceIncreaseCapacityDao.getSqIdcardPositiveImg(),
                     commerceIncreaseCapacityDao.getSqIdcardBackImg(),
                     commerceIncreaseCapacityDao.getInvoiceImg(),
-                    commerceIncreaseCapacityDao.getSubmitDate(),
+                    Utils.GetTime(commerceIncreaseCapacityDao.getSubmitDate()),
                     commerceIncreaseCapacityDao.getTransactorTel(),
                     commerceIncreaseCapacityDao.getSqAttorneyImg()
             ));
@@ -238,7 +239,7 @@ public class CommerceModel {
     public void updateIncreaseCapacityTransform(){
         this.commerceIncreaseCapacityDao = new CommerceIncreaseCapacityDao(
                 this.commerceIncreaseCapacityUpdateDTO.getId(),
-                this.commerceIncreaseCapacityUpdateDTO.getUser_open_id(),
+                null,
                 this.commerceIncreaseCapacityUpdateDTO.getIn_company_name(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_current_capacity(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_name(),
@@ -248,7 +249,7 @@ public class CommerceModel {
                 this.commerceIncreaseCapacityUpdateDTO.getIn_apply_person(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_transactor(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_transactor_idcard(),
-                this.commerceIncreaseCapacitySubmitDTO.getIn_transactor_tel(),
+                this.commerceIncreaseCapacityUpdateDTO.getIn_transactor_tel(),
                 this.commerceIncreaseCapacityUpdateDTO.getIn_invoice(),
                 this.commerceIncreaseCapacityUpdateDTO.getInvoice_number(),
                 this.commerceIncreaseCapacityUpdateDTO.getInvoice_bank(),
@@ -267,7 +268,7 @@ public class CommerceModel {
                 this.commerceIncreaseCapacityUpdateDTO.getSq_idcard_positive_img(),
                 this.commerceIncreaseCapacityUpdateDTO.getSq_idcard_back_img(),
                 this.commerceIncreaseCapacityUpdateDTO.getInvoice_img(),
-                this.commerceIncreaseCapacitySubmitDTO.getSq_attorney_img(),
+                this.commerceIncreaseCapacityUpdateDTO.getSq_attorney_img(),
                 null
         );
     }

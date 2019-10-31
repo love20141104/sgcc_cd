@@ -8,14 +8,14 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class UserQueryEntity {
+public class InhabitantQueryEntity {
 
     @Autowired
     private UserRepository userRepository;
 
 
     public List<InhabitantInfoCorrectDao> findAll(){
-        return userRepository.findAll();
+        return userRepository.findInhabitantAll();
     }
 
 

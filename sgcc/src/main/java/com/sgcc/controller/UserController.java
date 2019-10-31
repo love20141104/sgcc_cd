@@ -3,6 +3,8 @@ package com.sgcc.controller;
 import com.example.result.Result;
 import com.sgcc.dto.OrderTransDTO;
 import com.sgcc.dto.PayResultSubmitDTO;
+import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
+import com.sgcc.dto.commerce.CommerceInfoCorrectSubmitDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectEditDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectSubmitDTO;
 import com.sgcc.service.RecordService;
@@ -74,30 +76,57 @@ public class UserController {
 
     /******************************************信息修正*********************************************/
 
-    @ApiOperation(value = "信息修正-新增", notes = "")
-    @PostMapping(value = "/infoCorrect")
-    public Result addInfoCorrectOrder(@RequestBody InhabitantInfoCorrectSubmitDTO dto) {
-        return userService.addInfoCorrectOrder(dto);
+    @ApiOperation(value = "信息修正-居民-新增", notes = "")
+    @PostMapping(value = "/infoCorrect/inhabitant")
+    public Result addInhabitantInfoCorrect(@RequestBody InhabitantInfoCorrectSubmitDTO dto) {
+        return userService.addInhabitantInfoCorrect(dto);
     }
 
 
-    @ApiOperation(value = "信息修正-查询", notes = "")
-    @GetMapping(value = "/infoCorrect")
-    public Result queryInfoCorrectOrder() {
-        return userService.getInfoCorrectOrderList();
+    @ApiOperation(value = "信息修正-居民-查询", notes = "")
+    @GetMapping(value = "/infoCorrect/inhabitant")
+    public Result queryInhabitantInfoCorrect() {
+        return userService.queryInhabitantInfoCorrect();
     }
 
 
-    @ApiOperation(value = "信息修正-修改", notes = "")
-    @PutMapping(value = "/infoCorrect")
-    public Result updateInfoCorrectOrder(@RequestBody InhabitantInfoCorrectEditDTO dto) {
-        return userService.updateInfoCorrectOrder(dto);
+    @ApiOperation(value = "信息修正-居民-修改", notes = "")
+    @PutMapping(value = "/infoCorrect/inhabitant")
+    public Result updateInhabitantInfoCorrect(@RequestBody InhabitantInfoCorrectEditDTO dto) {
+        return userService.updateInhabitantInfoCorrect(dto);
     }
 
-    @ApiOperation(value = "信息修正-删除", notes = "")
-    @DeleteMapping(value = "/infoCorrect")
-    public Result delInfoCorrectOrder(@RequestBody List<String> ids) {
-        return userService.delInfoCorrectOrder(ids);
+    @ApiOperation(value = "信息修正-居民-删除", notes = "")
+    @DeleteMapping(value = "/infoCorrect/inhabitant")
+    public Result delInhabitantInfoCorrect(@RequestBody List<String> ids) {
+        return userService.delInhabitantInfoCorrect(ids);
+    }
+
+
+    @ApiOperation(value = "信息修正-个体工商业-新增", notes = "")
+    @PostMapping(value = "/infoCorrect/commerce")
+    public Result addCommerceInfoCorrect(@RequestBody CommerceInfoCorrectSubmitDTO dto) {
+        return userService.addCommerceInfoCorrect(dto);
+    }
+
+
+    @ApiOperation(value = "信息修正-个体工商业-查询", notes = "")
+    @GetMapping(value = "/infoCorrect/commerce")
+    public Result queryCommerceInfoCorrect() {
+        return userService.queryCommerceInfoCorrect();
+    }
+
+
+    @ApiOperation(value = "信息修正-个体工商业-修改", notes = "")
+    @PutMapping(value = "/infoCorrect/commerce")
+    public Result updateCommerceInfoCorrect(@RequestBody CommerceInfoCorrectEditDTO dto) {
+        return userService.updateCommerceInfoCorrect(dto);
+    }
+
+    @ApiOperation(value = "信息修正-个体工商业-删除", notes = "")
+    @DeleteMapping(value = "/infoCorrect/commerce")
+    public Result delCommerceInfoCorrect(@RequestBody List<String> ids) {
+        return userService.delCommerceInfoCorrect(ids);
     }
 
 

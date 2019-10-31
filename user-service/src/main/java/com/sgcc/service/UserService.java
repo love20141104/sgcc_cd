@@ -6,10 +6,12 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
 import com.sgcc.dto.ElectricityTypeDTO;
 import com.sgcc.dto.MonthlyBillsDTO;
+import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
+import com.sgcc.dto.commerce.CommerceInfoCorrectSubmitDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectEditDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectSubmitDTO;
-import com.sgcc.entity.event.UserEventEntity;
-import com.sgcc.entity.query.UserQueryEntity;
+import com.sgcc.entity.event.InhabitantEventEntity;
+import com.sgcc.entity.query.InhabitantQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +23,19 @@ import java.util.*;
 public class UserService {
 
     @Autowired
-    private UserQueryEntity userQueryEntity;
+    private InhabitantQueryEntity inhabitantQueryEntity;
 
     @Autowired
-    private UserEventEntity userEventEntity;
+    private InhabitantEventEntity inhabitantEventEntity;
 
 
     /**
-     * 查询所有信息修正订单
+     * 查询所有居民信息修正订单
      * @return
      */
-    public Result getInfoCorrectOrderList(){
+    public Result queryInhabitantInfoCorrect(){
         try {
-            List<InhabitantInfoCorrectDao> infoCorrectDaos = userQueryEntity.findAll();
+            List<InhabitantInfoCorrectDao> infoCorrectDaos = inhabitantQueryEntity.findAll();
             UserModel userModel = new UserModel();
             userModel.queryInfoCorrectTransform(infoCorrectDaos);
 
@@ -50,18 +52,18 @@ public class UserService {
 
 
     /**
-     * 新增信息修正订单
+     * 新增居民信息修正订单
      * @param dto
      * @return
      */
-    public Result addInfoCorrectOrder(InhabitantInfoCorrectSubmitDTO dto){
+    public Result addInhabitantInfoCorrect(InhabitantInfoCorrectSubmitDTO dto){
         if (dto == null)
             return Result.failure(TopErrorCode.ZERO_OBJ);
 
         try {
             UserModel userModel = new UserModel();
             userModel.addInfoCorrectTransform(dto);
-            int count = userEventEntity.addInfoCorrectOrder(userModel.getInhabitantInfoCorrectDao());
+            int count = inhabitantEventEntity.addInfoCorrectOrder(userModel.getInhabitantInfoCorrectDao());
             if (count > 0){
                 return Result.success("新增成功");
             }else {
@@ -74,12 +76,16 @@ public class UserService {
     }
 
 
-
-    public Result updateInfoCorrectOrder(InhabitantInfoCorrectEditDTO dto){
+    /**
+     * 修改居民信息修正订单
+     * @param dto
+     * @return
+     */
+    public Result updateInhabitantInfoCorrect(InhabitantInfoCorrectEditDTO dto){
         try {
             UserModel userModel = new UserModel();
             userModel.updateInfoCorrectTransform(dto);
-            int count = userEventEntity.updateInfoCorrectOrder(userModel.getInhabitantInfoCorrectDao());
+            int count = inhabitantEventEntity.updateInfoCorrectOrder(userModel.getInhabitantInfoCorrectDao());
             if (count > 0){
                 return Result.success("修改成功");
             }else {
@@ -92,11 +98,15 @@ public class UserService {
     }
 
 
-
-    public Result delInfoCorrectOrder(List<String> ids){
+    /**
+     * 删除居民信息修正订单
+     * @param ids
+     * @return
+     */
+    public Result delInhabitantInfoCorrect(List<String> ids){
         try {
 
-            int count = userEventEntity.delInfoCorrectOrder(ids);
+            int count = inhabitantEventEntity.delInfoCorrectOrder(ids);
             if (count > 0){
                 return Result.success("删除成功");
             }else {
@@ -110,7 +120,63 @@ public class UserService {
 
 
 
+    /**
+     * 新增个体工商业信息修正订单
+     * @param dto
+     * @return
+     */
+    public Result addCommerceInfoCorrect(CommerceInfoCorrectSubmitDTO dto) {
+        try {
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
 
+    }
+
+    /**
+     * 查询所有个体工商业信息修正订单
+     * @return
+     */
+    public Result queryCommerceInfoCorrect() {
+        try {
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+    }
+
+    /**
+     * 修改个体工商业信息修正订单
+     * @param dto
+     * @return
+     */
+    public Result updateCommerceInfoCorrect(CommerceInfoCorrectEditDTO dto) {
+        try {
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+    /**
+     * 删除个体工商业信息修正订单
+     * @param ids
+     * @return
+     */
+    public Result delCommerceInfoCorrect(List<String> ids) {
+        try {
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
 
 
 
@@ -182,9 +248,5 @@ public class UserService {
             throw new RuntimeException("查询月度账单失败!");
         }
     }
-
-
-
-
 
 }

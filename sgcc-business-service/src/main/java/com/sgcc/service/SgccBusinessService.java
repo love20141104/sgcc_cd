@@ -104,10 +104,8 @@ public class SgccBusinessService {
         if (Strings.isNullOrEmpty(openId))
             return Result.failure(TopErrorCode.NO_DATAS);
         try {
-
             List<CommerceIncreaseCapacityDao> daos = commerceIncreaseCapacityQueryEntity.
                     findIncreaseCapacityByOpenId(openId);
-
             CommerceModel commerceModel = new CommerceModel(daos);
             commerceModel.queryIncreaseByOpenIdTransform();
             return Result.success(commerceModel.getOrderDTOS());
@@ -120,14 +118,20 @@ public class SgccBusinessService {
 
     public Result findByOpenId(String id)
     {
-        List<InhabitantNewDao> inhabitantNewDaos = inhabitantNewQueryEntity.findByOpenId(id);
-        List<CommerceNewDao> commerceNewDaos = commerceNewQueryEntity.findByOpenId(id);
-        if( inhabitantNewDaos.size() <= 0 || commerceNewDaos.size() <= 0)
-            return null;
-        OrderModel model = new OrderModel(inhabitantNewDaos,commerceNewDaos);
-        model.queryOrderByOpenIdTransform();
-
-        return Result.success(model.getOrderDTOS());
+        try {
+            List<InhabitantNewDao> inhabitantNewDaos = inhabitantNewQueryEntity.findByOpenId(id);
+            List<CommerceNewDao> commerceNewDaos = commerceNewQueryEntity.findByOpenId(id);
+            if( inhabitantNewDaos.size() > 0 || commerceNewDaos.size() > 0){
+                OrderModel model = new OrderModel(inhabitantNewDaos,commerceNewDaos);
+                model.queryOrderByOpenIdTransform();
+                return Result.success(model.getOrderDTOS());
+            }else {
+                return Result.failure("查询失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
     }
 
 

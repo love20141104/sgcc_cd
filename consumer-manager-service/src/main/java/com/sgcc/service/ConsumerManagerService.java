@@ -75,6 +75,9 @@ public class ConsumerManagerService {
      * 删除客户经理
      */
     public Result deleteConsumerManager(String consumerManagerId) {
+        if (consumerManagerId.equals("test1"))
+            return Result.failure("此id不能删除");
+
         try {
             consumerManagerEventEntity.deleteConsumerManager(consumerManagerId);
             //如果redis中存在则删除
@@ -94,6 +97,9 @@ public class ConsumerManagerService {
      * 批量删除客户经理信息
      */
     public Result deleteConsumerManagers(List<String> consumerManagerIds) {
+
+        if (consumerManagerIds.contains("test1"))
+            consumerManagerIds.remove("test1");
         //参数检查start
         if (null == consumerManagerIds || consumerManagerIds.size() == 0) {
             return Result.failure(TopErrorCode.PARAMETER_ERR);

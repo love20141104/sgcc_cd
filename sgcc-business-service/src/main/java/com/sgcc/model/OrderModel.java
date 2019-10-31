@@ -31,7 +31,6 @@ public class OrderModel {
 
     public void queryOrderByOpenIdTransform(){
         String progress = "已提交";
-        String userType = "居民";
         this.inhabitantNewDaos.forEach(dao->{
             this.orderDTOS.add(new OrderDTO(
                     dao.getId().replace("-",""),
@@ -40,7 +39,7 @@ public class OrderModel {
                     dao.getNew_install_name(),
                     dao.getNew_install_address(),
                     progress,
-                    userType
+                    "居民"
             ));
         });
 
@@ -52,7 +51,7 @@ public class OrderModel {
                     dao.getNew_install_name(),
                     dao.getNew_install_address(),
                     progress,
-                    userType
+                    "个体工商业"
             ));
         });
 

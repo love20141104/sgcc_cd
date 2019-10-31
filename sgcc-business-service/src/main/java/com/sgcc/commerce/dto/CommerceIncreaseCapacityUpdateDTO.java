@@ -1,5 +1,6 @@
 package com.sgcc.commerce.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,10 +8,10 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor  //生成无参构造函数
+@AllArgsConstructor
 public class CommerceIncreaseCapacityUpdateDTO implements Serializable {
     private static final long serialVersionUID = -2768189117712127898L;
     private String id;
-    private String user_open_id;
     private String in_company_name;
     private Double in_current_capacity;
     private String in_name;
@@ -37,52 +38,8 @@ public class CommerceIncreaseCapacityUpdateDTO implements Serializable {
     private String sq_idcard_positive_img;
     private String sq_idcard_back_img;
     private String invoice_img;              // 一般纳税人
-    private String in_submit_date;
     private String in_transactor_tel;
     private String sq_attorney_img;
 
-    public CommerceIncreaseCapacityUpdateDTO(String id,String user_open_id,String in_company_name, Double in_current_capacity, String in_name,
-                                             String in_idcard, String in_telphone, String in_license_img,
-                                             String in_apply_person, String in_transactor, String in_transactor_idcard,
-                                             Boolean in_invoice, String invoice_number, String invoice_bank,
-                                             String invoice_bank_account, String invoice_regist_addr,
-                                             String invoice_phone, String propertyRight_img1, String propertyRight_img2,
-                                             String propertyRight_img3, String propertyRight_img4,
-                                             String propertyRight_img5, String propertyRight_img6,
-                                             String cq_idcard_positive_img, String cq_idcard_back_img,
-                                             String sq_idcard_positive_img, String sq_idcard_back_img,
-                                             String invoice_img,String in_submit_date,String in_transactor_tel,String sq_attorney_img) {
-        this.id = id;
-        this.user_open_id = user_open_id;
-        this.in_company_name = in_company_name;
-        this.in_current_capacity = in_current_capacity;
-        this.in_name = in_name;
-        this.in_idcard = in_idcard;
-        this.in_telphone = in_telphone;
-        this.in_license_img = in_license_img;
-        this.in_apply_person = in_apply_person;
-        this.in_transactor = in_transactor;
-        this.in_transactor_idcard = in_transactor_idcard;
-        this.in_invoice = in_invoice;
-        this.invoice_number = invoice_number;
-        this.invoice_bank = invoice_bank;
-        this.invoice_bank_account = invoice_bank_account;
-        this.invoice_regist_addr = invoice_regist_addr;
-        this.invoice_phone = invoice_phone;
-        this.propertyRight_img1 = propertyRight_img1;
-        this.propertyRight_img2 = propertyRight_img2;
-        this.propertyRight_img3 = propertyRight_img3;
-        this.propertyRight_img4 = propertyRight_img4;
-        this.propertyRight_img5 = propertyRight_img5;
-        this.propertyRight_img6 = propertyRight_img6;
-        this.cq_idcard_positive_img = cq_idcard_positive_img;
-        this.cq_idcard_back_img = cq_idcard_back_img;
-        this.sq_idcard_positive_img = sq_idcard_positive_img;
-        this.sq_idcard_back_img = sq_idcard_back_img;
-        this.invoice_img = invoice_img;
-        this.in_submit_date = in_submit_date;
-        this.in_transactor_tel = in_transactor_tel;
-        this.sq_attorney_img = sq_attorney_img;
 
-    }
 }

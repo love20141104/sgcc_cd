@@ -129,7 +129,8 @@ public class InhabitantNewRepository {
                 "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
                 "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
                 "new_install_apply_person,new_install_transactor,sq_arttorney_img,sq_idcard_positive_img," +
-                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_inhabitant where user_open_id ='" + id + "'";
+                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date " +
+                "from b_new_install_inhabitant where user_open_id ='" + id + "'";
 
         try {
             return jdbcTemplate.query(sql, new InhabitantNewRowMapper());

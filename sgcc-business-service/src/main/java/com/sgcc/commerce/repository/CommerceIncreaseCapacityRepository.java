@@ -108,7 +108,7 @@ public class CommerceIncreaseCapacityRepository {
      */
     public int updateIncreaseCapacity(CommerceIncreaseCapacityDao dao){
 
-        String sql = "update b_increase_capacity_commerce set user_open_id='"+dao.getOpenId()+"'," +
+        String sql = "update b_increase_capacity_commerce set " +
                 "in_company_name='"+dao.getCompanyName()+"'," +
                 "in_current_capacity="+dao.getCurrentCapacity()+"," +
                 "in_name='"+dao.getName()+"'," +
@@ -193,7 +193,7 @@ public class CommerceIncreaseCapacityRepository {
                 rs.getString("sq_idcard_back_img"),
                 rs.getString("invoice_img"),
                 rs.getString("sq_attorney_img"),
-                rs.getDate("in_submit_date")
+                Utils.GetDate(rs.getString("in_submit_date"))
 
             );
         }
