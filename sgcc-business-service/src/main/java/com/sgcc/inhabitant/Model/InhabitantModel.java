@@ -1,20 +1,17 @@
 package com.sgcc.inhabitant.Model;
 
 import com.example.Utils;
+import com.sgcc.dto.OrderDTO;
 import com.sgcc.inhabitant.dao.InhabitantNewDao;
 import com.sgcc.inhabitant.dto.*;
 import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import com.sgcc.inhabitant.dao.InhabitantIncreaseCapacityDao;
 import com.sgcc.inhabitant.dao.InhabitantRenameDao;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -73,6 +70,19 @@ public class InhabitantModel {
         List<InhabitantNewDTO> dtos = new ArrayList<>();
         for (InhabitantNewDao dao:daos )
             dtos.add(InhabitantNewDao2DTO(dao));
+
+        Collections.sort(dtos, new Comparator<InhabitantNewDTO>() {
+            @Override
+            public int compare(InhabitantNewDTO o1, InhabitantNewDTO o2) {
+                if (o1.getSubmit_date().getTime() > o2.getSubmit_date().getTime()) {
+                    return -1;
+                }
+                if (o1.getSubmit_date().getTime() == o2.getSubmit_date().getTime()) {
+                    return 0;
+                }
+                return 1;
+            }
+        });
 
         return dtos;
     }
@@ -142,6 +152,20 @@ public class InhabitantModel {
                     Utils.GetTime(dao.getSubmitDate())
             ));
         });
+
+        Collections.sort(this.inhabitantRenameDetailDTOs, new Comparator<InhabitantRenameDetailDTO>() {
+            @Override
+            public int compare(InhabitantRenameDetailDTO o1, InhabitantRenameDetailDTO o2) {
+                if (Utils.GetDate(o1.getSubmitDate()).getTime() > Utils.GetDate(o2.getSubmitDate()).getTime()) {
+                    return -1;
+                }
+                if (Utils.GetDate(o1.getSubmitDate()).getTime() == Utils.GetDate(o2.getSubmitDate()).getTime()) {
+                    return 0;
+                }
+                return 1;
+            }
+        });
+
 
     }
 

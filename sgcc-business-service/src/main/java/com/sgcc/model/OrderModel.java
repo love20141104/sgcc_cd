@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Data
@@ -55,6 +57,18 @@ public class OrderModel {
             ));
         });
 
+        Collections.sort(this.orderDTOS, new Comparator<OrderDTO>() {
+            @Override
+            public int compare(OrderDTO o1, OrderDTO o2) {
+                if (Utils.GetDate(o1.getApplyDate()).getTime() > Utils.GetDate(o2.getApplyDate()).getTime()) {
+                    return -1;
+                }
+                if (Utils.GetDate(o1.getApplyDate()).getTime() == Utils.GetDate(o2.getApplyDate()).getTime()) {
+                    return 0;
+                }
+                return 1;
+            }
+        });
     }
 
 

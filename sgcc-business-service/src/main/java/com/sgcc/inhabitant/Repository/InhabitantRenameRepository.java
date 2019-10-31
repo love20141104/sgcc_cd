@@ -133,7 +133,7 @@ public class InhabitantRenameRepository {
                     rs.getString("sq_idcard_back_img"),
                     rs.getString("info_transactor_idcard"),
                     rs.getString("info_transactor_tel"),
-                    rs.getDate("info_submit_date")
+                    Utils.GetDate(rs.getString("info_submit_date"))
             );
         }
     }

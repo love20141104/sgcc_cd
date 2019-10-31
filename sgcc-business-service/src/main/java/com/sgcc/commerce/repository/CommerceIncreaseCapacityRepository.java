@@ -180,7 +180,7 @@ public class CommerceIncreaseCapacityRepository {
                 rs.getString("invoice_bank_account"),
                 rs.getString("invoice_regist_addr"),
                 rs.getString("invoice_phone"),
-                rs.getDate("invoice_date"),
+                    Utils.GetDate(rs.getString("invoice_date")),
                 rs.getString("propertyRight_img1"),
                 rs.getString("propertyRight_img2"),
                 rs.getString("propertyRight_img3"),

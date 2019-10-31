@@ -126,7 +126,7 @@ public class SgccBusinessService {
                 model.queryOrderByOpenIdTransform();
                 return Result.success(model.getOrderDTOS());
             }else {
-                return Result.failure("查询失败");
+                return Result.failure("没有数据");
             }
         }catch (Exception e){
             e.printStackTrace();

@@ -7,15 +7,14 @@ import com.sgcc.commerce.dao.CommerceNewDao;
 import com.sgcc.commerce.dto.*;
 import com.sgcc.dto.OrderDTO;
 import com.sgcc.inhabitant.dao.InhabitantRenameDao;
+import com.sgcc.inhabitant.dto.InhabitantRenameDetailDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
 import javax.rmi.CORBA.Util;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
 @Data
 @NoArgsConstructor
 public class CommerceModel {
@@ -75,6 +74,20 @@ public class CommerceModel {
             ));
         });
 
+        Collections.sort(this.orderDTOS, new Comparator<OrderDTO>() {
+            @Override
+            public int compare(OrderDTO o1, OrderDTO o2) {
+                if (Utils.GetDate(o1.getApplyDate()).getTime() > Utils.GetDate(o2.getApplyDate()).getTime()) {
+                    return -1;
+                }
+                if (Utils.GetDate(o1.getApplyDate()).getTime() == Utils.GetDate(o2.getApplyDate()).getTime()) {
+                    return 0;
+                }
+                return 1;
+            }
+        });
+
+
     }
 
 
@@ -93,6 +106,18 @@ public class CommerceModel {
             ));
         });
 
+        Collections.sort(this.orderDTOS, new Comparator<OrderDTO>() {
+            @Override
+            public int compare(OrderDTO o1, OrderDTO o2) {
+                if (Utils.GetDate(o1.getApplyDate()).getTime() > Utils.GetDate(o2.getApplyDate()).getTime()) {
+                    return -1;
+                }
+                if (Utils.GetDate(o1.getApplyDate()).getTime() == Utils.GetDate(o2.getApplyDate()).getTime()) {
+                    return 0;
+                }
+                return 1;
+            }
+        });
     }
 
 
@@ -109,6 +134,18 @@ public class CommerceModel {
                     progress,
                     userType
             ));
+        });
+        Collections.sort(this.orderDTOS, new Comparator<OrderDTO>() {
+            @Override
+            public int compare(OrderDTO o1, OrderDTO o2) {
+                if (Utils.GetDate(o1.getApplyDate()).getTime() > Utils.GetDate(o2.getApplyDate()).getTime()) {
+                    return -1;
+                }
+                if (Utils.GetDate(o1.getApplyDate()).getTime() == Utils.GetDate(o2.getApplyDate()).getTime()) {
+                    return 0;
+                }
+                return 1;
+            }
         });
 
     }
@@ -152,6 +189,20 @@ public class CommerceModel {
                     commerceIncreaseCapacityDao.getSqAttorneyImg()
             ));
         });
+
+        Collections.sort(this.detailDTOS, new Comparator<CommerceIncreaseCapacityDetailDTO>() {
+            @Override
+            public int compare(CommerceIncreaseCapacityDetailDTO o1, CommerceIncreaseCapacityDetailDTO o2) {
+                if (Utils.GetDate(o1.getIn_submit_date()).getTime() > Utils.GetDate(o2.getIn_submit_date()).getTime()) {
+                    return -1;
+                }
+                if (Utils.GetDate(o1.getIn_submit_date()).getTime() == Utils.GetDate(o2.getIn_submit_date()).getTime()) {
+                    return 0;
+                }
+                return 1;
+            }
+        });
+
 
     }
 
@@ -309,6 +360,19 @@ public class CommerceModel {
         for (CommerceNewDao dao:daos )
             dtos.add(CommerceNewDao2DTO(dao));
 
+        Collections.sort(dtos, new Comparator<CommerceNewDTO>() {
+            @Override
+            public int compare(CommerceNewDTO o1, CommerceNewDTO o2) {
+                if (o1.getSubmit_date().getTime() > o2.getSubmit_date().getTime()) {
+                    return -1;
+                }
+                if (o1.getSubmit_date().getTime() == o2.getSubmit_date().getTime()) {
+                    return 0;
+                }
+                return 1;
+            }
+        });
+
         return dtos;
     }
 
@@ -346,6 +410,19 @@ public class CommerceModel {
         List<CommerceChangeTaxInfoDTO> dtos = new ArrayList<>();
         for (CommerceChangeTaxInfoDao dao:daos )
             dtos.add(CommerceChangeTaxInfoDao2DTO(dao));
+
+        Collections.sort(dtos, new Comparator<CommerceChangeTaxInfoDTO>() {
+            @Override
+            public int compare(CommerceChangeTaxInfoDTO o1, CommerceChangeTaxInfoDTO o2) {
+                if (o1.getSubmit_date().getTime() > o2.getSubmit_date().getTime()) {
+                    return -1;
+                }
+                if (o1.getSubmit_date().getTime() == o2.getSubmit_date().getTime()) {
+                    return 0;
+                }
+                return 1;
+            }
+        });
 
         return dtos;
     }
