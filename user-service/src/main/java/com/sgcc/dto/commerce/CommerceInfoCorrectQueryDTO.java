@@ -50,7 +50,7 @@ public class CommerceInfoCorrectQueryDTO implements Serializable {
 
     private String propertyRightImg6;
 
-    private Date correctSubmitDate;
+    private String correctSubmitDate;
 
 
 

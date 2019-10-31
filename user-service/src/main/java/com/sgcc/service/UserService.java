@@ -3,6 +3,7 @@ package com.sgcc.service;
 import com.example.Utils;
 import com.example.result.Result;
 import com.google.common.base.Strings;
+import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
 import com.sgcc.dto.ElectricityTypeDTO;
 import com.sgcc.dto.MonthlyBillsDTO;
@@ -10,11 +11,14 @@ import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
 import com.sgcc.dto.commerce.CommerceInfoCorrectSubmitDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectEditDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectSubmitDTO;
+import com.sgcc.entity.event.CommerceEventEntity;
 import com.sgcc.entity.event.InhabitantEventEntity;
+import com.sgcc.entity.query.CommerceQueryEntity;
 import com.sgcc.entity.query.InhabitantQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -29,6 +33,16 @@ public class UserService {
     private InhabitantEventEntity inhabitantEventEntity;
 
 
+    @Autowired
+    private CommerceQueryEntity commerceQueryEntity;
+
+    @Autowired
+    private CommerceEventEntity commerceEventEntity;
+
+
+
+    /**********************************************居民*********************************************/
+
     /**
      * 查询所有居民信息修正订单
      * @return
@@ -37,7 +51,7 @@ public class UserService {
         try {
             List<InhabitantInfoCorrectDao> infoCorrectDaos = inhabitantQueryEntity.findAll();
             UserModel userModel = new UserModel();
-            userModel.queryInfoCorrectTransform(infoCorrectDaos);
+            userModel.queryInhabitantInfoCorrectTransform(infoCorrectDaos);
 
             if (userModel.getInhabitantInfoCorrectQueryDTOS().size() > 0){
                 return Result.success(userModel.getInhabitantInfoCorrectQueryDTOS());
@@ -62,7 +76,7 @@ public class UserService {
 
         try {
             UserModel userModel = new UserModel();
-            userModel.addInfoCorrectTransform(dto);
+            userModel.addInhabitantInfoCorrectTransform(dto);
             int count = inhabitantEventEntity.addInfoCorrectOrder(userModel.getInhabitantInfoCorrectDao());
             if (count > 0){
                 return Result.success("新增成功");
@@ -84,7 +98,7 @@ public class UserService {
     public Result updateInhabitantInfoCorrect(InhabitantInfoCorrectEditDTO dto){
         try {
             UserModel userModel = new UserModel();
-            userModel.updateInfoCorrectTransform(dto);
+            userModel.updateInhabitantInfoCorrectTransform(dto);
             int count = inhabitantEventEntity.updateInfoCorrectOrder(userModel.getInhabitantInfoCorrectDao());
             if (count > 0){
                 return Result.success("修改成功");
@@ -118,7 +132,7 @@ public class UserService {
         }
     }
 
-
+    /**********************************************个体工商业*********************************************/
 
     /**
      * 新增个体工商业信息修正订单
@@ -126,8 +140,18 @@ public class UserService {
      * @return
      */
     public Result addCommerceInfoCorrect(CommerceInfoCorrectSubmitDTO dto) {
+        if (dto == null)
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+
         try {
-            return Result.success();
+            UserModel userModel = new UserModel();
+            userModel.addCommerceInfoCorrectTransform(dto);
+            int count = commerceEventEntity.addCommerceInfoCorrectOrder(userModel.getCommerceInfoCorrectDao());
+            if (count > 0 ){
+                return Result.success("新增成功");
+            }else {
+                return Result.failure("新增失败");
+            }
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -141,7 +165,14 @@ public class UserService {
      */
     public Result queryCommerceInfoCorrect() {
         try {
-            return Result.success();
+            List<CommerceInfoCorrectDao> commerceInfoCorrectDaos = commerceQueryEntity.findCommerceAll();
+            UserModel userModel = new UserModel();
+            userModel.queryCommerceInfoCorrectTransform(commerceInfoCorrectDaos);
+            if (userModel.getCommerceInfoCorrectQueryDTOS().size() > 0){
+                return Result.success(userModel.getCommerceInfoCorrectQueryDTOS());
+            }else {
+                return Result.failure("没有数据");
+            }
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -156,7 +187,14 @@ public class UserService {
      */
     public Result updateCommerceInfoCorrect(CommerceInfoCorrectEditDTO dto) {
         try {
-            return Result.success();
+            UserModel userModel = new UserModel();
+            userModel.updateCommerceInfoCorrectTransform(dto);
+            int count = commerceEventEntity.updateCommerceInfoCorrectOrder(userModel.getCommerceInfoCorrectDao());
+            if (count > 0 ){
+                return Result.success("修改成功");
+            }else {
+                return Result.failure("修改失败");
+            }
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -170,8 +208,15 @@ public class UserService {
      * @return
      */
     public Result delCommerceInfoCorrect(List<String> ids) {
+        if (ids.size() <= 0)
+            return Result.failure(TopErrorCode.GENERAL_ERR);
         try {
-            return Result.success();
+            int count = commerceEventEntity.delCommerceInfoCorrectOrder(ids);
+            if (count > 0 ){
+                return Result.success("删除成功");
+            }else {
+                return Result.failure("删除失败");
+            }
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
