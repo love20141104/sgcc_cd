@@ -47,8 +47,8 @@ public class ApiStatisticsInterceptor implements HandlerInterceptor {
         int startIndex = requestURI.lastIndexOf("/") + 1;
 
         String substring = requestURI.substring(startIndex);
-        if(isValidUUID(substring)||isInteger(substring)){
-            requestURI=requestURI.substring(0,startIndex-1);
+        if(isValidUUID(substring)||isInteger(substring)||isOpenId(substring)){
+            requestURI=requestURI.substring(0,startIndex)+"{id}";
         }
 
 
@@ -88,6 +88,13 @@ public class ApiStatisticsInterceptor implements HandlerInterceptor {
         Pattern pattern = Pattern.compile(regex);
         Matcher isNum = pattern.matcher(orginal);
         return isNum.matches();
+    }
+    public static boolean isOpenId(String str){
+        if(str.length()==28){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public static HttpServletRequest getHttpServletRequest() {
