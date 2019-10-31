@@ -66,7 +66,8 @@ public class ApiStatisticsInterceptor implements HandlerInterceptor {
      * 32位16进制的数字，用分隔符分成8-4-4-4-12的格式
      */
     private static final Pattern UUID_PATTERN = Pattern.compile("[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}");
-    public final static String REGEX_INTEGER = "^[-\\+]?\\d+$";
+    private static final Pattern OPENID_PATTERN = Pattern.compile("[-A-Za-z0-9_]{28}");
+    public final static Pattern REGEX_INTEGER = Pattern.compile("^[-\\+]?\\d+$");
 
     /**
      * 判断一个字符串是否是有效的UUID
@@ -79,22 +80,13 @@ public class ApiStatisticsInterceptor implements HandlerInterceptor {
         return matcher.matches();
     }
     public static boolean isInteger(String orginal) {
-        return isMatch(REGEX_INTEGER, orginal);
-    }
-    private static boolean isMatch(String regex, String orginal) {
-        if (orginal == null || orginal.trim().equals("")) { //$NON-NLS-1$
-            return false;
-        }
-        Pattern pattern = Pattern.compile(regex);
-        Matcher isNum = pattern.matcher(orginal);
+        Matcher isNum = REGEX_INTEGER.matcher(orginal);
         return isNum.matches();
     }
+
     public static boolean isOpenId(String str){
-        if(str.length()==28){
-            return true;
-        }else {
-            return false;
-        }
+        Matcher matcher = OPENID_PATTERN.matcher(str);
+        return matcher.matches();
     }
 
     public static HttpServletRequest getHttpServletRequest() {
