@@ -134,6 +134,25 @@ public class ConsumerManagerRepository {
     }
 
 
+    public List<ConsumerManagerDao> selectFiveConsumerManagerDaos() throws SQLException{
+        String sql = "select id"
+                +", consumer_manager_id"
+                +", consumer_manager_name"
+                +", consumer_manager_tel"
+                +", consumer_manager_service_area"
+                +", consumer_manager_administrative_region"
+                +", consumer_manager_duty"
+                +", consumer_manager_work_time"
+                +", consumer_manager_emergency_tel"
+                +", consumer_manager_work_unit"
+                +", consumer_manager_category"
+                +", consumer_manager_img"
+                + " from d_consumer_manager limit 5;";
+        logger.info("查询所有客户经理列表："+sql);
+        return jdbcTemplate.query(sql,new ConsumerManagerRowMapper());
+    }
+
+
 
     class ConsumerManagerRowMapper implements RowMapper<ConsumerManagerDao> {
         @Override

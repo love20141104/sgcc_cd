@@ -75,8 +75,6 @@ public class ConsumerManagerService {
      * 删除客户经理
      */
     public Result deleteConsumerManager(String consumerManagerId) {
-        if (consumerManagerId.equals("test1"))
-            return Result.failure("此id不能删除");
 
         try {
             consumerManagerEventEntity.deleteConsumerManager(consumerManagerId);
@@ -97,9 +95,6 @@ public class ConsumerManagerService {
      * 批量删除客户经理信息
      */
     public Result deleteConsumerManagers(List<String> consumerManagerIds) {
-
-        if (consumerManagerIds.contains("test1"))
-            consumerManagerIds.remove("test1");
         //参数检查start
         if (null == consumerManagerIds || consumerManagerIds.size() == 0) {
             return Result.failure(TopErrorCode.PARAMETER_ERR);
@@ -162,40 +157,64 @@ public class ConsumerManagerService {
 
 
     /**
-     * 根据用户id查对应的客户经理信息
+     * 取出五条客户经理信息，返回一条数据
+     * @param openId
+     * @return
      */
     public Result selectConsumerManagerByUserId(String openId) {
         try {
 
-            //TODO 根据用户id查询对应的客户经理id
-            String consumerManagerId = "test1";
-            ConsumerManagerDao consumerManagerDao = consumerManagerQueryEntity.findByIdInRedis(consumerManagerId);
-            //如果redis中没查到
-            if (null == consumerManagerDao) {
-                //从mysql查出所有客户经理
-                List<ConsumerManagerDao> consumerManagerDaos = new ArrayList<>(consumerManagerQueryEntity.findAllConsumerManager());
-                //如果查询结果不为空
-                if (null != consumerManagerDaos && consumerManagerDaos.size() > 0) {
-                    //将结果重新加载到redis中
-                    consumerManagerEventEntity.saveAllInRedis(consumerManagerDaos);
-                    //再从redis中重新查找
-                    consumerManagerDao = consumerManagerQueryEntity.findByIdInRedis(consumerManagerId);
-                }
-            }
-            if (null == consumerManagerDao || Strings.isNullOrEmpty(consumerManagerDao.getConsumerManagerId())) {
-                return Result.failure(TopErrorCode.NO_DATAS);
-            } else {
-                ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerDao);
-                consumerManagerDomainModel.selectTransform();
-                ConsumerManagerDTO consumerManagerDTO = consumerManagerDomainModel.getConsumerManagerDTO();
-                return Result.success(consumerManagerDTO);
-            }
+            List<ConsumerManagerDao> consumerManagerDaos = new ArrayList<>(consumerManagerQueryEntity.findFiveConsumerManagerDaos());
+
+            ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerDaos.get(0));
+            consumerManagerDomainModel.selectTransform();
+            ConsumerManagerDTO consumerManagerDTO = consumerManagerDomainModel.getConsumerManagerDTO();
+            return Result.success(consumerManagerDTO);
+
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.SQL_ERR);
         }
 
     }
+
+
+    /**
+     * 根据用户id查对应的客户经理信息
+     */
+
+//    public Result selectConsumerManagerByUserId(String openId) {
+//        try {
+//
+//            //TODO 根据用户id查询对应的客户经理id
+//            String consumerManagerId = "test1";
+//            ConsumerManagerDao consumerManagerDao = consumerManagerQueryEntity.findByIdInRedis(consumerManagerId);
+//            //如果redis中没查到
+//            if (null == consumerManagerDao) {
+//                //从mysql查出所有客户经理
+//                List<ConsumerManagerDao> consumerManagerDaos = new ArrayList<>(consumerManagerQueryEntity.findAllConsumerManager());
+//                //如果查询结果不为空
+//                if (null != consumerManagerDaos && consumerManagerDaos.size() > 0) {
+//                    //将结果重新加载到redis中
+//                    consumerManagerEventEntity.saveAllInRedis(consumerManagerDaos);
+//                    //再从redis中重新查找
+//                    consumerManagerDao = consumerManagerQueryEntity.findByIdInRedis(consumerManagerId);
+//                }
+//            }
+//            if (null == consumerManagerDao || Strings.isNullOrEmpty(consumerManagerDao.getConsumerManagerId())) {
+//                return Result.failure(TopErrorCode.NO_DATAS);
+//            } else {
+//                ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerDao);
+//                consumerManagerDomainModel.selectTransform();
+//                ConsumerManagerDTO consumerManagerDTO = consumerManagerDomainModel.getConsumerManagerDTO();
+//                return Result.success(consumerManagerDTO);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return Result.failure(TopErrorCode.SQL_ERR);
+//        }
+//
+//    }
 
     /**
      * 查询所有客户经理信息

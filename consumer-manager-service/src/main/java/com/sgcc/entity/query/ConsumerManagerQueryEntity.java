@@ -43,4 +43,12 @@ public class ConsumerManagerQueryEntity {
         List<ConsumerManagerDao> consumerManagerDaos = consumerManagerRepository.selectConsumerManagerDaos();
         return consumerManagerDaos;
     }
+
+
+    public List<ConsumerManagerDao> findFiveConsumerManagerDaos() throws SQLException {
+        List<ConsumerManagerDao> consumerManagerDaos = consumerManagerRepository.selectFiveConsumerManagerDaos();
+        return consumerManagerDaos;
+    }
+
+
 }
