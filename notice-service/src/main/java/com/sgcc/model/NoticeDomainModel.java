@@ -3,6 +3,7 @@ package com.sgcc.model;
 import com.sgcc.dao.NoticeDao;
 import com.sgcc.dto.AddFormDTO;
 import com.sgcc.dto.NoticeFormDTO;
+import com.sgcc.dto.QueryFormDTO;
 import com.sgcc.dto.UpdateFormDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class NoticeDomainModel {
 
     private List<NoticeFormDTO> noticeFormDTOS = new ArrayList<>();
 
-
+    private List<QueryFormDTO> queryFormDTOS = new ArrayList<>();
 
     public NoticeDomainModel(List<NoticeDao> noticeDaos) {
         this.noticeDaos = noticeDaos;
@@ -88,10 +89,13 @@ public class NoticeDomainModel {
 
     public void selectAllTransform() {
         this.noticeDaos.forEach(noticeDao -> {
-            this.noticeFormDTOS.add(new NoticeFormDTO(
+            this.queryFormDTOS.add(new QueryFormDTO(
+                            noticeDao.getId(),
+                            noticeDao.getNoticeId(),
                             noticeDao.getTypeName(),
                             noticeDao.getNoticeDate(),
-                            noticeDao.getRange()
+                            noticeDao.getRange(),
+                            noticeDao.getNoticeDate()
                     )
             );
         });

@@ -52,7 +52,7 @@ public class NoticeService {
 
             NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos);
             noticeDomainModel.selectAllTransform();
-            return Result.success(noticeDomainModel.getNoticeFormDTOS());
+            return Result.success(noticeDomainModel.getQueryFormDTOS());
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
