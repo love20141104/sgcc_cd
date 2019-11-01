@@ -30,6 +30,13 @@ public class NoticeController {
     }
 
 
+    @ApiOperation(value = "查询停电公告", notes = "")
+    @GetMapping(value = "/noticeInfo/")
+    public Result queryNoticeInfo() {
+        return noticeService.findNoticeListAll();
+    }
+
+
     @ApiOperation(value = "新增停电公告", notes = "")
     @PostMapping(value = "/noticeInfo")
     public Result addNoticeInfo(@RequestBody AddFormDTO addFormDTO) {

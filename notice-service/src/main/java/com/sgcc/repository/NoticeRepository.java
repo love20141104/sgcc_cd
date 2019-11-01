@@ -35,6 +35,15 @@ public class NoticeRepository {
         return jdbcTemplate.query(sql,new NoticeRowMapper());
     }
 
+    public List<NoticeDao> findNoticeListAll(){
+
+        String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
+                "notice_date from b_blackout_notice ";
+
+        return jdbcTemplate.query(sql,new NoticeRowMapper());
+    }
+
+
     /**
      * 根据id查询停电公告信息
      * @param id

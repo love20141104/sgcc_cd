@@ -44,6 +44,25 @@ public class NoticeService {
 
     }
 
+
+    public Result findNoticeListAll(){
+
+        try {
+            List<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeListAll();
+
+            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos);
+            noticeDomainModel.selectAllTransform();
+            return Result.success(noticeDomainModel.getNoticeFormDTOS());
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+    }
+
+
+
+
     /**
      * 新增停电公告
      * @param addFormDTO

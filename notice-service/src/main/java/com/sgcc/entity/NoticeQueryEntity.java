@@ -18,6 +18,10 @@ public class NoticeQueryEntity {
     }
 
 
+    public List<NoticeDao> findNoticeListAll(){
+        return noticeRepository.findNoticeListAll();
+    }
+
     public int insertNotice(NoticeDao noticeDao){
         return noticeRepository.insertNotice(noticeDao);
     }

@@ -86,4 +86,14 @@ public class NoticeDomainModel {
     }
 
 
+    public void selectAllTransform() {
+        this.noticeDaos.forEach(noticeDao -> {
+            this.noticeFormDTOS.add(new NoticeFormDTO(
+                            noticeDao.getTypeName(),
+                            noticeDao.getNoticeDate(),
+                            noticeDao.getRange()
+                    )
+            );
+        });
+    }
 }
