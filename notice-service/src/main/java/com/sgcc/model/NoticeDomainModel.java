@@ -62,7 +62,7 @@ public class NoticeDomainModel {
         this.noticeDao = new NoticeDao(
                 id,
                 id,
-                this.addFormDTO.getDistrict(),
+                this.addFormDTO.getNoticeDistrict(),
                 this.addFormDTO.getTypeName(),
                 this.addFormDTO.getRange(),
                 this.addFormDTO.getTime()
@@ -92,8 +92,8 @@ public class NoticeDomainModel {
             this.queryFormDTOS.add(new QueryFormDTO(
                             noticeDao.getId(),
                             noticeDao.getNoticeId(),
+                            noticeDao.getNoticeDistrict(),
                             noticeDao.getTypeName(),
-                            noticeDao.getNoticeDate(),
                             noticeDao.getRange(),
                             noticeDao.getNoticeDate()
                     )
