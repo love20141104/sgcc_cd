@@ -26,6 +26,20 @@ public class ConsumerManagerQueryEntity {
     public ConsumerManagerDao findByIdInRedis(String consumerManagerId) {
         return consumerManagerRedisRepository.findById(consumerManagerId).orElse(null);
     }
+    /**
+     * 根据id在mySQL中查询客户经理信息
+     * @param consumerManagerId
+     * @return
+     */
+    public ConsumerManagerDao findById(String consumerManagerId){
+        try {
+            return consumerManagerRepository.selectConsumerManagerDaoByUserId(consumerManagerId);
+        }
+        catch (SQLException e )
+        {
+            return null;
+        }
+    }
 
     /**
      * 从redis中查所有的客户经理信息
