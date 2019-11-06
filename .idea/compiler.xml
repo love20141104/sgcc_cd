@@ -8,13 +8,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="article-service" />
+        <module name="bill-service" />
         <module name="businessGuide-service" />
         <module name="cache-service" />
         <module name="consumer-manager-service" />
         <module name="domain-model" />
         <module name="dto-model" />
         <module name="exception" />
+        <module name="management-service" />
         <module name="mq-service" />
+        <module name="mq_service" />
         <module name="notice-service" />
         <module name="preBook-service" />
         <module name="question-service" />
@@ -34,6 +37,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="article-service" target="1.8" />
+      <module name="bill-service" target="1.8" />
       <module name="businessGuide-service" target="1.8" />
       <module name="cache-service" target="1.8" />
       <module name="consumer-manager-service" target="1.8" />
