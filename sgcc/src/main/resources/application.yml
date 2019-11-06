@@ -32,7 +32,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/sgcc_cd
     username: root
-    password: root@123
+    password: Root@123
   activemq:
     broker-url: tcp://127.0.0.1:61616
     in-memory: false
@@ -50,8 +50,8 @@ fdfs:
   web-server-url: https://www.sgcc.link:18625/
   tracker-list: 119.23.22.176:22122
 
-  ### Data
-  ### postgresql
+### Data
+### postgresql
 #  datasource:
 #    driver-class-name: org.postgresql.Driver
 #    url: jdbc:postgresql://192.168.1.71:5432/fangsheng0705
