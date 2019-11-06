@@ -1,13 +1,17 @@
 package com.sgcc.service;
 
 import com.example.result.Result;
+import com.sgcc.dao.ReadingQuantityStatistcsDao;
 import com.sgcc.dto.PaymentAmountChartDTO;
 import com.sgcc.dto.PaymentTimesChartDTO;
 import com.sgcc.dto.PaymentTimesDTO;
 import com.sgcc.dto.TotalFeesAvgChartDTO;
+import com.sgcc.entity.ReadingQuantityEntity;
 import com.sgcc.entity.query.ChartQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.ChartModel;
+import com.sgcc.model.ReadingQuantityModel;
+import com.sgcc.sgccenum.DateRangeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,8 @@ public class ChartService {
 
     @Autowired
     private ChartQueryEntity chartQueryEntity;
+    @Autowired
+    private ReadingQuantityEntity readingQuantityEntity;
 
 
     public Result findPaymentAmountChart(){
@@ -78,5 +84,18 @@ public class ChartService {
     }
 
 
+    /**
+     * 仪表盘显示各篇文章阅读量
+     *
+     * @param dateRangeEnum 时间范围
+     * @return
+     */
+    public Result getReadingQuantityStatistcs(DateRangeEnum dateRangeEnum){
+        List<ReadingQuantityStatistcsDao> readingQuantityStatistcsDaos = readingQuantityEntity.getReadingQuantityStatistcsDTOs(dateRangeEnum);
+        ReadingQuantityModel readingQuantityModel = new ReadingQuantityModel(readingQuantityStatistcsDaos);
+        readingQuantityModel.daos2dtos();
+        readingQuantityModel.viewDTOTransform();
+        return Result.success(readingQuantityModel.getReadingQuantityStatistcsViewDTO());
+    }
 
 }

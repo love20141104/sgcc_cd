@@ -6,13 +6,9 @@ import com.sgcc.dto.PayQueryDTO;
 import com.sgcc.service.ApiStatisticsService;
 import com.sgcc.service.ChartService;
 import com.sgcc.service.PageStatisticsService;
-import com.sgcc.service.ReadingQuantityService;
 import com.sgcc.service.WechatPayResultService;
 import com.sgcc.sgccenum.DateRangeEnum;
-import com.sgcc.sgccenum.DatetypeEnum;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +22,6 @@ public class StatisticsController {
 
     @Autowired
     private PageStatisticsService pageStatisticsService;
-
-    @Autowired
-    private ReadingQuantityService readingQuantityService;
 
     @Autowired
     private WechatPayResultService wechatPayResultService;
@@ -94,7 +87,7 @@ public class StatisticsController {
     @ApiOperation(value = "阅读量仪表盘数据", notes = "")
     @GetMapping(value = "/ReadingQuantity")
     public Result getReadingQuantityStatistcs(@RequestParam DateRangeEnum dateRangeEnum) {
-        return readingQuantityService.getReadingQuantityStatistcs(dateRangeEnum);
+        return chartService.getReadingQuantityStatistcs(dateRangeEnum);
     }
     /****************************************阅读量仪表盘end************************************************/
 
