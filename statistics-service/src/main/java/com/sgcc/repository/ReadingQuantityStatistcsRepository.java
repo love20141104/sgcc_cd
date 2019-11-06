@@ -16,28 +16,31 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
+/**
+ * 文章阅读量
+ */
 public class ReadingQuantityStatistcsRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<ReadingQuantityStatistcsDao> getReadingQuantityStatistcsDTOs(DateRangeEnum dateRangeEnum){
+    public List<ReadingQuantityStatistcsDao> getReadingQuantityStatistcsDTOs(DateRangeEnum dateRangeEnum) {
         String deteLimit;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        if(dateRangeEnum.equals(DateRangeEnum.WEEK)){
-            deteLimit = "and page.visit_date >= '"+sdf.format(DateUtil.getnweekFirst(1))+"'";
-        }else if(dateRangeEnum.equals(DateRangeEnum.MONTH)){
-            deteLimit = "and page.visit_date >= '"+sdf.format(DateUtil.getnMonthFirst(0))+"'";
-        }else {
-            deteLimit = "and page.visit_date >= '"+new Date().getYear()+"-01-01'";
+        if (dateRangeEnum.equals(DateRangeEnum.WEEK)) {
+            deteLimit = "and page.visit_date >= '" + sdf.format(DateUtil.getnweekFirst(1)) + "'";
+        } else if (dateRangeEnum.equals(DateRangeEnum.MONTH)) {
+            deteLimit = "and page.visit_date >= '" + sdf.format(DateUtil.getnMonthFirst(0)) + "'";
+        } else {
+            deteLimit = "and page.visit_date >= '" + new Date().getYear() + "-01-01'";
         }
         String sql = "select article.article_title title,article.article_url url,count(page.page_url) readNum from b_article article "
-                +" left join b_page_statistics page on page.page_url = article.article_url "
+                + " left join b_page_statistics page on page.page_url = article.article_url "
                 + deteLimit
-                +" group by page.page_url,article.article_title,article.article_url "
-                +" order by readNum DESC limit 10 ";
+                + " group by page.page_url,article.article_title,article.article_url "
+                + " order by readNum DESC limit 10 ";
 
 
-        return jdbcTemplate.query(sql,new ReadingQuantityMapper());
+        return jdbcTemplate.query(sql, new ReadingQuantityMapper());
 
 
     }

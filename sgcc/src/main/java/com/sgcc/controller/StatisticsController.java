@@ -90,5 +90,16 @@ public class StatisticsController {
         return chartService.getReadingQuantityStatistcs(dateRangeEnum);
     }
     /****************************************阅读量仪表盘end************************************************/
+    /****************************************业务办理比例仪表盘start*****************************************/
+
+    @ApiOperation(value = "业务办理比例仪表盘", notes = "")
+    @GetMapping(value = "/BusinessRecord")
+    public Result getReadingQuantityStatistcs() {
+        return chartService.getBusinessRecord();
+    }
+    /****************************************业务办理比例仪表盘end*******************************************/
+
+
+
 
 }
