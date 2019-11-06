@@ -27,7 +27,7 @@ public class ChartRepository {
      */
     public List<PaymentAmountChartDTO> findPaymentAmountChart(){
         String sql = "select sum(pay_totalFee) as total,date_format(pay_date ,'%Y-%m') as pay_date from b_pay_info " +
-                "WHERE  YEAR(pay_date)=YEAR(NOW()) group by DATE_FORMAT(pay_date ,'%Y-%m') " +
+                "WHERE date_sub(curdate(), interval 12 month ) <= date(pay_date) group by DATE_FORMAT(pay_date ,'%Y-%m') " +
                 "ORDER BY DATE_FORMAT(pay_date ,'%Y-%m') asc;";
         return jdbcTemplate.query(sql,new PaymentAmountChartRowMapper());
     }
