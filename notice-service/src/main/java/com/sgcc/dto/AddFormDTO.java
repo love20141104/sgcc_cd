@@ -15,7 +15,7 @@ public class AddFormDTO implements Serializable {
 
     private String typeName;
 
-    private String time;
+    private String notiveDate;
 
     private String range;
 

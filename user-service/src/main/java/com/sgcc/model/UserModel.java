@@ -215,7 +215,7 @@ public class UserModel {
 
 
 
-    public void findResultStatisticsByMonth(PayQueryStatisticsDTO dto,String StartDate,String dateUnit){
+    public void findResultStatisticsByMonth(PayQueryStatisticsDTO dto, String StartDate, String dateUnit){
             this.payStatisticsDTO = new PayStatisticsDTO(
                     StartDate,
                     dateUnit,

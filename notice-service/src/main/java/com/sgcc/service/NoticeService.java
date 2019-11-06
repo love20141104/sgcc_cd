@@ -71,9 +71,9 @@ public class NoticeService {
     public Result insertNoticeInfo(AddFormDTO addFormDTO){
 
         try {
-            if (Strings.isNullOrEmpty(addFormDTO.getDistrict()) ||
+            if (Strings.isNullOrEmpty(addFormDTO.getNoticeDistrict()) ||
                     Strings.isNullOrEmpty(addFormDTO.getTypeName()) ||
-                    Strings.isNullOrEmpty(addFormDTO.getTime()) ||
+                    Strings.isNullOrEmpty(addFormDTO.getNotiveDate()) ||
                     Strings.isNullOrEmpty(addFormDTO.getRange())
                 )
                 return Result.failure(TopErrorCode.PARAMETER_ERR);

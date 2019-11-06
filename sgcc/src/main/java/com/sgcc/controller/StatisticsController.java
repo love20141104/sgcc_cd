@@ -4,6 +4,7 @@ import com.example.result.Result;
 import com.sgcc.dto.PageStatisticsDto;
 import com.sgcc.dto.PayQueryDTO;
 import com.sgcc.service.ApiStatisticsService;
+import com.sgcc.service.ChartService;
 import com.sgcc.service.PageStatisticsService;
 import com.sgcc.service.WechatPayResultService;
 import io.swagger.annotations.Api;
@@ -25,6 +26,9 @@ public class StatisticsController {
 
     @Autowired
     private WechatPayResultService wechatPayResultService;
+
+    @Autowired
+    private ChartService chartService;
 
 
     @ApiOperation(value = "根据不同时间类型查询过去时间段的接口访问次数", notes = "")
@@ -61,11 +65,29 @@ public class StatisticsController {
 
     /******************************************缴费统计************************************************/
     @ApiOperation(value = "缴费结果-统计", notes = "")
-    @PostMapping(value = "/payResult")
+    @GetMapping(value = "/payResult")
     public Result queryPayResultByYearOrMonth(@RequestBody PayQueryDTO payQueryDTO) {
         return wechatPayResultService.findPayResultByYearOrMonth(payQueryDTO);
     }
 
+    @ApiOperation(value = "总销售额和日均销售额", notes = "")
+    @GetMapping(value = "/chart/totalFeesAndAverage")
+    public Result queryTotalFeesAndAverageChart() {
+        return chartService.findTotalFeesAvgChart();
+    }
+
+    @ApiOperation(value = "柱状图-支付笔数", notes = "")
+    @GetMapping(value = "/chart/paymentTimes")
+    public Result queryPaymentTimesChart() {
+        return chartService.findPaymentTimesChart();
+    }
+
+
+    @ApiOperation(value = "柱状图-缴费金额", notes = "")
+    @GetMapping(value = "/chart/paymentAmount")
+    public Result queryPaymentAmountChart() {
+        return chartService.findPaymentAmountChart();
+    }
 
 
 }

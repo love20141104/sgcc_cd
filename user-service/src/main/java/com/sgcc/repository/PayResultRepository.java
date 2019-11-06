@@ -3,7 +3,6 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.sgcc.dao.PayResultDao;
 import com.sgcc.dto.PayQueryStatisticsDTO;
-import com.sgcc.dto.PayStatisticsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

@@ -65,7 +65,7 @@ public class NoticeDomainModel {
                 this.addFormDTO.getNoticeDistrict(),
                 this.addFormDTO.getTypeName(),
                 this.addFormDTO.getRange(),
-                this.addFormDTO.getTime()
+                this.addFormDTO.getNotiveDate()
         );
 
     }
