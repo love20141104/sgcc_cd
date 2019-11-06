@@ -23,22 +23,14 @@ public class PageStatisticsService {
         return Result.success();
     }
     //
-    public Result getPageStatistcsDateDtoList(String tpye)
-
-    {
-        if (DatetypeEnum.MONTH.name().equalsIgnoreCase(tpye)) {
+    public Result getPageStatistcsMonth() {
             return Result.success(pageStatisticsEntity.getPageStatistcsMonthDtoList());
-        }
-        if (DatetypeEnum.WEEK.name().equalsIgnoreCase(tpye)) {
-            return Result.success(pageStatisticsEntity.getPageStatistcsWeekDtoList());
-        }
-        if (DatetypeEnum.DAY.name().equalsIgnoreCase(tpye)) {
+    }
+
+    public Result getPageStatistcsDay() {
             return Result.success(pageStatisticsEntity.getPageStatistcsDayDtoList());
-        }
-        if (DatetypeEnum.HOUR.name().equalsIgnoreCase(tpye)) {
-            return Result.success(pageStatisticsEntity.getPageStatistcsHourDtoList());
-        } else {
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-        }
+    }
+    public Result getHotPage(){
+        return Result.success(pageStatisticsEntity.hotPageDtoList());
     }
 }

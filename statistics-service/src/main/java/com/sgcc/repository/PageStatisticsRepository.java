@@ -3,6 +3,7 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PageStatisticsDao;
+import com.sgcc.dto.HotPageDto;
 import com.sgcc.dto.PageStatistcsDateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Repository
@@ -49,9 +51,17 @@ public class PageStatisticsRepository {
         logger.info("select:"+sql);
         PageStatistcsDateDto query = jdbcTemplate.queryForObject(sql, new PageStatistcsMonthDtoRowMapper());
         if(query==null){
-            return new PageStatistcsDateDto(null,0,0,0);
+            return new PageStatistcsDateDto(null,0);
         }
         return query;
+    }
+
+    public List<HotPageDto> hotPageDtoList(){
+        String sql="SELECT page_name,count(distinct(user_open_id)) user_num,COUNT(id) visit_num "
+                + " FROM b_page_statistics GROUP BY page_name ORDER BY COUNT(id) desc";
+        logger.info("insertSQL:"+sql);
+        List<HotPageDto> query = jdbcTemplate.query(sql, new HotPageDtoRowMapper());
+        return  query;
     }
 
     class PageStatistcsMonthDtoRowMapper implements RowMapper<PageStatistcsDateDto> {
@@ -62,16 +72,19 @@ public class PageStatisticsRepository {
             if(null==rs.getString("num")){
                 pageStatistcsDateDto.setUrlNum(0);
             }
-            if(null==rs.getString("client_ip_num")){
-                pageStatistcsDateDto.setClientIpNum(0);
-            }
-            if(null==rs.getString("user_open_id_num")){
-                pageStatistcsDateDto.setUserOpenIdNum(0);
-            }
             pageStatistcsDateDto.setUrlNum(rs.getInt("num"));
-            pageStatistcsDateDto.setClientIpNum(rs.getInt("client_ip_num"));
-            pageStatistcsDateDto.setUserOpenIdNum(rs.getInt("user_open_id_num"));
             return pageStatistcsDateDto;
+        }
+    }
+    class HotPageDtoRowMapper implements RowMapper<HotPageDto> {
+
+        @Override
+        public HotPageDto mapRow(ResultSet rs, int i) throws SQLException {
+            HotPageDto hotPageDto = new HotPageDto();
+            hotPageDto.setPageName(rs.getString("page_name"));
+            hotPageDto.setUserNum(rs.getInt("user_num"));
+            hotPageDto.setVisitNum(rs.getInt("visit_num"));
+            return hotPageDto;
         }
     }
 }

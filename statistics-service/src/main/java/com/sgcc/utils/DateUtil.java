@@ -137,14 +137,11 @@ public class DateUtil {
         return date;
     }
 
-    //本月第 n 天 00:00:00
+    //第 n 天前 00:00:00
     public static Date getndayFirst(int n) {
         Calendar calendar = Calendar.getInstance();
-        int actualMaximum = calendar.getActualMaximum(Calendar.DATE);
-        if(n>actualMaximum){
-            return null;
-        }
-        calendar.set(Calendar.DAY_OF_MONTH,n);
+
+        calendar.set(Calendar.DAY_OF_MONTH,calendar.get(Calendar.DAY_OF_MONTH)-n);
         calendar.set(Calendar.HOUR_OF_DAY,0);
         calendar.set(Calendar.MINUTE,0);
         calendar.set(Calendar.SECOND,0);
@@ -153,14 +150,10 @@ public class DateUtil {
         return date;
     }
 
-    //本月第 n 天 23:59:59
+    //第 n 天前 23:59:59
     public static Date getndayLast(int n) {
         Calendar calendar = Calendar.getInstance();
-        int actualMaximum = calendar.getActualMaximum(Calendar.DATE);
-        if(n>actualMaximum){
-            return null;
-        }
-        calendar.set(Calendar.DAY_OF_MONTH,n);
+        calendar.set(Calendar.DAY_OF_MONTH,calendar.get(Calendar.DAY_OF_MONTH)-n);
         calendar.set(Calendar.HOUR_OF_DAY,23);
         calendar.set(Calendar.MINUTE,59);
         calendar.set(Calendar.SECOND,59);
@@ -171,12 +164,13 @@ public class DateUtil {
     public static void main(String[] args) {
         /*System.out.println(Utils.GetTime(getnMonthFirst(0)));
         System.out.println(Utils.GetTime(getnMonthLast(0)));*/
-        for (int i = 1; i <=31 ; i++) {
+        /*for (int i = 0; i <=29 ; i++) {
             if(null!=getndayFirst(i)){
                 System.out.println(Utils.GetTime(getndayFirst(i)));
                 System.out.println(Utils.GetTime(getndayLast(i)));
             }
-        }
+        }*/
+        System.out.println(new Date());
     }
 }
 
