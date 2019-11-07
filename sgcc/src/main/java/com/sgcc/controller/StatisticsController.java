@@ -36,7 +36,7 @@ public class StatisticsController {
         return pageStatisticsService.getPageStatistcsMonth();
     }
 
-    @ApiOperation(value = "查询过去30天的页面访问次数", notes = "")
+    @ApiOperation(value = "查询过去10天的页面访问次数", notes = "")
     @GetMapping(value = "page/day")
     public Result pageday() {
         return pageStatisticsService.getPageStatistcsDay();

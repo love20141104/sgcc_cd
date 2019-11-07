@@ -27,7 +27,7 @@ public class ApiStatisticsRepository {
 
     @Transactional
     public void saveApiStatistics(ApiStatisticsDao apiStatisticsDao){
-        //if(!apiStatisticsDao.getApiUrlDesc().equalsIgnoreCase("null")) {
+        if(!apiStatisticsDao.getApiUrlDesc().equalsIgnoreCase("null")) {
             String sql = "insert into b_api_statistics(id,api_url,request_method,request_uri,user_open_id,visit_date,client_ip,api_url_desc)" +
                     "values ('" + apiStatisticsDao.getId() + "','"
                     + apiStatisticsDao.getApiUrl() + "','"
@@ -40,7 +40,7 @@ public class ApiStatisticsRepository {
                     + "')";
             logger.info("insertSQL:" + sql);
             jdbcTemplate.execute(sql);
-       // }
+        }
     }
     /**
     *@Description: 查询ApiStatisticsQueryDto结果集

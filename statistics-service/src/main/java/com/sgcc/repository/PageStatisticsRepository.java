@@ -41,7 +41,7 @@ public class PageStatisticsRepository {
     }
 
     public List<PageStatistcsDateDto> getPageStatisticsCountMonth(){
-        String sql="select count(id) num  ,DATE_FORMAT(visit_date ,'%Y-%m') visit_date from b_page_statistics  "
+        String sql="select IFNULL(count(id),0) num  ,DATE_FORMAT(visit_date ,'%Y-%m') visit_date from b_page_statistics  "
                 + " WHERE date_sub(curdate(), interval 12 month ) <= date(visit_date) "
                 + " group by DATE_FORMAT(visit_date ,'%Y-%m') ORDER BY DATE_FORMAT(visit_date ,'%Y-%m') asc;";
         logger.info("select:"+sql);
@@ -50,14 +50,14 @@ public class PageStatisticsRepository {
 
     public PageStatistcsMonthDto getPageStatisticsCountDay(){
         PageStatistcsMonthDto pageStatistcsMonthDto = new PageStatistcsMonthDto();
-        String sql="select count(id) num  ,DATE_FORMAT(visit_date ,'%Y-%m-%d') visit_date from b_page_statistics  "
-                + " WHERE date_sub(curdate(), interval 30 day ) <= date(visit_date) "
+        String sql="select IFNULL(count(id),0) num  ,DATE_FORMAT(visit_date ,'%Y-%m-%d') visit_date from b_page_statistics  "
+                + " WHERE date_sub(curdate(), interval 10 day ) <= date(visit_date) "
                 + " group by DATE_FORMAT(visit_date ,'%Y-%m-%d') ORDER BY DATE_FORMAT(visit_date ,'%Y-%m-%d') asc;";
         logger.info("select:"+sql);
         List<PageStatistcsDateDto> query = jdbcTemplate.query(sql, new PageStatistcsMonthDtoRowMapper());
         pageStatistcsMonthDto.setPageStatistcsList(query);
-        String sql2="select count(id) num  from b_page_statistics  "
-                + " WHERE date_sub(curdate(), interval 12 month ) <= date(visit_date) ";
+        String sql2="select IFNULL(count(id),0) num  from b_page_statistics  "
+                + " WHERE date_sub(curdate(), interval 10 day ) <= date(visit_date) ";
         Integer integer = jdbcTemplate.queryForObject(sql2, Integer.class);
         pageStatistcsMonthDto.setTotal(integer);
         return pageStatistcsMonthDto;
