@@ -27,7 +27,7 @@ public class PageStatisticsRepository {
 
     @Transactional
     public void savePageStatistics(PageStatisticsDao pageStatisticsDao){
-        if(!pageStatisticsDao.getPageName().equalsIgnoreCase("null")) {
+        if(null!=pageStatisticsDao.getPageName()&&!pageStatisticsDao.getPageName().equalsIgnoreCase("null")) {
             String sql = "insert into b_page_statistics(id,page_url,page_name,user_open_id,visit_date,client_ip)"
                     + " values ('" + pageStatisticsDao.getId() + "','"
                     + pageStatisticsDao.getPageUrl() + "','"
