@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Component
 public class WeChatEntity {
@@ -112,6 +113,7 @@ public class WeChatEntity {
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<TemplateMessage> requestEntity = new HttpEntity<>(templateMessage, requestHeaders);
+        System.out.println("发送模板消息URL："+URL);
         TempMessageDTO tempMessageDTO = restTemplate.postForObject(URL,requestEntity,TempMessageDTO.class);
         if (tempMessageDTO == null || tempMessageDTO.getErrcode()!=0){
             throw new Exception("模版消息发送失败，"+tempMessageDTO.getErrmsg());
