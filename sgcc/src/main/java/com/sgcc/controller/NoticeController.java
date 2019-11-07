@@ -58,7 +58,7 @@ public class NoticeController {
     }
 
     @ApiOperation(value ="短信群法接口",notes = "")
-    @PostMapping(value = "/messageNotification/")
+    @PostMapping(value = "/messageNotification")
     public Result doSendSms(@RequestBody List<String> phoneNums,@RequestParam String content){
         try{
             messageNotificationService.doSendSms(phoneNums,content);
