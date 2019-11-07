@@ -3,7 +3,6 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.sgcc.dao.PayResultDao;
 import com.sgcc.dto.PaymentAmountChartDTO;
-import com.sgcc.dto.PaymentTimesChartDTO;
 import com.sgcc.dto.PaymentTimesDTO;
 import com.sgcc.dto.TotalFeesAvgChartDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,8 @@ public class ChartRepository {
      */
     public List<PaymentAmountChartDTO> findPaymentAmountChart(){
         String sql = "select sum(pay_totalFee) as total,date_format(pay_date ,'%Y-%m') as pay_date from b_pay_info " +
-                "WHERE date_sub(curdate(), interval 12 month ) <= date(pay_date) group by DATE_FORMAT(pay_date ,'%Y-%m') " +
-                "ORDER BY DATE_FORMAT(pay_date ,'%Y-%m') asc;";
+                "WHERE date_sub(curdate(), interval 12 month ) < date(pay_date) group by DATE_FORMAT(pay_date ,'%Y-%m') " +
+                "ORDER BY DATE_FORMAT(pay_date ,'%Y-%m') asc";
         return jdbcTemplate.query(sql,new PaymentAmountChartRowMapper());
     }
 
@@ -50,8 +49,8 @@ public class ChartRepository {
      */
     public PaymentTimesDTO findAllPaymentTimesChart(){
 
-        String sql = "select COUNT(id) AS total from b_pay_info " +
-                "WHERE date_sub(curdate(), interval 10 day ) <= date(pay_date)";
+        String sql = "select COUNT(id) AS total from b_pay_info "
+                +"WHERE date_sub(curdate(), interval 10 day ) < date(pay_date)";
         return jdbcTemplate.queryForObject(sql,new PaymentTimesChartAllRowMapper());
     }
 
@@ -60,10 +59,9 @@ public class ChartRepository {
      * @return
      */
     public List<PaymentTimesDTO> findPaymentTimesChart(){
-
-        String sql = "select COUNT(id) AS total,DATE_FORMAT(pay_date ,'%Y-%m-%d') as pay_date from b_pay_info " +
-                "WHERE date_sub(curdate(), interval 10 day ) <= date(pay_date) " +
-                "group by DATE_FORMAT(pay_date ,'%Y-%m-%d') ORDER BY DATE_FORMAT(pay_date ,'%Y-%m-%d') asc ";
+        String sql = "select COUNT(id) AS total,DATE_FORMAT(pay_date ,'%Y-%m-%d') as pay_date "
+                +"from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date) "
+                +"group by DATE_FORMAT(pay_date ,'%Y-%m-%d') ORDER BY DATE_FORMAT(pay_date ,'%Y-%m-%d') asc";
 
         return jdbcTemplate.query(sql,new PaymentTimesChartRowMapper());
     }
@@ -100,7 +98,7 @@ public class ChartRepository {
     public TotalFeesAvgChartDTO findTotalFeesAvgChart(){
 
         String sql = "select sum(pay_totalFee) as total,sum(pay_totalFee)/10 as average,count(id)" +
-                "from b_pay_info WHERE date_sub(curdate(), interval 10 day ) <= date(pay_date)";
+                "from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date)";
         return jdbcTemplate.queryForObject(sql,new TotalFeesAvgChartRowMapper());
     }
 

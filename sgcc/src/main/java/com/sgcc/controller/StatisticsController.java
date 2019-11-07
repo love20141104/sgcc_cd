@@ -56,7 +56,7 @@ public class StatisticsController {
     }
 
 
-    /******************************************缴费统计************************************************/
+    /******************************************缴费统计start************************************************/
     @ApiOperation(value = "缴费结果-统计", notes = "")
     @GetMapping(value = "/payResult")
     public Result queryPayResultByYearOrMonth(@RequestBody PayQueryDTO payQueryDTO) {
@@ -81,6 +81,8 @@ public class StatisticsController {
     public Result queryPaymentAmountChart() {
         return chartService.findPaymentAmountChart();
     }
+
+    /******************************************缴费统计end************************************************/
 
     /****************************************阅读量仪表盘start************************************************/
 
