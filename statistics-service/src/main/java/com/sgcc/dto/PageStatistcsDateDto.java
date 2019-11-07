@@ -13,6 +13,6 @@ import java.util.Date;
 public class PageStatistcsDateDto implements Serializable {
     private static final long serialVersionUID = -2720156418106116259L;
 
-    private Date date;
+    private String date;
     private Integer urlNum;
 }

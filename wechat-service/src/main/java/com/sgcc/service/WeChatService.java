@@ -9,6 +9,7 @@ import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import com.sgcc.dtomodel.wechat.template.TemplateData;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
 import com.sgcc.entity.WeChatEntity;
+import com.sgcc.exception.TopErrorCode;
 import com.sgcc.wxpay.Sgcc_WXPay;
 import com.sgcc.wxpay.sdk.WXPayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,23 +92,32 @@ public class WeChatService {
     public Result sendTempMsg(String openId){
         try {
             Map<String, TemplateData> data = new LinkedHashMap<>();
-            data.put("first",new TemplateData("申请成功模板消息测试","#173177"));
-            data.put("event",new TemplateData("超级","#173177"));
-            data.put("dept",new TemplateData("神部","#173177"));
-            data.put("date",new TemplateData("2019年10月09日","#173177"));
-            data.put("remark",new TemplateData("申请成功！","#173177"));
+            data.put("first",new TemplateData("停电通知","#173177"));
+            data.put("event",new TemplateData("2019-11-12 8:00 ~ 2019-11-12 18:00\n","#173177"));
+            data.put("dept",new TemplateData("华府大道沿线","#173177"));
+            data.put("date",new TemplateData("线路检修","#173177"));
+            data.put("remark",new TemplateData("如有不便敬请谅解！","#173177"));
+
+//            data.put("first",new TemplateData("申请成功模板消息测试","#173177"));
+//            data.put("event",new TemplateData("超级","#173177"));
+//            data.put("dept",new TemplateData("神部","#173177"));
+//            data.put("date",new TemplateData("2019年10月09日","#173177"));
+//            data.put("remark",new TemplateData("申请成功！","#173177"));
 
             TemplateMessage templateMessage = new TemplateMessage(
-                    "PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
+                    "OPENTM410779767",//"PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
                     openId,     //  o7sDrsqAggP4dwbNnVMEC-JX__tE    o7sDrso9Jk1F_lhoItpSY2xTqEmY
                     "https://cdgd.pryun.vip",
                     data
             );
             weChatEntity.sendTempMsg(templateMessage);
+            return Result.success();
         } catch (Exception e) {
+            System.out.println("模板消息发送失败！");
             e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
         }
-        return Result.success();
+
     }
 
 

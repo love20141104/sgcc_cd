@@ -39,7 +39,7 @@ public class ApiStatisticsInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
         String userOpenId=request.getParameter("userOpenId");
         String apiUrl=request.getRequestURL().toString();
-        if(/*!Strings.isNullOrEmpty(userOpenId)&&*/!apiUrl.contains("Statistics")){
+        if(/*!Strings.isNullOrEmpty(userOpenId)&&*/!apiUrl.contains("Statistics")||!apiUrl.contains("error")){
             // 记录下请求内容
             String requestMethod=request.getMethod();
         String requestURI = request.getRequestURI();

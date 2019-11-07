@@ -43,6 +43,7 @@
         <module>sgcc-business-service</module>
         <module>sys-settings</module>
         <module>repair-service</module>
+        <module>message-notification-service</module>
     </modules>
 
 

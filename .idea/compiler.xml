@@ -16,6 +16,7 @@
         <module name="dto-model" />
         <module name="exception" />
         <module name="management-service" />
+        <module name="message-notification-service" />
         <module name="mq-service" />
         <module name="mq_service" />
         <module name="notice-service" />
@@ -45,6 +46,7 @@
       <module name="dto-model" target="1.8" />
       <module name="exception" target="1.8" />
       <module name="management-service" target="1.8" />
+      <module name="message-notification-service" target="1.8" />
       <module name="mq-service" target="1.8" />
       <module name="mq_service" target="1.8" />
       <module name="notice-service" target="1.8" />

@@ -5,6 +5,8 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.PageStatisticsDao;
 import com.sgcc.dto.HotPageDto;
 import com.sgcc.dto.PageStatistcsDateDto;
+import com.sgcc.dto.PageStatistcsMonthDto;
+import com.sgcc.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,40 +27,47 @@ public class PageStatisticsRepository {
 
     @Transactional
     public void savePageStatistics(PageStatisticsDao pageStatisticsDao){
-        String sql="insert into b_page_statistics(id,page_url,page_name,user_open_id,visit_date,client_ip)" +
-                "values ('"+pageStatisticsDao.getId()+"','"
-                +pageStatisticsDao.getPageUrl()+"','"
-                +pageStatisticsDao.getPageName()+"','"
-                +pageStatisticsDao.getUserOpenId()+"','"
-                + Utils.GetTime(pageStatisticsDao.getVisitDate())+"','"
-                +pageStatisticsDao.getClientIp()+"')";
-        logger.info("insertSQL:"+sql);
-        jdbcTemplate.update(sql);
+        if(!Strings.isNullOrEmpty(pageStatisticsDao.getPageName())&&!pageStatisticsDao.getPageName().equalsIgnoreCase("null")) {
+            String sql = "insert into b_page_statistics(id,page_url,page_name,user_open_id,visit_date,client_ip)"
+                    + " values ('" + pageStatisticsDao.getId() + "','"
+                    + pageStatisticsDao.getPageUrl() + "','"
+                    + pageStatisticsDao.getPageName() + "','"
+                    + pageStatisticsDao.getUserOpenId() + "','"
+                    + Utils.GetTime(pageStatisticsDao.getVisitDate()) + "','"
+                    + pageStatisticsDao.getClientIp() + "')";
+            logger.info("insertSQL:" + sql);
+            jdbcTemplate.update(sql);
+        }
     }
 
-    public PageStatistcsDateDto getPageStatisticsCount(String visit_date_begin, String visit_date_end){
-        String sql="select count(id) num ,count(distinct client_ip) client_ip_num,count(distinct user_open_id) user_open_id_num from b_page_statistics ";
-        StringBuffer sql_where = new StringBuffer();
-        if(!Strings.isNullOrEmpty(visit_date_begin)){
-            sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
-        }
-        if(!Strings.isNullOrEmpty(visit_date_end)){
-            sql_where.append("visit_date <= '").append(visit_date_end).append("'");
-        }
-        if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql +=" where " + sql_where.toString();
-        }
+    public List<PageStatistcsDateDto> getPageStatisticsCountMonth(){
+        String sql="select IFNULL(count(id),0) num  ,DATE_FORMAT(visit_date ,'%Y-%m') visit_date from b_page_statistics  "
+                + " WHERE date_sub(curdate(), interval 12 month ) <= date(visit_date) "
+                + " group by DATE_FORMAT(visit_date ,'%Y-%m') ORDER BY DATE_FORMAT(visit_date ,'%Y-%m') asc;";
         logger.info("select:"+sql);
-        PageStatistcsDateDto query = jdbcTemplate.queryForObject(sql, new PageStatistcsMonthDtoRowMapper());
-        if(query==null){
-            return new PageStatistcsDateDto(null,0);
-        }
-        return query;
+         return jdbcTemplate.query(sql, new PageStatistcsMonthDtoRowMapper());
+    }
+
+    public PageStatistcsMonthDto getPageStatisticsCountDay(){
+        PageStatistcsMonthDto pageStatistcsMonthDto = new PageStatistcsMonthDto();
+        String sql="select IFNULL(count(id),0) num  ,DATE_FORMAT(visit_date ,'%Y-%m-%d') visit_date from b_page_statistics  "
+                + " WHERE date_sub(curdate(), interval 9 day ) <= date(visit_date) "
+                + " group by DATE_FORMAT(visit_date ,'%Y-%m-%d') ORDER BY DATE_FORMAT(visit_date ,'%Y-%m-%d') asc;";
+        logger.info("select:"+sql);
+        List<PageStatistcsDateDto> query = jdbcTemplate.query(sql, new PageStatistcsMonthDtoRowMapper());
+        pageStatistcsMonthDto.setPageStatistcsList(query);
+        String sql2="select IFNULL(count(id),0) num  from b_page_statistics  "
+                + " WHERE date_sub(curdate(), interval 9 day ) <= date(visit_date) ";
+        Integer integer = jdbcTemplate.queryForObject(sql2, Integer.class);
+        pageStatistcsMonthDto.setTotal(integer);
+        return pageStatistcsMonthDto;
     }
 
     public List<HotPageDto> hotPageDtoList(){
         String sql="SELECT page_name,count(distinct(user_open_id)) user_num,COUNT(id) visit_num "
-                + " FROM b_page_statistics GROUP BY page_name ORDER BY COUNT(id) desc";
+                + " FROM b_page_statistics where page_url like '%https://sgcc.link/%' and  page_url not in ("
+                + " select article_url page_url from d_article article) "
+                + " GROUP BY page_name ORDER BY COUNT(id) desc";
         logger.info("insertSQL:"+sql);
         List<HotPageDto> query = jdbcTemplate.query(sql, new HotPageDtoRowMapper());
         return  query;
@@ -71,8 +80,11 @@ public class PageStatisticsRepository {
             PageStatistcsDateDto pageStatistcsDateDto = new PageStatistcsDateDto();
             if(null==rs.getString("num")){
                 pageStatistcsDateDto.setUrlNum(0);
+            }if(null==rs.getString("visit_date")){
+                pageStatistcsDateDto.setDate(null);
             }
             pageStatistcsDateDto.setUrlNum(rs.getInt("num"));
+            pageStatistcsDateDto.setDate(rs.getString("visit_date"));
             return pageStatistcsDateDto;
         }
     }
