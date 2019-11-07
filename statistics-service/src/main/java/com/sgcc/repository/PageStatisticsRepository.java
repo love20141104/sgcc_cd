@@ -51,13 +51,13 @@ public class PageStatisticsRepository {
     public PageStatistcsMonthDto getPageStatisticsCountDay(){
         PageStatistcsMonthDto pageStatistcsMonthDto = new PageStatistcsMonthDto();
         String sql="select IFNULL(count(id),0) num  ,DATE_FORMAT(visit_date ,'%Y-%m-%d') visit_date from b_page_statistics  "
-                + " WHERE date_sub(curdate(), interval 10 day ) <= date(visit_date) "
+                + " WHERE date_sub(curdate(), interval 9 day ) <= date(visit_date) "
                 + " group by DATE_FORMAT(visit_date ,'%Y-%m-%d') ORDER BY DATE_FORMAT(visit_date ,'%Y-%m-%d') asc;";
         logger.info("select:"+sql);
         List<PageStatistcsDateDto> query = jdbcTemplate.query(sql, new PageStatistcsMonthDtoRowMapper());
         pageStatistcsMonthDto.setPageStatistcsList(query);
         String sql2="select IFNULL(count(id),0) num  from b_page_statistics  "
-                + " WHERE date_sub(curdate(), interval 10 day ) <= date(visit_date) ";
+                + " WHERE date_sub(curdate(), interval 9 day ) <= date(visit_date) ";
         Integer integer = jdbcTemplate.queryForObject(sql2, Integer.class);
         pageStatistcsMonthDto.setTotal(integer);
         return pageStatistcsMonthDto;
