@@ -25,15 +25,17 @@ public class PageStatisticsRepository {
 
     @Transactional
     public void savePageStatistics(PageStatisticsDao pageStatisticsDao){
-        String sql="insert into b_page_statistics(id,page_url,page_name,user_open_id,visit_date,client_ip)" +
-                "values ('"+pageStatisticsDao.getId()+"','"
-                +pageStatisticsDao.getPageUrl()+"','"
-                +pageStatisticsDao.getPageName()+"','"
-                +pageStatisticsDao.getUserOpenId()+"','"
-                + Utils.GetTime(pageStatisticsDao.getVisitDate())+"','"
-                +pageStatisticsDao.getClientIp()+"')";
-        logger.info("insertSQL:"+sql);
-        jdbcTemplate.update(sql);
+        if(!pageStatisticsDao.getPageName().equalsIgnoreCase("null")) {
+            String sql = "insert into b_page_statistics(id,page_url,page_name,user_open_id,visit_date,client_ip)"
+                    + " values ('" + pageStatisticsDao.getId() + "','"
+                    + pageStatisticsDao.getPageUrl() + "','"
+                    + pageStatisticsDao.getPageName() + "','"
+                    + pageStatisticsDao.getUserOpenId() + "','"
+                    + Utils.GetTime(pageStatisticsDao.getVisitDate()) + "','"
+                    + pageStatisticsDao.getClientIp() + "')";
+            logger.info("insertSQL:" + sql);
+            jdbcTemplate.update(sql);
+        }
     }
 
     public PageStatistcsDateDto getPageStatisticsCount(String visit_date_begin, String visit_date_end){
