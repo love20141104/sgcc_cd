@@ -65,7 +65,7 @@ public class PageStatisticsRepository {
 
     public List<HotPageDto> hotPageDtoList(){
         String sql="SELECT page_name,count(distinct(user_open_id)) user_num,COUNT(id) visit_num "
-                + " FROM b_page_statistics where page_url not in ("
+                + " FROM b_page_statistics where page_url like '%https://sgcc.link/%' and  page_url not in ("
                 + " select article_url page_url from b_article article) "
                 + " GROUP BY page_name ORDER BY COUNT(id) desc";
         logger.info("insertSQL:"+sql);
