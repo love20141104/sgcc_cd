@@ -83,7 +83,7 @@ public class BusinessServiceController {
     }
 
     @ApiOperation(value = "更名过户-查询", notes = "")
-    @GetMapping(value = "/renameAndTransfer/inhabitant/")
+    @GetMapping(value = "/renameAndTransfer/inhabitant")
     public Result queryRenameAndTransferAll() {
         return  sgccBusinessService.queryRenameAll();
     }

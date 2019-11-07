@@ -31,7 +31,7 @@ public class NoticeController {
 
 
     @ApiOperation(value = "查询停电公告", notes = "")
-    @GetMapping(value = "/noticeInfo/")
+    @GetMapping(value = "/noticeInfo")
     public Result queryNoticeInfo() {
         return noticeService.findNoticeListAll();
     }
