@@ -33,7 +33,7 @@ public class ReadingQuantityStatistcsRepository {
         } else {
             deteLimit = "and page.visit_date >= '" + new Date().getYear() + "-01-01'";
         }
-        String sql = "select article.article_title title,article.article_url url,count(page.page_url) readNum from b_article article "
+        String sql = "select article.article_title title,article.article_url url,count(page.page_url) readNum from d_article article "
                 + " left join b_page_statistics page on page.page_url = article.article_url "
                 + deteLimit
                 + " group by page.page_url,article.article_title,article.article_url "

@@ -4,13 +4,13 @@
 ##### Basic
 server:
   port: 18624
-  ssl:
-  #    证书路径
-      key-store: 0_cdgd.pryun.vip.jks
-      key-store-type: JKS
-#      key-alias: tomcat
-  #    配置密码，就是在生成证书的时候输入的密码
-      key-store-password: bt.cn
+#  ssl:
+#  #    证书路径
+#      key-store: 0_cdgd.pryun.vip.jks
+#      key-store-type: JKS
+##      key-alias: tomcat
+#  #    配置密码，就是在生成证书的时候输入的密码
+#      key-store-password: bt.cn
 
 ##### Spring
 spring:
@@ -19,7 +19,7 @@ spring:
   ### Redis
   redis:
 #    database: 1
-    host: 127.0.0.1
+    host: 119.23.22.176
     port: 6379
     password:
     jedis:
@@ -30,11 +30,11 @@ spring:
   ### mysql
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/sgcc_cd
+    url: jdbc:mysql://119.23.22.176:3306/sgcc_cd
     username: root
     password: Root@123
   activemq:
-    broker-url: tcp://127.0.0.1:61616
+    broker-url: tcp://119.23.22.176:61616
     in-memory: false
     pool:
       enabled: false #如果此处设置为true，需要加如下的依赖包，否则会自动配置失败，报JmsMessagingTemplate注入失败

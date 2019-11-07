@@ -9,6 +9,7 @@ import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import com.sgcc.dtomodel.wechat.template.TemplateData;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
 import com.sgcc.entity.WeChatEntity;
+import com.sgcc.exception.TopErrorCode;
 import com.sgcc.wxpay.Sgcc_WXPay;
 import com.sgcc.wxpay.sdk.WXPayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,10 +111,13 @@ public class WeChatService {
                     data
             );
             weChatEntity.sendTempMsg(templateMessage);
+            return Result.success();
         } catch (Exception e) {
+            System.out.println("模板消息发送失败！");
             e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
         }
-        return Result.success();
+
     }
 
 
