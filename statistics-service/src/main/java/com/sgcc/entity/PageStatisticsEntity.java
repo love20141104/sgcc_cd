@@ -22,35 +22,12 @@ public class PageStatisticsEntity {
         pageStatisticsRepository.savePageStatistics(pageStatisticsDao);
     }
     public List<PageStatistcsDateDto> getPageStatistcsMonthDtoList(){
-        List<PageStatistcsDateDto> pageStatistcsDateDtos =new ArrayList<>();
-        for (int i = 0; i <=11 ; i++) {
-            String begin= Utils.GetTime(DateUtil.getnMonthFirst(i));
-            String end= Utils.GetTime(DateUtil.getnMonthLast(i));
-            PageStatistcsDateDto pageStatisticsCount = pageStatisticsRepository.getPageStatisticsCount(begin, end);
-            pageStatisticsCount.setDate(DateUtil.getnMonthFirst(i));
-            pageStatistcsDateDtos.add(pageStatisticsCount);
-        }
-        return pageStatistcsDateDtos;
+
+        return pageStatisticsRepository.getPageStatisticsCountMonth();
     }
 
     public PageStatistcsMonthDto getPageStatistcsDayDtoList(){
-        PageStatistcsMonthDto pageStatistcsMonthDto = new PageStatistcsMonthDto();
-        List<PageStatistcsDateDto> pageStatistcsDateDtos =new ArrayList<>();
-        for (int i = 0; i <=29 ; i++) {
-            if(null!=DateUtil.getndayFirst(i)) {
-                String begin = Utils.GetTime(DateUtil.getndayFirst(i));
-                String end = Utils.GetTime(DateUtil.getndayLast(i));
-                PageStatistcsDateDto pageStatisticsCount = pageStatisticsRepository.getPageStatisticsCount(begin, end);
-                pageStatisticsCount.setDate(DateUtil.getndayFirst(i));
-                pageStatistcsDateDtos.add(pageStatisticsCount);
-            }
-        }
-        String begin = Utils.GetTime(DateUtil.getndayFirst(29));
-        String end = Utils.GetTime(DateUtil.getndayLast(0));
-        PageStatistcsDateDto pageStatisticsCount = pageStatisticsRepository.getPageStatisticsCount(begin, end);
-        pageStatistcsMonthDto.setTotal(pageStatisticsCount.getUrlNum());
-        pageStatistcsMonthDto.setPageStatistcsList(pageStatistcsDateDtos);
-        return pageStatistcsMonthDto;
+        return pageStatisticsRepository.getPageStatisticsCountDay();
     }
 
     public List<HotPageDto> hotPageDtoList(){
