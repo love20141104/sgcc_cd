@@ -15,6 +15,7 @@
         <module name="domain-model" />
         <module name="dto-model" />
         <module name="exception" />
+        <module name="household-management-service" />
         <module name="management-service" />
         <module name="message-notification-service" />
         <module name="mq-service" />
@@ -45,6 +46,7 @@
       <module name="domain-model" target="1.8" />
       <module name="dto-model" target="1.8" />
       <module name="exception" target="1.8" />
+      <module name="household-management-service" target="1.8" />
       <module name="management-service" target="1.8" />
       <module name="message-notification-service" target="1.8" />
       <module name="mq-service" target="1.8" />
