@@ -5,6 +5,7 @@ import com.example.result.Result;
 import com.sgcc.entity.event.HouseholdEventEntity;
 import com.sgcc.entity.query.HouseholdQueryEntity;
 import com.sgcc.exception.TopErrorCode;
+import com.sgcc.sgccenum.SubscribeCateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,12 @@ public class HouseholdService {
      * 用户绑定户号
      */
     public Result bindHousehold(String openId, String householdNum,String pwd) {
-        //TODO 判断该用户绑定户号数量是否超过5个
-        if(true){
+        // 判断该用户绑定户号数量是否超过5个
+        if(householdQueryEntity.userExceed5(openId)){
             return Result.failure(TopErrorCode.HOUSEHOLD_BIND_NUM_EXCEED);
         }
-        //TODO 判断该户号是否已被5个用户绑定
-        else if(true){
+        // 判断该户号是否已被5个用户绑定
+        else if(householdQueryEntity.householdExceed5(householdNum)){
             return Result.failure(TopErrorCode.USER_BIND_NUM_EXCEED);
         }else {
             //TODO 根据户号密码调用接口验证信息是否正确
@@ -105,7 +106,7 @@ public class HouseholdService {
     }
 
     /**
-     * 数据库中记录的密码失效时，提示用户输入新密码、
+     * 数据库中记录的密码失效时，提示用户输入新密码修改密码
      */
     public Result changePWD(String openId,String householdNum,String pwd){
         //TODO 调用接口验证新密码是否正确
@@ -148,7 +149,7 @@ public class HouseholdService {
      * 用户修改消息订阅状态
      */
 
-    public Result ypdateSubscribe(String openId,String subscribeCategory,boolean isSubscribe){
+    public Result ypdateSubscribe(String openId, SubscribeCateEnum subscribeCateEnum, boolean isSubscribe){
         try{
             //TODO 修改订阅信息
             return Result.success();
