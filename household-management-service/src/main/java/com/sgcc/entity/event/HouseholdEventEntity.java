@@ -40,6 +40,7 @@ public class HouseholdEventEntity {
             }
             //没有user
         }else {
+             userDao1=new UserDao();
             //通过userOpenId查询数据库是否有该Subscribe
             SubscribeDao subscribeDao = householdRepository.ifSubscribeByUserOpenId(userOpenId);
             //没有Subscribe
