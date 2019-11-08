@@ -11,11 +11,11 @@ public class SubscribeInfoDTO implements Serializable {
 
     private static final long serialVersionUID = -7998987379275055415L;
 
-    private Boolean subBill;
-    private Boolean subPay;
-    private Boolean subArrears;
-    private Boolean subCoulometricAnalysis;
-    private Boolean subPower;
+    private Boolean subBill = true;
+    private Boolean subPay = true;
+    private Boolean subArrears = true;
+    private Boolean subCoulometricAnalysis = true;
+    private Boolean subPower = true;
 
     public SubscribeInfoDTO(
             Boolean subBill,

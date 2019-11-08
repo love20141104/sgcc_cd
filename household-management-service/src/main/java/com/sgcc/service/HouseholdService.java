@@ -2,12 +2,18 @@ package com.sgcc.service;
 
 
 import com.example.result.Result;
+import com.sgcc.dao.HouseholdInfoDao;
+import com.sgcc.dto.SubscribeInfoDTO;
 import com.sgcc.entity.event.HouseholdEventEntity;
 import com.sgcc.entity.query.HouseholdQueryEntity;
 import com.sgcc.exception.TopErrorCode;
+import com.sgcc.model.HouseholdModel;
 import com.sgcc.sgccenum.SubscribeCateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -57,6 +63,24 @@ public class HouseholdService {
             //TODO 删除关系表，户号表
 
             return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+    /**
+     * 用户获取绑定户号列表
+     */
+    public Result getBindList(String openId){
+        try{
+            //TODO 获取用户绑定的户号
+            List<HouseholdInfoDao> householdInfoDaos = new ArrayList<>();
+            //数据清洗
+            HouseholdModel householdModel = new HouseholdModel(openId,householdInfoDaos);
+            householdModel.daos2dto();
+            //返回结果
+            return Result.success(householdModel.getHouseholdInfoListDTO());
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -135,8 +159,8 @@ public class HouseholdService {
             try{
                 //TODO 将用户信息和订阅信息存入
 
-                //TODO 返回订阅信息
-                return Result.success();
+                //返回订阅信息
+                return Result.success(new SubscribeInfoDTO());
             }catch (Exception e){
                 e.printStackTrace();
                 return Result.failure(TopErrorCode.GENERAL_ERR);
