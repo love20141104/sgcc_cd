@@ -27,7 +27,7 @@ public class ArticleRepository {
 
     public List<ArticleDao> findAll( ){
         String sql = "select id,article_title,article_desc,article_img,article_url," +
-                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from d_article";
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from b_article";
         try{
             return jdbcTemplate.query(sql,new articleRowMapper());
         }
@@ -39,7 +39,7 @@ public class ArticleRepository {
 
     public List<ArticleDao> findAllByRecommended( Boolean isRecommended ){
         String sql = "select id,article_title,article_desc,article_img,article_url," +
-                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from d_article";
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from b_article";
         sql = sql + " where article_recommended = '" + Utils.Boolean2Int(isRecommended) + "'";
         try{
             return jdbcTemplate.query(sql,new articleRowMapper());
@@ -52,7 +52,7 @@ public class ArticleRepository {
 
     public List<ArticleDao> findAllByArticleType( String articleType ){
         String sql = "select id,article_title,article_desc,article_img,article_url," +
-                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from d_article";
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from b_article";
         sql = sql + " where article_type = '" + articleType + "'";
         try{
             return jdbcTemplate.query(sql,new articleRowMapper());
@@ -64,7 +64,7 @@ public class ArticleRepository {
     }
     public ArticleDao findByID( String id ){
         String sql = "select id,article_title,article_desc,article_img,article_url," +
-                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from d_article";
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from b_article";
         sql = sql + " where id = '" + id + "'";
         try{
             return jdbcTemplate.queryForObject(sql,new articleRowMapper());
@@ -77,7 +77,7 @@ public class ArticleRepository {
 
     @Transactional
     public void save(ArticleDao dao){
-        String sql = "insert into d_article(id,article_title,article_desc,article_img,article_url," +
+        String sql = "insert into b_article(id,article_title,article_desc,article_img,article_url," +
                 "article_recommended,article_type,submit_time) values('"+dao.getId()+"'" +
                 ",'"+dao.getArticle_title()+"','"+dao.getArticle_desc()+"','"+dao.getArticle_img()+"'" +
                 ",'"+ dao.getArticle_url() +"','"+ Utils.Boolean2Int(dao.isArticle_recommended()) +"'" +
@@ -87,7 +87,7 @@ public class ArticleRepository {
 
     @Transactional
     public ArticleDao update(ArticleDao dao){
-        String sql = "update d_article set article_title='"+dao.getArticle_title()+"'" +
+        String sql = "update b_article set article_title='"+dao.getArticle_title()+"'" +
                 ",article_desc='"+dao.getArticle_desc()+"',article_img='"+dao.getArticle_img()+"'" +
                 ",article_url='"+ dao.getArticle_url()+"'" +
                 ",article_recommended='"+Utils.Boolean2Int(dao.isArticle_recommended())+"'" +
@@ -101,7 +101,7 @@ public class ArticleRepository {
     @Transactional
     public void deleteAll(List<String> articleIds){
         String strIds = Utils.joinStrings(articleIds,"','");
-        String sql = "delete from d_article where id in('"+ strIds +"')";
+        String sql = "delete from b_article where id in('"+ strIds +"')";
         jdbcTemplate.execute(sql);
     }
 

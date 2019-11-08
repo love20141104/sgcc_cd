@@ -16,6 +16,10 @@ public class TotalFeesAvgChartDTO implements Serializable {
 
     private double total;
 
+    private double thisWeekTotal;
+
+    private double ratio;
+
     private double average;
 
 

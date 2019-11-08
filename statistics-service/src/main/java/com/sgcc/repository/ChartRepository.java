@@ -89,19 +89,22 @@ public class ChartRepository {
 
 
 
-
-
     /**
      * 查询最近10天缴费总额和日均销售额
      * @return
      */
     public TotalFeesAvgChartDTO findTotalFeesAvgChart(){
-
-        String sql = "select sum(pay_totalFee) as total,sum(pay_totalFee)/10 as average,count(id)" +
-                "from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date)";
-        return jdbcTemplate.queryForObject(sql,new TotalFeesAvgChartRowMapper());
+        String sql = "select (select sum(pay_totalFee) as total from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date)) as total,\n" +
+                "       (select sum(pay_totalFee)/10 as average from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date)) as average,\n" +
+                "       sum(pay_totalFee) thisWeekTotal,\n" +
+                "       (select sum(pay_totalFee) from b_pay_info WHERE yearweek(date_format(pay_date,'%Y-%m-%d'),1) = yearweek(now(),1)-1) as ratio\n" +
+                "from b_pay_info WHERE yearweek(date_format(pay_date,'%Y-%m-%d'),1) = yearweek(now(),1) ";
+        TotalFeesAvgChartDTO totalFeesAvgChartDTO = jdbcTemplate.queryForObject(sql,new TotalFeesAvgChartRowMapper());
+        // 计算同比增长率
+        double ratio = (totalFeesAvgChartDTO.getThisWeekTotal()-totalFeesAvgChartDTO.getRatio())/totalFeesAvgChartDTO.getRatio();
+        totalFeesAvgChartDTO.setRatio(ratio);
+        return totalFeesAvgChartDTO;
     }
-
 
 
     class TotalFeesAvgChartRowMapper implements RowMapper<TotalFeesAvgChartDTO>{
@@ -109,6 +112,8 @@ public class ChartRepository {
         public TotalFeesAvgChartDTO mapRow(ResultSet rs, int i) throws SQLException {
             return new TotalFeesAvgChartDTO(
                     rs.getDouble("total"),
+                    rs.getDouble("thisWeekTotal"),
+                    rs.getDouble("ratio"),
                     rs.getDouble("average")
             );
         }

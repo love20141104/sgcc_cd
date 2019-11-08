@@ -32,7 +32,6 @@ public class ChartQueryEntity {
         return chartRepository.findPaymentTimesChart();
     }
 
-
     public List<PaymentAmountChartDTO> findPaymentAmountChart() {
         return chartRepository.findPaymentAmountChart();
     }
