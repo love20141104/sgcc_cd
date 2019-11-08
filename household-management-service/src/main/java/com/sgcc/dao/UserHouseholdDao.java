@@ -11,5 +11,5 @@ public class UserHouseholdDao {
     private String id;
     private String userId;
     private String householdId;
-    private String isAvailable;
+    private Boolean isAvailable;
 }

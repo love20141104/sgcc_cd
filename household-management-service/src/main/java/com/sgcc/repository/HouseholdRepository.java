@@ -116,8 +116,8 @@ public class HouseholdRepository {
             return false;
         }
     }
-    public Boolean ifSubscribeByUserOpenId(String userOpenId){
-        String sql="select count(sub_id) from b_subscribe  ";
+    public String ifSubscribeByUserOpenId(String userOpenId){
+        String sql="select b_user.user_id from b_subscribe left join b_user on b_subscribe.user_id=b_user.user_id  ";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(userOpenId)){
             sql_where.append("user_open_id = '").append(userOpenId).append("'  ");
@@ -125,12 +125,8 @@ public class HouseholdRepository {
         if(!Strings.isNullOrEmpty(sql_where.toString())){
             sql +=" where " + sql_where.toString();
         }
-        Integer integer = jdbcTemplate.queryForObject(sql, Integer.class);
-        if(integer>0){
-            return true;
-        }else {
-            return false;
-        }
+        return jdbcTemplate.queryForObject(sql, String.class);
+
     }
 
     class UserRowMapper implements RowMapper<UserDao> {
