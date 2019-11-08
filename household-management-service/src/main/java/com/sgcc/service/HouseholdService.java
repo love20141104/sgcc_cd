@@ -3,6 +3,7 @@ package com.sgcc.service;
 
 import com.example.result.Result;
 import com.sgcc.dao.HouseholdInfoDao;
+import com.sgcc.dto.HouseholdInfoDTO_interface;
 import com.sgcc.dto.SubscribeInfoDTO;
 import com.sgcc.entity.event.HouseholdEventEntity;
 import com.sgcc.entity.query.HouseholdQueryEntity;
@@ -38,9 +39,17 @@ public class HouseholdService {
             //TODO 根据户号密码调用接口验证信息是否正确
             if(true){
                 // TODO 获取用户信息
-                Object o = new Object();
+                HouseholdInfoDTO_interface householdInfoDTO_interface = new HouseholdInfoDTO_interface();
+                householdInfoDTO_interface.setHouseholdNumber(householdNum);
+
                 try{
-                    // TODO 存用户表，户号表，关系表，订阅信息表
+                    HouseholdModel householdModel = new HouseholdModel(householdInfoDTO_interface);
+                    householdModel.interfaceDTO2DAO(pwd);
+                    // 存用户表，户号表，关系表，订阅信息表
+                    householdEventEntity.saveHousehold(
+                            openId
+                            ,householdModel.getHouseholdInfoDao()
+                            );
                     //返回成功
                     return Result.success();
                 }catch (Exception e){
@@ -60,8 +69,8 @@ public class HouseholdService {
     public Result removeBind(String openId, String householdNum) {
 
         try{
-            //TODO 删除关系表，户号表
-
+            // 删除关系表，户号表
+            householdEventEntity.deleteUserHouseHoldAndHouseholdInfo(householdNum,openId);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
@@ -104,11 +113,11 @@ public class HouseholdService {
     /**
      * 用户取消关注
      */
-    public Result cancelFocusWechat(String opneId){
+    public Result cancelFocusWechat(String openId){
 
         try{
-            //TODO 4张表中数据作废
-
+            // 4张表中数据作废
+            householdEventEntity.unavailableUserHouseHold(openId);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
@@ -118,15 +127,15 @@ public class HouseholdService {
     /**
      * 用户关注公众号
      */
-    public Result focusWechat(String opneId){
+    public Result focusWechat(String openId){
         try{
-            //TODO  若表中有该用户的作废数据则恢复4张表中数据作
+            // 若表中有该用户的作废数据则恢复4张表中数据
+            householdEventEntity.availableUserHouseHold(openId);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
-
     }
 
     /**
@@ -136,8 +145,8 @@ public class HouseholdService {
         //TODO 调用接口验证新密码是否正确
         if(true){
             try{
-                //TODO 修改户号表数据
-
+                // 修改户号表数据
+                householdEventEntity.updateUser(openId,householdNum,pwd);
                 return Result.success();
             }catch (Exception e){
                 e.printStackTrace();
@@ -173,7 +182,7 @@ public class HouseholdService {
      * 用户修改消息订阅状态
      */
 
-    public Result ypdateSubscribe(String openId, SubscribeCateEnum subscribeCateEnum, boolean isSubscribe){
+    public Result updateSubscribe(String openId, SubscribeCateEnum subscribeCateEnum, boolean isSubscribe){
         try{
             //TODO 修改订阅信息
             return Result.success();

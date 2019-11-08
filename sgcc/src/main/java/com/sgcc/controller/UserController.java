@@ -7,10 +7,8 @@ import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
 import com.sgcc.dto.commerce.CommerceInfoCorrectSubmitDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectEditDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectSubmitDTO;
-import com.sgcc.service.RecordService;
-import com.sgcc.service.SgccBusinessService;
-import com.sgcc.service.UserService;
-import com.sgcc.service.WechatPayResultService;
+import com.sgcc.service.*;
+import com.sgcc.sgccenum.SubscribeCateEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +36,14 @@ public class UserController {
     @Autowired
     private SgccBusinessService sgccBusinessService;
 
+    @Autowired
+    private HouseholdService householdService;
+
     @ApiOperation(value = "查询月度账单", notes = "")
     @GetMapping(value = "/bill/billInfo/{userNo}")
     public Result queryBillInfo(@PathVariable(required = true) String userNo,
                                 @RequestParam(required = true) long date) {
-        return userService.queryBillInfoById(userNo,date);
+        return userService.queryBillInfoById(userNo, date);
     }
 
 
@@ -59,7 +60,6 @@ public class UserController {
     }
 
 
-
     @ApiOperation(value = "查询缴费结果", notes = "")
     @GetMapping(value = "/payResult/payInfo")
     public Result querypayResult() {
@@ -70,7 +70,7 @@ public class UserController {
     @ApiOperation(value = "新增缴费结果", notes = "")
     @PostMapping(value = "/payResult/payInfo")
     public Result addpayResult(@RequestBody PayResultSubmitDTO payResultSubmitDTO) {
-        return  wechatPayResultService.insertPayResult(payResultSubmitDTO);
+        return wechatPayResultService.insertPayResult(payResultSubmitDTO);
     }
 
 
@@ -130,18 +130,98 @@ public class UserController {
     }
 
 
+    /********************************户号管理相关接口***********************************/
+    /**
+     * 用户绑定户号
+     */
+    @ApiOperation(value = "用户绑定户号", notes = "")
+    @PostMapping(value = "/open-id/{openId}/household-num/{householdNum}")
+    public Result bindHousehold(@PathVariable String openId, @PathVariable String householdNum, @RequestParam String pwd) {
+        return householdService.bindHousehold(openId, householdNum, pwd);
+    }
+
+    /**
+     * 用户解邦户号
+     */
+    @ApiOperation(value = "用户绑定户号", notes = "")
+    @DeleteMapping(value = "/open-id/{openId}/household-num/{householdNum}")
+    public Result removeBind(@PathVariable String openId, @PathVariable String householdNum) {
+        return householdService.removeBind(openId, householdNum);
+    }
+
+    /**
+     * 用户获取绑定户号列表
+     */
+    @ApiOperation(value = "用户绑定户号", notes = "")
+    @GetMapping(value = "/open-id/{openId}/household-num")
+    public Result getBindList(@PathVariable String openId) {
+        return householdService.getBindList(openId);
+    }
+
+    /**
+     * 数据库中记录的密码失效时，提示用户输入新密码修改密码
+     */
+    @ApiOperation(value = "用户绑定户号", notes = "")
+    @PutMapping(value = "/open-id/{openId}/household-num/{householdNum}")
+    public Result changePWD(@PathVariable String openId, @PathVariable String householdNum, @RequestParam String pwd) {
+        return householdService.changePWD(openId, householdNum, pwd);
+
+    }
 
 
+    /**
+     * 设置默认户号
+     */
+    @ApiOperation(value = "用户绑定户号", notes = "")
+    @PostMapping(value = "/open-id/{openId}/default-household-num/{householdNum}")
+    public Result setDefaultHouseholdNum(@PathVariable String openId, @PathVariable String householdNum) {
+        return householdService.setDefaultHouseholdNum(openId, householdNum);
+    }
+
+    /**
+     * 用户取消关注
+     */
+    @ApiOperation(value = "用户绑定户号", notes = "")
+    @DeleteMapping(value = "/open-id/{openId}")
+    public Result cancelFocusWechat(@PathVariable String openId) {
+        return householdService.cancelFocusWechat(openId);
+    }
+
+    /**
+     * 用户关注公众号
+     */
+    @ApiOperation(value = "用户绑定户号", notes = "")
+    @PostMapping(value = "/open-id/{openId}")
+    public Result focusWechat(@PathVariable String openId) {
+        return householdService.focusWechat(openId);
+
+    }
+
+    /**
+     * 查询用户消息订阅状态
+     */
+    @ApiOperation(value = "用户绑定户号", notes = "")
+    @GetMapping(value = "/open-id/{openId}/subscribeInfo")
+    public Result getSubscribeInfo(@PathVariable String openId) {
+        return householdService.getSubscribeInfo(openId);
+    }
+
+    /**
+     * 用户修改消息订阅状态
+     */
+    @ApiOperation(value = "用户绑定户号", notes = "")
+    @PutMapping(value = "/open-id/{openId}/subscribeInfo")
+    public Result updateSubscribe(@PathVariable String openId
+            , @RequestParam SubscribeCateEnum subscribeCateEnum
+            , @RequestParam boolean isSubscribe) {
+        return householdService.updateSubscribe(openId,subscribeCateEnum,isSubscribe);
+    }
 
 //    @ApiOperation(value = "新增居民增容订单", notes = "")
 //    @PostMapping(value = "/increaseCapacity/order/{openId}")
 //    public Result addIncreaseCapacityOrder(@RequestBody InhabitantIncreaseCapacityDTO dto, @PathVariable String openId) {
 //        return  sgccBusinessService.addIncreaseCapacityOrder(dto,openId);
 //    }
-
-
-
-
 
 
 }
