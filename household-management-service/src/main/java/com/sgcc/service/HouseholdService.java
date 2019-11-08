@@ -3,12 +3,14 @@ package com.sgcc.service;
 
 import com.example.result.Result;
 import com.sgcc.dao.HouseholdInfoDao;
+import com.sgcc.dao.SubscribeDao;
 import com.sgcc.dto.HouseholdInfoDTO_interface;
 import com.sgcc.dto.SubscribeInfoDTO;
 import com.sgcc.entity.event.HouseholdEventEntity;
 import com.sgcc.entity.query.HouseholdQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.HouseholdModel;
+import com.sgcc.model.SubscribeModel;
 import com.sgcc.sgccenum.SubscribeCateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -161,10 +163,12 @@ public class HouseholdService {
     public Result getSubscribeInfo(String openId){
         // 判断该用户是否在b_user表中以及该用户在订阅信息表中是否有记录
         if(householdQueryEntity.userIsExist(openId)){
-            // 获取该用户的订阅信息并返回
-
-            SubscribeInfoDTO subscribeInfoDTO = householdQueryEntity.getSubscribeInfo(openId);
-            return Result.success(subscribeInfoDTO);
+            // 获取该用户的订阅信息
+            SubscribeDao subscribeDao = householdQueryEntity.getSubscribeInfo(openId);
+            //数据清洗
+            SubscribeModel subscribeModel = new SubscribeModel(subscribeDao);
+            subscribeModel.selectTransform();
+            return Result.success(subscribeModel.getSubscribeInfoDTO());
         }else {
             try{
                 return Result.failure(TopErrorCode.NONE_HOUSEHOLD_INFO);
