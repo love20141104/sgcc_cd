@@ -22,31 +22,48 @@ public class HouseholdEventEntity {
      * 存用户表，户号表，关系表，订阅信息表
      * @param userOpenId
      * @param householdInfoDao
-     * @param userHouseholdDao
      */
     @Transactional
     public void saveHousehold(String userOpenId,
-                              HouseholdInfoDao householdInfoDao,
-                              UserHouseholdDao userHouseholdDao
-    ){
-        Boolean aBoolean = householdRepository.ifUserByUserOpenId(userOpenId);
-        if(aBoolean){
-            String str = householdRepository.ifSubscribeByUserOpenId(userOpenId);
-            if(Strings.isNullOrEmpty(str)) {
-                SubscribeDao subscribeDao=new SubscribeDao(UUID.randomUUID().toString(),userOpenId,true,true,true,true,true,true);
+                              HouseholdInfoDao householdInfoDao
+    ){  //通过userOpenId查询数据库是否有该用户
+        UserDao userDao1 = householdRepository.selectUserByUserOpenId(userOpenId);
+        //有user
+        if(null!=userDao1){
+            //通过userOpenId查询数据库是否有该Subscribe
+            SubscribeDao subscribeDao = householdRepository.ifSubscribeByUserOpenId(userOpenId);
+            //没有Subscribe
+            if(null==subscribeDao) {
+                //保存Subscribe
+                 subscribeDao=new SubscribeDao(UUID.randomUUID().toString(),userDao1.getUserId(),true,true,true,true,true,true);
                 householdRepository.insertSubscribe(subscribeDao);
             }
+            //没有user
         }else {
-            String str = householdRepository.ifSubscribeByUserOpenId(userOpenId);
-            if(Strings.isNullOrEmpty(str)) {
-                SubscribeDao subscribeDao=new SubscribeDao(UUID.randomUUID().toString(),userOpenId,true,true,true,true,true,true);
+            //通过userOpenId查询数据库是否有该Subscribe
+            SubscribeDao subscribeDao = householdRepository.ifSubscribeByUserOpenId(userOpenId);
+            //没有Subscribe
+            if(null==subscribeDao) {
+                String uuid = UUID.randomUUID().toString();
+                userDao1.setUserId(uuid);
+                 subscribeDao=new SubscribeDao(UUID.randomUUID().toString(),uuid,true,true,true,true,true,true);
                 householdRepository.insertSubscribe(subscribeDao);
+                //保存user
+                UserDao userDao = new UserDao(uuid, userOpenId, null, true);
+                householdRepository.insertUser(userDao);
+            }else {
+            //保存user
+                UserDao userDao = new UserDao(subscribeDao.getUserId(), userOpenId, null, true);
+                householdRepository.insertUser(userDao);
             }
-            String userId = UUID.randomUUID().toString();
-            UserDao userDao = new UserDao(userId, userOpenId, null, true);
-            householdRepository.insertUser(userDao);
         }
         householdRepository.insertHouseholdInfo(householdInfoDao);
+        //如果householdInfoDao没有主键
+        if(Strings.isNullOrEmpty(householdInfoDao.getHouseholdId())){
+            householdInfoDao.setHouseholdId(UUID.randomUUID().toString());
+        }
+        //保存userHouseholdDao关系表
+        UserHouseholdDao userHouseholdDao = new UserHouseholdDao(UUID.randomUUID().toString(), userDao1.getUserId(), householdInfoDao.getHouseholdId(), true);
         householdRepository.insertUserHousehold(userHouseholdDao);
     }
     //TODO 解绑删除关系表，户号表

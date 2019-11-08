@@ -100,8 +100,8 @@ public class HouseholdRepository {
         jdbcTemplate.execute(sql);
     }
 
-    public Boolean ifUserByUserOpenId(String userOpenId){
-        String sql="select count(user_id) from b_user  ";
+    public UserDao selectUserByUserOpenId(String userOpenId){
+        String sql="select user_id,user_open_id,user_tel,is_available from b_user  ";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(userOpenId)){
             sql_where.append("user_open_id = '").append(userOpenId).append("'  ");
@@ -109,15 +109,17 @@ public class HouseholdRepository {
         if(!Strings.isNullOrEmpty(sql_where.toString())){
             sql +=" where " + sql_where.toString();
         }
-        Integer integer = jdbcTemplate.queryForObject(sql, Integer.class);
-        if(integer>0){
-            return true;
-        }else {
-            return false;
+        try {
+            UserDao userDao = jdbcTemplate.queryForObject(sql, new UserRowMapper());
+            return userDao;
+        }catch (Exception e){
+            return null;
         }
     }
-    public String ifSubscribeByUserOpenId(String userOpenId){
-        String sql="select b_user.user_id from b_subscribe left join b_user on b_subscribe.user_id=b_user.user_id  ";
+    public SubscribeDao ifSubscribeByUserOpenId(String userOpenId){
+        String sql="select sub_id,b_subscribe.user_id user_id,sub_bill,sub_pay,sub_arrears"
+                + ",sub_coulometric_analysis,sub_power,b_subscribe.is_available is_available "
+                + "from b_subscribe left join b_user on b_subscribe.user_id=b_user.user_id  ";
         StringBuffer sql_where = new StringBuffer();
         if(!Strings.isNullOrEmpty(userOpenId)){
             sql_where.append("user_open_id = '").append(userOpenId).append("'  ");
@@ -125,8 +127,11 @@ public class HouseholdRepository {
         if(!Strings.isNullOrEmpty(sql_where.toString())){
             sql +=" where " + sql_where.toString();
         }
-        return jdbcTemplate.queryForObject(sql, String.class);
-
+        try {
+            return jdbcTemplate.queryForObject(sql, new SubscribeRowMapper());
+        }catch (Exception e){
+            return null;
+        }
     }
 
     class UserRowMapper implements RowMapper<UserDao> {
@@ -136,6 +141,21 @@ public class HouseholdRepository {
                     rs.getString("user_id"),
                     rs.getString("user_open_id"),
                     rs.getString("user_tel"),
+                    rs.getBoolean("is_available")
+            );
+        }
+    }
+    class SubscribeRowMapper implements RowMapper<SubscribeDao> {
+        @Override
+        public SubscribeDao mapRow(ResultSet rs, int i) throws SQLException {
+            return new SubscribeDao(
+                    rs.getString("sub_id"),
+                    rs.getString("user_id"),
+                    rs.getBoolean("sub_bill"),
+                    rs.getBoolean("sub_pay"),
+                    rs.getBoolean("sub_arrears"),
+                    rs.getBoolean("sub_coulometric_analysis"),
+                    rs.getBoolean("sub_power"),
                     rs.getBoolean("is_available")
             );
         }
