@@ -19,7 +19,7 @@ public class HouseholdService {
     /**
      * 用户绑定户号
      */
-    public Result bindHousehold() {
+    public Result bindHousehold(String openId, String householdNum,String pwd) {
         //TODO 判断该用户绑定户号数量是否超过5个
         if(true){
             return Result.failure(TopErrorCode.HOUSEHOLD_BIND_NUM_EXCEED);
@@ -50,7 +50,7 @@ public class HouseholdService {
     /**
      * 用户解邦户号
      */
-    public Result removeBind() {
+    public Result removeBind(String openId, String householdNum) {
 
         try{
             //TODO 删除关系表，户号表
@@ -61,10 +61,25 @@ public class HouseholdService {
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
+
+    /**
+     * 设置默认户号
+     */
+    public Result setDefaultHouseholdNum(String opneId,String householdNum){
+        try{
+            //TODO 更新户号表，设置默认
+
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
     /**
      * 用户取消关注
      */
-    public Result cancelFocusWechat(){
+    public Result cancelFocusWechat(String opneId){
 
         try{
             //TODO 4张表中数据作废
@@ -78,7 +93,7 @@ public class HouseholdService {
     /**
      * 用户关注公众号
      */
-    public Result focusWechat(){
+    public Result focusWechat(String opneId){
         try{
             //TODO  若表中有该用户的作废数据则恢复4张表中数据作
             return Result.success();
@@ -98,27 +113,52 @@ public class HouseholdService {
             try{
                 //TODO 修改户号表数据
 
+                return Result.success();
             }catch (Exception e){
                 e.printStackTrace();
-                Result.failure(TopErrorCode.GENERAL_ERR);
+                return Result.failure(TopErrorCode.GENERAL_ERR);
             }
         }else {
             return Result.failure(TopErrorCode.HOUSEHOLD_PWD_ERR);
         }
-
-
-        return null;
     }
     /**
      * 查询用户消息订阅状态
      */
+    public Result getSubscribeInfo(String openId){
+        //TODO 判断该用户是否在b_user表中以及该用户在订阅信息表中是否有记录
+        if(true){
+            //TODO 获取该用户的订阅信息并返回
+            return Result.success();
+        }else {
+            try{
+                //TODO 将用户信息和订阅信息存入
+
+                //TODO 返回订阅信息
+                return Result.success();
+            }catch (Exception e){
+                e.printStackTrace();
+                return Result.failure(TopErrorCode.GENERAL_ERR);
+            }
+
+        }
+    }
 
     /**
-     * 用户取消消息订阅
+     * 用户修改消息订阅状态
      */
 
-    /**
-     * 用户恢复消息订阅
-     */
+    public Result ypdateSubscribe(String openId,String subscribeCategory,boolean isSubscribe){
+        try{
+            //TODO 修改订阅信息
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+
 
 }
