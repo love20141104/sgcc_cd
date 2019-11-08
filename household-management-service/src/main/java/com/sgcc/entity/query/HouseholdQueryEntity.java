@@ -37,8 +37,7 @@ public class HouseholdQueryEntity {
      * 获取用户绑定的户号
      */
      public List<HouseholdInfoDao> getBindList(String userOpenId){
-         //TODO
-         return null;
+         return householdRepository.getBindList(userOpenId);
      }
 
     /**

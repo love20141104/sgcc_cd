@@ -35,4 +35,18 @@ public class SubscribeDao {
         this.subPower = subPower;
         this.isAvailable = isAvailable;
     }
+
+    public SubscribeDao(
+            String subId
+            , String userId
+    ) {
+        this.subId = subId;
+        this.userId = userId;
+        this.subBill = true;
+        this.subPay = true;
+        this.subArrears = true;
+        this.subCoulometricAnalysis = true;
+        this.subPower = true;
+        this.isAvailable = true;
+    }
 }

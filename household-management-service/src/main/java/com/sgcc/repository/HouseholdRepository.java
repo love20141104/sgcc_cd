@@ -139,7 +139,9 @@ public class HouseholdRepository {
     @Transactional
     public void deleteUserHouseHoldAndHouseholdInfo(String householdNumber,String userOpenId){
         if(!Strings.isNullOrEmpty(householdNumber)&&!Strings.isNullOrEmpty(userOpenId)) {
-            String sql = "delete from b_household_info where household_id =( select ru.household_id from (select household_id from b_user bu left  join r_user_household ruh "
+            String sql = "delete from b_household_info where household_id =" +
+                    "( select ru.household_id from " +
+                    "(select household_id from b_user bu left  join r_user_household ruh "
                     + " on bu.user_id=ruh.user_id "
                     + " and bu.user_open_id='" + userOpenId + "') ru left join b_household_info bhi "
                     + " on ru.household_id=bhi.household_id "
@@ -189,6 +191,103 @@ public class HouseholdRepository {
             logger.info("updateSQL:" + sql4);
             jdbcTemplate.execute(sql4);
 
+        }
+    }
+
+    /**
+     * 获取用户绑定的户号
+     * @param userOpenId
+     * @return
+     */
+    public List<HouseholdInfoDao> getBindList(String userOpenId) {
+        String sql = "select hi.household_id household_id" +
+                ",household_householder" +
+                ",household_number" +
+                ",household_address" +
+                ",household_default" +
+                ",household_type" +
+                ",household_password" +
+                ",hi.is_available is_available from b_household_info hi " +
+                "LEFT JOIN r_user_household r ON hi.household_id = r.household_id " +
+                "LEFT JOIN b_user u on r.user_id=u.user_id " +
+                " where u.user_open_id = '"+userOpenId+"'";
+
+        return jdbcTemplate.query(sql,new HouseholdInfoRowMapper());
+    }
+
+    /**
+     * 修改户号密码
+     * @param openId
+     * @param householdNum
+     * @param pwd
+     */
+    public void updatePwd(String openId, String householdNum, String pwd){
+        String sql = "update b_household_info set household_password = '"+pwd+"' " +
+                "where household_id = (" +
+                "select hi.household_id from b_household_info hi " +
+                "left join r_user_household r on r.household_id = hi.household_id " +
+                "left join b_user u on u.user_id = r.user_id " +
+                "where u.user_open_id = '"+openId+"' and hi.household_number = '"+householdNum+"'" +
+                ")";
+
+        jdbcTemplate.execute(sql);
+
+    }
+
+    /**
+     * 设置默认户号
+     * @param openId
+     * @param householdNum
+     */
+    @Transactional
+    public void setDefaultHouseholdNum(String openId, String householdNum){
+        String sql0 = "update b_household_info set household_default = false " +
+                "where household_id in (" +
+                "select hi.household_id from b_household_info hi " +
+                "left join r_user_household r on r.household_id = hi.household_id " +
+                "left join b_user u on u.user_id = r.user_id " +
+                "where u.user_open_id = '"+openId+"'" +
+                ")";
+
+        String sql = "update b_household_info set household_default = true " +
+                "where household_id = (" +
+                "select hi.household_id from b_household_info hi " +
+                "left join r_user_household r on r.household_id = hi.household_id " +
+                "left join b_user u on u.user_id = r.user_id " +
+                "where u.user_open_id = '"+openId+"' and hi.household_number = '"+householdNum+"'" +
+                ")";
+        jdbcTemplate.execute(sql0);
+        jdbcTemplate.execute(sql);
+    }
+
+    /**
+     * 修改订阅信息
+     * @param openId
+     * @param columnName
+     * @param is_subscribe
+     */
+    public void updateSubscribe(String openId,String columnName,boolean is_subscribe){
+        String sql = "update b_subscribe set "+columnName+" = "+is_subscribe+
+                " where user_id = (" +
+                "select u.user_id from b_user u " +
+                "where u.user_open_id = '"+openId+"'" +
+                ")";
+        jdbcTemplate.execute(sql);
+    }
+
+    class HouseholdInfoRowMapper implements RowMapper<HouseholdInfoDao> {
+        @Override
+        public HouseholdInfoDao mapRow(ResultSet rs, int i) throws SQLException {
+            return new HouseholdInfoDao(
+                    rs.getString("household_id"),
+                    rs.getString("household_householder"),
+                    rs.getString("household_number"),
+                    rs.getString("household_address"),
+                    rs.getBoolean("household_default"),
+                    rs.getString("household_type"),
+                    rs.getString("household_password"),
+                    rs.getBoolean("is_available")
+                    );
         }
     }
 
