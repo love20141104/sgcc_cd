@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class SubscribeDao {
     private String subId;
@@ -17,4 +16,23 @@ public class SubscribeDao {
     private Boolean subPower;
     private Boolean isAvailable;
 
+    public SubscribeDao(
+            String subId
+            , String userId
+            , Boolean subBill
+            , Boolean subPay
+            , Boolean subArrears
+            , Boolean subCoulometricAnalysis
+            , Boolean subPower
+            , Boolean isAvailable
+    ) {
+        this.subId = subId;
+        this.userId = userId;
+        this.subBill = subBill;
+        this.subPay = subPay;
+        this.subArrears = subArrears;
+        this.subCoulometricAnalysis = subCoulometricAnalysis;
+        this.subPower = subPower;
+        this.isAvailable = isAvailable;
+    }
 }
