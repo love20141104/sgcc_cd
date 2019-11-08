@@ -33,7 +33,7 @@ public class HouseholdEventEntity {
         //有user
         if(null!=userDao1){
             //通过userOpenId查询数据库是否有该Subscribe
-            SubscribeDao subscribeDao = householdRepository.ifSubscribeByUserOpenId(userOpenId);
+            SubscribeDao subscribeDao = householdRepository.selectSubscribeByUserOpenId(userOpenId);
             //没有Subscribe
             if(null==subscribeDao) {
                 //保存Subscribe
@@ -44,7 +44,7 @@ public class HouseholdEventEntity {
         }else {
              userDao1=new UserDao();
             //通过userOpenId查询数据库是否有该Subscribe
-            SubscribeDao subscribeDao = householdRepository.ifSubscribeByUserOpenId(userOpenId);
+            SubscribeDao subscribeDao = householdRepository.selectSubscribeByUserOpenId(userOpenId);
             //没有Subscribe
             if(null==subscribeDao) {
                 String uuid = UUID.randomUUID().toString();
@@ -60,6 +60,9 @@ public class HouseholdEventEntity {
                 householdRepository.insertUser(userDao);
             }
         }
+        //todo 判断该用户否是第一次绑定户号
+        //是 默认户号true
+        //不是 默认户号flase
         householdRepository.insertHouseholdInfo(householdInfoDao);
         //如果householdInfoDao没有主键
         if(Strings.isNullOrEmpty(householdInfoDao.getHouseholdId())){
@@ -71,7 +74,7 @@ public class HouseholdEventEntity {
     }
     //TODO 解绑删除关系表，户号表
     public void deleteUserHouseHoldAndHouseholdInfo(String householdNumber,String userOpenId){
-
+        householdRepository.deleteUserHouseHoldAndHouseholdInfo(householdNumber,userOpenId);
     }
     //TODO 4张表中数据作废
     public void unavailableUserHouseHold(String userOpenId){

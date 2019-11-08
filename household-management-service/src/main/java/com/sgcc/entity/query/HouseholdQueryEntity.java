@@ -47,7 +47,7 @@ public class HouseholdQueryEntity {
      */
     public boolean userIsExist(String openId){
         UserDao userDao = householdRepository.selectUserByUserOpenId(openId);
-        SubscribeDao subscribeDao = householdRepository.ifSubscribeByUserOpenId(openId);
+        SubscribeDao subscribeDao = householdRepository.selectSubscribeByUserOpenId(openId);
         if(null != userDao && null != subscribeDao){
             return true;
         }else {
@@ -60,7 +60,7 @@ public class HouseholdQueryEntity {
      * 获取该用户的订阅信息并返回
      */
     public SubscribeDao getSubscribeInfo(String openId){
-        return householdRepository.ifSubscribeByUserOpenId(openId);
+        return householdRepository.selectSubscribeByUserOpenId(openId);
     }
 
 }
