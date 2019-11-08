@@ -25,8 +25,10 @@ public enum TopErrorCode {
     PREBOOK_FULL( 10001 , "该时间段预约已满" ),
     EXCEEDING_LIMIT( 10002 , "超过最大预约次数" ),
     PARAMETER_ERR( 101 , "参数错误" ),
-    NO_DATAS( 102 , "未找到数据" );
-
+    NO_DATAS( 102 , "未找到数据" ),
+    HOUSEHOLD_BIND_NUM_EXCEED(20001,"用户绑定户号超过5个，无法绑定"),
+    USER_BIND_NUM_EXCEED(20002,"该户号已被超过5个用户绑定，无法被绑定"),
+    HOUSEHOLD_PWD_ERR(200023,"户号密码错误");
 
     //错误码
     private Integer errcode;
