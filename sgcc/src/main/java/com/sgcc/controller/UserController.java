@@ -143,7 +143,7 @@ public class UserController {
     /**
      * 用户解邦户号
      */
-    @ApiOperation(value = "用户绑定户号", notes = "")
+    @ApiOperation(value = "用户解邦户号", notes = "")
     @DeleteMapping(value = "/open-id/{openId}/household-num/{householdNum}")
     public Result removeBind(@PathVariable String openId, @PathVariable String householdNum) {
         return householdService.removeBind(openId, householdNum);
@@ -152,7 +152,7 @@ public class UserController {
     /**
      * 用户获取绑定户号列表
      */
-    @ApiOperation(value = "用户绑定户号", notes = "")
+    @ApiOperation(value = "用户获取绑定户号列表", notes = "")
     @GetMapping(value = "/open-id/{openId}/household-num")
     public Result getBindList(@PathVariable String openId) {
         return householdService.getBindList(openId);
@@ -161,7 +161,7 @@ public class UserController {
     /**
      * 数据库中记录的密码失效时，提示用户输入新密码修改密码
      */
-    @ApiOperation(value = "用户绑定户号", notes = "")
+    @ApiOperation(value = "数据库中记录的密码失效时,提示用户输入新密码修改密码", notes = "")
     @PutMapping(value = "/open-id/{openId}/household-num/{householdNum}")
     public Result changePWD(@PathVariable String openId, @PathVariable String householdNum, @RequestParam String pwd) {
         return householdService.changePWD(openId, householdNum, pwd);
@@ -172,7 +172,7 @@ public class UserController {
     /**
      * 设置默认户号
      */
-    @ApiOperation(value = "用户绑定户号", notes = "")
+    @ApiOperation(value = "设置默认户号", notes = "")
     @PostMapping(value = "/open-id/{openId}/default-household-num/{householdNum}")
     public Result setDefaultHouseholdNum(@PathVariable String openId, @PathVariable String householdNum) {
         return householdService.setDefaultHouseholdNum(openId, householdNum);
@@ -181,7 +181,7 @@ public class UserController {
     /**
      * 用户取消关注
      */
-    @ApiOperation(value = "用户绑定户号", notes = "")
+    @ApiOperation(value = "用户取消关注", notes = "")
     @DeleteMapping(value = "/open-id/{openId}")
     public Result cancelFocusWechat(@PathVariable String openId) {
         return householdService.cancelFocusWechat(openId);
@@ -190,7 +190,7 @@ public class UserController {
     /**
      * 用户关注公众号
      */
-    @ApiOperation(value = "用户绑定户号", notes = "")
+    @ApiOperation(value = "用户关注公众号", notes = "")
     @PostMapping(value = "/open-id/{openId}")
     public Result focusWechat(@PathVariable String openId) {
         return householdService.focusWechat(openId);
@@ -200,7 +200,7 @@ public class UserController {
     /**
      * 查询用户消息订阅状态
      */
-    @ApiOperation(value = "用户绑定户号", notes = "")
+    @ApiOperation(value = "查询用户消息订阅状态", notes = "")
     @GetMapping(value = "/open-id/{openId}/subscribeInfo")
     public Result getSubscribeInfo(@PathVariable String openId) {
         return householdService.getSubscribeInfo(openId);
@@ -209,7 +209,7 @@ public class UserController {
     /**
      * 用户修改消息订阅状态
      */
-    @ApiOperation(value = "用户绑定户号", notes = "")
+    @ApiOperation(value = "用户修改消息订阅状态", notes = "")
     @PutMapping(value = "/open-id/{openId}/subscribeInfo")
     public Result updateSubscribe(@PathVariable String openId
             , @RequestParam SubscribeCateEnum subscribeCateEnum

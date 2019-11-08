@@ -13,7 +13,6 @@ import com.sgcc.sgccenum.SubscribeCateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,7 +28,7 @@ public class HouseholdService {
      */
     public Result bindHousehold(String openId, String householdNum,String pwd) {
         // 判断该用户绑定户号数量是否超过5个
-        if(householdQueryEntity.userExceed5(openId)){
+            if(householdQueryEntity.userExceed5(openId)){
             return Result.failure(TopErrorCode.HOUSEHOLD_BIND_NUM_EXCEED);
         }
         // 判断该户号是否已被5个用户绑定
@@ -83,8 +82,8 @@ public class HouseholdService {
      */
     public Result getBindList(String openId){
         try{
-            //TODO 获取用户绑定的户号
-            List<HouseholdInfoDao> householdInfoDaos = new ArrayList<>();
+            // 获取用户绑定的户号
+            List<HouseholdInfoDao> householdInfoDaos =householdQueryEntity.getBindList(openId);
             //数据清洗
             HouseholdModel householdModel = new HouseholdModel(openId,householdInfoDaos);
             householdModel.daos2dto();
@@ -101,8 +100,8 @@ public class HouseholdService {
      */
     public Result setDefaultHouseholdNum(String opneId,String householdNum){
         try{
-            //TODO 更新户号表，设置默认
-
+            // 更新户号表，设置默认
+            householdEventEntity.setDefaultHouseholdNum(opneId,householdNum);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
@@ -160,16 +159,15 @@ public class HouseholdService {
      * 查询用户消息订阅状态
      */
     public Result getSubscribeInfo(String openId){
-        //TODO 判断该用户是否在b_user表中以及该用户在订阅信息表中是否有记录
-        if(true){
-            //TODO 获取该用户的订阅信息并返回
-            return Result.success();
+        // 判断该用户是否在b_user表中以及该用户在订阅信息表中是否有记录
+        if(householdQueryEntity.userIsExist(openId)){
+            // 获取该用户的订阅信息并返回
+
+            SubscribeInfoDTO subscribeInfoDTO = householdQueryEntity.getSubscribeInfo(openId);
+            return Result.success(subscribeInfoDTO);
         }else {
             try{
-                //TODO 将用户信息和订阅信息存入
-
-                //返回订阅信息
-                return Result.success(new SubscribeInfoDTO());
+                return Result.failure(TopErrorCode.NONE_HOUSEHOLD_INFO);
             }catch (Exception e){
                 e.printStackTrace();
                 return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -184,8 +182,14 @@ public class HouseholdService {
 
     public Result updateSubscribe(String openId, SubscribeCateEnum subscribeCateEnum, boolean isSubscribe){
         try{
-            //TODO 修改订阅信息
-            return Result.success();
+            // 判断该用户是否在b_user表中以及该用户在订阅信息表中是否有记录
+            if(householdQueryEntity.userIsExist(openId)){
+                // 修改订阅信息
+                householdEventEntity.updateSubscribe(openId,subscribeCateEnum,isSubscribe);
+                return Result.success();
+            }else {
+                return Result.failure(TopErrorCode.NONE_HOUSEHOLD_INFO);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);

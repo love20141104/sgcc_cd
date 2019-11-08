@@ -1,11 +1,13 @@
 package com.sgcc.entity.event;
 
 import com.google.common.base.Strings;
+import com.sgcc.constant.SubscribeConstant;
 import com.sgcc.dao.HouseholdInfoDao;
 import com.sgcc.dao.SubscribeDao;
 import com.sgcc.dao.UserDao;
 import com.sgcc.dao.UserHouseholdDao;
 import com.sgcc.repository.HouseholdRepository;
+import com.sgcc.sgccenum.SubscribeCateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,4 +85,16 @@ public class HouseholdEventEntity {
     public void updateUser(String openId,String householdNum,String pwd){
 
     }
+
+    //TODO 更新户号表，设置默认
+    public void setDefaultHouseholdNum(String opneId,String householdNum){
+
+    }
+
+    //TODO 修改订阅信息
+    public void updateSubscribe(String openId, SubscribeCateEnum subscribeCateEnum, boolean isSubscribe){
+        //数据库列名
+        SubscribeConstant.SUBSCRIBE_CATEGORY.get(subscribeCateEnum.name());
+    }
+
 }
