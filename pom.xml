@@ -21,6 +21,7 @@
 
     <modules>
         <module>sgcc</module>
+        <module>management-tool</module>
         <module>dependency-package/exception</module>
         <module>dependency-package/utils</module>
         <module>mq/mq</module>

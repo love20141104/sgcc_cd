@@ -17,6 +17,7 @@
         <module name="exception" />
         <module name="household-management-service" />
         <module name="management-service" />
+        <module name="management-tool" />
         <module name="message-notification-service" />
         <module name="mq-service" />
         <module name="mq_service" />
@@ -48,6 +49,7 @@
       <module name="exception" target="1.8" />
       <module name="household-management-service" target="1.8" />
       <module name="management-service" target="1.8" />
+      <module name="management-tool" target="1.8" />
       <module name="message-notification-service" target="1.8" />
       <module name="mq-service" target="1.8" />
       <module name="mq_service" target="1.8" />
