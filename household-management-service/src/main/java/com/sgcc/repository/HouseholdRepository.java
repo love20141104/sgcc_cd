@@ -1,5 +1,6 @@
 package com.sgcc.repository;
 
+import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.HouseholdInfoDao;
 import com.sgcc.dao.SubscribeDao;
@@ -27,8 +28,8 @@ public class HouseholdRepository {
 
     public Boolean userExceed5(String userOpenId){
         String sql="select count(id) from b_user b left join r_user_household r "
-                + " on b.user_id = r.user_id where user_open_id = "
-                + userOpenId;
+                + " on b.user_id = r.user_id where user_open_id = '"
+                + userOpenId+"'";
         logger.info("selectSQL:"+sql);
         Integer integer = jdbcTemplate.queryForObject(sql, Integer.class);
         if(integer>=5){
@@ -40,8 +41,8 @@ public class HouseholdRepository {
 
     public Boolean householdExceed5(String householdNumber){
         String sql="select count(id) from b_household_info b left join r_user_household r "
-                + " on b.household_id = r.household_id where household_number =  "
-                + householdNumber;
+                + " on b.household_id = r.household_id where household_number =  '"
+                + householdNumber+"'";
         logger.info("selectSQL:"+sql);
         Integer integer = jdbcTemplate.queryForObject(sql, Integer.class);
         if(integer>=5){
@@ -76,7 +77,7 @@ public class HouseholdRepository {
         logger.info("insertSQL:"+sql);
         jdbcTemplate.execute(sql);
     }
-
+//保存SubscribeDao
     public void insertSubscribe(SubscribeDao subscribeDao){
         String sql ="INSERT INTO b_subscribe(sub_id,user_id,sub_bill,sub_pay,sub_arrears,sub_coulometric_analysis,sub_power,is_available) VALUES ('"
                 + subscribeDao.getSubId()+"', '"
@@ -139,55 +140,49 @@ public class HouseholdRepository {
     @Transactional
     public void deleteUserHouseHoldAndHouseholdInfo(String householdNumber,String userOpenId){
         if(!Strings.isNullOrEmpty(householdNumber)&&!Strings.isNullOrEmpty(userOpenId)) {
-            String sql = "delete from b_household_info where household_id =" +
-                    "( select ru.household_id from " +
-                    "(select household_id from b_user bu left  join r_user_household ruh "
-                    + " on bu.user_id=ruh.user_id "
-                    + " and bu.user_open_id='" + userOpenId + "') ru left join b_household_info bhi "
-                    + " on ru.household_id=bhi.household_id "
-                    + " where bhi.household_number='" + householdNumber + "');";
+            String householdId = getHouseholdIdByUserOpenIdAndHouseholdNum(userOpenId, householdNumber);
+            String sql = "delete from b_household_info where household_id ='"+householdId+"'";
+            String userId = getUserIdByUserOpenId(userOpenId);
             logger.info("deleteSQL:" + sql);
             jdbcTemplate.execute(sql);
-            String sql2 = "delete from r_user_household where id =( select ruid from (select id,household_id from b_user bu left  join r_user_household ruh "
-                    + " on bu.user_id=ruh.user_id "
-                    + " and bu.user_open_id='" + userOpenId + "') ru left join b_household_info bhi "
-                    + " on ru.household_id=bhi.household_id "
-                    + " where bhi.household_number='" + householdNumber + "');";
+            String sql2 = "delete from r_user_household where user_id ='"+userId+"' and household_id ='"+householdId+"'";
             logger.info("deleteSQL:" + sql2);
             jdbcTemplate.execute(sql2);
         }
     }
     @Transactional
     public void unavailableUserHouseHold(String userOpenId ,Boolean available){
-        if(Strings.isNullOrEmpty(userOpenId)){
+        if(!Strings.isNullOrEmpty(userOpenId)){
+
+            //通过userOpenId获得用户id
+            String userIdByUserOpenId = getUserIdByUserOpenId(userOpenId);
+            //通过userOpenId获得HouseholdId列表
+            List<String> householdIdByUserOpenId = getHouseholdIdByUserOpenId(userOpenId);
             //作废b_user
-            String sql1="update b_user set ( is_available = "
+            String sql1="update b_user set  is_available = "
                     + available
                     +" where user_open_id = '"
                     +userOpenId+"'";
             logger.info("updateSQL:" + sql1);
             jdbcTemplate.execute(sql1);
             //作废r_user_household
-            String sql2="update r_user_household set ( is_available = "
+            String sql2="update r_user_household set  is_available = "
                     + available
-                    +" where user_id in ( select ruh.user_id user_id "
-                    + " from r_user_household ruh left join b_user bu "
-                    + " on ruh.user_id=bu.user_id and bu.user_open_id ='"
-                    +userOpenId+"')";
+                    +" where user_id = '"
+                    +userIdByUserOpenId+"'";
             logger.info("updateSQL:" + sql2);
             jdbcTemplate.execute(sql2);
-            //作废b_user
-            String sql3="update b_user set ( is_available = "
+            //作废b_household_info
+            String sql3="update b_household_info set  is_available = "
                     + available
-                    +" where user_open_id = '"
-                    +userOpenId+"'";
+                    +" where household_id in ('"+ Utils.joinStrings(householdIdByUserOpenId,"','")+"')";
             logger.info("updateSQL:" + sql3);
             jdbcTemplate.execute(sql3);
-            //作废b_user
-            String sql4="update b_user set ( is_available = "
+            //作废b_subscribe
+            String sql4="update b_subscribe set  is_available = "
                     + available
-                    +" where user_open_id = '"
-                    +userOpenId+"'";
+                    +" where user_id =  '"
+                    +userIdByUserOpenId+"'";
             logger.info("updateSQL:" + sql4);
             jdbcTemplate.execute(sql4);
 
@@ -195,7 +190,7 @@ public class HouseholdRepository {
     }
 
     /**
-     * 获取用户绑定的户号
+     * 获取用户绑定的户号列表
      * @param userOpenId
      * @return
      */
@@ -214,6 +209,22 @@ public class HouseholdRepository {
 
         return jdbcTemplate.query(sql,new HouseholdInfoRowMapper());
     }
+    public HouseholdInfoDao getHouseholdInfo(String userOpenId,String householdNum) {
+
+        String sql = "select hi.household_id household_id" +
+                ",household_householder" +
+                ",household_number" +
+                ",household_address" +
+                ",household_default" +
+                ",household_type" +
+                ",household_password" +
+                ",hi.is_available is_available from b_household_info  hi" +
+                " where household_id = (select hi.household_id household_id from b_household_info hi " +
+                "left join r_user_household r on r.household_id = hi.household_id " +
+                "left join b_user u on u.user_id = r.user_id " +
+                "where u.user_open_id = '"+userOpenId+"' and hi.household_number = '"+householdNum+"')";
+        return jdbcTemplate.queryForObject(sql,new HouseholdInfoRowMapper());
+    }
 
     /**
      * 修改户号密码
@@ -222,14 +233,9 @@ public class HouseholdRepository {
      * @param pwd
      */
     public void updatePwd(String openId, String householdNum, String pwd){
+        String householdId = getHouseholdIdByUserOpenIdAndHouseholdNum(openId, householdNum);
         String sql = "update b_household_info set household_password = '"+pwd+"' " +
-                "where household_id = (" +
-                "select hi.household_id from b_household_info hi " +
-                "left join r_user_household r on r.household_id = hi.household_id " +
-                "left join b_user u on u.user_id = r.user_id " +
-                "where u.user_open_id = '"+openId+"' and hi.household_number = '"+householdNum+"'" +
-                ")";
-
+                "where household_id = '"+householdId +"'";
         jdbcTemplate.execute(sql);
 
     }
@@ -241,23 +247,66 @@ public class HouseholdRepository {
      */
     @Transactional
     public void setDefaultHouseholdNum(String openId, String householdNum){
+
+        //通过userOpenId获得HouseholdId列表
+        List<String> householdIdByUserOpenId = getHouseholdIdByUserOpenId(openId);
+
+        String householdId = getHouseholdIdByUserOpenIdAndHouseholdNum(openId, householdNum);
+
         String sql0 = "update b_household_info set household_default = false " +
-                "where household_id in (" +
-                "select hi.household_id from b_household_info hi " +
-                "left join r_user_household r on r.household_id = hi.household_id " +
-                "left join b_user u on u.user_id = r.user_id " +
-                "where u.user_open_id = '"+openId+"'" +
-                ")";
+                "where household_id in ('"+ Utils.joinStrings(householdIdByUserOpenId,"','")+"')";
 
         String sql = "update b_household_info set household_default = true " +
-                "where household_id = (" +
-                "select hi.household_id from b_household_info hi " +
-                "left join r_user_household r on r.household_id = hi.household_id " +
-                "left join b_user u on u.user_id = r.user_id " +
-                "where u.user_open_id = '"+openId+"' and hi.household_number = '"+householdNum+"'" +
-                ")";
+                "where household_id = '"+householdId+"'";
         jdbcTemplate.execute(sql0);
         jdbcTemplate.execute(sql);
+    }
+
+    /**
+     * 通过userOpenId获得用户id
+     * @param userOpenId
+     * @return userId
+     */
+    public String getUserIdByUserOpenId(String userOpenId){
+        String sql0="  select distinct(ruh.user_id) user_id "
+                + " from r_user_household ruh left join b_user bu "
+                + " on ruh.user_id=bu.user_id where bu.user_open_id ='"
+                +userOpenId+"'";
+        logger.info("selectSQL:" + sql0);
+        return jdbcTemplate.queryForObject(sql0, String.class);
+    }
+    /**
+     * 通过userOpenId获得HouseholdId列表
+     * @param userOpenId
+     * @return HouseholdId
+     */
+    public List<String> getHouseholdIdByUserOpenId(String userOpenId){
+        String sql0= "select distinct(ruh.household_id) household_id "
+                + " from r_user_household ruh left join b_user bu "
+                + " on ruh.user_id=bu.user_id where bu.user_open_id ='"
+                +userOpenId+"'";
+        logger.info("selectSQL:" + sql0);
+        return jdbcTemplate.query(sql0, new RowMapper<String>() {
+            @Override
+            public String mapRow(ResultSet rs, int i) throws SQLException {
+                return rs.getString("household_id");
+            }
+        });
+    }
+
+    /**
+     * 通过userOpenId and HouseholdNum获得HouseholdId
+     * @param userOpenId
+     * @param householdNum
+     * @return
+     */
+    public String getHouseholdIdByUserOpenIdAndHouseholdNum(String userOpenId,String householdNum){
+        String sql0="select hi.household_id from b_household_info hi " +
+                "left join r_user_household r on r.household_id = hi.household_id " +
+                "left join b_user u on u.user_id = r.user_id " +
+                "where u.user_open_id = '"+userOpenId+"' and hi.household_number = '"+householdNum+"'";
+        logger.info("selectSQL:" + sql0);
+        return jdbcTemplate.queryForObject(sql0, String.class);
     }
 
     /**

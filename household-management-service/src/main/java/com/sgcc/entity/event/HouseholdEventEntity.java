@@ -56,6 +56,17 @@ public class HouseholdEventEntity {
 
     //TODO 解绑删除关系表，户号表
     public void deleteUserHouseHoldAndHouseholdInfo(String householdNumber, String userOpenId) {
+
+        //如果解绑的是默认户号并且该用户还有绑定的户号则需要设置一个默认账户
+        HouseholdInfoDao householdInfo = householdRepository.getHouseholdInfo(userOpenId, householdNumber);
+        if(householdInfo.getHouseholdDefault()){
+            List<HouseholdInfoDao> bindList = householdRepository.getBindList(userOpenId);
+            if(null!=bindList&&bindList.size()>0){
+                HouseholdInfoDao householdInfoDao = bindList.get(0);
+                String householdNumber1 = householdInfoDao.getHouseholdNumber();
+                householdRepository.setDefaultHouseholdNum(userOpenId,householdNumber1);
+            }
+        }
         householdRepository.deleteUserHouseHoldAndHouseholdInfo(householdNumber, userOpenId);
     }
 
