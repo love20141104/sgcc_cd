@@ -101,16 +101,10 @@ public class HouseholdRepository {
         logger.info("insertSQL:"+sql);
         jdbcTemplate.execute(sql);
     }
-//保存UserDao
+//通过userOpenId查询UserDao
     public UserDao selectUserByUserOpenId(String userOpenId){
-        String sql="select user_id,user_open_id,user_tel,is_available from b_user  ";
-        StringBuffer sql_where = new StringBuffer();
-        if(!Strings.isNullOrEmpty(userOpenId)){
-            sql_where.append("user_open_id = '").append(userOpenId).append("'  ");
-        }
-        if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql +=" where " + sql_where.toString();
-        }
+        String sql="select user_id,user_open_id,user_tel,is_available from b_user where user_open_id = '"
+                +userOpenId+ " '";
         try {
             UserDao userDao = jdbcTemplate.queryForObject(sql, new UserRowMapper());
             return userDao;
@@ -118,18 +112,12 @@ public class HouseholdRepository {
             return null;
         }
     }
-    //保存b_subscribe
+    //通过userOpenId查询subscribe
     public SubscribeDao selectSubscribeByUserOpenId(String userOpenId){
         String sql="select sub_id,b_subscribe.user_id user_id,sub_bill,sub_pay,sub_arrears"
                 + ",sub_coulometric_analysis,sub_power,b_subscribe.is_available is_available "
-                + "from b_subscribe left join b_user on b_subscribe.user_id=b_user.user_id  ";
-        StringBuffer sql_where = new StringBuffer();
-        if(!Strings.isNullOrEmpty(userOpenId)){
-            sql_where.append("user_open_id = '").append(userOpenId).append("'  ");
-        }
-        if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql +=" where " + sql_where.toString();
-        }
+                + "from b_subscribe left join b_user on b_subscribe.user_id=b_user.user_id  "
+                + "where user_open_id = '"+userOpenId+ " '";
         try {
             return jdbcTemplate.queryForObject(sql, new SubscribeRowMapper());
         }catch (Exception e){
@@ -152,12 +140,11 @@ public class HouseholdRepository {
     }
     @Transactional
     public void unavailableUserHouseHold(String userOpenId ,Boolean available){
-        if(!Strings.isNullOrEmpty(userOpenId)){
-
             //通过userOpenId获得用户id
-            String userIdByUserOpenId = getUserIdByUserOpenId(userOpenId);
+        String userIdByUserOpenId = getUserIdByUserOpenId(userOpenId);
             //通过userOpenId获得HouseholdId列表
-            List<String> householdIdByUserOpenId = getHouseholdIdByUserOpenId(userOpenId);
+        List<String> householdIdByUserOpenId = getHouseholdIdByUserOpenId(userOpenId);
+        if(!Strings.isNullOrEmpty(userIdByUserOpenId)&&null!=householdIdByUserOpenId&&householdIdByUserOpenId.size()>0){
             //作废b_user
             String sql1="update b_user set  is_available = "
                     + available
@@ -234,9 +221,11 @@ public class HouseholdRepository {
      */
     public void updatePwd(String openId, String householdNum, String pwd){
         String householdId = getHouseholdIdByUserOpenIdAndHouseholdNum(openId, householdNum);
-        String sql = "update b_household_info set household_password = '"+pwd+"' " +
-                "where household_id = '"+householdId +"'";
-        jdbcTemplate.execute(sql);
+        if(!Strings.isNullOrEmpty(householdId)) {
+            String sql = "update b_household_info set household_password = '" + pwd + "' " +
+                    "where household_id = '" + householdId + "'";
+            jdbcTemplate.execute(sql);
+        }
 
     }
 
@@ -250,16 +239,16 @@ public class HouseholdRepository {
 
         //通过userOpenId获得HouseholdId列表
         List<String> householdIdByUserOpenId = getHouseholdIdByUserOpenId(openId);
-
         String householdId = getHouseholdIdByUserOpenIdAndHouseholdNum(openId, householdNum);
+        if(null!=householdIdByUserOpenId&&householdIdByUserOpenId.size()>0&&!Strings.isNullOrEmpty(householdId)) {
+            String sql0 = "update b_household_info set household_default = false " +
+                    "where household_id in ('" + Utils.joinStrings(householdIdByUserOpenId, "','") + "')";
 
-        String sql0 = "update b_household_info set household_default = false " +
-                "where household_id in ('"+ Utils.joinStrings(householdIdByUserOpenId,"','")+"')";
-
-        String sql = "update b_household_info set household_default = true " +
-                "where household_id = '"+householdId+"'";
-        jdbcTemplate.execute(sql0);
-        jdbcTemplate.execute(sql);
+            String sql = "update b_household_info set household_default = true " +
+                    "where household_id = '" + householdId + "'";
+            jdbcTemplate.execute(sql0);
+            jdbcTemplate.execute(sql);
+        }
     }
 
     /**
@@ -267,14 +256,15 @@ public class HouseholdRepository {
      * @param userOpenId
      * @return userId
      */
-    public String getUserIdByUserOpenId(String userOpenId){
-        String sql0="  select distinct(ruh.user_id) user_id "
+    public String getUserIdByUserOpenId(String userOpenId) {
+        String sql0 = "  select distinct(ruh.user_id) user_id "
                 + " from r_user_household ruh left join b_user bu "
                 + " on ruh.user_id=bu.user_id where bu.user_open_id ='"
-                +userOpenId+"'";
+                + userOpenId + "'";
         logger.info("selectSQL:" + sql0);
         return jdbcTemplate.queryForObject(sql0, String.class);
     }
+
     /**
      * 通过userOpenId获得HouseholdId列表
      * @param userOpenId
