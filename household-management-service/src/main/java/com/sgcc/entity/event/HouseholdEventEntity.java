@@ -59,6 +59,7 @@ public class HouseholdEventEntity {
 
         //如果解绑的是默认户号并且该用户还有绑定的户号则需要设置一个默认账户
         HouseholdInfoDao householdInfo = householdRepository.getHouseholdInfo(userOpenId, householdNumber);
+        householdRepository.deleteUserHouseHoldAndHouseholdInfo(householdNumber, userOpenId);
         if(householdInfo.getHouseholdDefault()){
             List<HouseholdInfoDao> bindList = householdRepository.getBindList(userOpenId);
             if(null!=bindList&&bindList.size()>0){
@@ -67,7 +68,6 @@ public class HouseholdEventEntity {
                 householdRepository.setDefaultHouseholdNum(userOpenId,householdNumber1);
             }
         }
-        householdRepository.deleteUserHouseHoldAndHouseholdInfo(householdNumber, userOpenId);
     }
 
     //TODO 4张表中数据作废
@@ -92,10 +92,13 @@ public class HouseholdEventEntity {
 
     //TODO 修改订阅信息
     public void updateSubscribe(String openId, SubscribeCateEnum subscribeCateEnum, boolean isSubscribe) {
+
+        String columnName = SubscribeConstant.SUBSCRIBE_CATEGORY.get(subscribeCateEnum.name());
+
         householdRepository.updateSubscribe(
                 openId
                 //数据库列名
-                ,SubscribeConstant.SUBSCRIBE_CATEGORY.get(subscribeCateEnum.name())
+                ,columnName
                 ,isSubscribe
         );
     }
