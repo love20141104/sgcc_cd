@@ -98,7 +98,7 @@ public class HouseholdEventEntity {
         householdRepository.updateSubscribe(
                 openId
                 //数据库列名
-                ,columnName
+                ,subscribeCateEnum.name()
                 ,isSubscribe
         );
     }
