@@ -221,7 +221,7 @@ public class UserController {
      */
     @ApiOperation(value = "后台根据用户是否可用isAvailable查询用户和消息订阅状态", notes = "")
     @PutMapping(value = "/open-id/userisAvailable")
-    public Result updateSubscribe(boolean isAvailable) {
+    public Result updateSubscribe(@RequestParam boolean isAvailable) {
         return householdService.getUserSubscribeList(isAvailable);
     }
 

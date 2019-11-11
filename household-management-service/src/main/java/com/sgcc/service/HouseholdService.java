@@ -4,6 +4,7 @@ package com.sgcc.service;
 import com.example.result.Result;
 import com.sgcc.dao.HouseholdInfoDao;
 import com.sgcc.dao.SubscribeDao;
+import com.sgcc.dao.UserSubscribeDao;
 import com.sgcc.dto.HouseholdInfoDTO_interface;
 import com.sgcc.dto.SubscribeInfoDTO;
 import com.sgcc.entity.event.HouseholdEventEntity;
@@ -11,6 +12,7 @@ import com.sgcc.entity.query.HouseholdQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.HouseholdModel;
 import com.sgcc.model.SubscribeModel;
+import com.sgcc.model.UserSubscribeModel;
 import com.sgcc.sgccenum.SubscribeCateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -233,7 +235,9 @@ public class HouseholdService {
      * @return
      */
     public Result getUserSubscribeList(Boolean isAvailable){
-        return Result.success(householdQueryEntity.getUserSubscribeList(isAvailable));
+        List<UserSubscribeDao> userSubscribeList = householdQueryEntity.getUserSubscribeList(isAvailable);
+        UserSubscribeModel userSubscribeModel = new UserSubscribeModel(userSubscribeList);
+        return Result.success(userSubscribeModel.getUserSubscribeDTOList());
     }
 
 }
