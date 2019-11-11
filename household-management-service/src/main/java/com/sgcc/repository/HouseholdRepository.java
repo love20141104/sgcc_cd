@@ -2,10 +2,7 @@ package com.sgcc.repository;
 
 import com.example.Utils;
 import com.google.common.base.Strings;
-import com.sgcc.dao.HouseholdInfoDao;
-import com.sgcc.dao.SubscribeDao;
-import com.sgcc.dao.UserDao;
-import com.sgcc.dao.UserHouseholdDao;
+import com.sgcc.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -319,6 +316,23 @@ public class HouseholdRepository {
         jdbcTemplate.execute(sql);
     }
 
+
+    public List<UserSubscribeDao> getUserSubscribeList(Boolean isAvailable) {
+
+        String sql="select b_user.user_id user_id,user_open_id,user_tel,sub_id,sub_bill,sub_pay,sub_arrears"
+                + ",sub_coulometric_analysis,sub_power,b_user.is_available is_available "
+                + "from b_subscribe left join b_user on b_subscribe.user_id=b_user.user_id  ";
+        if (null!=isAvailable){
+            String wheresql=" where b_user.is_available = "+isAvailable;
+            sql+=wheresql;
+        }
+        try {
+            return jdbcTemplate.query(sql, new UserSubscribeRowMapper());
+        }catch (Exception e){
+            return null;
+        }
+    }
+
     class HouseholdInfoRowMapper implements RowMapper<HouseholdInfoDao> {
         @Override
         public HouseholdInfoDao mapRow(ResultSet rs, int i) throws SQLException {
@@ -352,6 +366,24 @@ public class HouseholdRepository {
             return new SubscribeDao(
                     rs.getString("sub_id"),
                     rs.getString("user_id"),
+                    rs.getBoolean("sub_bill"),
+                    rs.getBoolean("sub_pay"),
+                    rs.getBoolean("sub_arrears"),
+                    rs.getBoolean("sub_coulometric_analysis"),
+                    rs.getBoolean("sub_power"),
+                    rs.getBoolean("is_available")
+            );
+        }
+    }
+    class UserSubscribeRowMapper implements RowMapper<UserSubscribeDao> {
+        @Override
+        public UserSubscribeDao mapRow(ResultSet rs, int i) throws SQLException {
+            return new UserSubscribeDao(
+                    rs.getString("user_id"),
+                    rs.getString("user_open_id"),
+                    rs.getString("user_tel"),
+                    rs.getString("sub_id"),
+
                     rs.getBoolean("sub_bill"),
                     rs.getBoolean("sub_pay"),
                     rs.getBoolean("sub_arrears"),

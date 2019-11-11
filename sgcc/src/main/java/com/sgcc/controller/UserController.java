@@ -216,6 +216,14 @@ public class UserController {
             , @RequestParam boolean isSubscribe) {
         return householdService.updateSubscribe(openId,subscribeCateEnum,isSubscribe);
     }
+    /**
+     * 后台查询用户和消息订阅状态
+     */
+    @ApiOperation(value = "后台根据用户是否可用isAvailable查询用户和消息订阅状态", notes = "")
+    @PutMapping(value = "/open-id/userisAvailable")
+    public Result updateSubscribe(boolean isAvailable) {
+        return householdService.getUserSubscribeList(isAvailable);
+    }
 
 //    @ApiOperation(value = "新增居民增容订单", notes = "")
 //    @PostMapping(value = "/increaseCapacity/order/{openId}")

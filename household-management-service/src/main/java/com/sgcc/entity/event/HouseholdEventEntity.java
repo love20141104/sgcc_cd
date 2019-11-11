@@ -38,10 +38,8 @@ public class HouseholdEventEntity {
         if (null == userDao) {
             userDao = new UserDao(UUID.randomUUID().toString(), userOpenId, null, true);
             householdRepository.insertUser(userDao);
-        }
-        SubscribeDao subscribeDao = householdRepository.selectSubscribeByUserOpenId(userOpenId);
-        if(null == subscribeDao){
-            subscribeDao = new SubscribeDao(UUID.randomUUID().toString(), userDao.getUserId());
+
+            SubscribeDao subscribeDao = new SubscribeDao(UUID.randomUUID().toString(), userDao.getUserId());
             householdRepository.insertSubscribe(subscribeDao);
         }
         List<HouseholdInfoDao> householdInfoDaos = householdQueryEntity.getBindList(userOpenId);
@@ -102,5 +100,6 @@ public class HouseholdEventEntity {
                 ,isSubscribe
         );
     }
+
 
 }

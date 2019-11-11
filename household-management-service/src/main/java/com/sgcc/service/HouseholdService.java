@@ -25,9 +25,12 @@ public class HouseholdService {
     @Autowired
     private HouseholdQueryEntity householdQueryEntity;
 
-    /**
+/*
+*
      * 用户绑定户号
-     */
+
+*/
+
     public Result bindHousehold(String openId, String householdNum,String pwd) {
         //判断该户号是否绑定过
         if(null!=householdQueryEntity.getHouseholdInfoByOpenIdAndHouseholdNum(openId,householdNum)){
@@ -68,9 +71,12 @@ public class HouseholdService {
         }
     }
 
-    /**
+/*
+*
      * 用户解邦户号
-     */
+
+*/
+
     public Result removeBind(String openId, String householdNum) {
 
         try{
@@ -82,10 +88,13 @@ public class HouseholdService {
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
+/*
 
-    /**
+*
      * 用户获取绑定户号列表
-     */
+
+*/
+
     public Result getBindList(String openId){
         try{
             // 获取用户绑定的户号
@@ -101,9 +110,10 @@ public class HouseholdService {
         }
     }
 
-    /**
+/**
      * 设置默认户号
      */
+
     public Result setDefaultHouseholdNum(String opneId,String householdNum){
         try{
             // 更新户号表，设置默认
@@ -115,9 +125,12 @@ public class HouseholdService {
         }
     }
 
-    /**
+/*
+*
      * 用户取消关注
-     */
+
+*/
+
     public Result cancelFocusWechat(String openId){
 
         try{
@@ -129,9 +142,10 @@ public class HouseholdService {
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
-    /**
+/**
      * 用户关注公众号
      */
+
     public Result focusWechat(String openId){
         try{
             // 若表中有该用户的作废数据则恢复4张表中数据
@@ -142,10 +156,13 @@ public class HouseholdService {
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
+/*
 
-    /**
+*
      * 数据库中记录的密码失效时，提示用户输入新密码修改密码
-     */
+
+*/
+
     public Result changePWD(String openId,String householdNum,String pwd){
         //TODO 调用接口验证新密码是否正确
         if(true){
@@ -161,9 +178,12 @@ public class HouseholdService {
             return Result.failure(TopErrorCode.HOUSEHOLD_PWD_ERR);
         }
     }
-    /**
+/*
+*
      * 查询用户消息订阅状态
-     */
+
+*/
+
     public Result getSubscribeInfo(String openId){
         // 判断该用户是否在b_user表中以及该用户在订阅信息表中是否有记录
         if(householdQueryEntity.userIsExist(openId)){
@@ -184,9 +204,12 @@ public class HouseholdService {
         }
     }
 
-    /**
+/*
+*
      * 用户修改消息订阅状态
-     */
+
+*/
+
 
     public Result updateSubscribe(String openId, SubscribeCateEnum subscribeCateEnum, boolean isSubscribe){
         try{
@@ -204,7 +227,13 @@ public class HouseholdService {
         }
     }
 
-
-
+    /**
+     * 查询UserSubscribe
+     * @param isAvailable
+     * @return
+     */
+    public Result getUserSubscribeList(Boolean isAvailable){
+        return Result.success(householdQueryEntity.getUserSubscribeList(isAvailable));
+    }
 
 }

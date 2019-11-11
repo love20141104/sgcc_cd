@@ -3,6 +3,7 @@ package com.sgcc.entity.query;
 import com.sgcc.dao.HouseholdInfoDao;
 import com.sgcc.dao.SubscribeDao;
 import com.sgcc.dao.UserDao;
+import com.sgcc.dao.UserSubscribeDao;
 import com.sgcc.dto.SubscribeInfoDTO;
 import com.sgcc.repository.HouseholdRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,24 +53,14 @@ public class HouseholdQueryEntity {
         }else {
             return false;
         }
-
     }
-
-    /**
-     * 获取该用户的订阅信息并返回
-     */
+    public String getHouseholdInfoByOpenIdAndHouseholdNum(String openId,String householdNum){
+       return householdRepository.getHouseholdIdByUserOpenIdAndHouseholdNum(openId,householdNum);
+    }
     public SubscribeDao getSubscribeInfo(String openId){
         return householdRepository.selectSubscribeByUserOpenId(openId);
     }
-
-    /**
-     * 通过openId and HouseholdNum获得HouseholdInfoDao
-     * @param openId
-     * @param HouseholdNum
-     * @return
-     */
-    public HouseholdInfoDao getHouseholdInfoByOpenIdAndHouseholdNum(String openId,String HouseholdNum){
-        return householdRepository.getHouseholdInfo(openId,HouseholdNum);
+    public List<UserSubscribeDao> getUserSubscribeList(Boolean isAvailable){
+        return householdRepository.getUserSubscribeList(isAvailable);
     }
-
 }
