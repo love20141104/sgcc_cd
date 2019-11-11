@@ -62,4 +62,14 @@ public class HouseholdQueryEntity {
         return householdRepository.selectSubscribeByUserOpenId(openId);
     }
 
+    /**
+     * 通过openId and HouseholdNum获得HouseholdInfoDao
+     * @param openId
+     * @param HouseholdNum
+     * @return
+     */
+    public HouseholdInfoDao getHouseholdInfoByOpenIdAndHouseholdNum(String openId,String HouseholdNum){
+        return householdRepository.getHouseholdInfo(openId,HouseholdNum);
+    }
+
 }

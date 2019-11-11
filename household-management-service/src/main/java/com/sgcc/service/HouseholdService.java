@@ -29,6 +29,10 @@ public class HouseholdService {
      * 用户绑定户号
      */
     public Result bindHousehold(String openId, String householdNum,String pwd) {
+        //判断该户号是否绑定过
+        if(null!=householdQueryEntity.getHouseholdInfoByOpenIdAndHouseholdNum(openId,householdNum)){
+            return Result.failure(TopErrorCode.HOUSEHOLD_BIND_REPEAT);
+        }
         // 判断该用户绑定户号数量是否超过5个
             if(householdQueryEntity.userExceed5(openId)){
             return Result.failure(TopErrorCode.HOUSEHOLD_BIND_NUM_EXCEED);

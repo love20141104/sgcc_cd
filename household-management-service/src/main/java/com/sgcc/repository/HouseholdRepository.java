@@ -28,7 +28,7 @@ public class HouseholdRepository {
 
     public Boolean userExceed5(String userOpenId){
         String sql="select count(id) from b_user b left join r_user_household r "
-                + " on b.user_id = r.user_id where user_open_id = '"
+                + " on b.user_id = r.user_id where  user_open_id = '"
                 + userOpenId+"'";
         logger.info("selectSQL:"+sql);
         Integer integer = jdbcTemplate.queryForObject(sql, Integer.class);
@@ -103,7 +103,7 @@ public class HouseholdRepository {
     }
 //通过userOpenId查询UserDao
     public UserDao selectUserByUserOpenId(String userOpenId){
-        String sql="select user_id,user_open_id,user_tel,is_available from b_user where user_open_id = '"
+        String sql="select user_id,user_open_id,user_tel,is_available from b_user where  user_open_id = '"
                 +userOpenId+ " '";
         try {
             UserDao userDao = jdbcTemplate.queryForObject(sql, new UserRowMapper());
