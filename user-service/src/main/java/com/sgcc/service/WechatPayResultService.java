@@ -19,6 +19,9 @@ import java.util.List;
 public class WechatPayResultService {
 
     @Autowired
+    private WeChatService weChatService;
+
+    @Autowired
     private PayResultEntity payResultEntity;
 
     /**
@@ -114,6 +117,8 @@ public class WechatPayResultService {
             userModel.insertTransform();
             int count = payResultEntity.insertPayResult(userModel.getPayResultDao());
             if (count > 0){
+                weChatService.sendRechargeSuccessTempMsg(userModel.getPayResultDao().getOpenId(),userModel.getPayResultDao().getUserNo(),userModel.getPayResultDao().getMoney());
+
                 return Result.success("新增支付结果成功！");
             }else {
                 return Result.failure(TopErrorCode.SAVE_OBJ_ERR);
