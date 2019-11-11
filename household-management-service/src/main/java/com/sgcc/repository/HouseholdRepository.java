@@ -262,9 +262,9 @@ public class HouseholdRepository {
      * @return userId
      */
     public String getUserIdByUserOpenId(String userOpenId) {
-        String sql0 = "  select distinct(ruh.user_id) user_id "
-                + " from r_user_household ruh left join b_user bu "
-                + " on ruh.user_id=bu.user_id where bu.user_open_id ='"
+        String sql0 = "  select  user_id "
+                + " from  b_user bu "
+                + "  where bu.user_open_id ='"
                 + userOpenId + "'";
         logger.info("selectSQL:" + sql0);
         return jdbcTemplate.queryForObject(sql0, String.class);
