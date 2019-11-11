@@ -8,13 +8,11 @@ import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.service.WeChatService;
 import com.sgcc.wxpay.Sgcc_WXPay;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -135,6 +133,23 @@ public class WeChatController {
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR,e);
+        }
+    }
+
+
+
+    /**
+     * 新增临时素材
+     * @return
+     */
+    @ApiOperation(value = "uploadTemporaryMaterial", notes = "")
+    @PostMapping(value = "/uploadTemporaryMaterial",headers = "content-type=multipart/form-data")
+    public Result uploadTemporaryMaterial(@ApiParam(required = true) MultipartFile file){
+        try {
+            return weChatService.uploadTemporaryMaterial(file);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
 

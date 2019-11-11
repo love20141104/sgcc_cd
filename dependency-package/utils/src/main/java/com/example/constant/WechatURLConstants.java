@@ -23,6 +23,8 @@ public class WechatURLConstants {
 
     public static final  String SEND_MESSAGE_TEMPLATE = BASE+"/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
 
+    public static final String UPLOAD_TEMPORARY_MATERIAL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE";
+
     //public static final  String mch_id = "1550585661";      // 电享+
     public static final  String mch_id = "1555016091";    // 索思科得
     public static final  String APPKEY = "SSCDGDabcdefghijklmnopqrstuvwxyz";

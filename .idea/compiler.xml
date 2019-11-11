@@ -80,7 +80,9 @@
       <module name="domain-model" options="-parameters" />
       <module name="dto-model" options="-parameters" />
       <module name="exception" options="-parameters" />
+      <module name="household-management-service" options="-parameters" />
       <module name="management-service" options="-parameters" />
+      <module name="management-tool" options="-parameters" />
       <module name="message-notification-service" options="-parameters" />
       <module name="mq-service" options="-parameters" />
       <module name="notice-service" options="-parameters" />

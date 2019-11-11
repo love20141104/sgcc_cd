@@ -18,7 +18,6 @@ import com.sgcc.entity.query.InhabitantQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -32,14 +31,11 @@ public class UserService {
     @Autowired
     private InhabitantEventEntity inhabitantEventEntity;
 
-
     @Autowired
     private CommerceQueryEntity commerceQueryEntity;
 
     @Autowired
     private CommerceEventEntity commerceEventEntity;
-
-
 
     /**********************************************居民*********************************************/
 
@@ -224,7 +220,12 @@ public class UserService {
     }
 
 
-
+    /**
+     * 查询账单
+     * @param userNo
+     * @param date
+     * @return
+     */
     public Result queryBillInfoById(String userNo,long date){
         if (Strings.isNullOrEmpty(userNo))
             return Result.failure(TopErrorCode.NO_DATAS);
@@ -293,5 +294,6 @@ public class UserService {
             throw new RuntimeException("查询月度账单失败!");
         }
     }
+
 
 }

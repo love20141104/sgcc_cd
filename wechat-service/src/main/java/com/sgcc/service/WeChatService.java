@@ -14,6 +14,7 @@ import com.sgcc.wxpay.Sgcc_WXPay;
 import com.sgcc.wxpay.sdk.WXPayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -57,6 +58,16 @@ public class WeChatService {
     public Result getMaterial(String type,int offset,int count){
         return Result.success(weChatEntity.getMaterial(type,offset,count));
     }
+
+
+    /**
+     * 新增图文素材
+     */
+    public Result uploadTemporaryMaterial(MultipartFile file){
+        return Result.success(weChatEntity.uploadTemporaryMaterial("image",file));
+    }
+
+
 
     /**
      *

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -62,8 +63,16 @@ public class ChartRepository {
         String sql = "select COUNT(id) AS total,DATE_FORMAT(pay_date ,'%Y-%m-%d') as pay_date "
                 +"from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date) "
                 +"group by DATE_FORMAT(pay_date ,'%Y-%m-%d') ORDER BY DATE_FORMAT(pay_date ,'%Y-%m-%d') asc";
-
-        return jdbcTemplate.query(sql,new PaymentTimesChartRowMapper());
+        List<PaymentTimesDTO> paymentTimesDTOS = jdbcTemplate.query(sql,new PaymentTimesChartRowMapper());
+        String date = Utils.GetTimeForYMD(new Date());
+        PaymentTimesDTO paymentTimesDTO= null;
+        if (paymentTimesDTOS.contains(date)){
+            return paymentTimesDTOS;
+        }else {
+            paymentTimesDTO = new PaymentTimesDTO(0,date);
+            paymentTimesDTOS.add(paymentTimesDTOS.size(),paymentTimesDTO);
+            return paymentTimesDTOS;
+        }
     }
 
     class PaymentTimesChartAllRowMapper implements RowMapper<PaymentTimesDTO>{

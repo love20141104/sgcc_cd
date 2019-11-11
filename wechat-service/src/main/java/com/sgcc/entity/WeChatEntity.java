@@ -1,29 +1,24 @@
 package com.sgcc.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.constant.CommonConstants;
 import com.example.constant.WechatURLConstants;
 import com.sgcc.dto.GetMaterialDTO;
 import com.sgcc.dto.MaterialsDTO;
-import com.sgcc.dtomodel.wechat.TempMessageDTO;
-import com.sgcc.dtomodel.wechat.template.TemplateData;
+import com.sgcc.dtomodel.wechat.*;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
 import com.sgcc.wechat.SignatureModel;
 import com.sgcc.dao.AccessTokenDao;
 import com.sgcc.dao.JSApiTicketDao;
-import com.sgcc.dtomodel.wechat.AccessTokenDTO;
-import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
-import com.sgcc.dtomodel.wechat.WXConfigDTO;
 import com.sgcc.entity.event.AccessTokenEntity;
 import com.sgcc.entity.query.AccessTokenQueryEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
+import java.io.File;
 
 @Component
 public class WeChatEntity {
@@ -145,6 +140,51 @@ public class WeChatEntity {
 
         }
 
-
     }
+
+
+
+    /**
+     * 新增临时素材
+     * @return
+     * @throws Exception
+     */
+    public TemporaryMaterialsViewDTO uploadTemporaryMaterial(String type, MultipartFile media) {
+        String URL = WechatURLConstants.UPLOAD_TEMPORARY_MATERIAL.replace("ACCESS_TOKEN",getAccessToken().getAccess_token());
+
+        TemporaryMaterialsSubmitDTO dto = new TemporaryMaterialsSubmitDTO(
+                getAccessToken().getAccess_token(),
+                type,
+                media
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<TemporaryMaterialsSubmitDTO> requestEntity = new HttpEntity<>(dto, headers);
+        TemporaryMaterialsViewDTO temporaryMaterialsViewDTO = restTemplate.
+                postForObject(URL, requestEntity, TemporaryMaterialsViewDTO.class);
+        if (temporaryMaterialsViewDTO == null || temporaryMaterialsViewDTO.getErrcode()!=0){
+            try {
+                throw new Exception("上传临时素材失败，"+temporaryMaterialsViewDTO.getErrmsg());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return temporaryMaterialsViewDTO;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
