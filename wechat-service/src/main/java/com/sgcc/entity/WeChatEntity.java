@@ -132,7 +132,8 @@ public class WeChatEntity {
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<GetMaterialDTO> requestEntity = new HttpEntity<>(getMaterialDTO, requestHeaders);
         try{
-            MaterialsDTO materialsDTO = restTemplate.postForObject(WechatURLConstants.GETACCESSTOKEN,requestEntity,MaterialsDTO.class);
+            String URL = WechatURLConstants.URL_GET_MEDIA_LIST.replace("ACCESS_TOKEN",getAccessToken().getAccess_token());
+            MaterialsDTO materialsDTO = restTemplate.postForObject(URL,requestEntity,MaterialsDTO.class);
             return materialsDTO;
         }catch (Exception e){
             String s = restTemplate.postForObject(WechatURLConstants.GETACCESSTOKEN,requestEntity,String.class);
