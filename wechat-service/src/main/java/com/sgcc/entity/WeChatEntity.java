@@ -2,6 +2,8 @@ package com.sgcc.entity;
 
 import com.example.constant.CommonConstants;
 import com.example.constant.WechatURLConstants;
+import com.sgcc.dto.GetMaterialDTO;
+import com.sgcc.dto.MaterialsDTO;
 import com.sgcc.dtomodel.wechat.TempMessageDTO;
 import com.sgcc.dtomodel.wechat.template.TemplateData;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
@@ -122,6 +124,27 @@ public class WeChatEntity {
     }
 
 
+    /**
+     * 获取素材列表
+     * @param type
+     * @param offset
+     * @param count
+     * @return
+     */
+    public Object getMaterial(String type,int offset,int count) {
+        GetMaterialDTO getMaterialDTO = new GetMaterialDTO(type,offset,count);
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<GetMaterialDTO> requestEntity = new HttpEntity<>(getMaterialDTO, requestHeaders);
+        try{
+            MaterialsDTO materialsDTO = restTemplate.postForObject(WechatURLConstants.GETACCESSTOKEN,requestEntity,MaterialsDTO.class);
+            return materialsDTO;
+        }catch (Exception e){
+            String s = restTemplate.postForObject(WechatURLConstants.GETACCESSTOKEN,requestEntity,String.class);
+            return "\"String\":{" +s + "}";
+
+        }
 
 
+    }
 }

@@ -124,6 +124,21 @@ public class WeChatController {
         }
     }
 
+    /**
+     * 获取图文素材
+     */
+    @ApiOperation(value = "Materials", notes = "获取素材")
+    @PostMapping(value = "/Materials")
+    public Result getMaterial(@RequestParam String type,@RequestParam int offset,@RequestParam int count){
+        try {
+            return weChatService.getMaterial(type,offset,count);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR,e);
+        }
+    }
+
+
 
 
 }

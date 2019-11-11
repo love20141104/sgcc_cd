@@ -52,6 +52,13 @@ public class WeChatService {
     }
 
     /**
+     * 获取图文素材
+     */
+    public Result getMaterial(String type,int offset,int count){
+        return Result.success(weChatEntity.getMaterial(type,offset,count));
+    }
+
+    /**
      *
      * @param openId
      * @param totalFee
