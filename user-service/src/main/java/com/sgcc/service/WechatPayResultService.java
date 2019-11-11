@@ -6,6 +6,7 @@ import com.sgcc.dao.PayResultDao;
 import com.sgcc.dto.PayQueryDTO;
 import com.sgcc.dto.PayQueryStatisticsDTO;
 import com.sgcc.dto.PayResultSubmitDTO;
+import com.sgcc.dto.SubscribeInfoDTO;
 import com.sgcc.entity.query.PayResultEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.UserModel;
@@ -20,6 +21,8 @@ public class WechatPayResultService {
 
     @Autowired
     private WeChatService weChatService;
+    @Autowired
+    private HouseholdService householdService;
 
     @Autowired
     private PayResultEntity payResultEntity;
@@ -117,8 +120,13 @@ public class WechatPayResultService {
             userModel.insertTransform();
             int count = payResultEntity.insertPayResult(userModel.getPayResultDao());
             if (count > 0){
-                weChatService.sendRechargeSuccessTempMsg(userModel.getPayResultDao().getOpenId(),userModel.getPayResultDao().getUserNo(),userModel.getPayResultDao().getMoney());
-
+                Result result = householdService.getSubscribeInfo(userModel.getPayResultDao().getOpenId());
+                if(null != result.getData()){
+                    SubscribeInfoDTO subscribeInfoDTO = (SubscribeInfoDTO)result.getData();
+                    if(subscribeInfoDTO == null || subscribeInfoDTO.getSubPay()){
+                        weChatService.sendRechargeSuccessTempMsg(userModel.getPayResultDao().getOpenId(),userModel.getPayResultDao().getUserNo(),userModel.getPayResultDao().getMoney());
+                    }
+                }
                 return Result.success("新增支付结果成功！");
             }else {
                 return Result.failure(TopErrorCode.SAVE_OBJ_ERR);
