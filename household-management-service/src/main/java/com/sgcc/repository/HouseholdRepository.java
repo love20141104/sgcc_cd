@@ -210,7 +210,12 @@ public class HouseholdRepository {
                 "left join r_user_household r on r.household_id = hi.household_id " +
                 "left join b_user u on u.user_id = r.user_id " +
                 "where u.user_open_id = '"+userOpenId+"' and hi.household_number = '"+householdNum+"')";
-        return jdbcTemplate.queryForObject(sql,new HouseholdInfoRowMapper());
+        try {
+            return jdbcTemplate.queryForObject(sql, new HouseholdInfoRowMapper());
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     /**
