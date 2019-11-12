@@ -30,7 +30,9 @@ public enum TopErrorCode {
     USER_BIND_NUM_EXCEED(20002,"该户号已被超过5个用户绑定，无法被绑定"),
     HOUSEHOLD_PWD_ERR(20003,"户号密码错误"),
     NONE_HOUSEHOLD_INFO(20004,"请先绑定户号"),
-    HOUSEHOLD_BIND_REPEAT(20005,"用户已绑定该户号，无法绑定");
+    HOUSEHOLD_BIND_REPEAT(20005,"用户已绑定该户号，无法绑定"),
+    DECRYPTION_FAILED(20006,"解密失败"),
+    HOUSEHOLD_NUM_ERR(20007,"户号长度错误");
 
     //错误码
     private Integer errcode;

@@ -40,7 +40,18 @@ public class HouseholdService {
 */
 
     public Result bindHousehold(String openId, String householdNum,String pwd) {
-        //判断该户号是否绑定过
+        //todo 解密householdNum和pwd
+        try {
+            householdNum=DesUtil.decrypt(householdNum);
+            pwd=DesUtil.decrypt(pwd);
+        }catch (Exception e){
+            return Result.failure(TopErrorCode.DECRYPTION_FAILED);
+        }
+        if(householdNum.length()!=10){
+            return Result.failure(TopErrorCode.HOUSEHOLD_NUM_ERR);
+        }
+
+        //判断该户号是否被该用户绑定过
         if(null!=householdQueryEntity.getHouseholdInfoByOpenIdAndHouseholdNum(openId,householdNum)){
             return Result.failure(TopErrorCode.HOUSEHOLD_BIND_REPEAT);
         }
