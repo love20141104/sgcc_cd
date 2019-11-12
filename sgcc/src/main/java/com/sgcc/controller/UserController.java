@@ -240,6 +240,20 @@ public class UserController {
         return householdService.getNoBindList(openId);
     }
 
+    //todo 测试加密
+    @ApiOperation(value = "测试加密", notes = "")
+    @GetMapping(value = "/open-id/encrypt/{pwd}")
+    public String getEncrypt(@PathVariable String pwd) {
+        return householdService.encrypt(pwd);
+    }
+    //todo 测试解密
+    @ApiOperation(value = "测试加密", notes = "")
+    @GetMapping(value = "/open-id/decrypt/{pwd}")
+    public String getDecryptt(@PathVariable String pwd) {
+        return householdService.decrypt(pwd);
+    }
+
+
 
 
 //    @ApiOperation(value = "新增居民增容订单", notes = "")
