@@ -4,10 +4,7 @@ import com.example.Utils;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
 import com.sgcc.dao.PayResultDao;
-import com.sgcc.dto.PayQueryStatisticsDTO;
-import com.sgcc.dto.PayResultSubmitDTO;
-import com.sgcc.dto.PayResultViewDTO;
-import com.sgcc.dto.PayStatisticsDTO;
+import com.sgcc.dto.*;
 import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
 import com.sgcc.dto.commerce.CommerceInfoCorrectQueryDTO;
 import com.sgcc.dto.commerce.CommerceInfoCorrectSubmitDTO;
@@ -288,6 +285,27 @@ public class UserModel {
             ));
         });
     }
+
+
+    public PayResultViewsDTO findRecentlyTransform(double total){
+        this.payResultDaos.forEach(payResultDao->{
+            this.payResultViewDTOS.add(new PayResultViewDTO(
+                    payResultDao.getPayId(),
+                    payResultDao.getOrderNo(),
+                    payResultDao.getUserNo(),
+                    payResultDao.getOpenId(),
+                    payResultDao.getMoney(),
+                    payResultDao.getPaymentChannel(),
+                    Utils.GetTime(payResultDao.getOrderSubmitTime())
+            ));
+        });
+
+        PayResultViewsDTO payResultViewsDTO = new PayResultViewsDTO();
+        payResultViewsDTO.setTotal(total);
+        payResultViewsDTO.setPayResultViewDTOS(this.payResultViewDTOS);
+        return payResultViewsDTO;
+    }
+
 
 
 

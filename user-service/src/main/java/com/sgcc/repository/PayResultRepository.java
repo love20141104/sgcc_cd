@@ -3,6 +3,7 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.sgcc.dao.PayResultDao;
 import com.sgcc.dto.PayQueryStatisticsDTO;
+import com.sgcc.dto.PayResultViewsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,6 +18,26 @@ public class PayResultRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+
+    /**
+     * 查询最近一次缴费记录
+     * @param openId
+     * @return
+     */
+    public PayResultViewsDTO findMoneyByRecently(String openId){
+        String sql = "select pay_totalFee from b_pay_info where pay_household_number in("
+                +"select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
+                +" where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id='"+openId+"')"
+                +"and pay_date in (select max(pay_date) from b_pay_info where pay_household_number in("
+                +"select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
+                +" where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id='"+openId+"'));";
+
+        return jdbcTemplate.queryForObject(sql,new findMoneyByRecentlyRowMapper());
+    }
+
+
+
 
     /**
      * 新增支付结果信息
@@ -43,6 +64,8 @@ public class PayResultRepository {
 
         return jdbcTemplate.query(sql,new PayResultRowMapper());
     }
+
+
 
     /**
      * 根据当前时间查询最近30天缴费结果
@@ -104,6 +127,18 @@ public class PayResultRepository {
             return new PayQueryStatisticsDTO(
                     rs.getInt("count"),
                     rs.getDouble("pay_totalFee")
+            );
+        }
+    }
+
+
+    class findMoneyByRecentlyRowMapper implements RowMapper<PayResultViewsDTO>{
+
+        @Override
+        public PayResultViewsDTO mapRow(ResultSet rs, int i) throws SQLException {
+            return new PayResultViewsDTO(
+                    rs.getDouble("pay_totalFee"),
+                    null
             );
         }
     }

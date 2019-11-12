@@ -3,10 +3,7 @@ package com.sgcc.service;
 import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.PayResultDao;
-import com.sgcc.dto.PayQueryDTO;
-import com.sgcc.dto.PayQueryStatisticsDTO;
-import com.sgcc.dto.PayResultSubmitDTO;
-import com.sgcc.dto.SubscribeInfoDTO;
+import com.sgcc.dto.*;
 import com.sgcc.entity.query.PayResultEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.UserModel;
@@ -104,6 +101,33 @@ public class WechatPayResultService {
 
 
     }
+
+
+    public Result findRecentlyTransform(String openId){
+
+        if (Strings.isNullOrEmpty(openId))
+            return Result.failure("openId为空");
+
+        try {
+            List<PayResultDao> payResultDaos = payResultEntity.findPayResult();
+            PayResultViewsDTO payResultViewsDTO = payResultEntity.findMoneyByRecently(openId);
+            UserModel userModel = new UserModel(payResultDaos);
+
+            if (userModel.findRecentlyTransform(payResultViewsDTO.getTotal()) != null){
+                return Result.success(userModel.findRecentlyTransform(payResultViewsDTO.getTotal()));
+            }else {
+                return Result.failure(TopErrorCode.NO_DATAS);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+
+    }
+
+
 
     /**
      * 新增缴费成功结果

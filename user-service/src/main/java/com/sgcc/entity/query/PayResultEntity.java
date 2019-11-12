@@ -2,6 +2,7 @@ package com.sgcc.entity.query;
 
 import com.sgcc.dao.PayResultDao;
 import com.sgcc.dto.PayQueryStatisticsDTO;
+import com.sgcc.dto.PayResultViewsDTO;
 import com.sgcc.repository.PayResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,10 @@ public class PayResultEntity {
         return payResultRepository.findPayResult();
     }
 
+    public PayResultViewsDTO findMoneyByRecently(String openId){
+        return payResultRepository.findMoneyByRecently(openId);
+    }
+    
 
     public PayQueryStatisticsDTO findPayResultByMonth(String date){
         return payResultRepository.findPayResultByMonth(date);
