@@ -22,6 +22,8 @@ public class HouseholdRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+
+
     /**
      * 查询缴费记录中其他非绑定用户户号
      * @param openId
@@ -376,6 +378,8 @@ public class HouseholdRepository {
         jdbcTemplate.execute(sql1);
         jdbcTemplate.execute(sql2);
     }
+
+
 
 
     class NoBindRowMapper implements RowMapper<HouseholdNumsDTO> {

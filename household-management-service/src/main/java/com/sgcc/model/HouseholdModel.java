@@ -70,7 +70,11 @@ public class HouseholdModel {
     public String[] getNoBindTransform(List<HouseholdNumsDTO> householdNumsDTOS) {
         String[] str = new String[householdNumsDTOS.size()];
         for (int i = 0; i < householdNumsDTOS.size(); i++) {
-            str[i] = householdNumsDTOS.get(i).getHouseholdNumber();
+            try {
+                str[i] = DesUtil.encrypt(householdNumsDTOS.get(i).getHouseholdNumber());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return str;
     }

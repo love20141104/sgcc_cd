@@ -1,12 +1,10 @@
 package com.sgcc.entity.query;
 
-import com.example.result.Result;
 import com.sgcc.dao.HouseholdInfoDao;
 import com.sgcc.dao.SubscribeDao;
 import com.sgcc.dao.UserDao;
 import com.sgcc.dao.UserSubscribeDao;
 import com.sgcc.dto.HouseholdNumsDTO;
-import com.sgcc.dto.SubscribeInfoDTO;
 import com.sgcc.repository.HouseholdRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +15,8 @@ import java.util.List;
 public class HouseholdQueryEntity {
     @Autowired
     private HouseholdRepository householdRepository;
+
+
 
     /**
      * 查询缴费记录中其他非绑定用户户号

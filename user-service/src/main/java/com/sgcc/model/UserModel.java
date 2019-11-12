@@ -4,6 +4,7 @@ import com.example.Utils;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
 import com.sgcc.dao.PayResultDao;
+import com.sgcc.des.DesUtil;
 import com.sgcc.dto.*;
 import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
 import com.sgcc.dto.commerce.CommerceInfoCorrectQueryDTO;
@@ -55,6 +56,19 @@ public class UserModel {
         this.payResultDaos = payResultDaos;
     }
 
+
+
+    public DefaultNumInfoDTO getDefaultHouseholdTransform(HouseholdInfoDTO householdInfoDTO, RealTimeElectricityDTO realTimeElectricityDTO) throws Exception {
+        DefaultNumInfoDTO defaultNumInfoDTO = new DefaultNumInfoDTO(
+                householdInfoDTO.getHouseholder(),
+                DesUtil.encrypt(householdInfoDTO.getHouseholdNumber()),
+                householdInfoDTO.getHouseholdAddress(),
+                realTimeElectricityDTO.getCurrentMonthPower(),
+                realTimeElectricityDTO.getCurrentMonthFees(),
+                realTimeElectricityDTO.getCurrentPowerBalance()
+        );
+        return defaultNumInfoDTO;
+    }
 
 
 
@@ -305,7 +319,6 @@ public class UserModel {
         payResultViewsDTO.setPayResultViewDTOS(this.payResultViewDTOS);
         return payResultViewsDTO;
     }
-
 
 
 

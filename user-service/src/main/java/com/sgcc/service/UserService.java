@@ -5,8 +5,8 @@ import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
-import com.sgcc.dto.ElectricityTypeDTO;
-import com.sgcc.dto.MonthlyBillsDTO;
+import com.sgcc.des.DesUtil;
+import com.sgcc.dto.*;
 import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
 import com.sgcc.dto.commerce.CommerceInfoCorrectSubmitDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectEditDTO;
@@ -14,7 +14,9 @@ import com.sgcc.dto.inhabitant.InhabitantInfoCorrectSubmitDTO;
 import com.sgcc.entity.event.CommerceEventEntity;
 import com.sgcc.entity.event.InhabitantEventEntity;
 import com.sgcc.entity.query.CommerceQueryEntity;
+import com.sgcc.entity.query.HouseholdQueryEntity;
 import com.sgcc.entity.query.InhabitantQueryEntity;
+import com.sgcc.entity.query.UserQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,67 @@ public class UserService {
 
     @Autowired
     private CommerceEventEntity commerceEventEntity;
+
+    @Autowired
+    private UserQueryEntity userQueryEntity;
+
+
+
+    public Result getDefaultHousehold(String openId) {
+        if (Strings.isNullOrEmpty(openId))
+            return Result.failure("openId为空");
+
+        try {
+            HouseholdInfoDTO householdInfoDTO = userQueryEntity.getDefaultHousehold(openId);
+            householdInfoDTO.setHouseholdNumber(DesUtil.encrypt(householdInfoDTO.getHouseholdNumber()));
+            if (householdInfoDTO != null){
+                return Result.success(householdInfoDTO);
+            }else {
+                return Result.failure("户号信息查询失败");
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+
+
+    /**
+     * 查询默认户号信息和实时电量
+     * @param openId
+     * @return
+     */
+    public Result getDefaultHouseholdAndRealTimeElectricity(String openId) {
+
+        if (Strings.isNullOrEmpty(openId))
+            return Result.failure("openId为空");
+
+        try {
+            HouseholdInfoDTO householdInfoDTO = userQueryEntity.getDefaultHousehold(openId);
+
+            RealTimeElectricityDTO realTimeElectricityDTO = new
+                    RealTimeElectricityDTO(129.63,64.02,217.44);
+
+            UserModel model = new UserModel();
+            DefaultNumInfoDTO defaultNumInfoDTO = model.getDefaultHouseholdTransform(householdInfoDTO,realTimeElectricityDTO);
+
+            if (defaultNumInfoDTO != null){
+                return Result.success(defaultNumInfoDTO);
+            }else {
+                return Result.failure("默认户号信息查询失败");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
 
     /**********************************************居民*********************************************/
 
@@ -294,6 +357,7 @@ public class UserService {
             throw new RuntimeException("查询月度账单失败!");
         }
     }
+
 
 
 }

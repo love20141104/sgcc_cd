@@ -3,7 +3,8 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
-import com.sgcc.dto.commerce.CommerceInfoCorrectSubmitDTO;
+import com.sgcc.dto.DefaultNumInfoDTO;
+import com.sgcc.dto.HouseholdInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,6 +19,22 @@ public class UserRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    /**
+     * 查询默认户号信息
+     * @param openId
+     * @return
+     */
+    public HouseholdInfoDTO getDefaultHousehold(String openId){
+
+        String sql = "select hi.household_householder,hi.household_number,hi.household_address "
+                +"from b_user u,r_user_household uh,b_household_info hi"
+                +" where uh.user_id = u.user_id and hi.household_id = uh.household_id"
+                +" and u.user_open_id = '"+openId+"' and hi.household_default = true";
+        return jdbcTemplate.queryForObject(sql,new DefaultHouseholdRowMapper());
+    }
+
+
 
     /**************************************************个体工商业************************************************************/
     /**
@@ -199,6 +216,18 @@ public class UserRepository {
                     rs.getString("correct_new_address"),
                     rs.getString("correct_new_tel"),
                     Utils.GetDate(rs.getString("correct_submit_date"))
+            );
+        }
+    }
+
+
+    class DefaultHouseholdRowMapper implements RowMapper<HouseholdInfoDTO> {
+        @Override
+        public HouseholdInfoDTO mapRow(ResultSet rs, int i) throws SQLException {
+            return new HouseholdInfoDTO(
+                    rs.getString("household_householder"),
+                    rs.getString("household_number"),
+                    rs.getString("household_address")
             );
         }
     }

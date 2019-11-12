@@ -261,6 +261,25 @@ public class UserController {
         return householdService.decrypt(pwd);
     }
 
+    /**
+     * 查询默认户号信息和实时电量
+     * @param openId
+     * @return
+     */
+    @ApiOperation(value = "查询默认户号信息和实时电量", notes = "")
+    @GetMapping(value = "/open-id/{openId}/defaultHouseholdAndRealTimeElectricity")
+    public Result getDefaultHouseholdAndRealTimeElectricity(@PathVariable String openId) {
+        return userService.getDefaultHouseholdAndRealTimeElectricity(openId);
+    }
+
+
+    @ApiOperation(value = "查询默认户号信息", notes = "")
+    @GetMapping(value = "/open-id/{openId}/defaultHousehold")
+    public Result getDefaultHousehold(@PathVariable String openId) {
+        return userService.getDefaultHousehold(openId);
+    }
+
+
 
 
 
