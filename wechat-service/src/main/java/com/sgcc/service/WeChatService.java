@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -61,10 +62,10 @@ public class WeChatService {
 
 
     /**
-     * 新增图文素材
+     * 新增图文消息图片
      */
-    public Result uploadTemporaryMaterial(MultipartFile file){
-        return Result.success(weChatEntity.uploadTemporaryMaterial("image",file));
+    public Result uploadImg(MultipartFile file){
+        return Result.success(weChatEntity.uploadImg(file));
     }
 
 

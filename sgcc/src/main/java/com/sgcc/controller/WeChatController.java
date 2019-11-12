@@ -139,14 +139,14 @@ public class WeChatController {
 
 
     /**
-     * 新增临时素材
+     * 新增图文消息图片
      * @return
      */
-    @ApiOperation(value = "uploadTemporaryMaterial", notes = "")
-    @PostMapping(value = "/uploadTemporaryMaterial",headers = "content-type=multipart/form-data")
-    public Result uploadTemporaryMaterial(@ApiParam(required = true) MultipartFile file){
+    @ApiOperation(value = "uploadImg", notes = "")
+    @PostMapping(value = "/uploadImg",headers = "content-type=multipart/form-data")
+    public Result uploadImg(@ApiParam(required = true) MultipartFile file){
         try {
-            return weChatService.uploadTemporaryMaterial(file);
+            return weChatService.uploadImg(file);
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);

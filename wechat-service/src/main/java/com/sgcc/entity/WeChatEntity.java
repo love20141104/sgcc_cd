@@ -12,13 +12,19 @@ import com.sgcc.dao.AccessTokenDao;
 import com.sgcc.dao.JSApiTicketDao;
 import com.sgcc.entity.event.AccessTokenEntity;
 import com.sgcc.entity.query.AccessTokenQueryEntity;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 @Component
 public class WeChatEntity {
@@ -146,32 +152,27 @@ public class WeChatEntity {
 
 
     /**
-     * 新增临时素材
+     * 新增图文消息图片
      * @return
      * @throws Exception
      */
-    public TemporaryMaterialsViewDTO uploadTemporaryMaterial(String type, MultipartFile media) {
-        String URL = WechatURLConstants.UPLOAD_TEMPORARY_MATERIAL.replace("ACCESS_TOKEN",getAccessToken().getAccess_token());
-
-        TemporaryMaterialsSubmitDTO dto = new TemporaryMaterialsSubmitDTO(
-                getAccessToken().getAccess_token(),
-                type,
-                media
-        );
+    public String uploadImg(MultipartFile media) {
+        String URL = WechatURLConstants.UPLOAD_IMG
+                .replace("ACCESS_TOKEN",getAccessToken().getAccess_token());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<TemporaryMaterialsSubmitDTO> requestEntity = new HttpEntity<>(dto, headers);
-        TemporaryMaterialsViewDTO temporaryMaterialsViewDTO = restTemplate.
-                postForObject(URL, requestEntity, TemporaryMaterialsViewDTO.class);
-        if (temporaryMaterialsViewDTO == null || temporaryMaterialsViewDTO.getErrcode()!=0){
-            try {
-                throw new Exception("上传临时素材失败，"+temporaryMaterialsViewDTO.getErrmsg());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return temporaryMaterialsViewDTO;
+        headers.setContentType(MediaType.parseMediaType("multipart/form-data"));
+
+        MultiValueMap<String,Object> param = new LinkedMultiValueMap<>();
+
+        FileSystemResource fileSystemResource = new FileSystemResource(new File(media.getOriginalFilename()));
+        param.add("media",fileSystemResource);
+
+        HttpEntity<MultiValueMap<String,Object>> requestEntity =
+                new HttpEntity<MultiValueMap<String,Object>>(param, headers);
+        String result = restTemplate.postForObject(URL,requestEntity,String.class);
+
+        return result;
     }
 
 
