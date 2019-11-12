@@ -28,7 +28,7 @@ public class HouseholdRepository {
      * @return
      */
     public List<HouseholdNumsDTO> getNoBindList(String openId){
-        String sql = "select pay_household_number from b_pay_info where pay_household_number not in ("
+        String sql = "select distinct pay_household_number from b_pay_info where user_open_id='"+openId+"' and pay_household_number not in ("
                 +"select hi.household_number from b_pay_info p,b_user u,r_user_household uh,b_household_info hi"
                 +" where p.user_open_id = u.user_open_id and uh.user_id = u.user_id and hi.household_id = uh.household_id"
                 +" and p.user_open_id = '"+openId+"')";

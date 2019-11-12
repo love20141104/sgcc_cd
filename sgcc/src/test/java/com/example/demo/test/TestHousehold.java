@@ -36,13 +36,13 @@ public class TestHousehold {
         private static final long serialVersionUID = -8009670422095852284L;
 
         {
-            add("202154871");
-            add("202154871");
-            add("202154872");
-            add("202154873");
-            add("202154874");
-            add("202154875");
-            add("202154876");
+            add("2021548711");
+            add("2021548712");
+            add("2021548723");
+            add("2021548734");
+            add("2021548745");
+            add("2021548756");
+            add("2021548767");
         }
     };
 
@@ -185,7 +185,7 @@ public class TestHousehold {
      */
     @Test
     public void testCancelFocusWechat() {
-        Result result = householdService.cancelFocusWechat(openId);
+        Result result = householdService.cancelFocusWechat("2021548734");
         logger.info(JSON.toJSONString(result));
     }
 
