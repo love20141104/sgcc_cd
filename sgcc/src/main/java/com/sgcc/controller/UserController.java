@@ -242,14 +242,14 @@ public class UserController {
 
     //todo 测试加密
     @ApiOperation(value = "测试加密", notes = "")
-    @PostMapping(value = "/open-id/encrypt/{pwd}")
-    public String getEncrypt(@PathVariable String pwd) {
+    @PostMapping(value = "/open-id/encrypt")
+    public String getEncrypt( String pwd) {
         return householdService.encrypt(pwd);
     }
     //todo 测试解密
     @ApiOperation(value = "测试解密", notes = "")
-    @PostMapping(value = "/open-id/decrypt/{pwd}")
-    public String getDecryptt(@PathVariable String pwd) {
+    @PostMapping(value = "/open-id/decrypt")
+    public String getDecryptt( String pwd) {
         return householdService.decrypt(pwd);
     }
 
