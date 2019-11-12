@@ -4,6 +4,7 @@ import com.sgcc.dao.HouseholdInfoDao;
 import com.sgcc.dto.HouseholdInfoDTO;
 import com.sgcc.dto.HouseholdInfoDTO_interface;
 import com.sgcc.dto.HouseholdInfoListDTO;
+import com.sgcc.dto.HouseholdNumsDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.omg.PortableServer.THREAD_POLICY_ID;
@@ -57,5 +58,13 @@ public class HouseholdModel {
                 ,pwd
                 ,true
         );
+    }
+
+    public String[] getNoBindTransform(List<HouseholdNumsDTO> householdNumsDTOS) {
+        String[] str = new String[householdNumsDTOS.size()];
+        for (int i = 0; i < householdNumsDTOS.size(); i++) {
+            str[i] = householdNumsDTOS.get(i).getHouseholdNumber();
+        }
+        return str;
     }
 }

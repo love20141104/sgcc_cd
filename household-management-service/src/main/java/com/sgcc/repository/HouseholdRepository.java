@@ -3,6 +3,7 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.*;
+import com.sgcc.dto.HouseholdNumsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -22,6 +21,22 @@ public class HouseholdRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    /**
+     * 查询缴费记录中其他非绑定用户户号
+     * @param openId
+     * @return
+     */
+    public List<HouseholdNumsDTO> getNoBindList(String openId){
+        String sql = "select pay_household_number from b_pay_info where pay_household_number not in ("
+                +"select hi.household_number from b_pay_info p,b_user u,r_user_household uh,b_household_info hi"
+                +" where p.user_open_id = u.user_open_id and uh.user_id = u.user_id and hi.household_id = uh.household_id"
+                +" and p.user_open_id = '"+openId+"')";
+        return jdbcTemplate.query(sql,new NoBindRowMapper());
+
+    }
+
+
 
     public Boolean userExceed5(String userOpenId){
         String sql="select count(id) from b_user b left join r_user_household r "
@@ -332,6 +347,17 @@ public class HouseholdRepository {
             return null;
         }
     }
+
+
+    class NoBindRowMapper implements RowMapper<HouseholdNumsDTO> {
+        @Override
+        public HouseholdNumsDTO mapRow(ResultSet rs, int i) throws SQLException {
+            return new HouseholdNumsDTO(
+                    rs.getString("pay_household_number")
+            );
+        }
+    }
+
 
     class HouseholdInfoRowMapper implements RowMapper<HouseholdInfoDao> {
         @Override

@@ -225,6 +225,17 @@ public class UserController {
         return householdService.getUserSubscribeList(isAvailable);
     }
 
+    /**
+     * 查询缴费记录中其他非绑定用户户号
+     */
+    @ApiOperation(value = "查询缴费记录中其他非绑定用户户号", notes = "")
+    @GetMapping(value = "/open-id/{openId}/othersHouseholdNum")
+    public Result getNoBindList(@PathVariable String openId) {
+        return householdService.getNoBindList(openId);
+    }
+
+
+
 //    @ApiOperation(value = "新增居民增容订单", notes = "")
 //    @PostMapping(value = "/increaseCapacity/order/{openId}")
 //    public Result addIncreaseCapacityOrder(@RequestBody InhabitantIncreaseCapacityDTO dto, @PathVariable String openId) {

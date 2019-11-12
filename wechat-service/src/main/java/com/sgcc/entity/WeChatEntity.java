@@ -1,6 +1,7 @@
 package com.sgcc.entity;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.FileUtil;
 import com.example.constant.CommonConstants;
 import com.example.constant.WechatURLConstants;
 import com.sgcc.dto.GetMaterialDTO;
@@ -22,8 +23,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.util.Map;
 
@@ -157,7 +158,7 @@ public class WeChatEntity {
      * @return
      * @throws Exception
      */
-    public String uploadImg(MultipartFile media) {
+    public Object uploadImg(MultipartFile media) {
         String URL = WechatURLConstants.UPLOAD_IMG
                 .replace("ACCESS_TOKEN",getAccessToken().getAccess_token());
 
@@ -165,20 +166,21 @@ public class WeChatEntity {
         headers.setContentType(MediaType.parseMediaType("multipart/form-data"));
 
         MultiValueMap<String,Object> param = new LinkedMultiValueMap<>();
+        File file = null;
+        try {
+            file = FileUtil.multipartFileToFile(media);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        FileSystemResource fileSystemResource = new FileSystemResource(new File(media.getOriginalFilename()));
+        FileSystemResource fileSystemResource = new FileSystemResource(file);
         param.add("media",fileSystemResource);
 
         HttpEntity<MultiValueMap<String,Object>> requestEntity =
                 new HttpEntity<MultiValueMap<String,Object>>(param, headers);
         String result = restTemplate.postForObject(URL,requestEntity,String.class);
-        URLDecoder.decode(result);
-        return result;
+        return JSONObject.parseObject(result);
     }
-
-
-
-
 
 
 

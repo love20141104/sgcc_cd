@@ -2,10 +2,12 @@ package com.sgcc.service;
 
 
 import com.example.result.Result;
+import com.google.common.base.Strings;
 import com.sgcc.dao.HouseholdInfoDao;
 import com.sgcc.dao.SubscribeDao;
 import com.sgcc.dao.UserSubscribeDao;
 import com.sgcc.dto.HouseholdInfoDTO_interface;
+import com.sgcc.dto.HouseholdNumsDTO;
 import com.sgcc.dto.SubscribeInfoDTO;
 import com.sgcc.entity.event.HouseholdEventEntity;
 import com.sgcc.entity.query.HouseholdQueryEntity;
@@ -240,4 +242,21 @@ public class HouseholdService {
         return Result.success(userSubscribeModel.getUserSubscribeDTOList());
     }
 
+    /**
+     * 查询缴费记录中其他非绑定用户户号
+     * @return
+     */
+    public Result getNoBindList(String openId) {
+        if (Strings.isNullOrEmpty(openId))
+            return Result.failure("openId为空");
+        try {
+            List<HouseholdNumsDTO> householdNumsDTOS = householdQueryEntity.getNoBindList(openId);
+            HouseholdModel model = new HouseholdModel();
+            String[] str = model.getNoBindTransform(householdNumsDTOS);
+            return Result.success(str);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
 }
