@@ -279,7 +279,11 @@ public class HouseholdRepository {
                 + "  where bu.user_open_id ='"
                 + userOpenId + "'";
         logger.info("selectSQL:" + sql0);
-        return jdbcTemplate.queryForObject(sql0, String.class);
+        try {
+            return jdbcTemplate.queryForObject(sql0, String.class);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     /**
@@ -293,12 +297,17 @@ public class HouseholdRepository {
                 + " on ruh.user_id=bu.user_id where bu.user_open_id ='"
                 +userOpenId+"'";
         logger.info("selectSQL:" + sql0);
-        return jdbcTemplate.query(sql0, new RowMapper<String>() {
-            @Override
-            public String mapRow(ResultSet rs, int i) throws SQLException {
-                return rs.getString("household_id");
-            }
-        });
+        try {
+            return jdbcTemplate.query(sql0, new RowMapper<String>() {
+                @Override
+                public String mapRow(ResultSet rs, int i) throws SQLException {
+                    return rs.getString("household_id");
+                }
+            });
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     /**
@@ -313,7 +322,12 @@ public class HouseholdRepository {
                 "left join b_user u on u.user_id = r.user_id " +
                 "where u.user_open_id = '"+userOpenId+"' and hi.household_number = '"+householdNum+"'";
         logger.info("selectSQL:" + sql0);
-        return jdbcTemplate.queryForObject(sql0, String.class);
+        try {
+            return jdbcTemplate.queryForObject(sql0, String.class);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     /**
@@ -331,7 +345,7 @@ public class HouseholdRepository {
         jdbcTemplate.execute(sql);
     }
 
-
+//获得UserSubscribeDao列表
     public List<UserSubscribeDao> getUserSubscribeList(Boolean isAvailable) {
 
         String sql="select b_user.user_id user_id,user_open_id,user_tel,sub_id,sub_bill,sub_pay,sub_arrears"
@@ -346,6 +360,21 @@ public class HouseholdRepository {
         }catch (Exception e){
             return null;
         }
+    }
+    //修改UserSubscribeDao
+    @Transactional
+    public void updateUserSubscribe(UserSubscribeDao userSubscribeDao) {
+        String sql1="update b_user set user_tel ='"+userSubscribeDao.getUserTel()+"'"
+                + " where user_open_id = '"+userSubscribeDao.getUserOpenId()+"'";
+        String userId = getUserIdByUserOpenId(userSubscribeDao.getUserOpenId());
+        String sql2="update b_subscribe set sub_bill = "+userSubscribeDao.getSubBill()
+                +",sub_pay = "+userSubscribeDao.getSubPay()
+                +",sub_arrears = "+userSubscribeDao.getSubArrears()
+                +",sub_coulometric_analysis = "+userSubscribeDao.getSubCoulometricAnalysis()
+                +",sub_power = "+userSubscribeDao.getSubPower()
+                +" where user_id='"+userId+"'";
+        jdbcTemplate.execute(sql1);
+        jdbcTemplate.execute(sql2);
     }
 
 

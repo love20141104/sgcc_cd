@@ -2,10 +2,7 @@ package com.sgcc.entity.event;
 
 import com.google.common.base.Strings;
 import com.sgcc.constant.SubscribeConstant;
-import com.sgcc.dao.HouseholdInfoDao;
-import com.sgcc.dao.SubscribeDao;
-import com.sgcc.dao.UserDao;
-import com.sgcc.dao.UserHouseholdDao;
+import com.sgcc.dao.*;
 import com.sgcc.entity.query.HouseholdQueryEntity;
 import com.sgcc.repository.HouseholdRepository;
 import com.sgcc.sgccenum.SubscribeCateEnum;
@@ -102,4 +99,7 @@ public class HouseholdEventEntity {
     }
 
 
+    public void updateUserSubscribe(UserSubscribeDao userSubscribeDao) {
+        householdRepository.updateUserSubscribe(userSubscribeDao);
+    }
 }
