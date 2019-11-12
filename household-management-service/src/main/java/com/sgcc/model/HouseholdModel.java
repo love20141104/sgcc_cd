@@ -1,6 +1,7 @@
 package com.sgcc.model;
 
 import com.sgcc.dao.HouseholdInfoDao;
+import com.sgcc.des.DesUtil;
 import com.sgcc.dto.HouseholdInfoDTO;
 import com.sgcc.dto.HouseholdInfoDTO_interface;
 import com.sgcc.dto.HouseholdInfoListDTO;
@@ -34,10 +35,16 @@ public class HouseholdModel {
 
     public void daos2dto(){
         this.householdInfoDaos.forEach(dao->{
+            String householdNumber=null;
+            try {
+                householdNumber= DesUtil.encrypt(dao.getHouseholdNumber());
+            }catch (Exception e){
+
+            }
             householdInfoListDTO.getHouseholdInfoDTOS().add(
                     new HouseholdInfoDTO(
                             dao.getHouseholdHouseholder()
-                            ,dao.getHouseholdNumber()
+                            , householdNumber
                             ,dao.getHouseholdAddress()
                             ,dao.getHouseholdDefault()
                             ,dao.getHouseholdType()

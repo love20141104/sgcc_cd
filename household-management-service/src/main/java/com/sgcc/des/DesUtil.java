@@ -17,7 +17,6 @@ import java.util.Base64;
 
 import static sun.security.x509.CertificateAlgorithmId.ALGORITHM;
 
-@Component
 public class DesUtil {
 
     static {
@@ -72,7 +71,7 @@ public class DesUtil {
     private static SecretKeySpec getKey() throws Exception {
 
 
-        String strKey = "12345678@#pqweg&11";
+        String strKey = "0102030405060708";//"12345678@#pqweg&11";
         byte[] arrBTmp = strKey.getBytes();
         byte[] arrB = new byte[16]; // 创建一个空的16位字节数组（默认值为0）
         for (int i = 0; i < arrBTmp.length && i < arrB.length; i++) {

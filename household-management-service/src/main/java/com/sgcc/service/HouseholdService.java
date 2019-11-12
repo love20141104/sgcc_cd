@@ -30,8 +30,7 @@ public class HouseholdService {
     private HouseholdEventEntity householdEventEntity;
     @Autowired
     private HouseholdQueryEntity householdQueryEntity;
-    @Autowired
-    private DesUtil desUtil;
+
 
 /*
 *
@@ -97,7 +96,11 @@ public class HouseholdService {
 */
 
     public Result removeBind(String openId, String householdNum) {
-
+        try {
+            householdNum=DesUtil.decrypt(householdNum);
+        }catch (Exception e){
+            return Result.failure(TopErrorCode.DECRYPTION_FAILED);
+        }
         try{
             // 删除关系表，户号表
             householdEventEntity.deleteUserHouseHoldAndHouseholdInfo(householdNum,openId);
@@ -134,6 +137,11 @@ public class HouseholdService {
      */
 
     public Result setDefaultHouseholdNum(String opneId,String householdNum){
+        try {
+            householdNum=DesUtil.decrypt(householdNum);
+        }catch (Exception e){
+            return Result.failure(TopErrorCode.DECRYPTION_FAILED);
+        }
         try{
             // 更新户号表，设置默认
             householdEventEntity.setDefaultHouseholdNum(opneId,householdNum);
@@ -183,6 +191,11 @@ public class HouseholdService {
 */
 
     public Result changePWD(String openId,String householdNum,String pwd){
+        try {
+            householdNum=DesUtil.decrypt(householdNum);
+        }catch (Exception e){
+            return Result.failure(TopErrorCode.DECRYPTION_FAILED);
+        }
         //TODO 调用接口验证新密码是否正确
         if(true){
             try{
@@ -288,7 +301,7 @@ public class HouseholdService {
      */
     public String encrypt(String pwd){
         try {
-            return desUtil.encrypt(pwd);
+            return DesUtil.encrypt(pwd);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -302,7 +315,7 @@ public class HouseholdService {
      */
     public String decrypt(String s){
         try {
-            return desUtil.decrypt(s);
+            return DesUtil.decrypt(s);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
