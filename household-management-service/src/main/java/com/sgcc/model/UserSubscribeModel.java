@@ -1,5 +1,6 @@
 package com.sgcc.model;
 
+import com.sgcc.dao.UserHouseholdDao;
 import com.sgcc.dao.UserSubscribeDao;
 import com.sgcc.dto.UserSubscribeDTO;
 
@@ -14,6 +15,8 @@ public class UserSubscribeModel {
 
     private List<UserSubscribeDao> userSubscribeDaoList;
     private List<UserSubscribeDTO> userSubscribeDTOList;
+    private UserSubscribeDTO userSubscribeDTO;
+    private UserSubscribeDao userSubscribeDao;
 
     public UserSubscribeModel(List<UserSubscribeDao> userSubscribeDaoList) {
         this.userSubscribeDaoList = userSubscribeDaoList;
@@ -23,5 +26,12 @@ public class UserSubscribeModel {
             return userSubscribeDTO;
         }).collect(Collectors.toList());
         this.userSubscribeDTOList=collect;
+    }
+
+    public UserSubscribeModel(UserSubscribeDTO userSubscribeDTO) {
+        this.userSubscribeDTO = userSubscribeDTO;
+        UserSubscribeDao userSubscribeDao = new UserSubscribeDao();
+        BeanUtils.copyProperties(userSubscribeDTO,userSubscribeDao);
+        this.userSubscribeDao=userSubscribeDao;
     }
 }

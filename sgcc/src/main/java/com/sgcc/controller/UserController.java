@@ -3,6 +3,7 @@ package com.sgcc.controller;
 import com.example.result.Result;
 import com.sgcc.dto.OrderTransDTO;
 import com.sgcc.dto.PayResultSubmitDTO;
+import com.sgcc.dto.UserSubscribeDTO;
 import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
 import com.sgcc.dto.commerce.CommerceInfoCorrectSubmitDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectEditDTO;
@@ -220,9 +221,14 @@ public class UserController {
      * 后台查询用户和消息订阅状态
      */
     @ApiOperation(value = "后台根据用户是否可用isAvailable查询用户和消息订阅状态", notes = "")
-    @PutMapping(value = "/open-id/userisAvailable")
-    public Result updateSubscribe(@RequestParam boolean isAvailable) {
+    @GetMapping(value = "/open-id/userSubscribe")
+    public Result getUserSubscribe(@RequestParam boolean isAvailable) {
         return householdService.getUserSubscribeList(isAvailable);
+    }
+    @ApiOperation(value = "后台修改用户和消息订阅状态", notes = "")
+    @PutMapping(value = "/open-id/userSubscribe")
+    public Result updateUserSubscribe(@RequestBody UserSubscribeDTO userSubscribeDTO) {
+        return householdService.updateUserSubscribe(userSubscribeDTO);
     }
 
 //    @ApiOperation(value = "新增居民增容订单", notes = "")

@@ -7,6 +7,7 @@ import com.sgcc.dao.SubscribeDao;
 import com.sgcc.dao.UserSubscribeDao;
 import com.sgcc.dto.HouseholdInfoDTO_interface;
 import com.sgcc.dto.SubscribeInfoDTO;
+import com.sgcc.dto.UserSubscribeDTO;
 import com.sgcc.entity.event.HouseholdEventEntity;
 import com.sgcc.entity.query.HouseholdQueryEntity;
 import com.sgcc.exception.TopErrorCode;
@@ -240,4 +241,10 @@ public class HouseholdService {
         return Result.success(userSubscribeModel.getUserSubscribeDTOList());
     }
 
+    public Result updateUserSubscribe(UserSubscribeDTO userSubscribeDTO) {
+        UserSubscribeModel userSubscribeModel = new UserSubscribeModel(userSubscribeDTO);
+        householdEventEntity.updateUserSubscribe(userSubscribeModel.getUserSubscribeDao());
+
+        return Result.success();
+    }
 }
