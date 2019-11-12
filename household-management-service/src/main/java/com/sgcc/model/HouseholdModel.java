@@ -43,7 +43,8 @@ public class HouseholdModel {
             }
             householdInfoListDTO.getHouseholdInfoDTOS().add(
                     new HouseholdInfoDTO(
-                            dao.getHouseholdHouseholder()
+                            dao.getHouseholdId()
+                            , dao.getHouseholdHouseholder()
                             , householdNumber
                             ,dao.getHouseholdAddress()
                             ,dao.getHouseholdDefault()

@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class HouseholdInfoDTO implements Serializable {
     private static final long serialVersionUID = -6301556894234627123L;
 
+    private String householdId;
     private String householdHouseholder;
     private String householdNumber;
     private String householdAddress;

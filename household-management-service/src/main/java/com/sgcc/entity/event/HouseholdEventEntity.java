@@ -50,17 +50,18 @@ public class HouseholdEventEntity {
     }
 
     //TODO 解绑删除关系表，户号表
-    public void deleteUserHouseHoldAndHouseholdInfo(String householdNumber, String userOpenId) {
+    @Transactional
+    public void deleteUserHouseHoldAndHouseholdInfo(String householdId, String userOpenId) {
 
         //如果解绑的是默认户号并且该用户还有绑定的户号则需要设置一个默认账户
-        HouseholdInfoDao householdInfo = householdRepository.getHouseholdInfo(userOpenId, householdNumber);
-        householdRepository.deleteUserHouseHoldAndHouseholdInfo(householdNumber, userOpenId);
-        if(householdInfo.getHouseholdDefault()){
+        HouseholdInfoDao householdInfo = householdRepository.getHouseholdInfo(householdId);
+        householdRepository.deleteUserHouseHoldAndHouseholdInfo(userOpenId, householdId);
+        if(null!=householdInfo&&householdInfo.getHouseholdDefault()){
             List<HouseholdInfoDao> bindList = householdRepository.getBindList(userOpenId);
             if(null!=bindList&&bindList.size()>0){
                 HouseholdInfoDao householdInfoDao = bindList.get(0);
-                String householdNumber1 = householdInfoDao.getHouseholdNumber();
-                householdRepository.setDefaultHouseholdNum(userOpenId,householdNumber1);
+                String householdId2 = householdInfoDao.getHouseholdId();
+                householdRepository.setDefaultHouseholdNum(userOpenId,householdId2);
             }
         }
     }
@@ -81,8 +82,8 @@ public class HouseholdEventEntity {
     }
 
     //TODO 更新户号表，设置默认
-    public void setDefaultHouseholdNum(String openId, String householdNum) {
-        householdRepository.setDefaultHouseholdNum(openId,householdNum);
+    public void setDefaultHouseholdNum(String openId, String householdId) {
+        householdRepository.setDefaultHouseholdNum(openId,householdId);
     }
 
     //TODO 修改订阅信息

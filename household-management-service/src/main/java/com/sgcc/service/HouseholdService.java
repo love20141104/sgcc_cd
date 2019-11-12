@@ -92,15 +92,11 @@ public class HouseholdService {
 
 */
 
-    public Result removeBind(String openId, String householdNum) {
-        try {
-            householdNum=DesUtil.decrypt(householdNum);
-        }catch (Exception e){
-            return Result.failure(TopErrorCode.DECRYPTION_FAILED);
-        }
+    public Result removeBind(String openId, String householdId) {
+
         try{
             // 删除关系表，户号表
-            householdEventEntity.deleteUserHouseHoldAndHouseholdInfo(householdNum,openId);
+            householdEventEntity.deleteUserHouseHoldAndHouseholdInfo(householdId,openId);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
@@ -133,15 +129,10 @@ public class HouseholdService {
      * 设置默认户号
      */
 
-    public Result setDefaultHouseholdNum(String opneId,String householdNum){
-        try {
-            householdNum=DesUtil.decrypt(householdNum);
-        }catch (Exception e){
-            return Result.failure(TopErrorCode.DECRYPTION_FAILED);
-        }
+    public Result setDefaultHouseholdNum(String opneId,String householdId){
         try{
             // 更新户号表，设置默认
-            householdEventEntity.setDefaultHouseholdNum(opneId,householdNum);
+            householdEventEntity.setDefaultHouseholdNum(opneId,householdId);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
