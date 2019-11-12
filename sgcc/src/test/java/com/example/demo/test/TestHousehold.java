@@ -198,5 +198,16 @@ public class TestHousehold {
         logger.info(JSON.toJSONString(result));
     }
 
+    /**
+     * 加解密
+     */
+    @Test
+    public void testSecret(){
+        String ss = householdService.encrypt("1234567890");
+        logger.info("密文："+ss);
+        String pwd = householdService.decrypt(ss);
+        logger.info("明文："+pwd);
+
+    }
 
 }

@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.HouseholdInfoDao;
 import com.sgcc.dao.SubscribeDao;
 import com.sgcc.dao.UserSubscribeDao;
+import com.sgcc.des.DesUtil;
 import com.sgcc.dto.HouseholdInfoDTO_interface;
 import com.sgcc.dto.HouseholdNumsDTO;
 import com.sgcc.dto.SubscribeInfoDTO;
@@ -29,6 +30,8 @@ public class HouseholdService {
     private HouseholdEventEntity householdEventEntity;
     @Autowired
     private HouseholdQueryEntity householdQueryEntity;
+    @Autowired
+    private DesUtil desUtil;
 
 /*
 *
@@ -267,4 +270,32 @@ public class HouseholdService {
 
         return Result.success();
     }
+    /**
+     * 加密
+     * @param pwd
+     * @return
+     */
+    public String encrypt(String pwd){
+        try {
+            return desUtil.encrypt(pwd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 解密
+     * @param s
+     * @return
+     */
+    public String decrypt(String s){
+        try {
+            return desUtil.decrypt(s);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
