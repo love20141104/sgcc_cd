@@ -144,8 +144,8 @@ public class UserController {
      * 用户绑定户号
      */
     @ApiOperation(value = "用户绑定户号", notes = "")
-    @PostMapping(value = "/open-id/{openId}/household-num/{householdNum}")
-    public Result bindHousehold(@PathVariable String openId, @PathVariable String householdNum, @RequestParam String pwd) {
+    @PostMapping(value = "/open-id/{openId}")
+    public Result bindHousehold(@PathVariable String openId,  @RequestParam String householdNum, @RequestParam String pwd) {
         return householdService.bindHousehold(openId, householdNum, pwd);
     }
 
@@ -153,9 +153,9 @@ public class UserController {
      * 用户解邦户号
      */
     @ApiOperation(value = "用户解邦户号", notes = "")
-    @DeleteMapping(value = "/open-id/{openId}/household-num/{householdNum}")
-    public Result removeBind(@PathVariable String openId, @PathVariable String householdNum) {
-        return householdService.removeBind(openId, householdNum);
+    @DeleteMapping(value = "/open-id/{openId}/household-num/{householdId}")
+    public Result removeBind(@PathVariable String openId, @PathVariable String householdId) {
+        return householdService.removeBind(openId, householdId);
     }
 
     /**
@@ -170,21 +170,21 @@ public class UserController {
     /**
      * 数据库中记录的密码失效时，提示用户输入新密码修改密码
      */
-    @ApiOperation(value = "数据库中记录的密码失效时,提示用户输入新密码修改密码", notes = "")
+    /*@ApiOperation(value = "数据库中记录的密码失效时,提示用户输入新密码修改密码", notes = "")
     @PutMapping(value = "/open-id/{openId}/household-num/{householdNum}")
     public Result changePWD(@PathVariable String openId, @PathVariable String householdNum, @RequestParam String pwd) {
         return householdService.changePWD(openId, householdNum, pwd);
 
-    }
+    }*/
 
 
     /**
      * 设置默认户号
      */
     @ApiOperation(value = "设置默认户号", notes = "")
-    @PostMapping(value = "/open-id/{openId}/default-household-num/{householdNum}")
-    public Result setDefaultHouseholdNum(@PathVariable String openId, @PathVariable String householdNum) {
-        return householdService.setDefaultHouseholdNum(openId, householdNum);
+    @PostMapping(value = "/open-id/{openId}/default-household-num/{householdId}")
+    public Result setDefaultHouseholdNum(@PathVariable String openId, @PathVariable String householdId) {
+        return householdService.setDefaultHouseholdNum(openId, householdId);
     }
 
     /**
@@ -199,12 +199,12 @@ public class UserController {
     /**
      * 用户关注公众号
      */
-    @ApiOperation(value = "用户关注公众号", notes = "")
-    @PostMapping(value = "/open-id/{openId}")
-    public Result focusWechat(@PathVariable String openId) {
-        return householdService.focusWechat(openId);
-
-    }
+//    @ApiOperation(value = "用户关注公众号", notes = "")
+//    @PostMapping(value = "/open-id/{openId}")
+//    public Result focusWechat(@PathVariable String openId) {
+//        return householdService.focusWechat(openId);
+//
+//    }
 
     /**
      * 查询用户消息订阅状态

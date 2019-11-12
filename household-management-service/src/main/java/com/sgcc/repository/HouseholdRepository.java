@@ -138,9 +138,8 @@ public class HouseholdRepository {
     }
     //解绑删除关系表，户号表
     @Transactional
-    public void deleteUserHouseHoldAndHouseholdInfo(String householdNumber,String userOpenId){
-        if(!Strings.isNullOrEmpty(householdNumber)&&!Strings.isNullOrEmpty(userOpenId)) {
-            String householdId = getHouseholdIdByUserOpenIdAndHouseholdNum(userOpenId, householdNumber);
+    public void deleteUserHouseHoldAndHouseholdInfo(String userOpenId,String householdId ){
+        if(!Strings.isNullOrEmpty(householdId)) {
             String sql = "delete from b_household_info where household_id ='"+householdId+"'";
             String userId = getUserIdByUserOpenId(userOpenId);
             logger.info("deleteSQL:" + sql);
@@ -208,7 +207,7 @@ public class HouseholdRepository {
 
         return jdbcTemplate.query(sql,new HouseholdInfoRowMapper());
     }
-    public HouseholdInfoDao getHouseholdInfo(String userOpenId,String householdNum) {
+    public HouseholdInfoDao getHouseholdInfo(String householdId) {
 
         String sql = "select hi.household_id household_id" +
                 ",household_householder" +
@@ -218,10 +217,7 @@ public class HouseholdRepository {
                 ",household_type" +
                 ",household_password" +
                 ",hi.is_available is_available from b_household_info  hi" +
-                " where household_id = (select hi.household_id household_id from b_household_info hi " +
-                "left join r_user_household r on r.household_id = hi.household_id " +
-                "left join b_user u on u.user_id = r.user_id " +
-                "where u.user_open_id = '"+userOpenId+"' and hi.household_number = '"+householdNum+"')";
+                " where household_id = '"+householdId+"'";
         try {
             return jdbcTemplate.queryForObject(sql, new HouseholdInfoRowMapper());
         } catch (Exception e) {
@@ -249,15 +245,14 @@ public class HouseholdRepository {
     /**
      * 设置默认户号
      * @param openId
-     * @param householdNum
+     * @param householdId
      */
     @Transactional
-    public void setDefaultHouseholdNum(String openId, String householdNum){
+    public void setDefaultHouseholdNum(String openId, String householdId){
 
         //通过userOpenId获得HouseholdId列表
         List<String> householdIdByUserOpenId = getHouseholdIdByUserOpenId(openId);
-        String householdId = getHouseholdIdByUserOpenIdAndHouseholdNum(openId, householdNum);
-        if(null!=householdIdByUserOpenId&&householdIdByUserOpenId.size()>0&&!Strings.isNullOrEmpty(householdId)) {
+       if(null!=householdIdByUserOpenId&&householdIdByUserOpenId.size()>0&&!Strings.isNullOrEmpty(householdId)) {
             String sql0 = "update b_household_info set household_default = false " +
                     "where household_id in ('" + Utils.joinStrings(householdIdByUserOpenId, "','") + "')";
 
