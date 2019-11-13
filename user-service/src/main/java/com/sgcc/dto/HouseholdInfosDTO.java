@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HouseholdInfoDTO implements Serializable {
+public class HouseholdInfosDTO implements Serializable {
 
     private static final long serialVersionUID = -1963020315539773459L;
 

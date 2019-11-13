@@ -3,7 +3,7 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
-import com.sgcc.dto.HouseholdInfoDTO;
+import com.sgcc.dto.HouseholdInfosDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,7 +24,7 @@ public class UserRepository {
      * @param openId
      * @return
      */
-    public HouseholdInfoDTO getDefaultHousehold(String openId){
+    public HouseholdInfosDTO getDefaultHousehold(String openId){
         try {
             String sql = "select hi.household_householder,hi.household_number,hi.household_address "
                     +"from b_user u,r_user_household uh,b_household_info hi"
@@ -34,7 +34,6 @@ public class UserRepository {
         }catch (Exception e){
             return null;
         }
-
     }
 
 
@@ -224,10 +223,10 @@ public class UserRepository {
     }
 
 
-    class DefaultHouseholdRowMapper implements RowMapper<HouseholdInfoDTO> {
+    class DefaultHouseholdRowMapper implements RowMapper<HouseholdInfosDTO> {
         @Override
-        public HouseholdInfoDTO mapRow(ResultSet rs, int i) throws SQLException {
-            return new HouseholdInfoDTO(
+        public HouseholdInfosDTO mapRow(ResultSet rs, int i) throws SQLException {
+            return new HouseholdInfosDTO(
                     rs.getString("household_householder"),
                     rs.getString("household_number"),
                     rs.getString("household_address")
