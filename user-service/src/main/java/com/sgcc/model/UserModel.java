@@ -58,11 +58,11 @@ public class UserModel {
 
 
 
-    public DefaultNumInfoDTO getDefaultHouseholdTransform(HouseholdInfoDTO householdInfoDTO, RealTimeElectricityDTO realTimeElectricityDTO) throws Exception {
+    public DefaultNumInfoDTO getDefaultHouseholdTransform(HouseholdInfosDTO householdInfosDTO, RealTimeElectricityDTO realTimeElectricityDTO) throws Exception {
         DefaultNumInfoDTO defaultNumInfoDTO = new DefaultNumInfoDTO(
-                householdInfoDTO.getHouseholder(),
-                DesUtil.encrypt(householdInfoDTO.getHouseholdNumber()),
-                householdInfoDTO.getHouseholdAddress(),
+                householdInfosDTO.getHouseholder(),
+                DesUtil.encrypt(householdInfosDTO.getHouseholdNumber()),
+                householdInfosDTO.getHouseholdAddress(),
                 realTimeElectricityDTO.getCurrentMonthPower(),
                 realTimeElectricityDTO.getCurrentMonthFees(),
                 realTimeElectricityDTO.getCurrentPowerBalance()

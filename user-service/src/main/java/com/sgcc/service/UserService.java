@@ -14,7 +14,6 @@ import com.sgcc.dto.inhabitant.InhabitantInfoCorrectSubmitDTO;
 import com.sgcc.entity.event.CommerceEventEntity;
 import com.sgcc.entity.event.InhabitantEventEntity;
 import com.sgcc.entity.query.CommerceQueryEntity;
-import com.sgcc.entity.query.HouseholdQueryEntity;
 import com.sgcc.entity.query.InhabitantQueryEntity;
 import com.sgcc.entity.query.UserQueryEntity;
 import com.sgcc.exception.TopErrorCode;
@@ -49,10 +48,10 @@ public class UserService {
             return Result.failure("openId为空");
 
         try {
-            HouseholdInfoDTO householdInfoDTO = userQueryEntity.getDefaultHousehold(openId);
-            householdInfoDTO.setHouseholdNumber(DesUtil.encrypt(householdInfoDTO.getHouseholdNumber()));
-            if (householdInfoDTO != null){
-                return Result.success(householdInfoDTO);
+            HouseholdInfosDTO householdInfosDTO = userQueryEntity.getDefaultHousehold(openId);
+            householdInfosDTO.setHouseholdNumber(DesUtil.encrypt(householdInfosDTO.getHouseholdNumber()));
+            if (householdInfosDTO != null){
+                return Result.success(householdInfosDTO);
             }else {
                 return Result.failure("户号信息查询失败");
             }
@@ -78,13 +77,13 @@ public class UserService {
             return Result.failure("openId为空");
 
         try {
-            HouseholdInfoDTO householdInfoDTO = userQueryEntity.getDefaultHousehold(openId);
+            HouseholdInfosDTO householdInfosDTO = userQueryEntity.getDefaultHousehold(openId);
 
             RealTimeElectricityDTO realTimeElectricityDTO = new
                     RealTimeElectricityDTO(129.63,64.02,217.44);
 
             UserModel model = new UserModel();
-            DefaultNumInfoDTO defaultNumInfoDTO = model.getDefaultHouseholdTransform(householdInfoDTO,realTimeElectricityDTO);
+            DefaultNumInfoDTO defaultNumInfoDTO = model.getDefaultHouseholdTransform(householdInfosDTO,realTimeElectricityDTO);
 
             if (defaultNumInfoDTO != null){
                 return Result.success(defaultNumInfoDTO);

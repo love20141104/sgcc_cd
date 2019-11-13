@@ -13,6 +13,7 @@ import org.omg.PortableServer.THREAD_POLICY_ID;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -34,24 +35,23 @@ public class HouseholdModel {
     }
 
     public void daos2dto(){
-        this.householdInfoDaos.forEach(dao->{
-            String householdNumber=null;
+        List<HouseholdInfoDTO> collect = this.householdInfoDaos.stream().map(dao -> {
+            String householdNumber = null;
             try {
-                householdNumber= DesUtil.encrypt(dao.getHouseholdNumber());
-            }catch (Exception e){
+                householdNumber = DesUtil.encrypt(dao.getHouseholdNumber());
+            } catch (Exception e) {
 
             }
-            householdInfoListDTO.getHouseholdInfoDTOS().add(
-                    new HouseholdInfoDTO(
-                            dao.getHouseholdId()
-                            , dao.getHouseholdHouseholder()
-                            , householdNumber
-                            ,dao.getHouseholdAddress()
-                            ,dao.getHouseholdDefault()
-                            ,dao.getHouseholdType()
-                    )
-            );
-        });
+            HouseholdInfoDTO householdInfoDTO = new HouseholdInfoDTO();
+            householdInfoDTO.setHouseholdId(dao.getHouseholdId());
+            householdInfoDTO.setHouseholdHouseholder(dao.getHouseholdHouseholder());
+            householdInfoDTO.setHouseholdNumber(householdNumber);
+            householdInfoDTO.setHouseholdAddress(dao.getHouseholdAddress());
+            householdInfoDTO.setHouseholdDefault(dao.getHouseholdDefault());
+            householdInfoDTO.setHouseholdType(dao.getHouseholdType());
+            return householdInfoDTO;
+        }).collect(Collectors.toList());
+        householdInfoListDTO.setHouseholdInfoDTOS(collect);
         this.householdInfoListDTO.setOpenId(this.openId);
     }
 
