@@ -60,9 +60,23 @@ public class ChartRepository {
      * @return
      */
     public List<PaymentTimesDTO> findPaymentTimesChart(){
-        String sql = "select COUNT(id) AS total,DATE_FORMAT(pay_date ,'%Y-%m-%d') as pay_date "
-                +"from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date) "
-                +"group by DATE_FORMAT(pay_date ,'%Y-%m-%d') ORDER BY DATE_FORMAT(pay_date ,'%Y-%m-%d') asc";
+//        String sql = "select COUNT(id) AS total,DATE_FORMAT(pay_date ,'%Y-%m-%d') as pay_date "
+//                +"from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date) "
+//                +"group by DATE_FORMAT(pay_date ,'%Y-%m-%d') ORDER BY DATE_FORMAT(pay_date ,'%Y-%m-%d') asc";
+
+        String sql = "select COUNT(id) AS total,d.date  as pay_date from b_pay_info p " +
+                "right join (select date_sub(curdate(), interval 9 day ) as date " +
+                "union select date_sub(curdate(), interval 8 day ) as date " +
+                "union select date_sub(curdate(), interval 7 day ) as date " +
+                "union select date_sub(curdate(), interval 6 day ) as date " +
+                "union select date_sub(curdate(), interval 5 day ) as date " +
+                "union select date_sub(curdate(), interval 4 day ) as date " +
+                "union select date_sub(curdate(), interval 3 day ) as date " +
+                "union select date_sub(curdate(), interval 2 day ) as date " +
+                "union select date_sub(curdate(), interval 1 day ) as date " +
+                "union select date_sub(curdate(), interval 0 day ) as date) d " +
+                "on DATE_FORMAT(p.pay_date ,'%Y-%m-%d') = d.date group by d.date order by d.date asc ";
+
         List<PaymentTimesDTO> paymentTimesDTOS = jdbcTemplate.query(sql,new PaymentTimesChartRowMapper());
         return paymentTimesDTOS;
     }
@@ -76,6 +90,8 @@ public class ChartRepository {
             );
         }
     }
+
+
 
 
     class PaymentTimesChartRowMapper implements RowMapper<PaymentTimesDTO>{
