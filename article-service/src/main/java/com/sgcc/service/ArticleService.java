@@ -145,4 +145,14 @@ public class ArticleService {
         articleEventEntity.deletes(articleIds);
         Initialize(null);
     }
+
+    public List<ArticleMappingDTO> GetArticlesByArticleTitle(String articleTitle) {
+        ArticleModel model = new ArticleModel();
+        List<ArticleDao> daos = articleQueryEntity.getArticlesByTitle(articleTitle);
+        if( daos == null || daos.size() < 1 )
+        {
+            return null;
+        }
+        return model.daos2listmappingdtos(daos);
+    }
 }

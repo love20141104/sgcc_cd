@@ -105,6 +105,19 @@ public class ArticleRepository {
         jdbcTemplate.execute(sql);
     }
 
+    public List<ArticleDao> findAllByArticleTitle(String articleTitle) {
+        String sql = "select id,article_title,article_desc,article_img,article_url," +
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")+ " from d_article";
+        sql = sql + " where article_title like '%" + articleTitle + "%'";
+        try{
+            return jdbcTemplate.query(sql,new articleRowMapper());
+        }
+        catch (NoSuchElementException e )
+        {
+            return null;
+        }
+    }
+
     class articleRowMapper implements RowMapper<ArticleDao>{
         @Override
         public ArticleDao mapRow(ResultSet rs, int i) throws SQLException {

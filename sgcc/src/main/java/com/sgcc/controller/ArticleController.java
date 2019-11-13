@@ -59,7 +59,9 @@ public class ArticleController {
     @ApiOperation(value = "Get articles", notes = "")
     @GetMapping(value = "/manager/articles")
     public Result GetArticles( @RequestParam(value ="articleType", required = false) String articleType,
-                               @RequestParam(value ="isRecommended", required = false) boolean isRecommended                          ) {
+                               @RequestParam(value ="isRecommended", required = false) boolean isRecommended,
+                               @RequestParam(value ="articleTitle", required = false) String articleTitle
+    ) {
         List<ArticleMappingDTO> dtos = null ;
         do{
             // 推荐阅读
@@ -72,6 +74,12 @@ public class ArticleController {
             if( !Strings.isNullOrEmpty(articleType) )
             {
                 dtos = articleService.GetArticlesByArticleType( articleType );
+                break;
+            }
+            // 文章标题
+            if( !Strings.isNullOrEmpty(articleTitle) )
+            {
+                dtos = articleService.GetArticlesByArticleTitle( articleTitle );
                 break;
             }
             // 所有

@@ -52,4 +52,8 @@ public class ArticleQueryEntity {
     {
         return articleRepository.findAll();
     }
+
+    public List<ArticleDao> getArticlesByTitle(String articleTitle) {
+        return articleRepository.findAllByArticleTitle(articleTitle);
+    }
 }

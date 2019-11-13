@@ -41,25 +41,52 @@ public class PageStatisticsRepository {
     }
 
     public List<PageStatistcsDateDto> getPageStatisticsCountMonth(){
-        String sql="select IFNULL(count(id),0) num  ,DATE_FORMAT(visit_date ,'%Y-%m') visit_date from b_page_statistics  "
-                + " WHERE date_sub(curdate(), interval 12 month ) <= date(visit_date) "
-                + " group by DATE_FORMAT(visit_date ,'%Y-%m') ORDER BY DATE_FORMAT(visit_date ,'%Y-%m') asc;";
+        String sql="select IFNULL(count(id),0) num  ,d.date visit_date from b_page_statistics b "
+                +"right join (" +
+                " select DATE_FORMAT(date_sub(curdate(), interval 11 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 10 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 9 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 8 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 7 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 6 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 5 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 4 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 3 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 2 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 1 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 0 month ),'%Y-%m') as date) d "
+                +" on d.date = DATE_FORMAT(b.visit_date ,'%Y-%m') "
+                + " group by d.date ORDER BY d.date asc;";
         logger.info("select:"+sql);
          return jdbcTemplate.query(sql, new PageStatistcsMonthDtoRowMapper());
     }
 
     public PageStatistcsMonthDto getPageStatisticsCountDay(){
         PageStatistcsMonthDto pageStatistcsMonthDto = new PageStatistcsMonthDto();
-        String sql="select IFNULL(count(id),0) num  ,DATE_FORMAT(visit_date ,'%Y-%m-%d') visit_date from b_page_statistics  "
-                + " WHERE date_sub(curdate(), interval 9 day ) <= date(visit_date) "
-                + " group by DATE_FORMAT(visit_date ,'%Y-%m-%d') ORDER BY DATE_FORMAT(visit_date ,'%Y-%m-%d') asc;";
+        String sql="select IFNULL(count(id),0) num  ,d.date visit_date from b_page_statistics b "
+        +"right join (select date_sub(curdate(), interval 9 day ) as date " +
+                "union select date_sub(curdate(), interval 8 day ) as date " +
+                "union select date_sub(curdate(), interval 7 day ) as date " +
+                "union select date_sub(curdate(), interval 6 day ) as date " +
+                "union select date_sub(curdate(), interval 5 day ) as date " +
+                "union select date_sub(curdate(), interval 4 day ) as date " +
+                "union select date_sub(curdate(), interval 3 day ) as date " +
+                "union select date_sub(curdate(), interval 2 day ) as date " +
+                "union select date_sub(curdate(), interval 1 day ) as date " +
+                "union select date_sub(curdate(), interval 0 day ) as date) d "
+                +" on d.date = DATE_FORMAT(b.visit_date ,'%Y-%m-%d') "
+                + " group by d.date ORDER BY d.date asc;";
         logger.info("select:"+sql);
         List<PageStatistcsDateDto> query = jdbcTemplate.query(sql, new PageStatistcsMonthDtoRowMapper());
         pageStatistcsMonthDto.setPageStatistcsList(query);
         String sql2="select IFNULL(count(id),0) num  from b_page_statistics  "
                 + " WHERE date_sub(curdate(), interval 9 day ) <= date(visit_date) ";
-        Integer integer = jdbcTemplate.queryForObject(sql2, Integer.class);
-        pageStatistcsMonthDto.setTotal(integer);
+        try {
+            Integer integer = jdbcTemplate.queryForObject(sql2, Integer.class);
+            pageStatistcsMonthDto.setTotal(integer);
+        }catch (Exception e){
+            pageStatistcsMonthDto.setTotal(0);
+        }
         return pageStatistcsMonthDto;
     }
 
