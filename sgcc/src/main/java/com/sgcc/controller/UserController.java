@@ -153,7 +153,7 @@ public class UserController {
      * 用户解邦户号
      */
     @ApiOperation(value = "用户解邦户号", notes = "")
-    @DeleteMapping(value = "/open-id/{openId}/household-id/{householdId}")
+    @DeleteMapping(value = "/open-id/{openId}/household-num/{householdId}")
     public Result removeBind(@PathVariable String openId, @PathVariable String householdId) {
         return householdService.removeBind(openId, householdId);
     }
