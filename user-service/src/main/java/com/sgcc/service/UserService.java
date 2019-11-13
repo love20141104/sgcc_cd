@@ -50,8 +50,8 @@ public class UserService {
 
         try {
             HouseholdInfoDTO householdInfoDTO = userQueryEntity.getDefaultHousehold(openId);
-            householdInfoDTO.setHouseholdNumber(DesUtil.encrypt(householdInfoDTO.getHouseholdNumber()));
             if (householdInfoDTO != null){
+                householdInfoDTO.setHouseholdNumber(DesUtil.encrypt(householdInfoDTO.getHouseholdNumber()));
                 return Result.success(householdInfoDTO);
             }else {
                 return Result.failure("户号信息查询失败");
@@ -80,6 +80,9 @@ public class UserService {
         try {
             HouseholdInfoDTO householdInfoDTO = userQueryEntity.getDefaultHousehold(openId);
 
+            if (householdInfoDTO == null)
+                return Result.failure("默认户号信息查询失败");
+
             RealTimeElectricityDTO realTimeElectricityDTO = new
                     RealTimeElectricityDTO(129.63,64.02,217.44);
 
@@ -89,7 +92,7 @@ public class UserService {
             if (defaultNumInfoDTO != null){
                 return Result.success(defaultNumInfoDTO);
             }else {
-                return Result.failure("默认户号信息查询失败");
+                return Result.failure("默认户号信息和实时电量查询失败");
             }
 
         } catch (Exception e) {

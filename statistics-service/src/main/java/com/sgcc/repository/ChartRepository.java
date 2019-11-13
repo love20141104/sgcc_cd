@@ -64,15 +64,7 @@ public class ChartRepository {
                 +"from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date) "
                 +"group by DATE_FORMAT(pay_date ,'%Y-%m-%d') ORDER BY DATE_FORMAT(pay_date ,'%Y-%m-%d') asc";
         List<PaymentTimesDTO> paymentTimesDTOS = jdbcTemplate.query(sql,new PaymentTimesChartRowMapper());
-        String date = Utils.GetTimeForYMD(new Date());
-        PaymentTimesDTO paymentTimesDTO= null;
-        if (paymentTimesDTOS.contains(date)){
-            return paymentTimesDTOS;
-        }else {
-            paymentTimesDTO = new PaymentTimesDTO(0,date);
-            paymentTimesDTOS.add(paymentTimesDTOS.size(),paymentTimesDTO);
-            return paymentTimesDTOS;
-        }
+        return paymentTimesDTOS;
     }
 
     class PaymentTimesChartAllRowMapper implements RowMapper<PaymentTimesDTO>{
@@ -110,8 +102,14 @@ public class ChartRepository {
                 "from b_pay_info WHERE yearweek(date_format(pay_date,'%Y-%m-%d'),1) = yearweek(now(),1) ";
         TotalFeesAvgChartDTO totalFeesAvgChartDTO = jdbcTemplate.queryForObject(sql,new TotalFeesAvgChartRowMapper());
         // 计算同比增长率
-        double ratio = (totalFeesAvgChartDTO.getThisWeekTotal()-totalFeesAvgChartDTO.getRatio())/totalFeesAvgChartDTO.getRatio();
-        totalFeesAvgChartDTO.setRatio(ratio);
+
+
+        if (totalFeesAvgChartDTO.getRatio() != 0){
+            double ratio = (totalFeesAvgChartDTO.getThisWeekTotal()-totalFeesAvgChartDTO.getRatio())/totalFeesAvgChartDTO.getRatio();
+            totalFeesAvgChartDTO.setRatio(ratio);
+        }else {
+            totalFeesAvgChartDTO.setRatio(0);
+        }
         return totalFeesAvgChartDTO;
     }
 

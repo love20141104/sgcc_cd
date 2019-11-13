@@ -3,7 +3,6 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
-import com.sgcc.dto.DefaultNumInfoDTO;
 import com.sgcc.dto.HouseholdInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,12 +25,16 @@ public class UserRepository {
      * @return
      */
     public HouseholdInfoDTO getDefaultHousehold(String openId){
+        try {
+            String sql = "select hi.household_householder,hi.household_number,hi.household_address "
+                    +"from b_user u,r_user_household uh,b_household_info hi"
+                    +" where uh.user_id = u.user_id and hi.household_id = uh.household_id"
+                    +" and u.user_open_id = '"+openId+"' and hi.household_default = true";
+            return jdbcTemplate.queryForObject(sql,new DefaultHouseholdRowMapper());
+        }catch (Exception e){
+            return null;
+        }
 
-        String sql = "select hi.household_householder,hi.household_number,hi.household_address "
-                +"from b_user u,r_user_household uh,b_household_info hi"
-                +" where uh.user_id = u.user_id and hi.household_id = uh.household_id"
-                +" and u.user_open_id = '"+openId+"' and hi.household_default = true";
-        return jdbcTemplate.queryForObject(sql,new DefaultHouseholdRowMapper());
     }
 
 

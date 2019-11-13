@@ -1,6 +1,7 @@
 package com.sgcc.model;
 
 import com.example.Utils;
+import com.google.common.base.Strings;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
 import com.sgcc.dao.PayResultDao;
