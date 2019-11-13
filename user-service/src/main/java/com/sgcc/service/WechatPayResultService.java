@@ -104,27 +104,25 @@ public class WechatPayResultService {
 
 
     public Result findRecentlyTransform(String openId){
-
         if (Strings.isNullOrEmpty(openId))
             return Result.failure("openId为空");
 
         try {
             List<PayResultDao> payResultDaos = payResultEntity.findPayResult();
             PayResultViewsDTO payResultViewsDTO = payResultEntity.findMoneyByRecently(openId);
-            UserModel userModel = new UserModel(payResultDaos);
 
-            if (userModel.findRecentlyTransform(payResultViewsDTO.getTotal()) != null){
+            if (payResultDaos != null && payResultViewsDTO != null){
+                UserModel userModel = new UserModel(payResultDaos);
+                userModel.findRecentlyTransform(payResultViewsDTO.getTotal());
                 return Result.success(userModel.findRecentlyTransform(payResultViewsDTO.getTotal()));
             }else {
-                return Result.failure(TopErrorCode.NO_DATAS);
+                return Result.failure("没有查询到数据");
             }
 
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
-
-
     }
 
 

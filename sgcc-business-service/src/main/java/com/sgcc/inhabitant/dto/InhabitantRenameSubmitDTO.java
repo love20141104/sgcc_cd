@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class InhabitantRenameSubmitDTO implements Serializable {
     private static final long serialVersionUID = 8259578234317479309L;
-//    private String infoId;
 
     private String houseId;          // 户号信息id
 

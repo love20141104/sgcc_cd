@@ -26,9 +26,29 @@ public class ChartRepository {
      * @return
      */
     public List<PaymentAmountChartDTO> findPaymentAmountChart(){
-        String sql = "select sum(pay_totalFee) as total,date_format(pay_date ,'%Y-%m') as pay_date from b_pay_info " +
-                "WHERE date_sub(curdate(), interval 12 month ) < date(pay_date) group by DATE_FORMAT(pay_date ,'%Y-%m') " +
-                "ORDER BY DATE_FORMAT(pay_date ,'%Y-%m') asc";
+//        String sql = "select sum(pay_totalFee) as total,date_format(pay_date ,'%Y-%m') as pay_date from b_pay_info " +
+//                "WHERE date_sub(curdate(), interval 12 month ) < date(pay_date) group by DATE_FORMAT(pay_date ,'%Y-%m') " +
+//                "ORDER BY DATE_FORMAT(pay_date ,'%Y-%m') asc";
+
+        String sql = "select ifnull(sum(pay_totalFee),0) as total,d.date as pay_date from b_pay_info p " +
+                "RIGHT JOIN (select DATE_FORMAT(date_sub(curdate(), interval 11 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 10 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 9 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 8 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 7 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 6 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 5 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 4 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 3 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 2 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 1 month ),'%Y-%m') as date " +
+                "union select DATE_FORMAT(date_sub(curdate(), interval 0 month ),'%Y-%m') as date) d " +
+                "ON date_format(p.pay_date ,'%Y-%m')=d.date " +
+                "group by d.date " +
+                "order by d.date asc;";
+
+
+
         return jdbcTemplate.query(sql,new PaymentAmountChartRowMapper());
     }
 

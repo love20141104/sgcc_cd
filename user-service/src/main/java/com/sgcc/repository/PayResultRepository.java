@@ -26,14 +26,18 @@ public class PayResultRepository {
      * @return
      */
     public PayResultViewsDTO findMoneyByRecently(String openId){
-        String sql = "select pay_totalFee from b_pay_info where pay_household_number in("
-                +"select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
-                +" where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id='"+openId+"')"
-                +"and pay_date in (select max(pay_date) from b_pay_info where pay_household_number in("
-                +"select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
-                +" where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id='"+openId+"'));";
+        try {
+            String sql = "select pay_totalFee from b_pay_info where pay_household_number in("
+                    +"select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
+                    +" where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id='"+openId+"')"
+                    +"and pay_date in (select max(pay_date) from b_pay_info where pay_household_number in("
+                    +"select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
+                    +" where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id='"+openId+"'));";
 
-        return jdbcTemplate.queryForObject(sql,new findMoneyByRecentlyRowMapper());
+            return jdbcTemplate.queryForObject(sql,new findMoneyByRecentlyRowMapper());
+        }catch (Exception e){
+            return null;
+        }
     }
 
 

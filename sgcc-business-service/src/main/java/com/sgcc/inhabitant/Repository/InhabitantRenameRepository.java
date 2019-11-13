@@ -102,10 +102,22 @@ public class InhabitantRenameRepository {
                 "info_telphone,cq_idcard_img_positive,cq_idcard_img_back,info_apply_person,info_transactor," +
                 "sq_arttorney_img,sq_idcard_positive_img,sq_idcard_back_img,info_transactor_idcard,info_transactor_tel," +
                 "info_submit_date) values('"+dao.getId()+"'," +
-                "'"+dao.getInfoId()+"','"+dao.getHouseId()+"','"+dao.getOpenId()+"',"+dao.getChange()+"," +
-                "'"+dao.getInfoName()+"','"+dao.getInfoIdCard()+"','"+dao.getInfoTel()+"','"+dao.getCqIdCardPositiveImg()+"'," +
-                "'"+dao.getCqIdCardBackImg()+"','"+dao.getApplicant()+"','"+dao.getTransactorName()+"','"+dao.getSqArttorneyImg()+"'," +
-                "'"+dao.getSqIdCardPositiveImg()+"','"+dao.getSqIdCardBackImg()+"','"+dao.getTransactorIdCard()+"','"+dao.getTransactorTel()+"'," +
+                "'"+dao.getInfoId()+"'," +
+                "'"+dao.getHouseId()+"'," +
+                "'"+dao.getOpenId()+"'," +
+                ""+dao.getChange()+"," +
+                "'"+dao.getInfoName()+"'," +
+                "'"+dao.getInfoIdCard()+"'," +
+                "'"+dao.getInfoTel()+"'," +
+                "'"+dao.getCqIdCardPositiveImg()+"'," +
+                "'"+dao.getCqIdCardBackImg()+"'," +
+                "'"+dao.getApplicant()+"'," +
+                "'"+dao.getTransactorName()+"'," +
+                "'"+dao.getSqArttorneyImg()+"'," +
+                "'"+dao.getSqIdCardPositiveImg()+"'," +
+                "'"+dao.getSqIdCardBackImg()+"'," +
+                "'"+dao.getTransactorIdCard()+"'," +
+                "'"+dao.getTransactorTel()+"'," +
                 "'"+ Utils.GetTime(dao.getSubmitDate())+"')";
 
         return jdbcTemplate.update(sql);
