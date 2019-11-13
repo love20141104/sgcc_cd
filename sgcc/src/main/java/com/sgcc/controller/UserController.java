@@ -1,6 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
+import com.sgcc.dto.HouseholdInfoPostDTO;
 import com.sgcc.dto.OrderTransDTO;
 import com.sgcc.dto.PayResultSubmitDTO;
 import com.sgcc.dto.UserSubscribeDTO;
@@ -145,8 +146,8 @@ public class UserController {
      */
     @ApiOperation(value = "用户绑定户号", notes = "")
     @PostMapping(value = "/open-id/{openId}")
-    public Result bindHousehold(@PathVariable String openId,  @RequestParam String householdNum, @RequestParam String pwd) {
-        return householdService.bindHousehold(openId, householdNum, pwd);
+    public Result bindHousehold(@PathVariable String openId,@RequestBody HouseholdInfoPostDTO householdInfoPostDTO) {
+        return householdService.bindHousehold(openId, householdInfoPostDTO.getHouseholdNumber(), householdInfoPostDTO.getPwd());
     }
 
     /**
