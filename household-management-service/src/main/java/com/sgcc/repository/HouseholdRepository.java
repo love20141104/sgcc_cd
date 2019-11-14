@@ -185,7 +185,6 @@ public class HouseholdRepository {
                     +userIdByUserOpenId+"'";
             logger.info("updateSQL:" + sql4);
             jdbcTemplate.execute(sql4);
-
         }
     }
 
