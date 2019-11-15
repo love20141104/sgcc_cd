@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.ApiDescDao;
 import com.sgcc.dto.PageStatistcsDateDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -19,23 +20,26 @@ public class ApiDescRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Value("${precompile}")
+    private Boolean precompile;
+
     public ApiDescDao getApiDesc(String requestMapping, String requestMethod){
-        String sql="select id,request_mapping,request_method,request_desc from d_api_desc ";
-        StringBuffer sql_where = new StringBuffer();
-        if(!Strings.isNullOrEmpty(requestMethod)){
-            sql_where.append("request_method = '").append(requestMethod).append("' and ");
-        }
-        if(!Strings.isNullOrEmpty(requestMapping)){
-            sql_where.append("request_mapping = '").append(requestMapping).append("'");
-        }
-        if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql +=" where " + sql_where.toString();
-        }
-        logger.info("select:"+sql);
-        try {
-           return   jdbcTemplate.queryForObject(sql, new ApiDescDaoRowMapper());
-        }catch (Exception e){
-            return null;
+        if (precompile) {
+            String sql = "select id,request_mapping,request_method,request_desc from d_api_desc where" +
+                    " request_method = ? and request_mapping = ?";
+            try {
+                return jdbcTemplate.queryForObject(sql,new Object[]{requestMethod,requestMapping}, new ApiDescDaoRowMapper());
+            } catch (Exception e) {
+                return null;
+            }
+        }else {
+            String sql = "select id,request_mapping,request_method,request_desc from d_api_desc where" +
+                    " request_method = '"+requestMethod+"' and request_mapping = '"+requestMapping+"'";
+            try {
+                return jdbcTemplate.queryForObject(sql, new ApiDescDaoRowMapper());
+            } catch (Exception e) {
+                return null;
+            }
         }
     }
 

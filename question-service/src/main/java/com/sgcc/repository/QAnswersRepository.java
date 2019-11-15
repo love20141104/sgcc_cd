@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dtomodel.question.QAnswerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,7 +24,8 @@ public class QAnswersRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    @Value("${precompile}")
+    private Boolean precompile;
     /**
      * 查询所有问题回答
      * @param
@@ -92,9 +94,22 @@ public class QAnswersRepository {
      * @param ids
      */
     public void delQAnswer(List<String> ids){
-        String sql = "update d_question_answer set available = 0 where id in ('"
-                +Joiner.on("','").join(ids)+"')";
-        jdbcTemplate.execute(sql);
+        if (precompile) {
+            String sql = "update d_question_answer set available = 0 where id = ? ";
+            jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+                public int getBatchSize() {
+                    return ids.size();
+                }
+                public void setValues(PreparedStatement ps, int i)
+                        throws SQLException {
+                    ps.setString(1,ids.get(i));
+                }
+            });
+        }else {
+            String sql = "update d_question_answer set available = 0 where id in ('"
+                    + Joiner.on("','").join(ids) + "')";
+            jdbcTemplate.execute(sql);
+        }
     }
 
     /**

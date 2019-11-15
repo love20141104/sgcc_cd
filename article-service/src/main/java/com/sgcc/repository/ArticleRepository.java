@@ -122,19 +122,17 @@ public class ArticleRepository {
     public void save(ArticleDao dao){
         if (precompile) {
             String sql = "insert into d_article(id,article_title,article_desc,article_img,article_url," +
-                    "article_recommended,article_type,submit_time) values(?,?,?,?,?,?,?,?)";
-            jdbcTemplate.update(sql,new PreparedStatementSetter() {
-                public void setValues(PreparedStatement ps) throws SQLException {
-                    ps.setString(1, dao.getId());
-                    ps.setString(2, dao.getArticle_title());
-                    ps.setString(3, dao.getArticle_desc());
-                    ps.setString(4, dao.getArticle_img());
-                    ps.setString(5, dao.getArticle_url());
-                    ps.setBoolean(6, dao.isArticle_recommended());
-                    ps.setString(7, dao.getArticle_type());
-                    ps.setString(8, Utils.GetTime(dao.getSubmit_time()));
+                    "article_recommended,article_type,submit_time) values(?,?,?,? ,?,?,?,?)";
+            jdbcTemplate.update(sql,new Object[]{
+                     dao.getId()
+                    ,dao.getArticle_title()
+                    ,dao.getArticle_desc()
+                    ,dao.getArticle_img()
 
-                }
+                    ,dao.getArticle_url()
+                    ,dao.isArticle_recommended()
+                    ,dao.getArticle_type()
+                    ,Utils.GetTime(dao.getSubmit_time())
             });
         }else {
             String sql = "insert into d_article(id,article_title,article_desc,article_img,article_url," +
@@ -157,17 +155,16 @@ public class ArticleRepository {
                     ",article_type=?" +
                     ",submit_time=?" +
                     " where id=?";
-            jdbcTemplate.update(sql,new PreparedStatementSetter() {
-                public void setValues(PreparedStatement ps) throws SQLException {
-                    ps.setString(1, dao.getArticle_title());
-                    ps.setString(2, dao.getArticle_desc());
-                    ps.setString(3, dao.getArticle_img());
-                    ps.setString(4, dao.getArticle_url());
-                    ps.setBoolean(5, dao.isArticle_recommended());
-                    ps.setString(6, dao.getArticle_type());
-                    ps.setString(7, Utils.GetTime(dao.getSubmit_time()));
-                    ps.setString(8, dao.getId());
-                }
+            jdbcTemplate.update(sql,new Object[]{
+                    dao.getArticle_title()
+                    ,dao.getArticle_desc()
+                    ,dao.getArticle_img()
+                    ,dao.getArticle_url()
+
+                    ,dao.isArticle_recommended()
+                    ,dao.getArticle_type()
+                    ,Utils.GetTime(dao.getSubmit_time())
+                    ,dao.getId()
             });
             return findByID(dao.getId());
         }else {

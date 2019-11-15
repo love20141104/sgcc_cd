@@ -3,10 +3,13 @@ package com.sgcc.inhabitant.Repository;
 import com.example.Utils;
 import com.sgcc.inhabitant.dao.InhabitantNewDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -15,78 +18,185 @@ import java.util.List;
 public class InhabitantNewRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Value("${precompile}")
+    private Boolean precompile;
 
     public void save( InhabitantNewDao dao )
     {
-        String sql = "insert into b_new_install_inhabitant ( id,user_open_id,new_install_district,new_install_address," +
-                "new_install_capacity,propertyRight_img1,propertyRight_img2," +
-                "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
-                "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
-                "new_install_apply_person,new_install_transactor,new_install_transactor_idcard,sq_arttorney_img,sq_idcard_positive_img," +
-                "sq_idcard_back_img,new_install_transactor_tel,submit_date) values('" +
-                dao.getId()+"','" +
-                dao.getUser_open_id() + "','" +
-                dao.getNew_install_district()+ "','" +
-                dao.getNew_install_address()+ "','" +
-                dao.getNew_install_capacity() + "','" +
-                dao.getPropertyRight_img1() + "','" +
-                dao.getPropertyRight_img2() + "','" +
-                dao.getPropertyRight_img3() + "','" +
-                dao.getPropertyRight_img4() + "','" +
-                dao.getPropertyRight_img5() + "','" +
-                dao.getPropertyRight_img6() + "','" +
-                dao.getCq_idcard_positive_img()+ "','" +
-                dao.getCq_idcard_back_img() + "','" +
-                dao.getNew_install_name() + "','" +
-                dao.getNew_install_idcard() + "','" +
-                dao.getNew_install_telphone() + "','" +
-                dao.getNew_install_apply_person() + "','" +
-                dao.getNew_install_transactor()+ "','" +
-                dao.getNew_install_transactor_idcard() + "','"+
-                dao.getSq_arttorney_img()+ "','"+
-                dao.getSq_idcard_positive_img() + "','" +
-                dao.getSq_idcard_back_img()+ "','" +
-                dao.getNew_install_transactor_tel()+ "','" +
-                Utils.GetTime(dao.getSubmit_date()) +"')";
-        jdbcTemplate.execute(sql);
+        if (precompile) {
+            String sql = "insert into b_new_install_inhabitant ( id,user_open_id,new_install_district,new_install_address," +
+                    "new_install_capacity,propertyRight_img1,propertyRight_img2," +
+                    "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
+                    "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
+                    "new_install_apply_person,new_install_transactor,new_install_transactor_idcard,sq_arttorney_img,sq_idcard_positive_img," +
+                    "sq_idcard_back_img,new_install_transactor_tel,submit_date) " +
+                    "values(?,?,?,?,? ,?,?,?,?,? ,?,?,?,?,? ,?,?,?,?,? ,?,?,?,?)";
+            jdbcTemplate.update(sql,new Object[]{
+                    dao.getId()
+                            ,dao.getUser_open_id()
+                            ,dao.getNew_install_district()
+                           , dao.getNew_install_address()
+                            ,dao.getNew_install_capacity()
+
+                    ,dao.getPropertyRight_img1()
+                           , dao.getPropertyRight_img2()
+                            ,dao.getPropertyRight_img3()
+                            ,dao.getPropertyRight_img4()
+                           , dao.getPropertyRight_img5()
+
+                    ,dao.getPropertyRight_img6()
+                            ,dao.getCq_idcard_positive_img()
+                            ,dao.getCq_idcard_back_img()
+                            ,dao.getNew_install_name()
+                            ,dao.getNew_install_idcard()
+
+                    ,dao.getNew_install_telphone()
+                            ,dao.getNew_install_apply_person()
+                            ,dao.getNew_install_transactor()
+                            ,dao.getNew_install_transactor_idcard()
+                            ,dao.getSq_arttorney_img()
+
+                    ,dao.getSq_idcard_positive_img()
+                            ,dao.getSq_idcard_back_img()
+                            ,dao.getNew_install_transactor_tel()
+                            ,Utils.GetTime(dao.getSubmit_date())
+            });
+        }else {
+            String sql = "insert into b_new_install_inhabitant ( id,user_open_id,new_install_district,new_install_address," +
+                    "new_install_capacity,propertyRight_img1,propertyRight_img2," +
+                    "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
+                    "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
+                    "new_install_apply_person,new_install_transactor,new_install_transactor_idcard,sq_arttorney_img,sq_idcard_positive_img," +
+                    "sq_idcard_back_img,new_install_transactor_tel,submit_date) values('" +
+                    dao.getId() + "','" +
+                    dao.getUser_open_id() + "','" +
+                    dao.getNew_install_district() + "','" +
+                    dao.getNew_install_address() + "','" +
+                    dao.getNew_install_capacity() + "','" +
+                    dao.getPropertyRight_img1() + "','" +
+                    dao.getPropertyRight_img2() + "','" +
+                    dao.getPropertyRight_img3() + "','" +
+                    dao.getPropertyRight_img4() + "','" +
+                    dao.getPropertyRight_img5() + "','" +
+                    dao.getPropertyRight_img6() + "','" +
+                    dao.getCq_idcard_positive_img() + "','" +
+                    dao.getCq_idcard_back_img() + "','" +
+                    dao.getNew_install_name() + "','" +
+                    dao.getNew_install_idcard() + "','" +
+                    dao.getNew_install_telphone() + "','" +
+                    dao.getNew_install_apply_person() + "','" +
+                    dao.getNew_install_transactor() + "','" +
+                    dao.getNew_install_transactor_idcard() + "','" +
+                    dao.getSq_arttorney_img() + "','" +
+                    dao.getSq_idcard_positive_img() + "','" +
+                    dao.getSq_idcard_back_img() + "','" +
+                    dao.getNew_install_transactor_tel() + "','" +
+                    Utils.GetTime(dao.getSubmit_date()) + "')";
+            jdbcTemplate.execute(sql);
+        }
     }
 
     public void update( InhabitantNewDao dao )
     {
-        String sql = "update b_new_install_inhabitant set id ='"+ dao.getId()+"',"+
-                "user_open_id = '" + dao.getUser_open_id() +"',"+
-                "new_install_district= '" + dao.getNew_install_district() +"',"+
-                "new_install_address= '" + dao.getNew_install_address() +"',"+
-                "new_install_capacity= '" + dao.getNew_install_capacity() +"',"+
-                "propertyRight_img1= '" + dao.getPropertyRight_img1() +"',"+
-                "propertyRight_img2= '" + dao.getPropertyRight_img2() +"',"+
-                "propertyRight_img3= '" + dao.getPropertyRight_img3() +"',"+
-                "propertyRight_img4= '" + dao.getPropertyRight_img4() +"',"+
-                "propertyRight_img5= '" + dao.getPropertyRight_img5() +"',"+
-                "propertyRight_img6= '" + dao.getPropertyRight_img6() +"',"+
-                "cq_idcard_positive_img= '" + dao.getCq_idcard_positive_img() +"',"+
-                "cq_idcard_back_img= '" + dao.getCq_idcard_back_img() +"',"+
-                "new_install_name= '" + dao.getNew_install_name() +"',"+
-                "new_install_idcard= '" + dao.getNew_install_idcard() +"',"+
-                "new_install_telphone= '" + dao.getNew_install_telphone() +"',"+
-                "new_install_apply_person= '" + dao.getNew_install_apply_person() +"',"+
-                "new_install_transactor= '" + dao.getNew_install_transactor() +"',"+
-                "sq_arttorney_img= '" + dao.getSq_arttorney_img() +"',"+
-                "sq_idcard_positive_img= '" + dao.getSq_idcard_positive_img() +"',"+
-                "sq_idcard_back_img= '" + dao.getSq_idcard_back_img() +"',"+
-                "new_install_transactor_idcard= '" + dao.getNew_install_transactor_idcard() +"',"+
-                "new_install_transactor_tel= '" + dao.getNew_install_transactor_tel() +"',"+
-                "submit_date= '" + Utils.GetTime(dao.getSubmit_date()) +"' where id='" + dao.getId() + "'";
-        jdbcTemplate.execute(sql);
+        if (precompile) {
+            String sql = "update b_new_install_inhabitant set id =?," +
+                    "user_open_id = ?," +
+                    "new_install_district= ?," +
+                    "new_install_address= ?," +
+                    "new_install_capacity= ?," +
+                    "propertyRight_img1= ?," +
+                    "propertyRight_img2= ?," +
+                    "propertyRight_img3= ?," +
+                    "propertyRight_img4= ?," +
+                    "propertyRight_img5= ?," +
+                    "propertyRight_img6= ?," +
+                    "cq_idcard_positive_img= ?," +
+                    "cq_idcard_back_img= ?," +
+                    "new_install_name= ?," +
+                    "new_install_idcard= ?," +
+                    "new_install_telphone= ?," +
+                    "new_install_apply_person= ?," +
+                    "new_install_transactor= ?," +
+                    "sq_arttorney_img= ?," +
+                    "sq_idcard_positive_img= ?," +
+                    "sq_idcard_back_img= ?," +
+                    "new_install_transactor_idcard= ?," +
+                    "new_install_transactor_tel= ?," +
+                    "submit_date= ? where id=?";
+            jdbcTemplate.update(sql,new Object[]{
+                    dao.getId()
+                    ,dao.getUser_open_id()
+                    , dao.getNew_install_district()
+                    , dao.getNew_install_address()
+                    ,dao.getNew_install_capacity()
+                    , dao.getPropertyRight_img1()
+                    , dao.getPropertyRight_img2()
+                    , dao.getPropertyRight_img3()
+                    , dao.getPropertyRight_img4()
+                    , dao.getPropertyRight_img5()
+                    , dao.getPropertyRight_img6()
+                    , dao.getCq_idcard_positive_img()
+                    ,dao.getCq_idcard_back_img()
+                    , dao.getNew_install_name()
+                    , dao.getNew_install_idcard()
+                    , dao.getNew_install_telphone()
+                    , dao.getNew_install_apply_person()
+                    , dao.getNew_install_transactor()
+                    , dao.getSq_arttorney_img()
+                    , dao.getSq_idcard_positive_img()
+                    , dao.getSq_idcard_back_img()
+                    , dao.getNew_install_transactor_idcard()
+                    , dao.getNew_install_transactor_tel()
+                    , Utils.GetTime(dao.getSubmit_date())
+                    , dao.getId()
+            });
+        }else {
+            String sql = "update b_new_install_inhabitant set id ='" + dao.getId() + "'," +
+                    "user_open_id = '" + dao.getUser_open_id() + "'," +
+                    "new_install_district= '" + dao.getNew_install_district() + "'," +
+                    "new_install_address= '" + dao.getNew_install_address() + "'," +
+                    "new_install_capacity= '" + dao.getNew_install_capacity() + "'," +
+                    "propertyRight_img1= '" + dao.getPropertyRight_img1() + "'," +
+                    "propertyRight_img2= '" + dao.getPropertyRight_img2() + "'," +
+                    "propertyRight_img3= '" + dao.getPropertyRight_img3() + "'," +
+                    "propertyRight_img4= '" + dao.getPropertyRight_img4() + "'," +
+                    "propertyRight_img5= '" + dao.getPropertyRight_img5() + "'," +
+                    "propertyRight_img6= '" + dao.getPropertyRight_img6() + "'," +
+                    "cq_idcard_positive_img= '" + dao.getCq_idcard_positive_img() + "'," +
+                    "cq_idcard_back_img= '" + dao.getCq_idcard_back_img() + "'," +
+                    "new_install_name= '" + dao.getNew_install_name() + "'," +
+                    "new_install_idcard= '" + dao.getNew_install_idcard() + "'," +
+                    "new_install_telphone= '" + dao.getNew_install_telphone() + "'," +
+                    "new_install_apply_person= '" + dao.getNew_install_apply_person() + "'," +
+                    "new_install_transactor= '" + dao.getNew_install_transactor() + "'," +
+                    "sq_arttorney_img= '" + dao.getSq_arttorney_img() + "'," +
+                    "sq_idcard_positive_img= '" + dao.getSq_idcard_positive_img() + "'," +
+                    "sq_idcard_back_img= '" + dao.getSq_idcard_back_img() + "'," +
+                    "new_install_transactor_idcard= '" + dao.getNew_install_transactor_idcard() + "'," +
+                    "new_install_transactor_tel= '" + dao.getNew_install_transactor_tel() + "'," +
+                    "submit_date= '" + Utils.GetTime(dao.getSubmit_date()) + "' where id='" + dao.getId() + "'";
+            jdbcTemplate.execute(sql);
+        }
     }
 
-    public void deletes( List<String> ids )
-    {
-        String strIds = Utils.joinStrings(ids,"','");
-        String sql = "delete from b_new_install_inhabitant where id in('"+ strIds +"')";
-        jdbcTemplate.execute(sql);
+    public void deletes( List<String> ids ) {
+        if (precompile) {
+            String sql = "delete from b_new_install_inhabitant where id =? ";
+            jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+                public int getBatchSize() {
+                    return ids.size();
+                }
+                public void setValues(PreparedStatement ps, int i)
+                        throws SQLException {
+                    ps.setString(1,ids.get(i));
+                }
+            });
+        } else {
+            String strIds = Utils.joinStrings(ids, "','");
+            String sql = "delete from b_new_install_inhabitant where id in('" + strIds + "')";
+            jdbcTemplate.execute(sql);
+        }
     }
-
     public List<InhabitantNewDao> findAll()
     {
         String sql = "select id,user_open_id,new_install_district,new_install_address," +
@@ -106,37 +216,70 @@ public class InhabitantNewRepository {
 
     public InhabitantNewDao findById(String id )
     {
-        String sql = "select id,user_open_id,new_install_district,new_install_address," +
-                "new_install_capacity,propertyRight_img1,propertyRight_img2," +
-                "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
-                "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
-                "new_install_apply_person,new_install_transactor,sq_arttorney_img,sq_idcard_positive_img," +
-                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_inhabitant where id ='" + id + "'";
+        if (precompile) {
+            String sql = "select id,user_open_id,new_install_district,new_install_address," +
+                    "new_install_capacity,propertyRight_img1,propertyRight_img2," +
+                    "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
+                    "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
+                    "new_install_apply_person,new_install_transactor,sq_arttorney_img,sq_idcard_positive_img," +
+                    "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_inhabitant where id =? ";
 
-        try {
-            return jdbcTemplate.queryForObject(sql, new InhabitantNewRowMapper());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("失败！！");
+            try {
+                return jdbcTemplate.queryForObject(sql,new Object[]{id}, new InhabitantNewRowMapper());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("失败！！");
+            }
+        }else {
+            String sql = "select id,user_open_id,new_install_district,new_install_address," +
+                    "new_install_capacity,propertyRight_img1,propertyRight_img2," +
+                    "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
+                    "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
+                    "new_install_apply_person,new_install_transactor,sq_arttorney_img,sq_idcard_positive_img," +
+                    "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date from b_new_install_inhabitant where id ='" + id + "'";
+
+            try {
+                return jdbcTemplate.queryForObject(sql, new InhabitantNewRowMapper());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("失败！！");
+            }
         }
     }
 
 
     public List<InhabitantNewDao> findByOpenId(String id )
     {
-        String sql = "select id,user_open_id,new_install_district,new_install_address," +
-                "new_install_capacity,propertyRight_img1,propertyRight_img2," +
-                "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
-                "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
-                "new_install_apply_person,new_install_transactor,sq_arttorney_img,sq_idcard_positive_img," +
-                "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date " +
-                "from b_new_install_inhabitant where user_open_id ='" + id + "'";
+        if (precompile) {
+            String sql = "select id,user_open_id,new_install_district,new_install_address," +
+                    "new_install_capacity,propertyRight_img1,propertyRight_img2," +
+                    "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
+                    "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
+                    "new_install_apply_person,new_install_transactor,sq_arttorney_img,sq_idcard_positive_img," +
+                    "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date " +
+                    "from b_new_install_inhabitant where user_open_id =? ";
 
-        try {
-            return jdbcTemplate.query(sql, new InhabitantNewRowMapper());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("失败！！");
+            try {
+                return jdbcTemplate.query(sql,new Object[]{id}, new InhabitantNewRowMapper());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("失败！！");
+            }
+        }else {
+            String sql = "select id,user_open_id,new_install_district,new_install_address," +
+                    "new_install_capacity,propertyRight_img1,propertyRight_img2," +
+                    "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6," +
+                    "cq_idcard_positive_img,cq_idcard_back_img,new_install_name,new_install_idcard,new_install_telphone," +
+                    "new_install_apply_person,new_install_transactor,sq_arttorney_img,sq_idcard_positive_img," +
+                    "sq_idcard_back_img,new_install_transactor_idcard,new_install_transactor_tel,submit_date " +
+                    "from b_new_install_inhabitant where user_open_id ='" + id + "'";
+
+            try {
+                return jdbcTemplate.query(sql, new InhabitantNewRowMapper());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("失败！！");
+            }
         }
     }
 
