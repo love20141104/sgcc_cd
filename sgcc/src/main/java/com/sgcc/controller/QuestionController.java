@@ -22,7 +22,7 @@ public class QuestionController {
      *
      * @return
      */
-    @ApiOperation(value = "QuestionCategory", notes = "")
+    @ApiOperation(value = "QuestionCategory", notes = "查问题分类列表")
     @GetMapping(value = "/QuestionCategory")
     public Result getQuestionCategory() {
         return Result.success(questionService.getQuestionCategory());
@@ -34,7 +34,7 @@ public class QuestionController {
      * @param categoryId
      * @return
      */
-    @ApiOperation(value = "QuestionAnwser", notes = "")
+    @ApiOperation(value = "QuestionAnwser", notes = "根据问题分类id查询QA")
     @GetMapping(value = "/QuestionAnwser/category-Id/{categoryId}")
     public Result getQAList(@PathVariable String categoryId) {
         return Result.success(questionService.getQAList(categoryId));

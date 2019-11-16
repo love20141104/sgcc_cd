@@ -7,7 +7,9 @@ import com.sgcc.dao.BusinessCategoryRedisDao;
 import com.sgcc.dao.BusinessGuideDao;
 import com.sgcc.dao.BusinessGuideRedisDao;
 import com.sgcc.dto.*;
+import com.sgcc.entity.BusinessGuideQueryEntity;
 import com.sgcc.exception.TopErrorCode;
+import com.sgcc.model.BusinessHotModel;
 import com.sgcc.model.BusinessModel;
 import com.sgcc.producer.BusinessGuideProducer;
 import com.sgcc.repository.BCRedisRepository;
@@ -36,6 +38,9 @@ public class BusinessGuideService {
     private BGRedisRepository bgRedisRepository;
     @Autowired
     private BusinessGuideProducer businessGuideProducer;
+
+    @Autowired
+    private BusinessGuideQueryEntity businessGuideQueryEntity;
 
     public Result saveBusinessGuide(BusinessGuideSubmitDto businessGuideSubmitDto){
         BusinessGuideDao businessGuideDao = BusinessModel.sbumitdtotoredisdaoBG(businessGuideSubmitDto);
@@ -125,10 +130,17 @@ public class BusinessGuideService {
         return Result.success();
     }
 
+    /**
+     *
+     * @return
+     */
     public Result getBusinessCategoryList(){
         List<BusinessCategoryDao> businessCategoryDaos = businessCategoryRepository.selectBusinessCategory();
         List<BusinessCategoryDto> businessCategoryDtos = BusinessModel.daoTodtoBC(businessCategoryDaos);
-        return Result.success(businessCategoryDtos);
+        List<String> ids = businessGuideQueryEntity.selectHotBusinessCategory();
+        BusinessHotModel businessHotModel = new BusinessHotModel(ids,businessCategoryDtos);
+        businessHotModel.dto2hotDto();
+        return Result.success(businessHotModel.getBusinessCategoryHotDtos());
     }
 
 

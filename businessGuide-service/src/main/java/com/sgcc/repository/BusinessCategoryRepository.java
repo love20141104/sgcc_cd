@@ -101,6 +101,22 @@ public class BusinessCategoryRepository {
             return jdbcTemplate.query(sql, new BusinessCategoryDaoRowMapper());
         }
     }
+
+    /**
+     * 查询热点业务指南分类
+     * @return
+     */
+    public List<String> selectHotBusinessCategory(){
+        String sql = "select\n" +
+                "d.id\n" +
+                "from d_business_category d\n" +
+                "left join b_page_statistics b on b.page_url =concat('https://sgcc.link/businessGuideDetails?id=',d.id)\n" +
+                "group by d.id\n" +
+                "order by count(*) desc\n" +
+                "  limit 2 offset 0";
+        List<String> ids = jdbcTemplate.queryForList(sql,String.class);
+        return ids;
+    }
     class BusinessCategoryDaoRowMapper implements RowMapper<BusinessCategoryDao> {
 
         @Override

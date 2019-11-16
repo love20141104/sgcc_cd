@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class QuestionCategoryDTO implements Serializable ,Comparable<QuestionCategoryDTO>{
     private static final long serialVersionUID = -5867765633296987012L;
@@ -24,6 +23,21 @@ public class QuestionCategoryDTO implements Serializable ,Comparable<QuestionCat
     private Boolean categoryAvailable;
 
     private String categoryDetail;
+
+    public QuestionCategoryDTO(String categoryId
+            , String categoryDesc
+            , Integer categoryOrder
+            , Boolean categoryAvailable
+            , String categoryDetail) {
+        this.categoryId = categoryId;
+        this.categoryDesc = categoryDesc;
+        this.categoryOrder = categoryOrder;
+        this.categoryAvailable = categoryAvailable;
+        this.categoryDetail = categoryDetail;
+        this.isHot =false;
+    }
+
+    private boolean isHot = false;
 
     @Override
     public int compareTo(QuestionCategoryDTO questionCategoryDTO) {
