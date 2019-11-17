@@ -115,7 +115,7 @@ public class QCategorysRepository {
      * @param categoryDesc
      */
     public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc,boolean available) {
-        if (precompile) {
+        if (false) {
             Object[] objects = {};
             ArrayList<Object> objects1 = new ArrayList<>();
             String sql = "select id,category_id,category_desc,category_order,category_detail,category_available from d_question_category";
