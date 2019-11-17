@@ -5,6 +5,7 @@ import com.sgcc.dao.PayResultDao;
 import com.sgcc.dto.PaymentAmountChartDTO;
 import com.sgcc.dto.PaymentTimesDTO;
 import com.sgcc.dto.TotalFeesAvgChartDTO;
+import com.sgcc.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -131,21 +133,34 @@ public class ChartRepository {
      * @return
      */
     public TotalFeesAvgChartDTO findTotalFeesAvgChart(){
-        String sql = "select (select sum(pay_totalFee) as total from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date)) as total,\n" +
-                "       (select sum(pay_totalFee)/10 as average from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date)) as average,\n" +
-                "       sum(pay_totalFee) thisWeekTotal,\n" +
-                "       (select sum(pay_totalFee) from b_pay_info WHERE yearweek(date_format(pay_date,'%Y-%m-%d'),1) = yearweek(now(),1)-1) as ratio\n" +
-                "from b_pay_info WHERE yearweek(date_format(pay_date,'%Y-%m-%d'),1) = yearweek(now(),1) ";
-        TotalFeesAvgChartDTO totalFeesAvgChartDTO = jdbcTemplate.queryForObject(sql,new TotalFeesAvgChartRowMapper());
+//        String sql = "select (select sum(pay_totalFee) as total from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date)) as total,\n" +
+//                "       (select sum(pay_totalFee)/10 as average from b_pay_info WHERE date_sub(curdate(), interval 10 day ) < date(pay_date)) as average,\n" +
+//                "       sum(pay_totalFee) thisWeekTotal,\n" +
+//                "       (select sum(pay_totalFee) from b_pay_info WHERE yearweek(date_format(pay_date,'%Y-%m-%d'),1) = yearweek(now(),1)-1) as ratio\n" +
+//                "from b_pay_info WHERE yearweek(date_format(pay_date,'%Y-%m-%d'),1) = yearweek(now(),1) ";
+//
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //每周第一天为周日
+        String this_sunday = sdf.format(DateUtil.getnweekFirst(1));
+        String last_sunday = DateUtil.addnDay(sdf.format(DateUtil.getnweekFirst(1)),-7);
+        String last_saturday = DateUtil.addnDay(sdf.format(DateUtil.getnweekFirst(1)),-1);
+        String sql = "select sum(pay_totalFee) total\n" +
+                "  ,sum(pay_totalFee)/(TIMESTAMPDIFF(DAY,min(pay_date),DATE_FORMAT(NOW(),'%Y-%m-%d'))+1) average\n" +
+                "  ,(select sum(pay_totalFee) thisWeekTotal from b_pay_info where pay_date >='"+this_sunday+"') thisWeekTotal\n" +
+                "  ,(((select sum(pay_totalFee) thisWeekTotal from b_pay_info where pay_date >='"+this_sunday+"')\n" +
+                "   /(select sum(pay_totalFee) thisWeekTotal from b_pay_info where pay_date >='"+last_sunday+"' and pay_date<='"+last_saturday+"'))\n" +
+                "-1) as ratio\n" +
+                "from b_pay_info";
+            TotalFeesAvgChartDTO totalFeesAvgChartDTO = jdbcTemplate.queryForObject(sql,new TotalFeesAvgChartRowMapper());
         // 计算同比增长率
 
 
-        if (totalFeesAvgChartDTO.getRatio() != 0){
-            double ratio = (totalFeesAvgChartDTO.getThisWeekTotal()-totalFeesAvgChartDTO.getRatio())/totalFeesAvgChartDTO.getRatio();
-            totalFeesAvgChartDTO.setRatio(ratio);
-        }else {
-            totalFeesAvgChartDTO.setRatio(0);
-        }
+//        if (totalFeesAvgChartDTO.getRatio() != 0){
+//            double ratio = (totalFeesAvgChartDTO.getThisWeekTotal()-totalFeesAvgChartDTO.getRatio())/totalFeesAvgChartDTO.getRatio();
+//            totalFeesAvgChartDTO.setRatio(ratio);
+//        }else {
+//            totalFeesAvgChartDTO.setRatio(0);
+//        }
         return totalFeesAvgChartDTO;
     }
 
