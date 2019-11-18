@@ -68,7 +68,7 @@ public class ChartService {
 
 
     /**
-     * 查询最近10天缴费总额和日均销售额
+     * 查询缴费总额和日均销售额
      *
      * @return
      */

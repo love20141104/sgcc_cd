@@ -266,7 +266,7 @@ public class UserRepository {
             String sql = "insert into b_info_correct_inhabitant(correct_id, user_open_id, house_id, correct_name, " +
                     "correct_idcard, correct_tel, correct_idcard_positive_img, correct_idcard_back_img, correct_new_name, " +
                     "correct_new_address, correct_new_tel, correct_submit_date)" +
-                    " values()";
+                    " values(?,?,?,?,?,?,?,?,?,?,?,?)";
 
             return jdbcTemplate.update(sql,new Object[]{
                     dao.getCorrectId()
