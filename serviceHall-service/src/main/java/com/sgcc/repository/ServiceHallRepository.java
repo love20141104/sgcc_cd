@@ -60,7 +60,7 @@ public class ServiceHallRepository {
                     ",service_hall_available=? " +
                     ",service_hall_traffic=? " +
                     ",service_hall_rank=? " +
-                    ",service_hall_collect=? ";
+                    ",service_hall_collect=? " ;
             objects1.add(serviceHallDao.getServiceHallName());
             objects1.add(serviceHallDao.getServiceHallAddr());
             objects1.add(serviceHallDao.getServiceHallOpenTime());
@@ -72,26 +72,33 @@ public class ServiceHallRepository {
             objects1.add(serviceHallDao.getServiceHallRank());
             objects1.add(serviceHallDao.getServiceHallCollect());
             StringBuffer stringBuffer = new StringBuffer();
-            String whereSql = " where service_hall_id=? ";
-
             if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallTel()))
                 stringBuffer.append(",").append("service_hall_tel=? ");
                  objects1.add(serviceHallDao.getServiceHallTel() );
+
             if (!(serviceHallDao.getServiceHallLongitude() - 0.0 < 1e-6))
                 stringBuffer.append(",").append("service_hall_longitude=? ");
             objects1.add(serviceHallDao.getServiceHallLongitude());
+
             if (!(serviceHallDao.getServiceHallLatitude() - 0.0 < 1e-6))
                 stringBuffer.append(",").append("service_hall_latitude=?");
             objects1.add(serviceHallDao.getServiceHallLatitude());
+
             if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallLandmarkBuilding()))
                 stringBuffer.append(",").append("service_hall_landmark_building=? ");
             objects1.add(serviceHallDao.getServiceHallLandmarkBuilding());
+
             if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallBusinessDesc()))
                 stringBuffer.append(",").append("service_hall_business_desc=? ");
             objects1.add(serviceHallDao.getServiceHallBusinessDesc());
+
             if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallBusinessDistrict()))
                 stringBuffer.append(",").append("service_hall_business_district=? ");
             objects1.add(serviceHallDao.getServiceHallBusinessDistrict());
+
+            String whereSql = " where service_hall_id=? ";
+            objects1.add(serviceHallDao.getServiceHallId());
+
             if (!Strings.isNullOrEmpty(stringBuffer.toString())) {
                 sql += stringBuffer.toString() + whereSql;
             } else {
@@ -99,11 +106,12 @@ public class ServiceHallRepository {
             }
             objects1.add(serviceHallDao.getServiceHallId());
             if(objects1.size()>0){
+                Object[] objects2 = new Object[objects1.size()];
                 for (int i = 0; i <objects1.size() ; i++) {
-                    objects[i]=objects1.get(i);
+                    objects2[i]=objects1.get(i);
                 }
+                objects=objects2;
             }
-
             logger.info("updateSQL:" + sql);
             jdbcTemplate.update(sql,objects);
         }else {

@@ -129,14 +129,16 @@ public class QCategorysRepository {
                 objects1.add("%"+categoryDesc+"%");
             }
             sql_where.append("category_available = ?  and ");
-            objects1.add("%"+available+"%");
+            objects1.add(available);
             if (!Strings.isNullOrEmpty(sql_where.toString())) {
            sql +=" where " + sql_where.toString().substring(0,sql_where.toString().length() - 4);
             }
             if(objects1.size()>0){
+                Object[] objects2 = new Object[objects1.size()];
                 for (int i = 0; i <objects1.size() ; i++) {
-                    objects[i]=objects1.get(i);
+                    objects2[i]=objects1.get(i);
                 }
+                objects=objects2;
             }
             return jdbcTemplate.query(sql,objects, new categoryRowMapper());
         }else {

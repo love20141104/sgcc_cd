@@ -603,10 +603,10 @@ public class HouseholdRepository {
      */
     public void updateSubscribe(String openId,String columnName,boolean is_subscribe){
         if (precompile) {
-            String sql = "update b_subscribe set ? = ? where user_id = (" +
+            String sql = "update b_subscribe set " + columnName + " = ? where user_id = (" +
                     "select u.user_id from b_user u " +
                     "where u.user_open_id = ? )";
-            jdbcTemplate.update(sql,new Object[]{columnName,is_subscribe,openId});
+            jdbcTemplate.update(sql,new Object[]{is_subscribe,openId});
         }else {
             String sql = "update b_subscribe set " + columnName + " = " + is_subscribe +
                     " where user_id = (" +

@@ -8,6 +8,7 @@ import com.sgcc.dto.ApiStatisticsActiveDto;
 import com.sgcc.dto.ApiStatisticsDto;
 import com.sgcc.dto.ApiStatisticsQueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -25,20 +26,40 @@ public class ApiStatisticsRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Value("${precompile}")
+    private Boolean precompile;
+
     @Transactional
     public void saveApiStatistics(ApiStatisticsDao apiStatisticsDao){
-        if(!Strings.isNullOrEmpty(apiStatisticsDao.getApiUrlDesc())&&!apiStatisticsDao.getApiUrlDesc().equalsIgnoreCase("null")) {
-            String sql = "insert into b_api_statistics(id,api_url,request_method,user_open_id,visit_date,client_ip,api_url_desc)" +
-                    "values ('" + apiStatisticsDao.getId() + "','"
-                    + apiStatisticsDao.getApiUrl() + "','"
-                    + apiStatisticsDao.getRequestMethod() + "','"
-                    + apiStatisticsDao.getUserOpenId() + "','"
-                    + Utils.GetTime(apiStatisticsDao.getVisitDate()) + "','"
-                    + apiStatisticsDao.getClientIp() + "','"
-                    + apiStatisticsDao.getApiUrlDesc()
-                    + "')";
-            logger.info("insertSQL:" + sql);
-            jdbcTemplate.execute(sql);
+        if (precompile) {
+            if (!Strings.isNullOrEmpty(apiStatisticsDao.getApiUrlDesc()) && !apiStatisticsDao.getApiUrlDesc().equalsIgnoreCase("null")) {
+                String sql = "insert into b_api_statistics(id,api_url,request_method,user_open_id,visit_date,client_ip,api_url_desc)" +
+                        "values ()";
+                logger.info("insertSQL:" + sql);
+                jdbcTemplate.update(sql,new Object[]{
+                        apiStatisticsDao.getId()
+                        , apiStatisticsDao.getApiUrl()
+                        , apiStatisticsDao.getRequestMethod()
+                        , apiStatisticsDao.getUserOpenId()
+                        , Utils.GetTime(apiStatisticsDao.getVisitDate())
+                        , apiStatisticsDao.getClientIp()
+                        , apiStatisticsDao.getApiUrlDesc()
+                });
+            }
+        }else {
+            if (!Strings.isNullOrEmpty(apiStatisticsDao.getApiUrlDesc()) && !apiStatisticsDao.getApiUrlDesc().equalsIgnoreCase("null")) {
+                String sql = "insert into b_api_statistics(id,api_url,request_method,user_open_id,visit_date,client_ip,api_url_desc)" +
+                        "values ('" + apiStatisticsDao.getId() + "','"
+                        + apiStatisticsDao.getApiUrl() + "','"
+                        + apiStatisticsDao.getRequestMethod() + "','"
+                        + apiStatisticsDao.getUserOpenId() + "','"
+                        + Utils.GetTime(apiStatisticsDao.getVisitDate()) + "','"
+                        + apiStatisticsDao.getClientIp() + "','"
+                        + apiStatisticsDao.getApiUrlDesc()
+                        + "')";
+                logger.info("insertSQL:" + sql);
+                jdbcTemplate.execute(sql);
+            }
         }
     }
     /**
@@ -49,20 +70,27 @@ public class ApiStatisticsRepository {
     *@date: 2019/10/18 0018
     */
     public List<ApiStatisticsQueryDto> getApiStatisticsQuery(String visit_date_begin, String visit_date_end){
-        String sql="select api_url,count(id) call_num from b_api_statistics ";
-        StringBuffer sql_where = new StringBuffer();
-        if(!Strings.isNullOrEmpty(visit_date_begin)){
-            sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
+        if (precompile) {
+            String sql = "select api_url,count(id) call_num from b_api_statistics " +
+                    " where visit_date >=? and  visit_date <=? group by api_url";
+            logger.info("select:" + sql);
+            return jdbcTemplate.query(sql,new Object[]{visit_date_begin,visit_date_end}, new ApiStatisticsQueryRowMapper());
+        }else {
+            String sql = "select api_url,count(id) call_num from b_api_statistics ";
+            StringBuffer sql_where = new StringBuffer();
+            if (!Strings.isNullOrEmpty(visit_date_begin)) {
+                sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
+            }
+            if (!Strings.isNullOrEmpty(visit_date_end)) {
+                sql_where.append("visit_date <= '").append(visit_date_end).append("'");
+            }
+            if (!Strings.isNullOrEmpty(sql_where.toString())) {
+                sql += " where " + sql_where.toString();
+            }
+            sql += " group by api_url";
+            logger.info("select:" + sql);
+            return jdbcTemplate.query(sql, new ApiStatisticsQueryRowMapper());
         }
-        if(!Strings.isNullOrEmpty(visit_date_end)){
-            sql_where.append("visit_date <= '").append(visit_date_end).append("'");
-        }
-        if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql +=" where " + sql_where.toString();
-        }
-        sql+=" group by api_url";
-        logger.info("select:"+sql);
-        return jdbcTemplate.query(sql,new ApiStatisticsQueryRowMapper());
     }
     /**
      *@Description: 查询ApiStatisticsQueryDto结果集
@@ -98,18 +126,24 @@ public class ApiStatisticsRepository {
     *@date: 2019/10/18 0018
     */
     public List<ApiStatisticsDto> getApiStatistics(String visit_date_begin, String visit_date_end){
-        String sql="select id, api_url,user_open_id,visit_date,client_ip from b_api_statistics ";
-        StringBuffer sql_where = new StringBuffer();
-        if(!Strings.isNullOrEmpty(visit_date_begin)){
-            sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
+        if (precompile) {
+            String sql = "select id, api_url,user_open_id,visit_date,client_ip from b_api_statistics " +
+                    " where visit_date >=  ? and visit_date <= ? ";
+            return jdbcTemplate.query(sql,new Object[]{visit_date_begin,visit_date_end}, new ApiStatisticsRowMapper());
+        }else {
+            String sql = "select id, api_url,user_open_id,visit_date,client_ip from b_api_statistics ";
+            StringBuffer sql_where = new StringBuffer();
+            if (!Strings.isNullOrEmpty(visit_date_begin)) {
+                sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
+            }
+            if (!Strings.isNullOrEmpty(visit_date_end)) {
+                sql_where.append("visit_date <= '").append(visit_date_end).append("'");
+            }
+            if (!Strings.isNullOrEmpty(sql_where.toString())) {
+                sql += " where " + sql_where.toString();
+            }
+            return jdbcTemplate.query(sql, new ApiStatisticsRowMapper());
         }
-        if(!Strings.isNullOrEmpty(visit_date_end)){
-            sql_where.append("visit_date <= '").append(visit_date_end).append("'");
-        }
-        if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql +=" where " + sql_where.toString();
-        }
-        return jdbcTemplate.query(sql,new ApiStatisticsRowMapper());
     }
 
     /**
@@ -120,28 +154,26 @@ public class ApiStatisticsRepository {
      *@date: 2019/10/18 0018
      */
     public Integer getApiStatisticsOpenIdNum(String visit_date_begin, String visit_date_end){
-        String sql="select count(DISTINCT(user_open_id)) usernum from b_api_statistics ";
-        StringBuffer sql_where = new StringBuffer();
-        if(!Strings.isNullOrEmpty(visit_date_begin)){
-            sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
-        }
-        if(!Strings.isNullOrEmpty(visit_date_end)){
-            sql_where.append("visit_date <= '").append(visit_date_end).append("'");
-        }
-        if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql +=" where " + sql_where.toString();
-        }
-        List<ApiStatisticsActiveDto> query = jdbcTemplate.query(sql, new ApiStatisticsActiveDtoRowMapper());
-        ApiStatisticsActiveDto apiStatisticsActiveDto = new ApiStatisticsActiveDto();
-        if(null==query||query.size()==0){
-            apiStatisticsActiveDto.setUsernum(1);
+        if (precompile) {
+            String sql = "select count(DISTINCT(user_open_id)) usernum from b_api_statistics " +
+                    " where  visit_date >= ? and visit_date <=? ";
+            return   jdbcTemplate.queryForObject(sql,new Object[]{visit_date_begin,visit_date_end}, Integer.class);
+
         }else {
-            apiStatisticsActiveDto = query.get(0);
-            if (null == apiStatisticsActiveDto.getUsernum() || 0 == apiStatisticsActiveDto.getUsernum()) {
-                apiStatisticsActiveDto.setUsernum(1);
+            String sql = "select count(DISTINCT(user_open_id)) usernum from b_api_statistics ";
+            StringBuffer sql_where = new StringBuffer();
+            if (!Strings.isNullOrEmpty(visit_date_begin)) {
+                sql_where.append("visit_date >= '").append(visit_date_begin).append("' and ");
             }
+            if (!Strings.isNullOrEmpty(visit_date_end)) {
+                sql_where.append("visit_date <= '").append(visit_date_end).append("'");
+            }
+            if (!Strings.isNullOrEmpty(sql_where.toString())) {
+                sql += " where " + sql_where.toString();
+            }
+            return   jdbcTemplate.queryForObject(sql, Integer.class);
+
         }
-        return apiStatisticsActiveDto.getUsernum();
     }
 
     class ApiStatisticsQueryRowMapper implements RowMapper<ApiStatisticsQueryDto>{

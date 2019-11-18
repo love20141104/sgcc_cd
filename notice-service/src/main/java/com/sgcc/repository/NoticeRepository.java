@@ -183,7 +183,7 @@ public class NoticeRepository {
      */
     public void delNoticeById(List<String> ids){
         if (precompile) {
-            String sql = "delete from b_blackout_notice where notice_id in=? ";
+            String sql = "delete from b_blackout_notice where notice_id =? ";
 
             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                 public int getBatchSize() {

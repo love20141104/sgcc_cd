@@ -72,7 +72,7 @@ public class BusinessCategoryRepository {
     @Transactional
     public void deleteBusinessCategory(List<String> ids){
         if (precompile) {
-            String sql = "delete from d_business_category where id in = ?";
+            String sql = "delete from d_business_category where id = ?";
             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
                     return ids.size();

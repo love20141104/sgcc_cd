@@ -73,7 +73,7 @@ public class SuggestionController {
      */
     @ApiOperation(value = "后台管理系统修改意见", notes = "")
     @PutMapping(value = "/Suggestions/{id}")
-    public Result updateSuggestion(SuggestionMappingDTO dto , @PathVariable("id") String suggestionId)
+    public Result updateSuggestion(@RequestBody SuggestionMappingDTO dto , @PathVariable("id") String suggestionId)
     {
         return suggestionService.update(dto);
     }
@@ -82,7 +82,7 @@ public class SuggestionController {
      */
     @ApiOperation(value = "后台管理系统新增意见", notes = "")
     @PostMapping(value = "/Suggestions/{id}")
-    public Result AddSuggestion(SuggestionMappingDTO dto, @PathVariable("id") String suggestionId )
+    public Result AddSuggestion(@RequestBody SuggestionMappingDTO dto, @PathVariable("id") String suggestionId )
     {
         return suggestionService.AddSuggestion(dto);
     }
