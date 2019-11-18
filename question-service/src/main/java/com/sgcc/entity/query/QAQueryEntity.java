@@ -1,12 +1,10 @@
 package com.sgcc.entity.query;
 
+import com.sgcc.dao.HotQuestionDao;
 import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dao.QuestionCategoryDao;
 import com.sgcc.dtomodel.question.QAnswerDTO;
-import com.sgcc.repository.QARedisRepository;
-import com.sgcc.repository.QAnswersRepository;
-import com.sgcc.repository.QCategoryRedisRepository;
-import com.sgcc.repository.QCategorysRepository;
+import com.sgcc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +20,8 @@ public class QAQueryEntity {
     private QCategoryRedisRepository qCategoryRedisRepository;
     @Autowired
     private QCategorysRepository qCategorysRepository;
+    @Autowired
+    private HotCategoryRepositry hotCategoryRepositry;
 
     /**
      * 从mysql中查询可用的问题分类列表
@@ -64,5 +64,13 @@ public class QAQueryEntity {
     }
 
 
+    /**
+     * 获取各个问题分类的使用次数
+     * @return
+     */
+    public List<String> getHotQuuestion(){
+        List<String> categoryIds = hotCategoryRepositry.getHotQuuestion();
+        return categoryIds;
+    }
 }
 

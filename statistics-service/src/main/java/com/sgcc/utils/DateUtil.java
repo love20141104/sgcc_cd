@@ -2,6 +2,8 @@ package com.sgcc.utils;
 
 import com.example.Utils;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -160,6 +162,21 @@ public class DateUtil {
         long tt = calendar.getTime().getTime();
         Date date = new Date(tt);
         return date;
+    }
+    public static String addnDay(String time,int i)
+    {
+        String add = null;
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date timeNow = df.parse(time);
+            Calendar begin=Calendar.getInstance();
+            begin.setTime(timeNow);
+            begin.add(Calendar.DAY_OF_MONTH,i);
+            add = df.format(begin.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return add;
     }
     public static void main(String[] args) {
         /*System.out.println(Utils.GetTime(getnMonthFirst(0)));

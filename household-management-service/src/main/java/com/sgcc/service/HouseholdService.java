@@ -37,12 +37,19 @@ public class HouseholdService {
 
     public Result bindHousehold(String openId, String householdNum,String pwd) {
         //todo 解密householdNum和pwd
+
         try {
-            householdNum=DesUtil.decrypt(householdNum);
             pwd=DesUtil.decrypt(pwd);
         }catch (Exception e){
             return Result.failure(TopErrorCode.DECRYPTION_FAILED);
         }
+        try {
+            householdNum=DesUtil.decrypt(householdNum);
+
+        }catch (Exception e){
+            return Result.failure(TopErrorCode.DECRYPTION_FAILED);
+        }
+
         if(householdNum.length()!=10){
             return Result.failure(TopErrorCode.HOUSEHOLD_NUM_ERR);
         }

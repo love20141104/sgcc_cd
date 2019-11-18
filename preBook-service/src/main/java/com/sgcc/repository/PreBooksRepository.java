@@ -5,9 +5,12 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.PreBookDao;
 import com.sgcc.dtomodel.prebook.PrebookDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -28,6 +32,8 @@ public class PreBooksRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Value("${precompile}")
+    private Boolean precompile;
     /**
      * 查询所有预约信息
      * @return
@@ -160,12 +166,21 @@ public class PreBooksRepository {
      */
     @Transactional
     public List<String> deletePrebook(String prebookCode) {
-        String sql_select = "select id from b_prebook where prebook_code = '" + prebookCode + "'";
-        List<String> id = jdbcTemplate.queryForList(sql_select, String.class);
+        if (precompile) {
+            String sql_select = "select id from b_prebook where prebook_code = ?";
+            List<String> id = jdbcTemplate.queryForList(sql_select,new Object[]{prebookCode}, String.class);
 
-        String sql_delete = "delete from b_prebook where prebook_code =  '" + prebookCode + "'";
-        jdbcTemplate.execute(sql_delete);
-        return id;
+            String sql_delete = "delete from b_prebook where prebook_code =  ? ";
+            jdbcTemplate.update(sql_delete,new Object[]{prebookCode});
+            return id;
+        }else {
+            String sql_select = "select id from b_prebook where prebook_code = '" + prebookCode + "'";
+            List<String> id = jdbcTemplate.queryForList(sql_select, String.class);
+
+            String sql_delete = "delete from b_prebook where prebook_code =  '" + prebookCode + "'";
+            jdbcTemplate.execute(sql_delete);
+            return id;
+        }
     }
 
     /**
@@ -176,14 +191,30 @@ public class PreBooksRepository {
      */
     @Transactional
     public List<String> deletePrebooks(List<String> prebookCodes) {
-        String sql_select = "select id from b_prebook where prebook_code " +
-                "in('"+ Utils.joinStrings(prebookCodes,"','") +"')";
-        List<String> ids = jdbcTemplate.queryForList(sql_select, String.class);
+        if (precompile) {
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate =
+                    new NamedParameterJdbcTemplate(jdbcTemplate);
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            parameters.addValue("ids", Arrays.asList(prebookCodes));
 
-        String sql_delete = "delete from b_prebook where prebook_code " +
-                "in('"+Utils.joinStrings(prebookCodes,"','")+"')";
-        jdbcTemplate.execute(sql_delete);
-        return ids;
+            String sql_select = "select id from b_prebook where prebook_code " +
+                    "in(:ids)";
+            List<String> ids = namedParameterJdbcTemplate.queryForList(sql_select,parameters, String.class);
+
+            String sql_delete = "delete from b_prebook where prebook_code " +
+                    "in(:ids)";
+            namedParameterJdbcTemplate.update(sql_delete,parameters);
+            return ids;
+        }else {
+            String sql_select = "select id from b_prebook where prebook_code " +
+                    "in('" + Utils.joinStrings(prebookCodes, "','") + "')";
+            List<String> ids = jdbcTemplate.queryForList(sql_select, String.class);
+
+            String sql_delete = "delete from b_prebook where prebook_code " +
+                    "in('" + Utils.joinStrings(prebookCodes, "','") + "')";
+            jdbcTemplate.execute(sql_delete);
+            return ids;
+        }
     }
 
 
@@ -199,29 +230,66 @@ public class PreBooksRepository {
 
     @Transactional
     public List<PreBookDao> getPrebook(String user_open_id, String service_hall_id, String prebook_code, String prebook_date_start, String prebook_date_end) {
-        String sql = "select id,user_open_id,service_hall_id,prebook_code,prebook_date,prebook_start_time,contact,contact_tel,submit_time from b_prebook ";
-        StringBuffer sql_where = new StringBuffer();
-        if(!Strings.isNullOrEmpty(user_open_id)){
-            sql_where.append("user_open_id like '%").append(user_open_id).append("%' and ");
-        }
-        if(!Strings.isNullOrEmpty(service_hall_id)){
-            sql_where.append("service_hall_id like '%").append(service_hall_id).append("%' and ");
-        }
-        if(!Strings.isNullOrEmpty(prebook_code)){
-            sql_where.append("prebook_code like '%").append(prebook_code).append("%' and ");
-        }
-        if(!Strings.isNullOrEmpty(prebook_date_start)){
-            sql_where.append("prebook_date >= '").append(prebook_date_start).append("' and ");
-        }
-        if(!Strings.isNullOrEmpty(prebook_date_start)){
-            sql_where.append("prebook_date <= '").append(prebook_date_end).append("' and ");
-        }
+        if (precompile) {
+            Object[] objects = {};
+            ArrayList<Object> objects1 = new ArrayList<>();
+            String sql = "select id,user_open_id,service_hall_id,prebook_code,prebook_date,prebook_start_time,contact,contact_tel,submit_time from b_prebook ";
+            StringBuffer sql_where = new StringBuffer();
+            if (!Strings.isNullOrEmpty(user_open_id)) {
+                sql_where.append("user_open_id like ? and ");
+                objects1.add("%"+user_open_id+"%");
+            }
+            if (!Strings.isNullOrEmpty(service_hall_id)) {
+                sql_where.append("service_hall_id like ? and ");
+                objects1.add("%"+service_hall_id+"%");
+            }
+            if (!Strings.isNullOrEmpty(prebook_code)) {
+                sql_where.append("prebook_code like ? and ");
+                objects1.add("%"+prebook_code+"%");
+            }
+            if (!Strings.isNullOrEmpty(prebook_date_start)) {
+                sql_where.append("prebook_date >= '").append(prebook_date_start).append("' and ");
+                objects1.add(prebook_date_start);
+            }
+            if (!Strings.isNullOrEmpty(prebook_date_start)) {
+                sql_where.append("prebook_date <= '").append(prebook_date_end).append("' and ");
+                objects1.add(prebook_date_start);
+            }
+            if(objects1.size()>0){
+                for (int i = 0; i <objects1.size() ; i++) {
+                    objects[i]=objects1.get(i);
+                }
+            }
+            if (!Strings.isNullOrEmpty(sql_where.toString())) {
+                sql += " where " + sql_where.toString().substring(0, sql_where.toString().length() - 4);
+            }
 
-        if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql +=" where " + sql_where.toString().substring(0,sql_where.toString().length() - 4);
-        }
+            return jdbcTemplate.query(sql,objects, new PreBookRowMapper());
+        }else {
+            String sql = "select id,user_open_id,service_hall_id,prebook_code,prebook_date,prebook_start_time,contact,contact_tel,submit_time from b_prebook ";
+            StringBuffer sql_where = new StringBuffer();
+            if (!Strings.isNullOrEmpty(user_open_id)) {
+                sql_where.append("user_open_id like '%").append(user_open_id).append("%' and ");
+            }
+            if (!Strings.isNullOrEmpty(service_hall_id)) {
+                sql_where.append("service_hall_id like '%").append(service_hall_id).append("%' and ");
+            }
+            if (!Strings.isNullOrEmpty(prebook_code)) {
+                sql_where.append("prebook_code like '%").append(prebook_code).append("%' and ");
+            }
+            if (!Strings.isNullOrEmpty(prebook_date_start)) {
+                sql_where.append("prebook_date >= '").append(prebook_date_start).append("' and ");
+            }
+            if (!Strings.isNullOrEmpty(prebook_date_start)) {
+                sql_where.append("prebook_date <= '").append(prebook_date_end).append("' and ");
+            }
 
-        return jdbcTemplate.query(sql,new PreBookRowMapper());
+            if (!Strings.isNullOrEmpty(sql_where.toString())) {
+                sql += " where " + sql_where.toString().substring(0, sql_where.toString().length() - 4);
+            }
+
+            return jdbcTemplate.query(sql, new PreBookRowMapper());
+        }
     }
 
 

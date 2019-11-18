@@ -5,11 +5,14 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.BusinessGuideDao;
 import com.sgcc.dto.BusinessGuideDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -22,51 +25,116 @@ public class BusinessGuideRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Value("${precompile}")
+    private Boolean precompile;
+
     @Transactional
     public void insertBusinessGuide(BusinessGuideDao businessGuideDao){
-        String sql="insert into d_business_guide(id,title,content,content_url,category_id,create_date)values ( " +
-                "'"+businessGuideDao.getId() + "'  , '"
-                + businessGuideDao.getTitle() + "'  , '"
-                + businessGuideDao.getContent()+ "'  , '"
-                + businessGuideDao.getContentUrl()+ "'  , '"
-                + businessGuideDao.getCategoryId()+ "'  , '"
-                + Utils.GetTime(businessGuideDao.getCreateDate())
-                + "' )";
-        logger.info("insertSQL:"+sql);
-        jdbcTemplate.execute(sql);
+        if (precompile) {
+            String sql = "insert into d_business_guide(id,title,content,content_url,category_id,create_date)" +
+                    " values (?,?,?, ?,?,? )";
+            logger.info("insertSQL:" + sql);
+            jdbcTemplate.update(sql,new Object[]{
+                    businessGuideDao.getId()
+                    ,businessGuideDao.getTitle()
+                    ,businessGuideDao.getContent()
+                    ,businessGuideDao.getContentUrl()
+                    ,businessGuideDao.getCategoryId()
+                    ,Utils.GetTime(businessGuideDao.getCreateDate())
+            });
+        }else {
+            String sql = "insert into d_business_guide(id,title,content,content_url,category_id,create_date)values ( " +
+                    "'" + businessGuideDao.getId() + "'  , '"
+                    + businessGuideDao.getTitle() + "'  , '"
+                    + businessGuideDao.getContent() + "'  , '"
+                    + businessGuideDao.getContentUrl() + "'  , '"
+                    + businessGuideDao.getCategoryId() + "'  , '"
+                    + Utils.GetTime(businessGuideDao.getCreateDate())
+                    + "' )";
+            logger.info("insertSQL:" + sql);
+            jdbcTemplate.execute(sql);
+        }
     }
     @Transactional
     public void updateBusinessGuide(BusinessGuideDao businessGuideDao){
-        String sql="update  d_business_guide set"
-                + " title= '" +businessGuideDao.getTitle()
-                + "' ,content= '" +businessGuideDao.getContent()
-                + "' ,content_url= '" +businessGuideDao.getContentUrl()
-                + "' ,category_id=  '" +businessGuideDao.getCategoryId()
-                + "' where id= '"+businessGuideDao.getId()+"'";
-        logger.info("updateSQL:"+sql);
-        jdbcTemplate.execute(sql);
+        if (precompile) {
+            String sql = "update  d_business_guide set"
+                    + " title= ?"
+                    + " ,content= ?"
+                    + " ,content_url= ?"
+                    + " ,category_id=  ?"
+                    + " where id= ?" ;
+            logger.info("updateSQL:" + sql);
+            jdbcTemplate.update(sql,new Object[]{
+                    businessGuideDao.getTitle()
+                    ,businessGuideDao.getContent()
+                    ,businessGuideDao.getContentUrl()
+                    ,businessGuideDao.getCategoryId()
+                    ,businessGuideDao.getId()
+            });
+        }else {
+            String sql = "update  d_business_guide set"
+                    + " title= '" + businessGuideDao.getTitle()
+                    + "' ,content= '" + businessGuideDao.getContent()
+                    + "' ,content_url= '" + businessGuideDao.getContentUrl()
+                    + "' ,category_id=  '" + businessGuideDao.getCategoryId()
+                    + "' where id= '" + businessGuideDao.getId() + "'";
+            logger.info("updateSQL:" + sql);
+            jdbcTemplate.execute(sql);
+        }
     }
     @Transactional
     public void deleteBusinessGuide(List<String> ids){
-        String sql = "delete from d_business_guide where id in('"+ Utils.joinStrings(ids,"','")+"')";
-        jdbcTemplate.execute(sql);
-        logger.info("deleteSQL:"+sql);
+        if (precompile) {
+            String sql = "delete from d_business_guide where id =?";
+            jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+                public int getBatchSize() {
+                    return ids.size();
+                }
+                public void setValues(PreparedStatement ps, int i)
+                                throws SQLException {
+                    ps.setString(1,ids.get(i));
+                }
+            });
+            logger.info("deleteSQL:" + sql);
+        }else {
+            String sql = "delete from d_business_guide where id in('" + Utils.joinStrings(ids, "','") + "')";
+            jdbcTemplate.execute(sql);
+            logger.info("deleteSQL:" + sql);
+        }
     }
 
     public List<BusinessGuideDao> selectBusinessGuide(String categoryId){
-        if(Strings.isNullOrEmpty(categoryId)){
-            String sql = "select bg.id id ,bg.title title, bg.content content, bg.content_url content_url,"
-                    + " bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from"
-                    + " d_business_guide bg left join d_business_category bc on bc.id=bg.category_id";
-            logger.info("selectSQL:"+sql);
-            return jdbcTemplate.query(sql, new BusinessGuideDaoRowMapper());
+        if (precompile) {
+            if (Strings.isNullOrEmpty(categoryId)) {
+                String sql = "select bg.id id ,bg.title title, bg.content content, bg.content_url content_url,"
+                        + " bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from"
+                        + " d_business_guide bg left join d_business_category bc on bc.id=bg.category_id";
+                logger.info("selectSQL:" + sql);
+                return jdbcTemplate.query(sql,new Object[]{}, new BusinessGuideDaoRowMapper());
+            } else {
+                String sql = "select bg.id id ,bg.title title, bg.content content, bg.content_url content_url,"
+                        + " bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from"
+                        + " d_business_guide bg left join d_business_category bc on bc.id=bg.category_id"
+                        + " where  category_id = ?";
+                logger.info("selectSQL:" + sql);
+                return jdbcTemplate.query(sql,new Object[]{categoryId}, new BusinessGuideDaoRowMapper());
+            }
         }else {
-            String sql = "select bg.id id ,bg.title title, bg.content content, bg.content_url content_url,"
-                    + " bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from"
-                    + " d_business_guide bg left join d_business_category bc on bc.id=bg.category_id"
-                    + " where  category_id = '"+categoryId+"'";
-            logger.info("selectSQL:"+sql);
-            return jdbcTemplate.query(sql, new BusinessGuideDaoRowMapper());
+            if (Strings.isNullOrEmpty(categoryId)) {
+                String sql = "select bg.id id ,bg.title title, bg.content content, bg.content_url content_url,"
+                        + " bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from"
+                        + " d_business_guide bg left join d_business_category bc on bc.id=bg.category_id";
+                logger.info("selectSQL:" + sql);
+                return jdbcTemplate.query(sql, new BusinessGuideDaoRowMapper());
+            } else {
+                String sql = "select bg.id id ,bg.title title, bg.content content, bg.content_url content_url,"
+                        + " bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from"
+                        + " d_business_guide bg left join d_business_category bc on bc.id=bg.category_id"
+                        + " where  category_id = '" + categoryId + "'";
+                logger.info("selectSQL:" + sql);
+                return jdbcTemplate.query(sql, new BusinessGuideDaoRowMapper());
+            }
         }
     }
 

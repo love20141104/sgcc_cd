@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.sgcc.dao.QuestionCategoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +24,8 @@ public class QCategoryRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    @Value("${precompile}")
+    private Boolean precompile;
     /**
      * 查询所有问题类型
      * @param
@@ -39,10 +42,21 @@ public class QCategoryRepository {
      * @param questionCategoryDao
      */
     public void addQCategory(QuestionCategoryDao questionCategoryDao){
-        String sql = "insert into d_question_category(id,category_id,category_desc,category_order) " +
-                "values('"+questionCategoryDao.getId()+"','"+questionCategoryDao.getCategoryId()+"'" +
-                ",'"+questionCategoryDao.getCategoryDesc()+"',"+questionCategoryDao.getCategoryOrder()+")";
-        jdbcTemplate.update(sql);
+        if (precompile) {
+            String sql = "insert into d_question_category(id,category_id,category_desc,category_order) " +
+                    "values(?,?,?,?)";
+            jdbcTemplate.update(sql,new Object[]{
+                    questionCategoryDao.getId()
+                    ,questionCategoryDao.getCategoryId()
+                    ,questionCategoryDao.getCategoryDesc()
+                    ,questionCategoryDao.getCategoryOrder()
+            });
+        }else {
+            String sql = "insert into d_question_category(id,category_id,category_desc,category_order) " +
+                    "values('" + questionCategoryDao.getId() + "','" + questionCategoryDao.getCategoryId() + "'" +
+                    ",'" + questionCategoryDao.getCategoryDesc() + "'," + questionCategoryDao.getCategoryOrder() + ")";
+            jdbcTemplate.update(sql);
+        }
     }
 
     /**
@@ -61,10 +75,20 @@ public class QCategoryRepository {
      * @param questionCategoryDao
      */
     public void updateQCategory(QuestionCategoryDao questionCategoryDao){
-        String sql = "update d_question_category set category_desc='"+questionCategoryDao.getCategoryDesc()+"'" +
-                ",category_order="+questionCategoryDao.getCategoryOrder()+
-                " where category_id='"+questionCategoryDao.getCategoryId()+"'";
-        jdbcTemplate.update(sql);
+        if (precompile) {
+            String sql = "update d_question_category set category_desc=? " +
+                    ",category_order=?  where category_id=? ";
+            jdbcTemplate.update(sql,new Object[]{
+                   questionCategoryDao.getCategoryDesc()
+                    ,questionCategoryDao.getCategoryOrder()
+                    ,questionCategoryDao.getCategoryId()
+            });
+        }else {
+            String sql = "update d_question_category set category_desc='" + questionCategoryDao.getCategoryDesc() + "'" +
+                    ",category_order=" + questionCategoryDao.getCategoryOrder() +
+                    " where category_id='" + questionCategoryDao.getCategoryId() + "'";
+            jdbcTemplate.update(sql);
+        }
     }
 
     /**
@@ -74,18 +98,44 @@ public class QCategoryRepository {
      * @param categoryDesc
      */
     public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc) {
-        String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category";
-        StringBuffer sql_where = new StringBuffer();
-        if(!Strings.isNullOrEmpty(categoryId)){
-            sql_where.append(" category_id like '%").append(categoryId+"%' and ");
-        }if(!Strings.isNullOrEmpty(categoryDesc)){
-            sql_where.append("category_desc like '%").append(categoryDesc+"%' and ");
-        }
+        if (precompile) {
+            Object[] objects = {};
+            ArrayList<Object> objects1 = new ArrayList<>();
+            String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category";
+            StringBuffer sql_where = new StringBuffer();
+            if (!Strings.isNullOrEmpty(categoryId)) {
+                sql_where.append(" category_id like ? and ");
+                objects1.add("%"+categoryId+"%");
+            }
+            if (!Strings.isNullOrEmpty(categoryDesc)) {
+                sql_where.append("category_desc like ? and ");
+                objects1.add("%"+categoryDesc+"%");
+            }
 
-        if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql +=" where " + sql_where.toString().substring(0,sql_where.toString().length() - 4);
+            if (!Strings.isNullOrEmpty(sql_where.toString())) {
+                sql += " where " + sql_where.toString().substring(0, sql_where.toString().length() - 4);
+            }
+            if(objects1.size()>0){
+                for (int i = 0; i <objects1.size() ; i++) {
+                    objects[i]=objects1.get(i);
+                }
+            }
+            return jdbcTemplate.query(sql,objects, new categoryRowMapper());
+        }else {
+            String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category";
+            StringBuffer sql_where = new StringBuffer();
+            if (!Strings.isNullOrEmpty(categoryId)) {
+                sql_where.append(" category_id like '%").append(categoryId + "%' and ");
+            }
+            if (!Strings.isNullOrEmpty(categoryDesc)) {
+                sql_where.append("category_desc like '%").append(categoryDesc + "%' and ");
+            }
+
+            if (!Strings.isNullOrEmpty(sql_where.toString())) {
+                sql += " where " + sql_where.toString().substring(0, sql_where.toString().length() - 4);
+            }
+            return jdbcTemplate.query(sql, new categoryRowMapper());
         }
-        return jdbcTemplate.query(sql,new categoryRowMapper());
 
     }
 

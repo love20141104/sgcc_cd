@@ -5,10 +5,13 @@ import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
 import com.sgcc.dto.HouseholdInfosDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,6 +21,8 @@ public class UserRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Value("${precompile}")
+    private Boolean precompile;
 
     /**
      * 查询默认户号信息
@@ -25,14 +30,26 @@ public class UserRepository {
      * @return
      */
     public HouseholdInfosDTO getDefaultHousehold(String openId){
-        try {
-            String sql = "select hi.household_householder,hi.household_number,hi.household_address "
-                    +"from b_user u,r_user_household uh,b_household_info hi"
-                    +" where uh.user_id = u.user_id and hi.household_id = uh.household_id"
-                    +" and u.user_open_id = '"+openId+"' and hi.household_default = true";
-            return jdbcTemplate.queryForObject(sql,new DefaultHouseholdRowMapper());
-        }catch (Exception e){
-            return null;
+        if (precompile) {
+            try {
+                String sql = "select hi.household_householder,hi.household_number,hi.household_address "
+                        + "from b_user u,r_user_household uh,b_household_info hi"
+                        + " where uh.user_id = u.user_id and hi.household_id = uh.household_id"
+                        + " and u.user_open_id = ? and hi.household_default = true";
+                return jdbcTemplate.queryForObject(sql,new Object[]{openId}, new DefaultHouseholdRowMapper());
+            } catch (Exception e) {
+                return null;
+            }
+        }else {
+            try {
+                String sql = "select hi.household_householder,hi.household_number,hi.household_address "
+                        + "from b_user u,r_user_household uh,b_household_info hi"
+                        + " where uh.user_id = u.user_id and hi.household_id = uh.household_id"
+                        + " and u.user_open_id = '" + openId + "' and hi.household_default = true";
+                return jdbcTemplate.queryForObject(sql, new DefaultHouseholdRowMapper());
+            } catch (Exception e) {
+                return null;
+            }
         }
     }
 
@@ -58,17 +75,49 @@ public class UserRepository {
      * @return
      */
     public int addCommerceInfoCorrectOrder(CommerceInfoCorrectDao dao){
-        String sql = "insert into b_info_correct_commerce(correct_id,user_open_id,house_id,correct_name,correct_idcard," +
-                "correct_tel,correct_idcard_positive_img,correct_idcard_back_img,correct_license_img,correct_new_name," +
-                "correct_new_address,correct_new_tel,propertyRight_img1,propertyRight_img2,propertyRight_img3," +
-                "propertyRight_img4,propertyRight_img5,propertyRight_img6,correct_submit_date) values('"+dao.getCorrectId()+"'," +
-                "'"+dao.getUserOpenId()+"','"+dao.getHouseId()+"','"+dao.getCorrectName()+"','"+dao.getCorrectIdcard()+"'," +
-                "'"+dao.getCorrectTel()+"','"+dao.getCorrectIdcardPositiveImg()+"','"+dao.getCorrectIdcardBackImg()+"'," +
-                "'"+dao.getCorrectLicenseImg()+"','"+dao.getCorrectNewName()+"','"+dao.getCorrectNewAddress()+"'," +
-                "'"+dao.getCorrectNewTel()+"','"+dao.getPropertyRightImg1()+"','"+dao.getPropertyRightImg2()+"'," +
-                "'"+dao.getPropertyRightImg3()+"','"+dao.getPropertyRightImg4()+"','"+dao.getPropertyRightImg5()+"'," +
-                "'"+dao.getPropertyRightImg6()+"','"+Utils.GetTime(dao.getCorrectSubmitDate())+"')";
-        return jdbcTemplate.update(sql);
+        if (precompile) {
+            String sql = "insert into b_info_correct_commerce(correct_id,user_open_id,house_id,correct_name,correct_idcard," +
+                    "correct_tel,correct_idcard_positive_img,correct_idcard_back_img,correct_license_img,correct_new_name," +
+                    "correct_new_address,correct_new_tel,propertyRight_img1,propertyRight_img2,propertyRight_img3," +
+                    "propertyRight_img4,propertyRight_img5,propertyRight_img6,correct_submit_date) " +
+                    "values(?,?,?,?,? ,?,?,?,?,? ,?,?,?,?,? ,?,?,?,?)";
+            return jdbcTemplate.update(sql,new Object[]{
+                    dao.getCorrectId()
+                    ,dao.getUserOpenId()
+                    ,dao.getHouseId()
+                    ,dao.getCorrectName()
+                    ,dao.getCorrectIdcard()
+
+                    ,dao.getCorrectTel()
+                    , dao.getCorrectIdcardPositiveImg()
+                    ,dao.getCorrectIdcardBackImg()
+                    , dao.getCorrectLicenseImg()
+                    ,dao.getCorrectNewName()
+
+                    , dao.getCorrectNewAddress()
+                    , dao.getCorrectNewTel()
+                    , dao.getPropertyRightImg1()
+                    , dao.getPropertyRightImg2()
+                    , dao.getPropertyRightImg3()
+
+                    , dao.getPropertyRightImg4()
+                    , dao.getPropertyRightImg5()
+                    ,dao.getPropertyRightImg6()
+                    ,Utils.GetTime(dao.getCorrectSubmitDate())
+            });
+        }else {
+            String sql = "insert into b_info_correct_commerce(correct_id,user_open_id,house_id,correct_name,correct_idcard," +
+                    "correct_tel,correct_idcard_positive_img,correct_idcard_back_img,correct_license_img,correct_new_name," +
+                    "correct_new_address,correct_new_tel,propertyRight_img1,propertyRight_img2,propertyRight_img3," +
+                    "propertyRight_img4,propertyRight_img5,propertyRight_img6,correct_submit_date) values('" + dao.getCorrectId() + "'," +
+                    "'" + dao.getUserOpenId() + "','" + dao.getHouseId() + "','" + dao.getCorrectName() + "','" + dao.getCorrectIdcard() + "'," +
+                    "'" + dao.getCorrectTel() + "','" + dao.getCorrectIdcardPositiveImg() + "','" + dao.getCorrectIdcardBackImg() + "'," +
+                    "'" + dao.getCorrectLicenseImg() + "','" + dao.getCorrectNewName() + "','" + dao.getCorrectNewAddress() + "'," +
+                    "'" + dao.getCorrectNewTel() + "','" + dao.getPropertyRightImg1() + "','" + dao.getPropertyRightImg2() + "'," +
+                    "'" + dao.getPropertyRightImg3() + "','" + dao.getPropertyRightImg4() + "','" + dao.getPropertyRightImg5() + "'," +
+                    "'" + dao.getPropertyRightImg6() + "','" + Utils.GetTime(dao.getCorrectSubmitDate()) + "')";
+            return jdbcTemplate.update(sql);
+        }
     }
 
 
@@ -78,25 +127,65 @@ public class UserRepository {
      * @return
      */
     public int updateCommerceInfoCorrectOrder(CommerceInfoCorrectDao dao){
-        String sql = "update b_info_correct_commerce set " +
-                "house_id = '"+dao.getHouseId()+"'," +
-                "correct_name = '"+dao.getCorrectName()+"'," +
-                "correct_idcard = '"+dao.getCorrectIdcard()+"'," +
-                "correct_tel = '"+dao.getCorrectTel()+"'," +
-                "correct_idcard_positive_img = '"+dao.getCorrectIdcardPositiveImg()+"'," +
-                "correct_idcard_back_img = '"+dao.getCorrectIdcardBackImg()+"'," +
-                "correct_license_img = '"+dao.getCorrectLicenseImg()+"'," +
-                "correct_new_name = '"+dao.getCorrectNewName()+"'," +
-                "correct_new_address = '"+dao.getCorrectNewAddress()+"'," +
-                "correct_new_tel = '"+dao.getCorrectNewTel()+"'," +
-                "propertyRight_img1 = '"+dao.getPropertyRightImg1()+"'," +
-                "propertyRight_img2 = '"+dao.getPropertyRightImg2()+"'," +
-                "propertyRight_img3 = '"+dao.getPropertyRightImg3()+"'," +
-                "propertyRight_img4 = '"+dao.getPropertyRightImg4()+"'," +
-                "propertyRight_img5 = '"+dao.getPropertyRightImg5()+"'," +
-                "propertyRight_img6 = '"+dao.getPropertyRightImg6()+"'" +
-                " where correct_id = '"+dao.getCorrectId()+"'";
-        return jdbcTemplate.update(sql);
+        if (precompile) {
+            String sql = "update b_info_correct_commerce set " +
+                    "house_id = ? ," +
+                    "correct_name = ? ," +
+                    "correct_idcard = ? ," +
+                    "correct_tel = ? ," +
+                    "correct_idcard_positive_img = ? ," +
+                    "correct_idcard_back_img = ? ," +
+                    "correct_license_img = ? ," +
+                    "correct_new_name = ? ," +
+                    "correct_new_address = ? ," +
+                    "correct_new_tel = ? ," +
+                    "propertyRight_img1 = ? ," +
+                    "propertyRight_img2 = ? ," +
+                    "propertyRight_img3 = ? ," +
+                    "propertyRight_img4 = ? ," +
+                    "propertyRight_img5 = ? ," +
+                    "propertyRight_img6 = ? " +
+                    " where correct_id = ? ";
+            return jdbcTemplate.update(sql,new Object[]{
+                    dao.getHouseId()
+                    ,dao.getCorrectName()
+                    , dao.getCorrectIdcard()
+                    , dao.getCorrectTel()
+                    , dao.getCorrectIdcardPositiveImg()
+                    , dao.getCorrectIdcardBackImg()
+                    , dao.getCorrectLicenseImg()
+                    , dao.getCorrectNewName()
+                    , dao.getCorrectNewAddress()
+                    , dao.getCorrectNewTel()
+                    , dao.getPropertyRightImg1()
+                    , dao.getPropertyRightImg2()
+                    , dao.getPropertyRightImg3()
+                    , dao.getPropertyRightImg4()
+                    , dao.getPropertyRightImg5()
+                    , dao.getPropertyRightImg6()
+                    , dao.getCorrectId()
+            });
+        }else {
+            String sql = "update b_info_correct_commerce set " +
+                    "house_id = '" + dao.getHouseId() + "'," +
+                    "correct_name = '" + dao.getCorrectName() + "'," +
+                    "correct_idcard = '" + dao.getCorrectIdcard() + "'," +
+                    "correct_tel = '" + dao.getCorrectTel() + "'," +
+                    "correct_idcard_positive_img = '" + dao.getCorrectIdcardPositiveImg() + "'," +
+                    "correct_idcard_back_img = '" + dao.getCorrectIdcardBackImg() + "'," +
+                    "correct_license_img = '" + dao.getCorrectLicenseImg() + "'," +
+                    "correct_new_name = '" + dao.getCorrectNewName() + "'," +
+                    "correct_new_address = '" + dao.getCorrectNewAddress() + "'," +
+                    "correct_new_tel = '" + dao.getCorrectNewTel() + "'," +
+                    "propertyRight_img1 = '" + dao.getPropertyRightImg1() + "'," +
+                    "propertyRight_img2 = '" + dao.getPropertyRightImg2() + "'," +
+                    "propertyRight_img3 = '" + dao.getPropertyRightImg3() + "'," +
+                    "propertyRight_img4 = '" + dao.getPropertyRightImg4() + "'," +
+                    "propertyRight_img5 = '" + dao.getPropertyRightImg5() + "'," +
+                    "propertyRight_img6 = '" + dao.getPropertyRightImg6() + "'" +
+                    " where correct_id = '" + dao.getCorrectId() + "'";
+            return jdbcTemplate.update(sql);
+        }
     }
 
 
@@ -105,8 +194,22 @@ public class UserRepository {
      * @return
      */
     public int delCommerceInfoCorrectOrder(List<String> ids){
-        String sql = "delete from b_info_correct_commerce where correct_id in('"+Utils.joinStrings(ids,"','")+"')";
-        return jdbcTemplate.update(sql);
+        if (precompile) {
+            String sql = "delete from b_info_correct_commerce where correct_id = ? ";
+             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+                public int getBatchSize() {
+                    return ids.size();
+                }
+                public void setValues(PreparedStatement ps, int i)
+                        throws SQLException {
+                    ps.setString(1,ids.get(i));
+                }
+            });
+             return ids.size();
+        }else {
+            String sql = "delete from b_info_correct_commerce where correct_id in('" + Utils.joinStrings(ids, "','") + "')";
+            return jdbcTemplate.update(sql);
+        }
     }
 
 
@@ -159,15 +262,37 @@ public class UserRepository {
      * @return
      */
     public int addInhabitantInfoCorrectOrder(InhabitantInfoCorrectDao dao){
-        String sql = "insert into b_info_correct_inhabitant(correct_id, user_open_id, house_id, correct_name, " +
-                "correct_idcard, correct_tel, correct_idcard_positive_img, correct_idcard_back_img, correct_new_name, " +
-                "correct_new_address, correct_new_tel, correct_submit_date) values('"+dao.getCorrectId()+"'," +
-                "'"+dao.getUserOpenId()+"','"+dao.getHouseId()+"','"+dao.getCorrectName()+"','"+dao.getCorrectIdcard()+"'," +
-                "'"+dao.getCorrectTel()+"','"+dao.getCorrectIdcardPositiveImg()+"','"+dao.getCorrectIdcardBackImg()+"'," +
-                "'"+dao.getCorrectNewName()+"','"+dao.getCorrectNewAddress()+"','"+dao.getCorrectNewTel()+"'," +
-                "'"+ Utils.GetTime(dao.getCorrectSubmitDate()) +"')";
+        if (precompile) {
+            String sql = "insert into b_info_correct_inhabitant(correct_id, user_open_id, house_id, correct_name, " +
+                    "correct_idcard, correct_tel, correct_idcard_positive_img, correct_idcard_back_img, correct_new_name, " +
+                    "correct_new_address, correct_new_tel, correct_submit_date)" +
+                    " values()";
 
-        return jdbcTemplate.update(sql);
+            return jdbcTemplate.update(sql,new Object[]{
+                    dao.getCorrectId()
+                    ,dao.getUserOpenId()
+                    ,dao.getHouseId()
+                    ,dao.getCorrectName()
+                    , dao.getCorrectIdcard()
+                    , dao.getCorrectTel()
+                    , dao.getCorrectIdcardPositiveImg()
+                    , dao.getCorrectIdcardBackImg()
+                    , dao.getCorrectNewName()
+                    ,dao.getCorrectNewAddress()
+                    , dao.getCorrectNewTel()
+                    ,Utils.GetTime(dao.getCorrectSubmitDate())
+            });
+        }else {
+            String sql = "insert into b_info_correct_inhabitant(correct_id, user_open_id, house_id, correct_name, " +
+                    "correct_idcard, correct_tel, correct_idcard_positive_img, correct_idcard_back_img, correct_new_name, " +
+                    "correct_new_address, correct_new_tel, correct_submit_date) values('" + dao.getCorrectId() + "'," +
+                    "'" + dao.getUserOpenId() + "','" + dao.getHouseId() + "','" + dao.getCorrectName() + "','" + dao.getCorrectIdcard() + "'," +
+                    "'" + dao.getCorrectTel() + "','" + dao.getCorrectIdcardPositiveImg() + "','" + dao.getCorrectIdcardBackImg() + "'," +
+                    "'" + dao.getCorrectNewName() + "','" + dao.getCorrectNewAddress() + "','" + dao.getCorrectNewTel() + "'," +
+                    "'" + Utils.GetTime(dao.getCorrectSubmitDate()) + "')";
+
+            return jdbcTemplate.update(sql);
+        }
 
     }
 
@@ -178,14 +303,36 @@ public class UserRepository {
      * @return
      */
     public int updateInhabitantInfoCorrect(InhabitantInfoCorrectDao dao){
-        String sql = "update b_info_correct_inhabitant set house_id= '"+dao.getHouseId()+"'," +
-                "correct_name='"+dao.getCorrectName()+"',correct_idcard='"+dao.getCorrectIdcard()+"'," +
-                "correct_tel='"+dao.getCorrectTel()+"',correct_idcard_positive_img='"+dao.getCorrectIdcardPositiveImg()+"'," +
-                "correct_idcard_back_img='"+dao.getCorrectIdcardBackImg()+"',correct_new_name='"+dao.getCorrectNewName()+"'," +
-                "correct_new_address='"+dao.getCorrectNewAddress()+"',correct_new_tel='"+dao.getCorrectNewTel()+"'" +
-                " where correct_id ='"+dao.getCorrectId()+"'";
+        if (precompile) {
+            String sql = "update b_info_correct_inhabitant set house_id= ? ," +
+                    "correct_name=? ,correct_idcard=? ," +
+                    "correct_tel=? ,correct_idcard_positive_img=? ," +
+                    "correct_idcard_back_img=? ,correct_new_name=? ," +
+                    "correct_new_address=? ,correct_new_tel=? " +
+                    " where correct_id =? ";
 
-        return jdbcTemplate.update(sql);
+            return jdbcTemplate.update(sql,new Object[]{
+                    dao.getHouseId()
+                    ,dao.getCorrectName()
+                    , dao.getCorrectIdcard()
+                    , dao.getCorrectTel()
+                    , dao.getCorrectIdcardPositiveImg()
+                    , dao.getCorrectIdcardBackImg()
+                    , dao.getCorrectNewName()
+                    , dao.getCorrectNewAddress()
+                    , dao.getCorrectNewTel()
+                    , dao.getCorrectId()
+            });
+        }else {
+            String sql = "update b_info_correct_inhabitant set house_id= '" + dao.getHouseId() + "'," +
+                    "correct_name='" + dao.getCorrectName() + "',correct_idcard='" + dao.getCorrectIdcard() + "'," +
+                    "correct_tel='" + dao.getCorrectTel() + "',correct_idcard_positive_img='" + dao.getCorrectIdcardPositiveImg() + "'," +
+                    "correct_idcard_back_img='" + dao.getCorrectIdcardBackImg() + "',correct_new_name='" + dao.getCorrectNewName() + "'," +
+                    "correct_new_address='" + dao.getCorrectNewAddress() + "',correct_new_tel='" + dao.getCorrectNewTel() + "'" +
+                    " where correct_id ='" + dao.getCorrectId() + "'";
+
+            return jdbcTemplate.update(sql);
+        }
     }
 
 
@@ -195,9 +342,24 @@ public class UserRepository {
      * @return
      */
     public int delInhabitantCorrectIds(List<String> ids){
-        String sql = "delete from b_info_correct_inhabitant where correct_id in('"+Utils.joinStrings(ids,"','")+"')";
+        if (precompile) {
+            String sql = "delete from b_info_correct_inhabitant where correct_id  =? ";
 
-        return jdbcTemplate.update(sql);
+             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+                 public int getBatchSize() {
+                     return ids.size();
+                 }
+                 public void setValues(PreparedStatement ps, int i)
+                         throws SQLException {
+                     ps.setString(1,ids.get(i));
+                 }
+             });
+             return ids.size();
+        }else {
+            String sql = "delete from b_info_correct_inhabitant where correct_id in('" + Utils.joinStrings(ids, "','") + "')";
+
+            return jdbcTemplate.update(sql);
+        }
     }
 
 

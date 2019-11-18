@@ -2,6 +2,7 @@ package com.sgcc.Service;
 
 import com.example.result.Result;
 import com.google.common.base.Strings;
+import com.sgcc.dao.HotQuestionDao;
 import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dao.QuestionCategoryDao;
 import com.sgcc.dtomodel.question.*;
@@ -61,8 +62,10 @@ public class QuestionService {
             qaEventEntity.innitQuestionCategory();
             questionCategoryDaos = qaQueryEntity.getRedisCategoryList();
         }
-        CategoryModel categoryModel = new CategoryModel(questionCategoryDaos);
+        List<String> categoryIds = qaQueryEntity.getHotQuuestion();
+        CategoryModel categoryModel = new CategoryModel(questionCategoryDaos,categoryIds);
         categoryModel.buildQuestionCategoryDTOS();
+        categoryModel.buildHotQuestionCategoryDTOS();
         return categoryModel.getQuestionCategoryDTOS();
     }
 

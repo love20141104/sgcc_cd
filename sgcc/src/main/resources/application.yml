@@ -82,3 +82,5 @@ fdfs:
 logging:
   level:
     root: info
+
+precompile: true

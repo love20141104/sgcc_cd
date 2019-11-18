@@ -3,6 +3,7 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.sgcc.dao.ServiceHallDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,6 +19,8 @@ public class ServiceHallsRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Value("${precompile}")
+    private Boolean precompile;
 
     public List<ServiceHallDao> findHallList(){
         String sql = "select id,service_hall_id,service_hall_name,service_hall_addr,service_hall_opentime,service_hall_longitude," +
@@ -36,17 +39,31 @@ public class ServiceHallsRepository {
 
 
     public List<ServiceHallDao> findHallById(String id){
-        String sql = "select id,service_hall_id,service_hall_name,service_hall_addr,service_hall_opentime,service_hall_longitude," +
-                "service_hall_latitude,service_hall_district,service_hall_tel,service_hall_available,service_hall_business_desc,"+
-                "service_hall_traffic,service_hall_landmark_building,service_hall_owner,service_hall_business_district,"+
-                "service_hall_rank,service_hall_collect from d_service_hall where service_hall_available = 1 and service_hall_id= " +
-                "'"+id+"'";
+        if (precompile) {
+            String sql = "select id,service_hall_id,service_hall_name,service_hall_addr,service_hall_opentime,service_hall_longitude," +
+                    "service_hall_latitude,service_hall_district,service_hall_tel,service_hall_available,service_hall_business_desc," +
+                    "service_hall_traffic,service_hall_landmark_building,service_hall_owner,service_hall_business_district," +
+                    "service_hall_rank,service_hall_collect from d_service_hall where service_hall_available = 1 and service_hall_id= ?";
 
-        try {
-            return jdbcTemplate.query(sql, new TestRowMapper());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("失败！！");
+            try {
+                return jdbcTemplate.query(sql,new Object[]{id}, new TestRowMapper());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("失败！！");
+            }
+        }else {
+            String sql = "select id,service_hall_id,service_hall_name,service_hall_addr,service_hall_opentime,service_hall_longitude," +
+                    "service_hall_latitude,service_hall_district,service_hall_tel,service_hall_available,service_hall_business_desc," +
+                    "service_hall_traffic,service_hall_landmark_building,service_hall_owner,service_hall_business_district," +
+                    "service_hall_rank,service_hall_collect from d_service_hall where service_hall_available = 1 and service_hall_id= " +
+                    "'" + id + "'";
+
+            try {
+                return jdbcTemplate.query(sql, new TestRowMapper());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("失败！！");
+            }
         }
 
     }
@@ -92,7 +109,7 @@ public class ServiceHallsRepository {
         String sql = "INSERT INTO d_service_hall(id,service_hall_id,service_hall_name,service_hall_addr" +
                 ",service_hall_opentime,service_hall_longitude,service_hall_latitude,service_hall_district," +
                 "service_hall_tel,service_hall_available,service_hall_owner,service_hall_traffic,service_hall_rank," +
-                "service_hall_collect) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "service_hall_collect) values(?,?,?,?,? ,?,?,?,?,? ,?,?,?,?)";
 
 
         int[] result = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -128,9 +145,22 @@ public class ServiceHallsRepository {
      * @param ids
      */
     public void delServiceHalls(List<String> ids){
-        String strIds = Utils.joinStrings(ids,"','");
-        String sql = "delete from d_service_hall where service_hall_id in('"+ strIds +"')";
-        jdbcTemplate.execute(sql);
+        if (precompile) {
+            String sql = "delete from d_service_hall where service_hall_id =? ";
+            jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+                public int getBatchSize() {
+                    return ids.size();
+                }
+                public void setValues(PreparedStatement ps, int i)
+                        throws SQLException {
+                    ps.setString(1,ids.get(i));
+                }
+            });
+        }else {
+            String strIds = Utils.joinStrings(ids, "','");
+            String sql = "delete from d_service_hall where service_hall_id in('" + strIds + "')";
+            jdbcTemplate.execute(sql);
+        }
     }
 
 

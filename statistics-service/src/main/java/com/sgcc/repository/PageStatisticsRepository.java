@@ -8,6 +8,7 @@ import com.sgcc.dto.PageStatistcsDateDto;
 import com.sgcc.dto.PageStatistcsMonthDto;
 import com.sgcc.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -24,19 +25,38 @@ public class PageStatisticsRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Value("${precompile}")
+    private Boolean precompile;
 
     @Transactional
     public void savePageStatistics(PageStatisticsDao pageStatisticsDao){
-        if(!Strings.isNullOrEmpty(pageStatisticsDao.getPageName())&&!pageStatisticsDao.getPageName().equalsIgnoreCase("null")) {
-            String sql = "insert into b_page_statistics(id,page_url,page_name,user_open_id,visit_date,client_ip)"
-                    + " values ('" + pageStatisticsDao.getId() + "','"
-                    + pageStatisticsDao.getPageUrl() + "','"
-                    + pageStatisticsDao.getPageName() + "','"
-                    + pageStatisticsDao.getUserOpenId() + "','"
-                    + Utils.GetTime(pageStatisticsDao.getVisitDate()) + "','"
-                    + pageStatisticsDao.getClientIp() + "')";
-            logger.info("insertSQL:" + sql);
-            jdbcTemplate.update(sql);
+        if (precompile) {
+            if (!Strings.isNullOrEmpty(pageStatisticsDao.getPageName()) && !pageStatisticsDao.getPageName().equalsIgnoreCase("null")) {
+                String sql = "insert into b_page_statistics(id,page_url,page_name,user_open_id,visit_date,client_ip)"
+                        + " values (?,?,?,?,? ,?)";
+                logger.info("insertSQL:" + sql);
+                jdbcTemplate.update(sql,new Object[]{
+                        pageStatisticsDao.getId()
+                        , pageStatisticsDao.getPageUrl()
+                        , pageStatisticsDao.getPageName()
+                        ,  pageStatisticsDao.getUserOpenId()
+                        ,  Utils.GetTime(pageStatisticsDao.getVisitDate())
+
+                        , pageStatisticsDao.getClientIp()
+                });
+            }
+        }else {
+            if (!Strings.isNullOrEmpty(pageStatisticsDao.getPageName()) && !pageStatisticsDao.getPageName().equalsIgnoreCase("null")) {
+                String sql = "insert into b_page_statistics(id,page_url,page_name,user_open_id,visit_date,client_ip)"
+                        + " values ('" + pageStatisticsDao.getId() + "','"
+                        + pageStatisticsDao.getPageUrl() + "','"
+                        + pageStatisticsDao.getPageName() + "','"
+                        + pageStatisticsDao.getUserOpenId() + "','"
+                        + Utils.GetTime(pageStatisticsDao.getVisitDate()) + "','"
+                        + pageStatisticsDao.getClientIp() + "')";
+                logger.info("insertSQL:" + sql);
+                jdbcTemplate.update(sql);
+            }
         }
     }
 

@@ -4,10 +4,13 @@ import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.commerce.dao.CommerceIncreaseCapacityDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -17,33 +20,84 @@ public class CommerceIncreaseCapacityRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    @Value("${precompile}")
+    private Boolean precompile;
     /**
      * 新增增容订单
      * @param dao
      * @return
      */
     public int addIncreaseCapacityOrder(CommerceIncreaseCapacityDao dao){
+        if (precompile) {
+            String sql = "insert into b_increase_capacity_commerce(id,user_open_id,in_company_name," +
+                    "in_current_capacity,in_name,in_idcard,in_telphone,sq_idcard_positive_img,cq_idcard_back_img," +
+                    "in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4," +
+                    "propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard," +
+                    "cq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank," +
+                    "invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date," +
+                    "sq_attorney_img,in_transactor_tel) values(?,?,?,?,? ,?,?,?,?,? ,?,?,?,?,? ,?,?,?,?,? ,?,?,?,?,? ,?,?,?,?,? ,?,?,? )";
+            return jdbcTemplate.update(sql,new Object[]{
+                    dao.getId()
+                    ,dao.getOpenId()
+                    ,dao.getCompanyName()
+                    ,dao.getCurrentCapacity()
+                    ,dao.getName()
 
-        String sql = "insert into b_increase_capacity_commerce(id,user_open_id,in_company_name," +
-                "in_current_capacity,in_name,in_idcard,in_telphone,sq_idcard_positive_img,cq_idcard_back_img," +
-                "in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4," +
-                "propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard," +
-                "cq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank," +
-                "invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date," +
-                "sq_attorney_img,in_transactor_tel) values(" +
-                "'"+dao.getId()+"','"+dao.getOpenId()+"','"+dao.getCompanyName()+"'," +
-                ""+dao.getCurrentCapacity()+",'"+dao.getName()+"','"+dao.getIdcard()+"','"+dao.getContactTel()+"'," +
-                "'"+dao.getCqIdcardPositiveImg()+"','"+dao.getCqIdcardBackImg()+"','"+dao.getLicenseImg()+"'," +
-                "'"+dao.getSecuritiesImg1()+"','"+dao.getSecuritiesImg2()+"','"+dao.getSecuritiesImg3()+"'," +
-                "'"+dao.getSecuritiesImg4()+"','"+dao.getSecuritiesImg5()+"','"+dao.getSecuritiesImg6()+"'," +
-                "'"+dao.getAplicant()+"','"+dao.getTransactor()+"','"+dao.getTransactorIdcard()+"'," +
-                "'"+dao.getSqIdcardPositiveImg()+"','"+dao.getSqIdcardBackImg()+"',"+dao.getInvoiceFlag()+"," +
-                "'"+dao.getCompanyName()+"','"+dao.getInvoiceNum()+"','"+dao.getInvoiceBank()+"'," +
-                "'"+dao.getInvoiceBankAccount()+"','"+dao.getInvoiceRegistAddr()+"','"+dao.getInvoiceContactTel()+"'," +
-                "'"+Utils.GetTime(dao.getInvoiceDate())+"','"+dao.getInvoiceImg()+"'," +
-                "'"+Utils.GetTime(dao.getSubmitDate())+"','"+dao.getSqAttorneyImg()+"','"+dao.getTransactorTel()+"')";
-        return jdbcTemplate.update(sql);
+                    ,dao.getIdcard()
+                    ,dao.getContactTel()
+                    ,dao.getCqIdcardPositiveImg()
+                    ,dao.getCqIdcardBackImg()
+                    ,dao.getLicenseImg()
+
+                    ,dao.getSecuritiesImg1()
+                    ,dao.getSecuritiesImg2()
+                    ,dao.getSecuritiesImg3()
+                    ,dao.getSecuritiesImg4()
+                    ,dao.getSecuritiesImg5()
+
+                    ,dao.getSecuritiesImg6()
+                    ,dao.getAplicant()
+                    ,dao.getTransactor()
+                    ,dao.getTransactorIdcard()
+                    ,dao.getSqIdcardPositiveImg()
+
+                    ,dao.getSqIdcardBackImg()
+                    ,dao.getInvoiceFlag()
+                    ,dao.getCompanyName()
+                    ,dao.getInvoiceNum()
+                    ,dao.getInvoiceBank()
+
+                    ,dao.getInvoiceBankAccount()
+                    ,dao.getInvoiceRegistAddr()
+                    ,dao.getInvoiceContactTel()
+                    ,Utils.GetTime(dao.getInvoiceDate())
+                    ,dao.getInvoiceImg()
+
+                    ,Utils.GetTime(dao.getSubmitDate())
+                    ,dao.getSqAttorneyImg()
+                    ,dao.getTransactorTel()
+            });
+        }else {
+            String sql = "insert into b_increase_capacity_commerce(id,user_open_id,in_company_name," +
+                    "in_current_capacity,in_name,in_idcard,in_telphone,sq_idcard_positive_img,cq_idcard_back_img," +
+                    "in_license_img,propertyRight_img1,propertyRight_img2,propertyRight_img3,propertyRight_img4," +
+                    "propertyRight_img5,propertyRight_img6,in_apply_person,in_transactor,in_transactor_idcard," +
+                    "cq_idcard_positive_img,sq_idcard_back_img,in_invoice,invoice_company,invoice_number,invoice_bank," +
+                    "invoice_bank_account,invoice_regist_addr,invoice_phone,invoice_date,invoice_img,in_submit_date," +
+                    "sq_attorney_img,in_transactor_tel) values(" +
+                    "'" + dao.getId() + "','" + dao.getOpenId() + "','" + dao.getCompanyName() + "'," +
+                    "" + dao.getCurrentCapacity() + ",'" + dao.getName() + "','" + dao.getIdcard() + "','" + dao.getContactTel() + "'," +
+                    "'" + dao.getCqIdcardPositiveImg() + "','" + dao.getCqIdcardBackImg() + "','" + dao.getLicenseImg() + "'," +
+                    "'" + dao.getSecuritiesImg1() + "','" + dao.getSecuritiesImg2() + "','" + dao.getSecuritiesImg3() + "'," +
+                    "'" + dao.getSecuritiesImg4() + "','" + dao.getSecuritiesImg5() + "','" + dao.getSecuritiesImg6() + "'," +
+                    "'" + dao.getAplicant() + "','" + dao.getTransactor() + "','" + dao.getTransactorIdcard() + "'," +
+                    "'" + dao.getSqIdcardPositiveImg() + "','" + dao.getSqIdcardBackImg() + "'," + dao.getInvoiceFlag() + "," +
+                    "'" + dao.getCompanyName() + "','" + dao.getInvoiceNum() + "','" + dao.getInvoiceBank() + "'," +
+                    "'" + dao.getInvoiceBankAccount() + "','" + dao.getInvoiceRegistAddr() + "','" + dao.getInvoiceContactTel() + "'," +
+                    "'" + Utils.GetTime(dao.getInvoiceDate()) + "','" + dao.getInvoiceImg() + "'," +
+                    "'" + Utils.GetTime(dao.getSubmitDate()) + "','" + dao.getSqAttorneyImg() + "','" + dao.getTransactorTel() + "')";
+            return jdbcTemplate.update(sql);
+        }
 
     }
 
@@ -53,7 +107,16 @@ public class CommerceIncreaseCapacityRepository {
      * @return
      */
     public List<CommerceIncreaseCapacityDao> findIncreaseCapacityOrderList(String id){
-
+        if (precompile) {
+            String sql = "select id,user_open_id,in_company_name,in_current_capacity,in_name,in_idcard,in_telphone," +
+                    "sq_idcard_positive_img,cq_idcard_back_img,in_license_img,propertyRight_img1,propertyRight_img2," +
+                    "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6,in_apply_person," +
+                    "in_transactor,in_transactor_idcard,cq_idcard_positive_img,sq_idcard_back_img,in_invoice," +
+                    "invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
+                    "invoice_date,invoice_img,in_submit_date,sq_attorney_img,in_transactor_tel from b_increase_capacity_commerce " +
+                    "where id=?";
+            return jdbcTemplate.query(sql,new Object[]{id},new IncreaseCapacityRowMapper());
+        }
         String sql = "select id,user_open_id,in_company_name,in_current_capacity,in_name,in_idcard,in_telphone," +
                 "sq_idcard_positive_img,cq_idcard_back_img,in_license_img,propertyRight_img1,propertyRight_img2," +
                 "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6,in_apply_person," +
@@ -67,7 +130,16 @@ public class CommerceIncreaseCapacityRepository {
 
 
     public List<CommerceIncreaseCapacityDao> findIncreaseCapacityByOpenId(String openId){
-
+        if (precompile) {
+            String sql = "select id,user_open_id,in_company_name,in_current_capacity,in_name,in_idcard,in_telphone," +
+                    "sq_idcard_positive_img,cq_idcard_back_img,in_license_img,propertyRight_img1,propertyRight_img2," +
+                    "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6,in_apply_person," +
+                    "in_transactor,in_transactor_idcard,cq_idcard_positive_img,sq_idcard_back_img,in_invoice," +
+                    "invoice_company,invoice_number,invoice_bank,invoice_bank_account,invoice_regist_addr,invoice_phone," +
+                    "invoice_date,invoice_img,in_submit_date,sq_attorney_img,in_transactor_tel from b_increase_capacity_commerce " +
+                    "where user_open_id=?";
+            return jdbcTemplate.query(sql,new Object[]{openId},new IncreaseCapacityRowMapper());
+        }
         String sql = "select id,user_open_id,in_company_name,in_current_capacity,in_name,in_idcard,in_telphone," +
                 "sq_idcard_positive_img,cq_idcard_back_img,in_license_img,propertyRight_img1,propertyRight_img2," +
                 "propertyRight_img3,propertyRight_img4,propertyRight_img5,propertyRight_img6,in_apply_person," +
@@ -107,40 +179,107 @@ public class CommerceIncreaseCapacityRepository {
      * @return
      */
     public int updateIncreaseCapacity(CommerceIncreaseCapacityDao dao){
+        if (precompile) {
+            String sql = "update b_increase_capacity_commerce set " +
+                    "in_company_name=?," +
+                    "in_current_capacity=?," +
+                    "in_name=?," +
+                    "in_idcard=?," +
+                    "in_telphone=?," +
+                    "sq_idcard_positive_img=?," +
+                    "cq_idcard_back_img=?," +
+                    "in_license_img=?," +
+                    "propertyRight_img1=?," +
+                    "propertyRight_img2=?," +
+                    "propertyRight_img3=?," +
+                    "propertyRight_img4=?," +
+                    "propertyRight_img5=?," +
+                    "propertyRight_img6=?," +
+                    "in_apply_person=?," +
+                    "in_transactor=?," +
+                    "in_transactor_idcard=?," +
+                    "cq_idcard_positive_img=?," +
+                    "sq_idcard_back_img=?," +
+                    "in_invoice=?," +
+                    "invoice_company=?," +
+                    "invoice_number=?," +
+                    "invoice_bank=?," +
+                    "invoice_bank_account=?," +
+                    "invoice_regist_addr=?," +
+                    "invoice_phone=?," +
+                    "invoice_img=?," +
+                    "sq_attorney_img=?," +
+                    "in_transactor_tel=? " +
+                    "where id=?";
 
-        String sql = "update b_increase_capacity_commerce set " +
-                "in_company_name='"+dao.getCompanyName()+"'," +
-                "in_current_capacity="+dao.getCurrentCapacity()+"," +
-                "in_name='"+dao.getName()+"'," +
-                "in_idcard='"+dao.getIdcard()+"'," +
-                "in_telphone='"+dao.getContactTel()+"'," +
-                "sq_idcard_positive_img='"+dao.getCqIdcardPositiveImg()+"'," +
-                "cq_idcard_back_img='"+dao.getCqIdcardBackImg()+"'," +
-                "in_license_img='"+dao.getLicenseImg()+"'," +
-                "propertyRight_img1='"+dao.getSecuritiesImg1()+"'," +
-                "propertyRight_img2='"+dao.getSecuritiesImg2()+"'," +
-                "propertyRight_img3='"+dao.getSecuritiesImg3()+"'," +
-                "propertyRight_img4='"+dao.getSecuritiesImg4()+"'," +
-                "propertyRight_img5='"+dao.getSecuritiesImg5()+"'," +
-                "propertyRight_img6='"+dao.getSecuritiesImg6()+"'," +
-                "in_apply_person='"+dao.getAplicant()+"'," +
-                "in_transactor='"+dao.getTransactor()+"'," +
-                "in_transactor_idcard='"+dao.getTransactorIdcard()+"'," +
-                "cq_idcard_positive_img='"+dao.getSqIdcardPositiveImg()+"'," +
-                "sq_idcard_back_img='"+dao.getSqIdcardBackImg()+"'," +
-                "in_invoice="+dao.getInvoiceFlag()+"," +
-                "invoice_company='"+dao.getCompanyName()+"'," +
-                "invoice_number='"+dao.getInvoiceNum()+"'," +
-                "invoice_bank='"+dao.getInvoiceBank()+"'," +
-                "invoice_bank_account='"+dao.getInvoiceBankAccount()+"'," +
-                "invoice_regist_addr='"+dao.getInvoiceRegistAddr()+"'," +
-                "invoice_phone='"+dao.getInvoiceContactTel()+"'," +
-                "invoice_img='"+dao.getInvoiceImg()+"'," +
-                "sq_attorney_img='"+dao.getSqAttorneyImg()+"'," +
-                "in_transactor_tel='"+dao.getTransactorTel()+"' " +
-                "where id='"+dao.getId()+"'";
+            return jdbcTemplate.update(sql,new Object[]{
+                     dao.getCompanyName()
+                             ,dao.getCurrentCapacity()
+                            , dao.getName()
+                            , dao.getIdcard()
+                            , dao.getContactTel()
+                            , dao.getCqIdcardPositiveImg()
+                            , dao.getCqIdcardBackImg()
+                            , dao.getLicenseImg()
+                            , dao.getSecuritiesImg1()
+                            , dao.getSecuritiesImg2()
+                            , dao.getSecuritiesImg3()
+                            , dao.getSecuritiesImg4()
+                            , dao.getSecuritiesImg5()
+                            , dao.getSecuritiesImg6()
+                            , dao.getAplicant()
+                            , dao.getTransactor()
+                            ,dao.getTransactorIdcard()
+                            , dao.getSqIdcardPositiveImg()
+                            , dao.getSqIdcardBackImg()
+                            , dao.getInvoiceFlag()
+                            , dao.getCompanyName()
+                            , dao.getInvoiceNum()
+                            , dao.getInvoiceBank()
+                            , dao.getInvoiceBankAccount()
+                            , dao.getInvoiceRegistAddr()
+                            ,dao.getInvoiceContactTel()
+                            , dao.getInvoiceImg()
+                            , dao.getSqAttorneyImg()
+                            , dao.getTransactorTel()
+                            , dao.getId()
 
-        return jdbcTemplate.update(sql);
+            });
+        }else {
+            String sql = "update b_increase_capacity_commerce set " +
+                    "in_company_name='" + dao.getCompanyName() + "'," +
+                    "in_current_capacity=" + dao.getCurrentCapacity() + "," +
+                    "in_name='" + dao.getName() + "'," +
+                    "in_idcard='" + dao.getIdcard() + "'," +
+                    "in_telphone='" + dao.getContactTel() + "'," +
+                    "sq_idcard_positive_img='" + dao.getCqIdcardPositiveImg() + "'," +
+                    "cq_idcard_back_img='" + dao.getCqIdcardBackImg() + "'," +
+                    "in_license_img='" + dao.getLicenseImg() + "'," +
+                    "propertyRight_img1='" + dao.getSecuritiesImg1() + "'," +
+                    "propertyRight_img2='" + dao.getSecuritiesImg2() + "'," +
+                    "propertyRight_img3='" + dao.getSecuritiesImg3() + "'," +
+                    "propertyRight_img4='" + dao.getSecuritiesImg4() + "'," +
+                    "propertyRight_img5='" + dao.getSecuritiesImg5() + "'," +
+                    "propertyRight_img6='" + dao.getSecuritiesImg6() + "'," +
+                    "in_apply_person='" + dao.getAplicant() + "'," +
+                    "in_transactor='" + dao.getTransactor() + "'," +
+                    "in_transactor_idcard='" + dao.getTransactorIdcard() + "'," +
+                    "cq_idcard_positive_img='" + dao.getSqIdcardPositiveImg() + "'," +
+                    "sq_idcard_back_img='" + dao.getSqIdcardBackImg() + "'," +
+                    "in_invoice=" + dao.getInvoiceFlag() + "," +
+                    "invoice_company='" + dao.getCompanyName() + "'," +
+                    "invoice_number='" + dao.getInvoiceNum() + "'," +
+                    "invoice_bank='" + dao.getInvoiceBank() + "'," +
+                    "invoice_bank_account='" + dao.getInvoiceBankAccount() + "'," +
+                    "invoice_regist_addr='" + dao.getInvoiceRegistAddr() + "'," +
+                    "invoice_phone='" + dao.getInvoiceContactTel() + "'," +
+                    "invoice_img='" + dao.getInvoiceImg() + "'," +
+                    "sq_attorney_img='" + dao.getSqAttorneyImg() + "'," +
+                    "in_transactor_tel='" + dao.getTransactorTel() + "' " +
+                    "where id='" + dao.getId() + "'";
+
+            return jdbcTemplate.update(sql);
+        }
 
     }
 
@@ -149,10 +288,22 @@ public class CommerceIncreaseCapacityRepository {
      * @param ids
      */
     public void delIncreaseCapacity(List<String> ids){
-
-        String sql = "delete from b_increase_capacity_commerce where id in('"+
-                Utils.joinStrings(ids,"','") +"') ";
-        jdbcTemplate.execute(sql);
+        if (precompile) {
+            String sql = "delete from b_increase_capacity_commerce where id =?  ";
+            jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+                public int getBatchSize() {
+                    return ids.size();
+                }
+                public void setValues(PreparedStatement ps, int i)
+                        throws SQLException {
+                    ps.setString(1,ids.get(i));
+                }
+            });
+        }else {
+            String sql = "delete from b_increase_capacity_commerce where id in('" +
+                    Utils.joinStrings(ids, "','") + "') ";
+            jdbcTemplate.execute(sql);
+        }
 
     }
 

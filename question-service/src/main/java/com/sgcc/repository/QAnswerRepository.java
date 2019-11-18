@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.QuestionAnswerDao;
 import com.sgcc.dtomodel.question.QAnswerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,6 +25,9 @@ public class QAnswerRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Value("${precompile}")
+    private Boolean precompile;
+
     /**
      * 查询所有问题回答
      * @param
@@ -35,6 +39,7 @@ public class QAnswerRepository {
     }
 
     public List<QAnswerDTO> findQAnswerList(String category_name, String question_desc, String answer){
+
         String sql = "select a.id,a.category_id,b.category_desc as category_name,a.question_desc,a.answer,a.available " +
                 "from d_question_answer a,d_question_category b "+
                 "where available = 1 and a.category_id = b.category_id ";
@@ -69,10 +74,21 @@ public class QAnswerRepository {
      * @param questionAnswerDao
      */
     public void addQAnswer(QuestionAnswerDao questionAnswerDao){
-        String sql = "insert into d_question_answer(id,category_id,question_desc,answer) " +
-                "values('"+questionAnswerDao.getId()+"','"+questionAnswerDao.getCategoryId()+"'" +
-                ",'"+questionAnswerDao.getQuestionDesc()+"','"+questionAnswerDao.getAnswer()+"')";
-        jdbcTemplate.update(sql);
+        if (precompile) {
+            String sql = "insert into d_question_answer(id,category_id,question_desc,answer) " +
+                    "values(?,?,?,?)";
+            jdbcTemplate.update(sql,new Object[]{
+                    questionAnswerDao.getId()
+                    ,questionAnswerDao.getCategoryId()
+                    ,questionAnswerDao.getQuestionDesc()
+                    ,questionAnswerDao.getAnswer()
+            });
+        }else {
+            String sql = "insert into d_question_answer(id,category_id,question_desc,answer) " +
+                    "values('" + questionAnswerDao.getId() + "','" + questionAnswerDao.getCategoryId() + "'" +
+                    ",'" + questionAnswerDao.getQuestionDesc() + "','" + questionAnswerDao.getAnswer() + "')";
+            jdbcTemplate.update(sql);
+        }
     }
 
     /**
@@ -91,9 +107,19 @@ public class QAnswerRepository {
      * @param questionAnswerDao
      */
     public void updateQAnswer(QuestionAnswerDao questionAnswerDao){
-        String sql = "update d_question_answer set question_desc='"+questionAnswerDao.getQuestionDesc()+"'" +
-                ",answer='"+questionAnswerDao.getAnswer()+"'  where id='"+questionAnswerDao.getId()+"'";
-        jdbcTemplate.update(sql);
+        if (precompile) {
+            String sql = "update d_question_answer set question_desc=? " +
+                    ",answer=?  where id=? ";
+            jdbcTemplate.update(sql,new Object[]{
+                        questionAnswerDao.getQuestionDesc()
+                        ,questionAnswerDao.getAnswer()
+                        ,questionAnswerDao.getId()
+            });
+        }else {
+            String sql = "update d_question_answer set question_desc='" + questionAnswerDao.getQuestionDesc() + "'" +
+                    ",answer='" + questionAnswerDao.getAnswer() + "'  where id='" + questionAnswerDao.getId() + "'";
+            jdbcTemplate.update(sql);
+        }
     }
 
     class answerRowMapper implements RowMapper<QuestionAnswerDao> {

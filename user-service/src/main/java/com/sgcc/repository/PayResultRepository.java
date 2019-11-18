@@ -5,6 +5,7 @@ import com.sgcc.dao.PayResultDao;
 import com.sgcc.dto.PayQueryStatisticsDTO;
 import com.sgcc.dto.PayResultViewsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,8 @@ public class PayResultRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    @Value("${precompile}")
+    private Boolean precompile;
 
     /**
      * 查询最近一次缴费记录
@@ -26,17 +28,32 @@ public class PayResultRepository {
      * @return
      */
     public PayResultViewsDTO findMoneyByRecently(String openId){
-        try {
-            String sql = "select pay_totalFee from b_pay_info where pay_household_number in("
-                    +"select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
-                    +" where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id='"+openId+"')"
-                    +"and pay_date in (select max(pay_date) from b_pay_info where pay_household_number in("
-                    +"select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
-                    +" where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id='"+openId+"'));";
+        if (precompile) {
+            try {
+                String sql = "select pay_totalFee from b_pay_info where pay_household_number in("
+                        + "select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
+                        + " where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id=?)"
+                        + "and pay_date in (select max(pay_date) from b_pay_info where pay_household_number in("
+                        + "select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
+                        + " where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id=?));";
 
-            return jdbcTemplate.queryForObject(sql,new findMoneyByRecentlyRowMapper());
-        }catch (Exception e){
-            return null;
+                return jdbcTemplate.queryForObject(sql,new Object[]{openId,openId}, new findMoneyByRecentlyRowMapper());
+            } catch (Exception e) {
+                return null;
+            }
+        }else {
+            try {
+                String sql = "select pay_totalFee from b_pay_info where pay_household_number in("
+                        + "select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
+                        + " where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id='" + openId + "')"
+                        + "and pay_date in (select max(pay_date) from b_pay_info where pay_household_number in("
+                        + "select hi.household_number from b_user u,r_user_household uh,b_household_info hi"
+                        + " where u.user_id=uh.user_id and uh.household_id=hi.household_id and hi.household_default=true and u.user_open_id='" + openId + "'));";
+
+                return jdbcTemplate.queryForObject(sql, new findMoneyByRecentlyRowMapper());
+            } catch (Exception e) {
+                return null;
+            }
         }
     }
 
@@ -49,14 +66,30 @@ public class PayResultRepository {
      * @return
      */
     public int insertPayResult(PayResultDao payResultDao){
-        String sql = "insert into b_pay_info(id,pay_id,order_number,pay_household_number," +
-                "user_open_id,pay_totalFee,pay_date,payment_channel) values('"+payResultDao.getId()+"'," +
-                "'"+payResultDao.getPayId()+"','"+payResultDao.getOrderNo()+"'," +
-                "'"+payResultDao.getUserNo()+"','"+payResultDao.getOpenId()+"',"+payResultDao.getMoney()+"," +
-                "'"+ Utils.GetTime(payResultDao.getOrderSubmitTime()) +"'," +
-                "'"+payResultDao.getPaymentChannel()+"')";
+        if (precompile) {
+            String sql = "insert into b_pay_info(id,pay_id,order_number,pay_household_number," +
+                    "user_open_id,pay_totalFee,pay_date,payment_channel) values(?,?,?,?,? ,?,?,?)";
 
-        return jdbcTemplate.update(sql);
+            return jdbcTemplate.update(sql,new Object[]{
+                    payResultDao.getId()
+                    ,payResultDao.getPayId()
+                    , payResultDao.getOrderNo()
+                    ,payResultDao.getUserNo()
+                    , payResultDao.getOpenId()
+
+                    , payResultDao.getMoney()
+                    ,Utils.GetTime(payResultDao.getOrderSubmitTime())
+                    ,payResultDao.getPaymentChannel()});
+        }else {
+            String sql = "insert into b_pay_info(id,pay_id,order_number,pay_household_number," +
+                    "user_open_id,pay_totalFee,pay_date,payment_channel) values('" + payResultDao.getId() + "'," +
+                    "'" + payResultDao.getPayId() + "','" + payResultDao.getOrderNo() + "'," +
+                    "'" + payResultDao.getUserNo() + "','" + payResultDao.getOpenId() + "'," + payResultDao.getMoney() + "," +
+                    "'" + Utils.GetTime(payResultDao.getOrderSubmitTime()) + "'," +
+                    "'" + payResultDao.getPaymentChannel() + "')";
+
+            return jdbcTemplate.update(sql);
+        }
     }
 
     /**
@@ -76,11 +109,17 @@ public class PayResultRepository {
      * @return
      */
     public PayQueryStatisticsDTO findPayResultByMonth(String date){
+        if (precompile) {
+            String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee" +
+                    " from b_pay_info WHERE date_sub( ? , interval 30 day ) <= pay_date;";
 
-        String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee" +
-                " from b_pay_info WHERE date_sub('"+date+"', interval 30 day ) <= pay_date;";
+            return jdbcTemplate.queryForObject(sql,new Object[]{date}, new PayStatisticsRowMapper());
+        }else {
+            String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee" +
+                    " from b_pay_info WHERE date_sub('" + date + "', interval 30 day ) <= pay_date;";
 
-        return jdbcTemplate.queryForObject(sql,new PayStatisticsRowMapper());
+            return jdbcTemplate.queryForObject(sql, new PayStatisticsRowMapper());
+        }
     }
 
 
@@ -89,11 +128,17 @@ public class PayResultRepository {
      * @return
      */
     public List<PayQueryStatisticsDTO> findPayResultByCurrentMonth(String date){
+        if (precompile) {
+            String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee " +
+                    "from b_pay_info where YEAR(pay_date)=YEAR( ? ) group by DATE_FORMAT(pay_date ,'%m')";
 
-        String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee " +
-                "from b_pay_info where YEAR(pay_date)=YEAR('"+date+"') group by DATE_FORMAT(pay_date ,'%m')";
+            return jdbcTemplate.query(sql,new Object[]{date}, new PayStatisticsRowMapper());
+        }else {
+            String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee " +
+                    "from b_pay_info where YEAR(pay_date)=YEAR('" + date + "') group by DATE_FORMAT(pay_date ,'%m')";
 
-        return jdbcTemplate.query(sql,new PayStatisticsRowMapper());
+            return jdbcTemplate.query(sql, new PayStatisticsRowMapper());
+        }
     }
 
     /**
@@ -115,11 +160,17 @@ public class PayResultRepository {
      * @return
      */
     public PayQueryStatisticsDTO findPayResultByCurrentYear(String date){
+        if (precompile) {
+            String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee" +
+                    " from b_pay_info where YEAR(pay_date) = year( ? ) group by DATE_FORMAT(pay_date ,'%Y');";
 
-        String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee" +
-                " from b_pay_info where YEAR(pay_date) = year('"+date+"') group by DATE_FORMAT(pay_date ,'%Y');";
+            return jdbcTemplate.queryForObject(sql,new Object[]{date}, new PayStatisticsRowMapper());
+        }else {
+            String sql = "select COUNT(id) AS count,sum(pay_totalFee) as pay_totalFee" +
+                    " from b_pay_info where YEAR(pay_date) = year('" + date + "') group by DATE_FORMAT(pay_date ,'%Y');";
 
-        return jdbcTemplate.queryForObject(sql,new PayStatisticsRowMapper());
+            return jdbcTemplate.queryForObject(sql, new PayStatisticsRowMapper());
+        }
     }
 
 
