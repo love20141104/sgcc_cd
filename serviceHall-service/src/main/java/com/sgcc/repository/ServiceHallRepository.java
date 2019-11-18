@@ -71,6 +71,7 @@ public class ServiceHallRepository {
             objects1.add(serviceHallDao.getServiceHallTraffic());
             objects1.add(serviceHallDao.getServiceHallRank());
             objects1.add(serviceHallDao.getServiceHallCollect());
+
             StringBuffer stringBuffer = new StringBuffer();
             if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallTel()))
                 stringBuffer.append(",").append("service_hall_tel=? ");
@@ -78,23 +79,23 @@ public class ServiceHallRepository {
 
             if (!(serviceHallDao.getServiceHallLongitude() - 0.0 < 1e-6))
                 stringBuffer.append(",").append("service_hall_longitude=? ");
-            objects1.add(serviceHallDao.getServiceHallLongitude());
+                objects1.add(serviceHallDao.getServiceHallLongitude());
 
             if (!(serviceHallDao.getServiceHallLatitude() - 0.0 < 1e-6))
                 stringBuffer.append(",").append("service_hall_latitude=?");
-            objects1.add(serviceHallDao.getServiceHallLatitude());
+                objects1.add(serviceHallDao.getServiceHallLatitude());
 
             if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallLandmarkBuilding()))
                 stringBuffer.append(",").append("service_hall_landmark_building=? ");
-            objects1.add(serviceHallDao.getServiceHallLandmarkBuilding());
+                objects1.add(serviceHallDao.getServiceHallLandmarkBuilding());
 
             if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallBusinessDesc()))
                 stringBuffer.append(",").append("service_hall_business_desc=? ");
-            objects1.add(serviceHallDao.getServiceHallBusinessDesc());
+                objects1.add(serviceHallDao.getServiceHallBusinessDesc());
 
             if (!Strings.isNullOrEmpty(serviceHallDao.getServiceHallBusinessDistrict()))
                 stringBuffer.append(",").append("service_hall_business_district=? ");
-            objects1.add(serviceHallDao.getServiceHallBusinessDistrict());
+                objects1.add(serviceHallDao.getServiceHallBusinessDistrict());
 
             String whereSql = " where service_hall_id=? ";
             objects1.add(serviceHallDao.getServiceHallId());
@@ -104,7 +105,6 @@ public class ServiceHallRepository {
             } else {
                 sql += whereSql;
             }
-            objects1.add(serviceHallDao.getServiceHallId());
             if(objects1.size()>0){
                 Object[] objects2 = new Object[objects1.size()];
                 for (int i = 0; i <objects1.size() ; i++) {

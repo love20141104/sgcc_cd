@@ -136,7 +136,7 @@ public class SuggestionsRepository {
                     ,dao.getReplyContent()
                     , Utils.GetTime(dao.getReplyDate())
                     ,dao.getSuggestionId()});
-            return findBySuggestionId(dao.getSuggestionId());
+            return dao;
         }else {
             String sql = "update b_suggestion set reply_user_id='" + dao.getReplyUserId() + "'," +
                     "reply_content = '" + dao.getReplyContent() + "'," + "reply_date = '" + Utils.GetTime(dao.getReplyDate()) + "'";

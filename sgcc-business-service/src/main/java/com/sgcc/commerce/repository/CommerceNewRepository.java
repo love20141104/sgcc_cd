@@ -98,7 +98,7 @@ public class CommerceNewRepository {
     public void update( CommerceNewDao dao )
     {
         if (precompile) {
-            String sql = "update b_new_install_commerce set id ?," +
+            String sql = "update b_new_install_commerce set id = ?," +
                     "user_open_id = ?," +
                     "new_install_company_name= ?," +
                     "new_install_district= ?," +
