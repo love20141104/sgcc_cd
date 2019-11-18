@@ -73,7 +73,7 @@ public class NoticeService {
         try {
             if (Strings.isNullOrEmpty(addFormDTO.getNoticeDistrict()) ||
                     Strings.isNullOrEmpty(addFormDTO.getTypeName()) ||
-                    Strings.isNullOrEmpty(addFormDTO.getNotiveDate()) ||
+                    Strings.isNullOrEmpty(addFormDTO.getNoticeDate()) ||
                     Strings.isNullOrEmpty(addFormDTO.getRange())
                 )
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
