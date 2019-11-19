@@ -235,7 +235,16 @@ public class PreBooksRepository {
         if (precompile) {
             Object[] objects = {};
             ArrayList<Object> objects1 = new ArrayList<>();
-            String sql = "select id,user_open_id,service_hall_id,prebook_code,prebook_date,prebook_start_time,contact,contact_tel,submit_time from b_prebook ";
+            String sql = "select id" +
+                    ",user_open_id" +
+                    ",service_hall_id" +
+                    ",prebook_code" +
+                    ",prebook_date" +
+
+                    ",prebook_start_time" +
+                    ",contact" +
+                    ",contact_tel" +
+                    ",submit_time from b_prebook ";
             StringBuffer sql_where = new StringBuffer();
             if (!Strings.isNullOrEmpty(user_open_id)) {
                 sql_where.append("user_open_id = ? and ");

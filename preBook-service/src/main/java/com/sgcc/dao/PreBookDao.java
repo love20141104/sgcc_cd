@@ -61,8 +61,8 @@ public class PreBookDao implements Serializable {
     // 预约提交时间
     private String submitDate;
 
-    public PreBookDao(String id, String userId, String serviceHallId, String prebookDate,
-                      String prebookStartTime, String prebookCode, String contact, String contactTel, String submitDate) {
+    public PreBookDao(String id, String userId, String serviceHallId, String prebookCode, String prebookDate,
+                      String prebookStartTime, String contact, String contactTel, String submitDate) {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
