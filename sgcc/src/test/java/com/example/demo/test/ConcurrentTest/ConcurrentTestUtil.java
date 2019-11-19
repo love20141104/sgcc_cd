@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.test.ConcurrentTest;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * 压力测试工具
  */
-public class PressureTestUtil {
+public class ConcurrentTestUtil {
 
     private static RestTemplate restTemplate = new RestTemplate(new HttpsClientRequestFactory());
     private static final String userName = "xiemin";
@@ -27,9 +27,10 @@ public class PressureTestUtil {
         System.out.println("测试接口："+message);
         JSONObject responseEntity = restTemplate.getForObject(url, JSONObject.class);
         List<Object> list = (List<Object>) responseEntity.get("data");
-        for (Object o : list){
-            System.out.println("data:"+o);
-        }
+        System.out.println("data:"+list.size());
+//        for (Object o : list){
+//            System.out.println("data:"+o);
+//        }
         System.out.println("----------------------------------");
     }
 

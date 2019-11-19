@@ -175,7 +175,7 @@ public class InhabitantRenameRepository {
             String sql = "insert into b_rename_transfer(id,info_id,house_id,user_open_id,info_change,info_name,info_idcard," +
                     "info_telphone,cq_idcard_img_positive,cq_idcard_img_back,info_apply_person,info_transactor," +
                     "sq_arttorney_img,sq_idcard_positive_img,sq_idcard_back_img,info_transactor_idcard,info_transactor_tel," +
-                    "info_submit_date) values(?,?,?,?,? ,?,?,?,?,? ,?,?,?)";
+                    "info_submit_date) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             return jdbcTemplate.update(sql,new Object[]{
                     dao.getId()
