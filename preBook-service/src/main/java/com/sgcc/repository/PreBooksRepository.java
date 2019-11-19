@@ -259,12 +259,12 @@ public class PreBooksRepository {
                 objects1.add(prebook_code);
             }
             if (!Strings.isNullOrEmpty(prebook_date_start)) {
-                sql_where.append("prebook_date >= '").append(prebook_date_start).append("' and ");
+                sql_where.append("prebook_date >= ? and ");
                 objects1.add(prebook_date_start);
             }
-            if (!Strings.isNullOrEmpty(prebook_date_start)) {
-                sql_where.append("prebook_date <= '").append(prebook_date_end).append("' and ");
-                objects1.add(prebook_date_start);
+            if (!Strings.isNullOrEmpty(prebook_date_end)) {
+                sql_where.append("prebook_date <= ? and ");
+                objects1.add(prebook_date_end);
             }
             if(objects1.size()>0){
                 Object[] objects2 = new Object[objects1.size()];
@@ -277,7 +277,8 @@ public class PreBooksRepository {
                 sql += " where " + sql_where.toString().substring(0, sql_where.toString().length() - 4);
             }
             logger.info("SQL:" + sql);
-            return jdbcTemplate.query(sql,objects, new PreBookRowMapper());
+            List<PreBookDao> query = jdbcTemplate.query(sql, objects, new PreBookRowMapper());
+            return query;
         }else {
             String sql = "select id" +
                     ",user_open_id" +
@@ -301,7 +302,7 @@ public class PreBooksRepository {
             if (!Strings.isNullOrEmpty(prebook_date_start)) {
                 sql_where.append("prebook_date >= '").append(prebook_date_start).append("' and ");
             }
-            if (!Strings.isNullOrEmpty(prebook_date_start)) {
+            if (!Strings.isNullOrEmpty(prebook_date_end)) {
                 sql_where.append("prebook_date <= '").append(prebook_date_end).append("' and ");
             }
 
