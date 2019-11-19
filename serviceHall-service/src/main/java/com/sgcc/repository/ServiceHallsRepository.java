@@ -13,10 +13,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Repository
 public class ServiceHallsRepository {
-
+    private Logger logger = Logger.getLogger(ServiceHallsRepository.class.toString());
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Value("${precompile}")
@@ -29,6 +30,7 @@ public class ServiceHallsRepository {
                 "service_hall_rank,service_hall_collect from d_service_hall where service_hall_available = 1";
 
         try {
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new TestRowMapper());
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,6 +48,7 @@ public class ServiceHallsRepository {
                     "service_hall_rank,service_hall_collect from d_service_hall where service_hall_available = 1 and service_hall_id= ?";
 
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql,new Object[]{id}, new TestRowMapper());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -59,6 +62,7 @@ public class ServiceHallsRepository {
                     "'" + id + "'";
 
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql, new TestRowMapper());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -77,6 +81,7 @@ public class ServiceHallsRepository {
         String sql = "update d_service_hall set service_hall_name=?,service_hall_addr=?,service_hall_opentime=?, " +
                 "service_hall_district=?,service_hall_owner=?,service_hall_available=?,service_hall_traffic=?, " +
                 "service_hall_rank=?,service_hall_collect=? where service_hall_id=?";
+        logger.info("SQL:" + sql);
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -112,7 +117,7 @@ public class ServiceHallsRepository {
                 "service_hall_collect,service_hall_business_desc,service_hall_landmark_building,service_hall_business_district)" +
                 " values(?,?,?,?,? ,?,?,?,?,? ,?,?,?,?,? ,?,?)";
 
-
+        logger.info("SQL:" + sql);
         int[] result = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -151,6 +156,7 @@ public class ServiceHallsRepository {
     public void delServiceHalls(List<String> ids){
         if (precompile) {
             String sql = "delete from d_service_hall where service_hall_id =? ";
+            logger.info("SQL:" + sql);
             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
                     return ids.size();
@@ -163,6 +169,7 @@ public class ServiceHallsRepository {
         }else {
             String strIds = Utils.joinStrings(ids, "','");
             String sql = "delete from d_service_hall where service_hall_id in('" + strIds + "')";
+            logger.info("SQL:" + sql);
             jdbcTemplate.execute(sql);
         }
     }

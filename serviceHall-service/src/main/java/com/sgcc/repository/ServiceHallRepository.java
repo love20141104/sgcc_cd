@@ -35,6 +35,7 @@ public class ServiceHallRepository {
                 "service_hall_rank,service_hall_collect from d_service_hall where service_hall_available = 1";
 
         try {
+
             return jdbcTemplate.query(sql, new ServiceRowMapper());
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,6 +212,7 @@ public class ServiceHallRepository {
     public void delServiceHalls(List<String> ids){
         if (precompile) {
             String sql = "delete from d_service_hall where service_hall_id =? ";
+            logger.info("SQL:" + sql);
             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
                     return ids.size();
@@ -223,6 +225,7 @@ public class ServiceHallRepository {
         }else {
             String strIds = Utils.joinStrings(ids, "','");
             String sql = "delete from d_service_hall where service_hall_id in('" + strIds + "')";
+            logger.info("SQL:" + sql);
             jdbcTemplate.execute(sql);
         }
     }

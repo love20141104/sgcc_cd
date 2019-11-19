@@ -35,6 +35,7 @@ public class ArticleRepository {
             String sql = "select id,article_title,article_desc,article_img,article_url," +
                     "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql,new Object[]{}, new articleRowMapper());
             } catch (NoSuchElementException e) {
                 return null;
@@ -43,6 +44,7 @@ public class ArticleRepository {
             String sql = "select id,article_title,article_desc,article_img,article_url," +
                     "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql, new articleRowMapper());
             } catch (NoSuchElementException e) {
                 return null;
@@ -56,6 +58,7 @@ public class ArticleRepository {
                     " article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article"
                     + " where article_recommended = ? ";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql,new Object[]{isRecommended}
                 , new articleRowMapper());
             } catch (NoSuchElementException e) {
@@ -67,6 +70,7 @@ public class ArticleRepository {
                     "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
             sql = sql + " where article_recommended = '" + Utils.Boolean2Int(isRecommended) + "'";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql, new articleRowMapper());
             } catch (NoSuchElementException e) {
                 return null;
@@ -80,6 +84,7 @@ public class ArticleRepository {
                     " article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article"
                     + " where article_type = ? ";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql,new Object[]{articleType}, new articleRowMapper());
             } catch (NoSuchElementException e) {
                 return null;
@@ -90,6 +95,7 @@ public class ArticleRepository {
                     "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
             sql = sql + " where article_type = '" + articleType + "'";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql, new articleRowMapper());
             } catch (NoSuchElementException e) {
                 return null;
@@ -102,6 +108,7 @@ public class ArticleRepository {
                     "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article"
              + " where id = ?";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.queryForObject(sql,new Object[]{id}, new articleRowMapper());
             } catch (NoSuchElementException e) {
                 return null;
@@ -111,6 +118,7 @@ public class ArticleRepository {
                     "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
             sql = sql + " where id = '" + id + "'";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.queryForObject(sql, new articleRowMapper());
             } catch (NoSuchElementException e) {
                 return null;
@@ -123,6 +131,7 @@ public class ArticleRepository {
         if (precompile) {
             String sql = "insert into d_article(id,article_title,article_desc,article_img,article_url," +
                     "article_recommended,article_type,submit_time) values(?,?,?,? ,?,?,?,?)";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{
                      dao.getId()
                     ,dao.getArticle_title()
@@ -140,6 +149,7 @@ public class ArticleRepository {
                     ",'" + dao.getArticle_title() + "','" + dao.getArticle_desc() + "','" + dao.getArticle_img() + "'" +
                     ",'" + dao.getArticle_url() + "','" + Utils.Boolean2Int(dao.isArticle_recommended()) + "'" +
                     ",'" + dao.getArticle_type() + "','" + Utils.GetTime(dao.getSubmit_time()) + "')";
+            logger.info("SQL:" + sql);
             jdbcTemplate.execute(sql);
         }
     }
@@ -155,6 +165,7 @@ public class ArticleRepository {
                     ",article_type=?" +
                     ",submit_time=?" +
                     " where id=?";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{
                     dao.getArticle_title()
                     ,dao.getArticle_desc()
@@ -175,6 +186,7 @@ public class ArticleRepository {
                     ",article_type='" + dao.getArticle_type() + "'" +
                     ",submit_time='" + Utils.GetTime(dao.getSubmit_time()) + "'" +
                     " where id='" + dao.getId() + "'";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql);
             return findByID(dao.getId());
         }
@@ -184,6 +196,7 @@ public class ArticleRepository {
     public void deleteAll(List<String> articleIds){
         if (precompile) {
             String sql = "delete from d_article where id =?";
+            logger.info("SQL:" + sql);
             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                         public int getBatchSize() {
                             return articleIds.size();
@@ -196,6 +209,7 @@ public class ArticleRepository {
         }else {
             String strIds = Utils.joinStrings(articleIds, "','");
             String sql = "delete from d_article where id in('" + strIds + "')";
+            logger.info("SQL:" + sql);
             jdbcTemplate.execute(sql);
         }
     }
@@ -207,6 +221,7 @@ public class ArticleRepository {
                     "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article"
                     + " where article_title like ?";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql,new Object[]{articleTitle}, new articleRowMapper());
             } catch (NoSuchElementException e) {
                 return null;
@@ -216,6 +231,7 @@ public class ArticleRepository {
                     "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
             sql = sql + " where article_title like '%" + articleTitle + "%'";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql, new articleRowMapper());
             } catch (NoSuchElementException e) {
                 return null;

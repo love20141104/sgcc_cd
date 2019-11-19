@@ -13,10 +13,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Repository
 public class BusinessTypeRepository {
-
+    private Logger logger = Logger.getLogger(BusinessTypeRepository.class.toString());
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -32,12 +33,12 @@ public class BusinessTypeRepository {
         if (precompile) {
             String sql = "select id,business_type_id,business_type,`order`,business_type_available from d_business_type where business_type_available=1";
             List<BusinessTypeDao> bussinessTypeDaoList = jdbcTemplate.query(sql,new Object[]{}, new businessTypeRowMapper());
-
+            logger.info("SQL:" + sql);
             return bussinessTypeDaoList;
         }else {
             String sql = "select id,business_type_id,business_type,`order`,business_type_available from d_business_type where business_type_available=1";
             List<BusinessTypeDao> bussinessTypeDaoList = jdbcTemplate.query(sql, new businessTypeRowMapper());
-
+            logger.info("SQL:" + sql);
             return bussinessTypeDaoList;
         }
     }
@@ -51,6 +52,7 @@ public class BusinessTypeRepository {
         if (precompile) {
             String sql = "insert into d_business_type(id,business_type_id,business_type,`order`) " +
                     "values(?,?,?,?)";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{
                     businessTypeDao.getId()
                     ,businessTypeDao.getBusinessTypeId()
@@ -61,6 +63,7 @@ public class BusinessTypeRepository {
             String sql = "insert into d_business_type(id,business_type_id,business_type,`order`) " +
                     "values('" + businessTypeDao.getId() + "','" + businessTypeDao.getBusinessTypeId() + "'" +
                     ",'" + businessTypeDao.getBusinessType() + "'," + businessTypeDao.getOrder() + ")";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql);
         }
 
@@ -73,8 +76,8 @@ public class BusinessTypeRepository {
      */
     public void delBType(List<String> businessTypeIds) {
         if (precompile) {
-            String strIds = Utils.joinStrings(businessTypeIds, "','");
             String sql = "delete from d_business_type where business_type_id =? ";
+            logger.info("SQL:" + sql);
             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
                     return businessTypeIds.size();
@@ -87,6 +90,7 @@ public class BusinessTypeRepository {
         }else {
             String strIds = Utils.joinStrings(businessTypeIds, "','");
             String sql = "delete from d_business_type where business_type_id in('" + strIds + "')";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql);
         }
 
@@ -100,10 +104,12 @@ public class BusinessTypeRepository {
     public void updateBType(BusinessTypeDao businessTypeDao) {
         if (precompile) {
             String sql = "update d_business_type set business_type=?  where business_type_id=? ";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{businessTypeDao.getBusinessType(),businessTypeDao.getBusinessTypeId()});
         }else {
             String sql = "update d_business_type set business_type='" + businessTypeDao.getBusinessType() +
                     "' where business_type_id='" + businessTypeDao.getBusinessTypeId() + "'";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql);
         }
     }

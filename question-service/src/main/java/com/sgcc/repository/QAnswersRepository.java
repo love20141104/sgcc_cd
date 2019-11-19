@@ -14,14 +14,16 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * 问题回答增删改查
  */
 @Repository
 public class QAnswersRepository {
-
+    private Logger logger = Logger.getLogger(QAnswersRepository.class.toString());
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Value("${precompile}")
@@ -36,33 +38,80 @@ public class QAnswersRepository {
         return answerDaoList;
     }
 
-    public List<QAnswerDTO> findQAnswerList(String category_name, String question_desc, String answer){
-        String sql = "select a.id,a.category_id,b.category_desc as category_name,a.question_desc,a.answer,a.available " +
-                "from d_question_answer a,d_question_category b "+
-                "where available = 1 and a.category_id = b.category_id ";
-        StringBuffer sql_where = new StringBuffer();
-        if(!Strings.isNullOrEmpty(category_name)){
-            sql_where.append(" b.category_desc like '%").append(category_name+"%' and ");
-        }if(!Strings.isNullOrEmpty(question_desc)){
-            sql_where.append("a.question_desc like '%").append(question_desc+"%' and ");
-        }if(!Strings.isNullOrEmpty(answer)){
-            sql_where.append("a.answer like '%").append(answer+"%' and ");
-        }
+    public List<QAnswerDTO> findQAnswerList(String category_name, String question_desc, String answer) {
+        if (precompile) {
+            Object[] objects = {};
+            ArrayList<Object> objects1 = new ArrayList<>();
 
-        if(!Strings.isNullOrEmpty(sql_where.toString())){
-            sql += "and "+sql_where.toString().substring(0,sql_where.toString().length() - 4);
-        }
+            String sql = "select a.id,a.category_id,b.category_desc as category_name,a.question_desc,a.answer,a.available " +
+                    "from d_question_answer a,d_question_category b " +
+                    "where available = 1 and a.category_id = b.category_id ";
+            StringBuffer sql_where = new StringBuffer();
+            if (!Strings.isNullOrEmpty(category_name)) {
+                sql_where.append(" b.category_desc like ? and ");
+                objects1.add("%"+category_name+"%");
 
-        List<QAnswerDTO> answerDaoList = jdbcTemplate.query(sql,new questionAnswerRowMapper());
-        return answerDaoList;
+            }
+            if (!Strings.isNullOrEmpty(question_desc)) {
+                sql_where.append("a.question_desc like ? and ");
+                objects1.add("%"+question_desc+"%");
+            }
+            if (!Strings.isNullOrEmpty(answer)) {
+                sql_where.append("a.answer like ? and ");
+                objects1.add("%"+answer+"%");
+            }
+
+            if (!Strings.isNullOrEmpty(sql_where.toString())) {
+                sql += "and " + sql_where.toString().substring(0, sql_where.toString().length() - 4);
+            }
+            if(objects1.size()>0){
+                Object[] objects2 = new Object[objects1.size()];
+                for (int i = 0; i <objects1.size() ; i++) {
+                    objects2[i]=objects1.get(i);
+                }
+                objects=objects2;
+            }
+            logger.info("SQL:" + sql);
+            List<QAnswerDTO> answerDaoList = jdbcTemplate.query(sql,objects, new questionAnswerRowMapper());
+            return answerDaoList;
+        } else {
+            String sql = "select a.id,a.category_id,b.category_desc as category_name,a.question_desc,a.answer,a.available " +
+                    "from d_question_answer a,d_question_category b " +
+                    "where available = 1 and a.category_id = b.category_id ";
+            StringBuffer sql_where = new StringBuffer();
+            if (!Strings.isNullOrEmpty(category_name)) {
+                sql_where.append(" b.category_desc like '%").append(category_name + "%' and ");
+            }
+            if (!Strings.isNullOrEmpty(question_desc)) {
+                sql_where.append("a.question_desc like '%").append(question_desc + "%' and ");
+            }
+            if (!Strings.isNullOrEmpty(answer)) {
+                sql_where.append("a.answer like '%").append(answer + "%' and ");
+            }
+
+            if (!Strings.isNullOrEmpty(sql_where.toString())) {
+                sql += "and " + sql_where.toString().substring(0, sql_where.toString().length() - 4);
+            }
+            logger.info("SQL:" + sql);
+            List<QAnswerDTO> answerDaoList = jdbcTemplate.query(sql, new questionAnswerRowMapper());
+            return answerDaoList;
+        }
     }
 
     public List<QuestionAnswerDao> findQAnswerByCategoryId(String categoryId){
-
-        String sql = "select id,category_id,question_desc,answer,available from d_question_answer"
-                + " where available = 1 and category_id = '"+categoryId+"'";
-        List<QuestionAnswerDao> answerDaoList = jdbcTemplate.query(sql,new answerRowMapper());
-        return answerDaoList;
+        if (precompile) {
+            String sql = "select id,category_id,question_desc,answer,available from d_question_answer"
+                    + " where available = 1 and category_id = ? ";
+            logger.info("SQL:" + sql);
+            List<QuestionAnswerDao> answerDaoList = jdbcTemplate.query(sql,new Object[]{categoryId}, new answerRowMapper());
+            return answerDaoList;
+        }else {
+            String sql = "select id,category_id,question_desc,answer,available from d_question_answer"
+                    + " where available = 1 and category_id = '" + categoryId + "'";
+            logger.info("SQL:" + sql);
+            List<QuestionAnswerDao> answerDaoList = jdbcTemplate.query(sql, new answerRowMapper());
+            return answerDaoList;
+        }
     }
 
 

@@ -15,13 +15,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * 问题回答增删改查
  */
 @Repository
 public class QAnswerRepository {
-
+    private Logger logger = Logger.getLogger(QAnswerRepository.class.toString());
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -77,6 +78,7 @@ public class QAnswerRepository {
         if (precompile) {
             String sql = "insert into d_question_answer(id,category_id,question_desc,answer) " +
                     "values(?,?,?,?)";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{
                     questionAnswerDao.getId()
                     ,questionAnswerDao.getCategoryId()
@@ -87,6 +89,7 @@ public class QAnswerRepository {
             String sql = "insert into d_question_answer(id,category_id,question_desc,answer) " +
                     "values('" + questionAnswerDao.getId() + "','" + questionAnswerDao.getCategoryId() + "'" +
                     ",'" + questionAnswerDao.getQuestionDesc() + "','" + questionAnswerDao.getAnswer() + "')";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql);
         }
     }
@@ -110,6 +113,7 @@ public class QAnswerRepository {
         if (precompile) {
             String sql = "update d_question_answer set question_desc=? " +
                     ",answer=?  where id=? ";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{
                         questionAnswerDao.getQuestionDesc()
                         ,questionAnswerDao.getAnswer()
@@ -118,6 +122,7 @@ public class QAnswerRepository {
         }else {
             String sql = "update d_question_answer set question_desc='" + questionAnswerDao.getQuestionDesc() + "'" +
                     ",answer='" + questionAnswerDao.getAnswer() + "'  where id='" + questionAnswerDao.getId() + "'";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql);
         }
     }

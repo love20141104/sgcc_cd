@@ -15,13 +15,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * 问题类型增删改查
  */
 @Repository
 public class QCategoryRepository {
-
+    private Logger logger = Logger.getLogger(QCategoryRepository.class.toString());
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Value("${precompile}")
@@ -45,6 +46,7 @@ public class QCategoryRepository {
         if (precompile) {
             String sql = "insert into d_question_category(id,category_id,category_desc,category_order) " +
                     "values(?,?,?,?)";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{
                     questionCategoryDao.getId()
                     ,questionCategoryDao.getCategoryId()
@@ -55,6 +57,7 @@ public class QCategoryRepository {
             String sql = "insert into d_question_category(id,category_id,category_desc,category_order) " +
                     "values('" + questionCategoryDao.getId() + "','" + questionCategoryDao.getCategoryId() + "'" +
                     ",'" + questionCategoryDao.getCategoryDesc() + "'," + questionCategoryDao.getCategoryOrder() + ")";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql);
         }
     }
@@ -78,6 +81,7 @@ public class QCategoryRepository {
         if (precompile) {
             String sql = "update d_question_category set category_desc=? " +
                     ",category_order=?  where category_id=? ";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{
                    questionCategoryDao.getCategoryDesc()
                     ,questionCategoryDao.getCategoryOrder()
@@ -87,6 +91,7 @@ public class QCategoryRepository {
             String sql = "update d_question_category set category_desc='" + questionCategoryDao.getCategoryDesc() + "'" +
                     ",category_order=" + questionCategoryDao.getCategoryOrder() +
                     " where category_id='" + questionCategoryDao.getCategoryId() + "'";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql);
         }
     }
@@ -122,6 +127,7 @@ public class QCategoryRepository {
                 }
                 objects=objects2;
             }
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,objects, new categoryRowMapper());
         }else {
             String sql = "select id,category_id,category_desc,category_order,category_available from d_question_category";
@@ -136,6 +142,7 @@ public class QCategoryRepository {
             if (!Strings.isNullOrEmpty(sql_where.toString())) {
                 sql += " where " + sql_where.toString().substring(0, sql_where.toString().length() - 4);
             }
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new categoryRowMapper());
         }
 

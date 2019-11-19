@@ -41,12 +41,14 @@ public class HouseholdRepository {
                     + "select hi.household_number from b_pay_info p,b_user u,r_user_household uh,b_household_info hi"
                     + " where p.user_open_id = u.user_open_id and uh.user_id = u.user_id and hi.household_id = uh.household_id"
                     + " and p.user_open_id = ?)";
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{openId}, new NoBindRowMapper());
         }else {
             String sql = "select distinct pay_household_number from b_pay_info where user_open_id='" + openId + "' and pay_household_number not in ("
                     + "select hi.household_number from b_pay_info p,b_user u,r_user_household uh,b_household_info hi"
                     + " where p.user_open_id = u.user_open_id and uh.user_id = u.user_id and hi.household_id = uh.household_id"
                     + " and p.user_open_id = '" + openId + "')";
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new NoBindRowMapper());
         }
     }
@@ -216,6 +218,7 @@ public class HouseholdRepository {
         if (precompile) {
             String sql = "select user_id,user_open_id,user_tel,is_available from b_user where  user_open_id = ?";
             try {
+                logger.info("SQL:" + sql);
                 UserDao userDao = jdbcTemplate.queryForObject(sql, new Object[]{userOpenId},new UserRowMapper());
                 return userDao;
             } catch (Exception e) {
@@ -225,6 +228,7 @@ public class HouseholdRepository {
             String sql = "select user_id,user_open_id,user_tel,is_available from b_user where  user_open_id = '"
                     + userOpenId + " '";
             try {
+                logger.info("SQL:" + sql);
                 UserDao userDao = jdbcTemplate.queryForObject(sql, new UserRowMapper());
                 return userDao;
             } catch (Exception e) {
@@ -240,6 +244,7 @@ public class HouseholdRepository {
                     + "from b_subscribe left join b_user on b_subscribe.user_id=b_user.user_id  "
                     + "where user_open_id = ?";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.queryForObject(sql,new Object[]{userOpenId}, new SubscribeRowMapper());
             } catch (Exception e) {
                 return null;
@@ -250,6 +255,7 @@ public class HouseholdRepository {
                     + "from b_subscribe left join b_user on b_subscribe.user_id=b_user.user_id  "
                     + "where user_open_id = '" + userOpenId + " '";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.queryForObject(sql, new SubscribeRowMapper());
             } catch (Exception e) {
                 return null;
@@ -372,7 +378,7 @@ public class HouseholdRepository {
                     "LEFT JOIN r_user_household r ON hi.household_id = r.household_id " +
                     "LEFT JOIN b_user u on r.user_id=u.user_id " +
                     " where u.user_open_id = ?";
-
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{userOpenId}, new HouseholdInfoRowMapper());
         }else {
             String sql = "select hi.household_id household_id" +
@@ -386,7 +392,7 @@ public class HouseholdRepository {
                     "LEFT JOIN r_user_household r ON hi.household_id = r.household_id " +
                     "LEFT JOIN b_user u on r.user_id=u.user_id " +
                     " where u.user_open_id = '" + userOpenId + "'";
-
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new HouseholdInfoRowMapper());
         }
     }
@@ -402,6 +408,7 @@ public class HouseholdRepository {
                     ",hi.is_available is_available from b_household_info  hi" +
                     " where household_id = ?";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.queryForObject(sql,new Object[]{householdId}, new HouseholdInfoRowMapper());
             } catch (Exception e) {
                 return null;
@@ -417,6 +424,7 @@ public class HouseholdRepository {
                     ",hi.is_available is_available from b_household_info  hi" +
                     " where household_id = '" + householdId + "'";
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.queryForObject(sql, new HouseholdInfoRowMapper());
             } catch (Exception e) {
                 return null;
@@ -436,6 +444,7 @@ public class HouseholdRepository {
             String householdId = getHouseholdIdByUserOpenIdAndHouseholdNum(openId, householdNum);
             if (!Strings.isNullOrEmpty(householdId)) {
                 String sql = "update b_household_info set household_password = ? where household_id = ? ";
+                logger.info("SQL:" + sql);
                 jdbcTemplate.update(sql,new Object[]{pwd,householdId});
             }
         }else {
@@ -443,6 +452,7 @@ public class HouseholdRepository {
             if (!Strings.isNullOrEmpty(householdId)) {
                 String sql = "update b_household_info set household_password = '" + pwd + "' " +
                         "where household_id = '" + householdId + "'";
+                logger.info("SQL:" + sql);
                 jdbcTemplate.execute(sql);
             }
         }
@@ -462,9 +472,10 @@ public class HouseholdRepository {
             if (null != householdIdByUserOpenId && householdIdByUserOpenId.size() > 0 && !Strings.isNullOrEmpty(householdId)) {
                 String sql0 = "update b_household_info set household_default = false " +
                         "where household_id =?";
-
+                logger.info("SQL:" + sql0);
                 String sql = "update b_household_info set household_default = true " +
                         "where household_id = ?";
+                logger.info("SQL:" + sql);
                 jdbcTemplate.batchUpdate(sql0,new BatchPreparedStatementSetter() {
                     public int getBatchSize() {
                         return householdIdByUserOpenId.size();
@@ -487,6 +498,8 @@ public class HouseholdRepository {
                         "where household_id = '" + householdId + "'";
                 jdbcTemplate.execute(sql0);
                 jdbcTemplate.execute(sql);
+                logger.info("SQL:" + sql0);
+                logger.info("SQL:" + sql);
             }
         }
     }
@@ -606,6 +619,7 @@ public class HouseholdRepository {
             String sql = "update b_subscribe set " + columnName + " = ? where user_id = (" +
                     "select u.user_id from b_user u " +
                     "where u.user_open_id = ? )";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{is_subscribe,openId});
         }else {
             String sql = "update b_subscribe set " + columnName + " = " + is_subscribe +
@@ -613,6 +627,7 @@ public class HouseholdRepository {
                     "select u.user_id from b_user u " +
                     "where u.user_open_id = '" + openId + "'" +
                     ")";
+            logger.info("SQL:" + sql);
             jdbcTemplate.execute(sql);
         }
     }
@@ -625,6 +640,7 @@ public class HouseholdRepository {
                     + "from b_subscribe left join b_user on b_subscribe.user_id=b_user.user_id "
                     + " where b_user.is_available = ? " ;
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql,new Object[]{isAvailable}, new UserSubscribeRowMapper());
             } catch (Exception e) {
                 return null;
@@ -638,6 +654,7 @@ public class HouseholdRepository {
                 sql += wheresql;
             }
             try {
+                logger.info("SQL:" + sql);
                 return jdbcTemplate.query(sql, new UserSubscribeRowMapper());
             } catch (Exception e) {
                 return null;
@@ -659,6 +676,8 @@ public class HouseholdRepository {
                     + ",sub_coulometric_analysis = ? "
                     + ",sub_power = ? "
                     + " where user_id= ? ";
+            logger.info("SQL:" + sql1);
+            logger.info("SQL:" + sql2);
             jdbcTemplate.update(sql1,new Object[]{userSubscribeDao.getUserTel(),userSubscribeDao.getUserOpenId()});
             jdbcTemplate.update(sql2,new Object[]{
                     userSubscribeDao.getSubBill()
@@ -681,6 +700,8 @@ public class HouseholdRepository {
                     + " where user_id='" + userId + "'";
             jdbcTemplate.execute(sql1);
             jdbcTemplate.execute(sql2);
+            logger.info("SQL:" + sql1);
+            logger.info("SQL:" + sql2);
         }
     }
 

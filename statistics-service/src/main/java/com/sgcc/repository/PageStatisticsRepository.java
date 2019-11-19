@@ -77,7 +77,7 @@ public class PageStatisticsRepository {
                 "union select DATE_FORMAT(date_sub(curdate(), interval 0 month ),'%Y-%m') as date) d "
                 +" on d.date = DATE_FORMAT(b.visit_date ,'%Y-%m') "
                 + " group by d.date ORDER BY d.date asc;";
-        logger.info("select:"+sql);
+        logger.info("sql:"+sql);
          return jdbcTemplate.query(sql, new PageStatistcsMonthDtoRowMapper());
     }
 
@@ -115,7 +115,7 @@ public class PageStatisticsRepository {
                 + " FROM b_page_statistics where page_url like '%https://sgcc.link/%' and  page_url not in ("
                 + " select article_url page_url from d_article article) "
                 + " GROUP BY page_name ORDER BY COUNT(id) desc";
-        logger.info("insertSQL:"+sql);
+        logger.info("sql:"+sql);
         List<HotPageDto> query = jdbcTemplate.query(sql, new HotPageDtoRowMapper());
         return  query;
     }

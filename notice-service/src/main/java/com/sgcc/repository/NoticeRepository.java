@@ -37,12 +37,13 @@ public class NoticeRepository {
             String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
                     "notice_date from b_blackout_notice " +
                     "where notice_district=? ";
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{district}, new NoticeRowMapper());
         }else {
             String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
                     "notice_date from b_blackout_notice " +
                     "where notice_district='" + district + "'";
-
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new NoticeRowMapper());
         }
     }
@@ -51,12 +52,12 @@ public class NoticeRepository {
         if (precompile) {
             String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
                     "notice_date from b_blackout_notice ";
-
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{}, new NoticeRowMapper());
         }else {
             String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
                     "notice_date from b_blackout_notice ";
-
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new NoticeRowMapper());
         }
     }
@@ -72,13 +73,13 @@ public class NoticeRepository {
             String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
                     "notice_date from b_blackout_notice " +
                     "where notice_id=? ";
-
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{id}, new NoticeRowMapper());
         }else {
             String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
                     "notice_date from b_blackout_notice " +
                     "where notice_id='" + id + "'";
-
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new NoticeRowMapper());
         }
     }
@@ -91,13 +92,13 @@ public class NoticeRepository {
         if (precompile) {
             String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
                     "notice_date from b_blackout_notice ";
-
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{}, new NoticeRowMapper());
         }else {
 
             String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
                     "notice_date from b_blackout_notice ";
-
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new NoticeRowMapper());
         }
     }
@@ -114,6 +115,7 @@ public class NoticeRepository {
             String sql = "insert into b_blackout_notice(id,notice_id,notice_district,notice_type," +
                     "notice_range,notice_date) " +
                     "values(?,?,?,?,? ,?)";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{
                     noticeDao.getId()
                     ,noticeDao.getNoticeId()
@@ -129,7 +131,7 @@ public class NoticeRepository {
                     "notice_range,notice_date) " +
                     "values('" + noticeDao.getId() + "','" + noticeDao.getNoticeId() + "','" + noticeDao.getNoticeDistrict() + "'," +
                     "'" + noticeDao.getTypeName() + "','" + noticeDao.getRange() + "','" + noticeDao.getNoticeDate() + "')";
-
+            logger.info("SQL:" + sql);
             jdbcTemplate.execute(sql);
             return findNoticeById(noticeDao.getNoticeId()).size();
         }
@@ -184,7 +186,7 @@ public class NoticeRepository {
     public void delNoticeById(List<String> ids){
         if (precompile) {
             String sql = "delete from b_blackout_notice where notice_id =? ";
-
+            logger.info("SQL:" + sql);
             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
                     return ids.size();
@@ -196,7 +198,7 @@ public class NoticeRepository {
             });
         }else {
             String sql = "delete from b_blackout_notice where notice_id in('" + Utils.joinStrings(ids, "','") + "')";
-
+            logger.info("SQL:" + sql);
             jdbcTemplate.execute(sql);
         }
     }

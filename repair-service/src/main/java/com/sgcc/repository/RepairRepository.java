@@ -14,10 +14,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Repository
 public class RepairRepository {
-
+    private Logger logger = Logger.getLogger(RepairRepository.class.toString());
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Value("${precompile}")
@@ -30,6 +31,7 @@ public class RepairRepository {
 
         String sql = "select id,repair_id,user_open_id,repair_content,repair_contact,repair_tel," +
                 "repair_address,repair_img1,repair_img2,repair_img3,repair_submit_date from b_repair";
+        logger.info("SQL:" + sql);
         return jdbcTemplate.query(sql,new RepairRowMapper());
     }
 
@@ -43,11 +45,13 @@ public class RepairRepository {
             String sql = "select id,repair_id,user_open_id,repair_content,repair_contact,repair_tel," +
                     "repair_address,repair_img1,repair_img2,repair_img3,repair_submit_date from b_repair " +
                     "where repair_id=? ";
+            logger.info("SQL:" + sql);
             return jdbcTemplate.queryForObject(sql,new Object[]{repairId}, new RepairRowMapper());
         }else {
             String sql = "select id,repair_id,user_open_id,repair_content,repair_contact,repair_tel," +
                     "repair_address,repair_img1,repair_img2,repair_img3,repair_submit_date from b_repair " +
                     "where repair_id='" + repairId + "'";
+            logger.info("SQL:" + sql);
             return jdbcTemplate.queryForObject(sql, new RepairRowMapper());
         }
     }
@@ -58,11 +62,13 @@ public class RepairRepository {
             String sql = "select id,repair_id,user_open_id,repair_content,repair_contact,repair_tel," +
                     "repair_address,repair_img1,repair_img2,repair_img3,repair_submit_date from b_repair " +
                     "where user_open_id=? ";
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{openId}, new RepairRowMapper());
         }else {
             String sql = "select id,repair_id,user_open_id,repair_content,repair_contact,repair_tel," +
                     "repair_address,repair_img1,repair_img2,repair_img3,repair_submit_date from b_repair " +
                     "where user_open_id='" + openId + "'";
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new RepairRowMapper());
         }
     }
@@ -79,6 +85,7 @@ public class RepairRepository {
             String sql = "insert into b_repair(id,repair_id,user_open_id,repair_content,repair_contact" +
                     ",repair_tel,repair_address,repair_img1,repair_img2,repair_img3" +
                     ",repair_submit_date) values(?,?,?,?,? ,?,?,?,?,? ,?)";
+            logger.info("SQL:" + sql);
             return jdbcTemplate.update(sql,new Object[]{
                     dao.getId()
                     ,dao.getRepairId()
@@ -100,6 +107,7 @@ public class RepairRepository {
                     "'" + dao.getRepairId() + "','" + dao.getOpenId() + "','" + dao.getRepairContent() + "','" + dao.getRepairContact() + "'," +
                     "'" + dao.getRepairTel() + "','" + dao.getRepairAddr() + "','" + dao.getRepairImg1() + "','" + dao.getRepairImg2() + "'," +
                     "'" + dao.getRepairImg3() + "','" + Utils.GetTime(dao.getSubmitDate()) + "')";
+            logger.info("SQL:" + sql);
         return jdbcTemplate.update(sql);
     }
     }
@@ -110,6 +118,7 @@ public class RepairRepository {
             String sql = "update b_repair set repair_content=? ,user_open_id=? ,repair_contact=? " +
                     " ,repair_tel=?, repair_address=?,repair_img1=?,repair_img2=?,repair_img3=? " +
                     " where repair_id =? ";
+            logger.info("SQL:" + sql);
             return jdbcTemplate.update(sql,new Object[]{
                     dao.getRepairContent()
                     ,dao.getOpenId()
@@ -147,7 +156,7 @@ public class RepairRepository {
             } else {
                 sql += whereSql;
             }
-
+            logger.info("SQL:" + sql);
             return jdbcTemplate.update(sql);
         }
 
@@ -164,6 +173,7 @@ public class RepairRepository {
     public int delRepairOrder(List<String> ids){
         if (precompile) {
             String sql = "delete from b_repair where repair_id =? ";
+            logger.info("SQL:" + sql);
              jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                  public int getBatchSize() {
                      return ids.size();
@@ -176,6 +186,7 @@ public class RepairRepository {
              return 1;
         }else {
             String sql = "delete from b_repair where repair_id in('" + Utils.joinStrings(ids, "','") + "')";
+            logger.info("SQL:" + sql);
             return jdbcTemplate.update(sql);
         }
     }

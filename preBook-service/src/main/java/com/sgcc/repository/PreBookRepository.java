@@ -41,13 +41,13 @@ public class PreBookRepository {
             String sql = "select id,user_id,service_hall_id,business_type_id,prebook_code,prebook_date," +
                     "prebook_start_time,contact,contact_tel,submit_time from b_prebook";
             List<PreBookDao> preBookDaoList = jdbcTemplate.query(sql,new Object[]{}, new PreBookRowMapper());
-
+            logger.info("SQL:" + sql);
             return preBookDaoList;
         }else {
             String sql = "select id,user_id,service_hall_id,business_type_id,prebook_code,prebook_date," +
                     "prebook_start_time,contact,contact_tel,submit_time from b_prebook";
             List<PreBookDao> preBookDaoList = jdbcTemplate.query(sql, new PreBookRowMapper());
-
+            logger.info("SQL:" + sql);
             return preBookDaoList;
         }
     }
@@ -97,6 +97,7 @@ public class PreBookRepository {
                     ",contact_tel=? ,service_hall_id=? " +
                     ",prebook_date=? " +
                     ",prebook_start_time=? where prebook_code=? ";
+            logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{
                         prebookDTO.getUserId()
                         ,prebookDTO.getContact()
@@ -109,6 +110,7 @@ public class PreBookRepository {
                         });
             String sql_select = "select id,user_open_id,service_hall_id,prebook_code,prebook_date,prebook_start_time,contact" +
                     ",contact_tel,submit_time from b_prebook where prebook_code = '" + prebookDTO.getPrebookCode() + "'";
+            logger.info("SQL:" + sql_select);
             return jdbcTemplate.query(sql_select, new PreBookRowMapper());
         }else {
             String sql = "update b_prebook set user_open_id='" + prebookDTO.getUserId() + "',contact='" + prebookDTO.getContact() + "'" +
@@ -117,8 +119,10 @@ public class PreBookRepository {
                     ",prebook_start_time='" + prebookDTO.getPrebookStartTime() +
                     "' where prebook_code='" + prebookDTO.getPrebookCode() + "'";
             jdbcTemplate.update(sql);
+            logger.info("SQL:" + sql);
             String sql_select = "select id,user_open_id,service_hall_id,prebook_code,prebook_date,prebook_start_time,contact" +
                     ",contact_tel,submit_time from b_prebook where prebook_code = '" + prebookDTO.getPrebookCode() + "'";
+            logger.info("SQL:" + sql_select);
             return jdbcTemplate.query(sql_select, new PreBookRowMapper());
         }
 

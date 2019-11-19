@@ -15,13 +15,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * 问题类型增删改查
  */
 @Repository
 public class QCategorysRepository {
-
+    private Logger logger = Logger.getLogger(QCategorysRepository.class.toString());
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Value("${precompile}")
@@ -33,6 +34,7 @@ public class QCategorysRepository {
      */
     public List<QuestionCategoryDao> findAllQCategory(){
         String sql = "select id,category_id,category_desc,category_order,category_detail,category_available from d_question_category where category_available=1";
+        logger.info("SQL:" + sql);
         List<QuestionCategoryDao> categoryDaoList = jdbcTemplate.query(sql,new categoryRowMapper());
         return categoryDaoList;
     }
@@ -45,6 +47,7 @@ public class QCategorysRepository {
     public void addQCategory(List<QuestionCategoryDao> categoryList){
         String sql = "insert into d_question_category(id,category_id,category_desc,category_order,category_detail) " +
                 "values(?,?,?,?,?)";
+        logger.info("SQL:" + sql);
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -69,6 +72,7 @@ public class QCategorysRepository {
     public void delQCategory(List<String> categoryIds){
         if (precompile) {
             String sql = "update d_question_category set category_available=0 where category_id =? ";
+            logger.info("SQL:" + sql);
             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
                     return categoryIds.size();
@@ -92,6 +96,7 @@ public class QCategorysRepository {
      */
     public void updateQCategory(List<QuestionCategoryDao> categoryList){
         String sql = "update d_question_category set category_desc=?,category_order=?,category_detail=? where category_id=? and category_available=1";
+        logger.info("SQL:" + sql);
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -115,7 +120,7 @@ public class QCategorysRepository {
      * @param categoryDesc
      */
     public List<QuestionCategoryDao> selectQuestionCategory(String categoryId, String categoryDesc,boolean available) {
-        if (false) {
+        if (precompile) {
             Object[] objects = {};
             ArrayList<Object> objects1 = new ArrayList<>();
             String sql = "select id,category_id,category_desc,category_order,category_detail,category_available from d_question_category";
@@ -140,6 +145,7 @@ public class QCategorysRepository {
                 }
                 objects=objects2;
             }
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,objects, new categoryRowMapper());
         }else {
             String sql = "select id,category_id,category_desc,category_order,category_detail,category_available from d_question_category";
@@ -157,6 +163,7 @@ public class QCategorysRepository {
             } else {
                 sql += " where " + " category_available = " + available;
             }
+            logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new categoryRowMapper());
         }
 

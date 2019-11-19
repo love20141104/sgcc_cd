@@ -114,6 +114,7 @@ public class BusinessCategoryRepository {
                 "group by d.id\n" +
                 "order by count(*) desc\n" +
                 "  limit 2 offset 0";
+        logger.info("SQL:" + sql);
         List<String> ids = jdbcTemplate.queryForList(sql,String.class);
         return ids;
     }
