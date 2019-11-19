@@ -384,6 +384,7 @@ public class PrebookService {
             , String prebook_code
             , String prebook_date_start
             , String prebook_date_end
+            , String contactOrTel
     ) {
         try {
             DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -395,7 +396,7 @@ public class PrebookService {
             }
 
             List<PreBookDao> preBookDaos = prebookQueryEntity.getPrebook(user_open_id, service_hall_id,
-                    prebook_code, prebook_date_start, prebook_date_end);
+                    prebook_code, prebook_date_start, prebook_date_end,contactOrTel);
 
             //根据preBookDaos构造PrebookDomainModel
             PrebookDomainModel prebookModel = new PrebookDomainModel(preBookDaos);

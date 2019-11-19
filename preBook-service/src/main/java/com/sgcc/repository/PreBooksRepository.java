@@ -231,7 +231,7 @@ public class PreBooksRepository {
      */
 
     @Transactional
-    public List<PreBookDao> getPrebook(String user_open_id, String service_hall_id, String prebook_code, String prebook_date_start, String prebook_date_end) {
+    public List<PreBookDao> getPrebook(String user_open_id, String service_hall_id, String prebook_code, String prebook_date_start, String prebook_date_end,String contactOrTel) {
         if (precompile) {
             Object[] objects = {};
             ArrayList<Object> objects1 = new ArrayList<>();
@@ -265,6 +265,12 @@ public class PreBooksRepository {
             if (!Strings.isNullOrEmpty(prebook_date_end)) {
                 sql_where.append("prebook_date <= ? and ");
                 objects1.add(prebook_date_end);
+            }
+            if (!Strings.isNullOrEmpty(contactOrTel)) {
+                contactOrTel="%"+contactOrTel+"%";
+                sql_where.append("contact like ? or contact_tel like ? and ");
+                objects1.add(contactOrTel);
+                objects1.add(contactOrTel);
             }
             if(objects1.size()>0){
                 Object[] objects2 = new Object[objects1.size()];

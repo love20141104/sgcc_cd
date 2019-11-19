@@ -57,9 +57,9 @@ public class ManagementController {
             , @RequestParam(required = false) String prebook_code
             , @RequestParam(required = false) String prebook_date_start
             , @RequestParam(required = false) String prebook_date_end
-
+            , @RequestParam(required = false) String contactOrTel
     ) {
-        return prebookManager.selectPrebookDTO(user_open_id,service_hall_id,prebook_code,prebook_date_start,prebook_date_end);
+        return prebookManager.selectPrebookDTO(user_open_id,service_hall_id,prebook_code,prebook_date_start,prebook_date_end,contactOrTel);
     }
 
     @ApiOperation(value = "新增问题分类", notes = "")

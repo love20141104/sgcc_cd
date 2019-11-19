@@ -109,7 +109,8 @@ public class ServiceHallsRepository {
         String sql = "INSERT INTO d_service_hall(id,service_hall_id,service_hall_name,service_hall_addr" +
                 ",service_hall_opentime,service_hall_longitude,service_hall_latitude,service_hall_district," +
                 "service_hall_tel,service_hall_available,service_hall_owner,service_hall_traffic,service_hall_rank," +
-                "service_hall_collect) values(?,?,?,?,? ,?,?,?,?,? ,?,?,?,?)";
+                "service_hall_collect,service_hall_business_desc,service_hall_landmark_building,service_hall_business_district)" +
+                " values(?,?,?,?,? ,?,?,?,?,? ,?,?,?,?,? ,?,?)";
 
 
         int[] result = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -129,6 +130,9 @@ public class ServiceHallsRepository {
                 ps.setString(12, list.get(i).getServiceHallTraffic());
                 ps.setString(13, list.get(i).getServiceHallRank());
                 ps.setBoolean(14, list.get(i).getServiceHallCollect());
+                ps.setString(15, list.get(i).getServiceHallBusinessDesc());
+                ps.setString(16, list.get(i).getServiceHallLandmarkBuilding());
+                ps.setString(17, list.get(i).getServiceHallBusinessDistrict());
             }
 
             @Override

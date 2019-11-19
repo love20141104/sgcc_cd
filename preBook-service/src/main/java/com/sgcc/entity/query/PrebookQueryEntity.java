@@ -112,9 +112,9 @@ public class PrebookQueryEntity {
      * @param prebook_date_start
      * @param prebook_date_end
      */
-    public List<PreBookDao> getPrebook(String user_open_id, String service_hall_id, String prebook_code, String prebook_date_start, String prebook_date_end) {
+    public List<PreBookDao> getPrebook(String user_open_id, String service_hall_id, String prebook_code, String prebook_date_start, String prebook_date_end,String contactOrTel) {
 
-        return preBooksRepository.getPrebook(user_open_id,service_hall_id,prebook_code,prebook_date_start,prebook_date_end);
+        return preBooksRepository.getPrebook(user_open_id,service_hall_id,prebook_code,prebook_date_start,prebook_date_end,contactOrTel);
     }
 
     /**

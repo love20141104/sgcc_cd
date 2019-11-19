@@ -90,7 +90,7 @@ public class InhabitantRenameRepository {
      */
     public void delRenameOrderList(List<String> ids){
         if (precompile) {
-            String sql = "delete from b_rename_transfer where info_id in=? ";
+            String sql = "delete from b_rename_transfer where info_id =? ";
             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
                     return ids.size();
