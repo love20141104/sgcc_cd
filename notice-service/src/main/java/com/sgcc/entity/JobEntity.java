@@ -37,7 +37,7 @@ public class JobEntity {
         );
         repairProgressRepository.insertRepairProgress(repairProgressDao);
     }
-    public void updatejobStatus(String  jobId, JobEnum jobStatus){
+    public void updatejobStatus(JobDao jobDao){
 
     }
     public void deleteJob(List<String> ids){

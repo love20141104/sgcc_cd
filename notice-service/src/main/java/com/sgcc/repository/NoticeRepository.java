@@ -34,15 +34,15 @@ public class NoticeRepository {
      */
     public List<NoticeDao> findNoticeList(String district){
         if (precompile) {
-            String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
-                    "notice_date from b_blackout_notice " +
-                    "where notice_district=? ";
+            String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
+                    +"from b_blackout_notice "
+                    +"where notice_district=? ";
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{district}, new NoticeRowMapper());
         }else {
-            String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
-                    "notice_date from b_blackout_notice " +
-                    "where notice_district='" + district + "'";
+            String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
+                    +"from b_blackout_notice "
+                    +"where notice_district='" + district + "'";
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new NoticeRowMapper());
         }
@@ -50,13 +50,13 @@ public class NoticeRepository {
 
     public List<NoticeDao> findNoticeListAll(){
         if (precompile) {
-            String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
-                    "notice_date from b_blackout_notice ";
+            String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
+                    +"from b_blackout_notice ";
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{}, new NoticeRowMapper());
         }else {
-            String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
-                    "notice_date from b_blackout_notice ";
+            String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
+                    +"from b_blackout_notice ";
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new NoticeRowMapper());
         }
@@ -70,15 +70,15 @@ public class NoticeRepository {
      */
     public List<NoticeDao> findNoticeById(String id){
         if (precompile) {
-            String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
-                    "notice_date from b_blackout_notice " +
-                    "where notice_id=? ";
+            String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
+                    +"from b_blackout_notice "
+                    +"where notice_id=? ";
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{id}, new NoticeRowMapper());
         }else {
-            String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
-                    "notice_date from b_blackout_notice " +
-                    "where notice_id='" + id + "'";
+            String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
+                    +"from b_blackout_notice "
+                    +"where notice_id='" + id + "'";
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new NoticeRowMapper());
         }
@@ -90,14 +90,14 @@ public class NoticeRepository {
      */
     public List<NoticeDao> findAll(){
         if (precompile) {
-            String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
-                    "notice_date from b_blackout_notice ";
+            String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
+                    +"from b_blackout_notice ";
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{}, new NoticeRowMapper());
         }else {
 
-            String sql = "select id,notice_id,notice_district,notice_type,notice_range," +
-                    "notice_date from b_blackout_notice ";
+            String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
+                    +"from b_blackout_notice ";
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new NoticeRowMapper());
         }
@@ -112,9 +112,8 @@ public class NoticeRepository {
      */
     public int insertNotice(NoticeDao noticeDao){
         if (precompile) {
-            String sql = "insert into b_blackout_notice(id,notice_id,notice_district,notice_type," +
-                    "notice_range,notice_date) " +
-                    "values(?,?,?,?,? ,?)";
+            String sql = "insert into b_blackout_notice(id,notice_id,notice_district,notice_type,notice_range,notice_date) "
+                    +"values(?,?,?,?,? ,?)";
             logger.info("SQL:" + sql);
             jdbcTemplate.update(sql,new Object[]{
                     noticeDao.getId()
@@ -122,7 +121,6 @@ public class NoticeRepository {
                     ,noticeDao.getNoticeDistrict()
                     ,noticeDao.getTypeName()
                     ,noticeDao.getRange()
-
                     ,noticeDao.getNoticeDate()
             });
             return findNoticeById(noticeDao.getNoticeId()).size();
