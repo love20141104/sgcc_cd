@@ -21,10 +21,13 @@ public class RepairProgressEntity {
 
     /**
      * 保存抢修进度
+     * @param noticeId
      * @param progressDao
      */
     @Transactional
-    public void saveRepairProgress(RepairProgressDao progressDao){
+    public void saveRepairProgress(String noticeId,RepairProgressDao progressDao){
+        String jobId = jobRepository.selectJobIdByNoticeId(noticeId);
+        progressDao.setJobId(jobId);
         //如果保存的该进度为抢修中 ，且数据库有该工单抢修中状态则覆盖
         if(progressDao.getProgressStatus().equalsIgnoreCase("抢修中")){
             List<RepairProgressDao> repairProgressDaos = repairProgressRepository.selectRepairProgressList(progressDao.getJobId());
