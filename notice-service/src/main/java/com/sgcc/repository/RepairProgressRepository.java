@@ -67,7 +67,8 @@ public class RepairProgressRepository {
     public List<RepairProgressDao> selectRepairProgressListByNoticeId(String noticeId) {
         String sql = "select id,user_open_id,job_id,progress_status,progress_date"
                 + ",progress_img1,progress_img2,progress_img3 "
-                + "from b_repair_progress where job_id = (select notice_id from b_job where  notice_id ='" + noticeId + " ')";
+                + "from b_repair_progress where job_id = (select job_id from b_job where  notice_id ='" + noticeId + " ')" +
+                " order by progress_date asc";
         try {
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new RepairProgressDaoRowMapper());
