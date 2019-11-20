@@ -71,10 +71,8 @@ public class RepairProgressRepository {
     }
     //通过停电公告id查询抢修进度
     public List<JobAndRepairProgressDao> selectRepairProgressListByNoticeId(String noticeId) {
-        String sql = "select job_repair_personnel,job_reason, id,user_open_id,job_id,progress_status,progress_date"
-                + ",progress_img1,progress_img2,progress_img3 "
-                + "from b_repair_progress rp left join b_job j on rp.job_id=j.job_id and  j.notice_id ='" + noticeId + " ')" +
-                " order by progress_date asc";
+        String sql = "select job_repair_personnel,job_reason, id,rp.user_open_id user_open_id,j.job_id,progress_status,progress_date,progress_img1,progress_img2,progress_img3 " +
+                "from b_repair_progress rp left join b_job j on rp.job_id=j.job_id and  j.notice_id ="+noticeId+" order by progress_date asc";
         try {
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new JobAndRepairProgressDaoRowMapper());
