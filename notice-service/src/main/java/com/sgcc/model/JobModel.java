@@ -1,8 +1,6 @@
 package com.sgcc.model;
 
 import com.example.Utils;
-import com.sgcc.Enum.JobEnum;
-import com.sgcc.Enum.RepairProgressEnum;
 import com.sgcc.dao.JobDao;
 import com.sgcc.dao.RepairProgressDao;
 import com.sgcc.dto.NewJobSubmitDTO;
@@ -24,7 +22,7 @@ public class JobModel {
                id.replace("-",""),
                openId,
                newJobSubmitDTO.getNoticeId(),
-               JobEnum.UNFINISHED,
+               "未完成",
                newJobSubmitDTO.getJobRepairPersonnel(),
                newJobSubmitDTO.getJobReason(),
                Utils.GetCurTime()
@@ -32,7 +30,7 @@ public class JobModel {
     }
 
 
-    public void updateJobStatusTransform(String jobId,JobEnum jobEnum) {
+    public void updateJobStatusTransform(String jobId,String jobEnum) {
         this.jobDao = new JobDao(
                 jobId,
                 null,

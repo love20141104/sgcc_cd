@@ -1,6 +1,6 @@
 package com.sgcc.entity;
 
-import com.sgcc.Enum.JobEnum;
+
 import com.sgcc.dao.RepairProgressDao;
 import com.sgcc.repository.JobRepository;
 import com.sgcc.repository.RepairProgressRepository;
@@ -20,10 +20,10 @@ public class RepairProgressEntity {
     @Transactional
     public void saveRepairProgress(RepairProgressDao progressDao){
         //如果保存的该进度为抢修中 ，且数据库有该工单抢修中状态则覆盖
-        if(progressDao.getProgressStatus().name().equalsIgnoreCase("抢修中")){
+        if(progressDao.getProgressStatus().equalsIgnoreCase("抢修中")){
             List<RepairProgressDao> repairProgressDaos = repairProgressRepository.selectRepairProgressList(progressDao.getJobId());
             repairProgressDaos.forEach(repairProgressDao->{
-                if(repairProgressDao.getProgressStatus().name().equalsIgnoreCase("抢修中")){
+                if(repairProgressDao.getProgressStatus().equalsIgnoreCase("抢修中")){
                     List<String> ids=new ArrayList<>();
                     ids.add(repairProgressDao.getId());
                     repairProgressRepository.deleteRepairProgress(ids);
@@ -31,8 +31,8 @@ public class RepairProgressEntity {
             });
         }
         //如果保存的该进度为抢修完成 ，则工单状态改为已完成
-        if(progressDao.getProgressStatus().name().equalsIgnoreCase("已完成")){
-            jobRepository.updatejobStatus(progressDao.getJobId(), JobEnum.valueOf("已完成"));
+        if(progressDao.getProgressStatus().equalsIgnoreCase("已完成")){
+            jobRepository.updatejobStatus(progressDao.getJobId(), "已完成");
         }
         repairProgressRepository.insertRepairProgress(progressDao);
 
@@ -44,6 +44,6 @@ public class RepairProgressEntity {
 
     }
     public List<RepairProgressDao> selectRepairProgressListByNoticeId(String noticeId){
-        return repairProgressRepository.selectRepairProgressList(noticeId);
+        return repairProgressRepository.selectRepairProgressListByNoticeId(noticeId);
     }
 }

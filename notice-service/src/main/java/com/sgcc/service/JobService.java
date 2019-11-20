@@ -2,7 +2,7 @@ package com.sgcc.service;
 
 import com.example.result.Result;
 import com.google.common.base.Strings;
-import com.sgcc.Enum.JobEnum;
+
 import com.sgcc.dao.RepairProgressDao;
 import com.sgcc.dto.NewJobSubmitDTO;
 import com.sgcc.entity.JobEntity;
@@ -68,20 +68,7 @@ public class JobService {
      * @param jobEnum
      * @return
      */
-    public Result updateJobStatus(String jobId, JobEnum jobEnum) {
-        if (Strings.isNullOrEmpty(jobId))
-            return Result.failure("传入参数为空");
-        try {
 
-            JobModel model = new JobModel();
-            model.updateJobStatusTransform(jobId,jobEnum);
-            jobEntity.updatejobStatus(model.getJobDao());
-            return Result.success();
-        }catch (Exception e){
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.GENERAL_ERR);
-        }
-    }
 
 
     /**

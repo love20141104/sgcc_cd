@@ -1,7 +1,6 @@
 package com.sgcc.entity;
 
-import com.sgcc.Enum.JobEnum;
-import com.sgcc.Enum.RepairProgressEnum;
+
 import com.sgcc.dao.JobDao;
 import com.sgcc.dao.RepairProgressDao;
 import com.sgcc.repository.JobRepository;
@@ -29,7 +28,7 @@ public class JobEntity {
                 UUID.randomUUID().toString()
                 ,jobDao.getUserOpenId()
                 ,jobDao.getJobId()
-                , RepairProgressEnum.valueOf("ACCEPTED")
+                , "已受理"
                 ,new Date()
                 ,""
                 ,""

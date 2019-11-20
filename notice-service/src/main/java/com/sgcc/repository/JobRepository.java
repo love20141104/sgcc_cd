@@ -1,7 +1,6 @@
 package com.sgcc.repository;
 
 import com.example.Utils;
-import com.sgcc.Enum.JobEnum;
 import com.sgcc.dao.JobDao;
 import com.sgcc.dao.RepairProgressDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +32,17 @@ public class JobRepository {
                 jobDao.getJobId()+"'" +
                 ",'"+jobDao.getJobNo()+"'"+
                 ",'"+jobDao.getUserOpenId()+"'"+
-                ",'"+jobDao.getUserOpenId()+"'"+
                 ",'"+jobDao.getNoticeId()+"'"+
-                ",'"+jobDao.getJobStatus().name()+"'"+
+
+                ",'"+jobDao.getJobStatus()+"'"+
                 ",'"+jobDao.getJobRepairPersonnel()+"'"+
                 ",'"+jobDao.getJobReason()+"'"+
                 ",'"+Utils.GetTime(jobDao.getSubmitDate())+"')";
         logger.info("SQL:" + sql);
         jdbcTemplate.execute(sql);
     }
-    public void updatejobStatus(String  jobId, JobEnum jobStatus){
-        String sql = "update b_job set job_status = '"+jobStatus.name()+"' where job_id ='"+jobId+"'";
+    public void updatejobStatus(String  jobId, String jobStatus){
+        String sql = "update b_job set job_status = '"+jobStatus+"' where job_id ='"+jobId+"'";
         logger.info("SQL:" + sql);
         jdbcTemplate.execute(sql);
     }

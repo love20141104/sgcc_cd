@@ -1,7 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
-import com.sgcc.Enum.JobEnum;
+
 import com.sgcc.dto.AddFormDTO;
 import com.sgcc.dto.NewJobSubmitDTO;
 import com.sgcc.dto.NoticeFormDTO;
@@ -48,11 +48,7 @@ public class NoticeController {
         return jobService.delJob(ids);
     }
 
-    @ApiOperation(value = "工单状态-修改", notes = "")
-    @PutMapping(value = "/open-id/job/{jobId}/status")
-    public Result updateJobStatus(@PathVariable String jobId, @RequestParam JobEnum jobEnum) {
-        return jobService.updateJobStatus(jobId,jobEnum);
-    }
+
 
 
     @ApiOperation(value = "抢修进度-查询", notes = "")
