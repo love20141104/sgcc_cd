@@ -2,8 +2,11 @@ package com.sgcc.model;
 
 import com.example.Utils;
 import com.sgcc.dao.JobDao;
+import com.sgcc.dao.NoticeAndJobDao;
 import com.sgcc.dao.RepairProgressDao;
+import com.sgcc.dto.JobViewDTO;
 import com.sgcc.dto.NewJobSubmitDTO;
+import com.sgcc.dto.RepairProgressSubmitDTO;
 import com.sgcc.dto.RepairProgressViewDTO;
 import lombok.Data;
 
@@ -19,6 +22,9 @@ public class JobModel {
     private RepairProgressDao repairProgressDao;
 
     private List<RepairProgressViewDTO> repairProgressViewDTOS = new ArrayList<>();
+
+    private List<JobViewDTO> jobViewDTOS = new ArrayList<>();
+
 
     public void addJobTransform(String openId, NewJobSubmitDTO newJobSubmitDTO) {
         String id = UUID.randomUUID().toString();
@@ -62,4 +68,45 @@ public class JobModel {
         });
 
     }
+
+    public void addProgressTransform(String openId, RepairProgressSubmitDTO repairProgressSubmitDTO) {
+        String id = UUID.randomUUID().toString();
+        this.repairProgressDao = new RepairProgressDao(
+                id,
+                openId,
+                repairProgressSubmitDTO.getJobId(),
+                repairProgressSubmitDTO.getProgressStatus(),
+                Utils.GetCurTime(),
+                repairProgressSubmitDTO.getProgressImg1(),
+                repairProgressSubmitDTO.getProgressImg2(),
+                repairProgressSubmitDTO.getProgressImg3()
+        );
+
+    }
+
+
+    public void selectJobsTransform(List<NoticeAndJobDao> noticeAndJobDaos) {
+        noticeAndJobDaos.forEach(dao->{
+            this.jobViewDTOS.add(new JobViewDTO(
+                    dao.getNoticeId(),
+                    dao.getNoticeDistrict(),
+                    dao.getTypeName(),
+                    dao.getRange(),
+                    dao.getNoticeDate(),
+                    dao.getJobId(),
+                    dao.getJobNo(),
+                    dao.getUserOpenId(),
+                    dao.getJobStatus(),
+                    dao.getJobRepairPersonnel(),
+                    dao.getJobReason(),
+                    Utils.GetTime(dao.getSubmitDate())
+            ));
+        });
+
+
+    }
+
+
+
+
 }

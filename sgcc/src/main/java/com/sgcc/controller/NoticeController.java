@@ -46,25 +46,30 @@ public class NoticeController {
     }
 
 
-    @ApiOperation(value = "工单-修改", notes = "")
-    @PutMapping(value = "/open-id/job/{jobId}")
-    public Result updateJob(@PathVariable String jobId, @RequestBody JobEditDTO jobEditDTO) {
-        return jobService.updateJob(jobId,jobEditDTO);
-    }
+//    @ApiOperation(value = "工单-修改", notes = "")
+//    @PutMapping(value = "/open-id/job/{jobId}")
+//    public Result updateJob(@PathVariable String jobId, @RequestBody JobEditDTO jobEditDTO) {
+//        return jobService.updateJob(jobId,jobEditDTO);
+//    }
 
     @ApiOperation(value = "工单-查询", notes = "")
-    @PutMapping(value = "/open-id/job")
-    public Result selectJob() {
-        return jobService.selectJob();
+    @GetMapping(value = "/open-id/job")
+    public Result selectJobs() {
+        return jobService.selectJobs();
     }
 
 
     @ApiOperation(value = "抢修进度-查询", notes = "")
-    @GetMapping(value = "/open-id/jobNo/progress")
+    @GetMapping(value = "/open-id/progress/{noticeId}")
     public Result selectProgressByNoticeId(@PathVariable String noticeId) {
         return jobService.selectProgressByNoticeId(noticeId);
     }
 
+    @ApiOperation(value = "抢修进度-新增", notes = "")
+    @PostMapping(value = "/open-id/{openId}/job-no/progress")
+    public Result addProgress(@PathVariable String openId,@RequestBody RepairProgressSubmitDTO repairProgressSubmitDTO) {
+        return jobService.addProgress(openId,repairProgressSubmitDTO);
+    }
 
 
 

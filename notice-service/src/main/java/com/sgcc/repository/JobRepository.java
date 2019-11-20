@@ -55,7 +55,7 @@ public class JobRepository {
     }
     @Transactional
     public void deleteJob(List<String> ids){
-        String sql = "delete from b_job where id in('" + Utils.joinStrings(ids, "','") + "')";
+        String sql = "delete from b_job where job_id in('" + Utils.joinStrings(ids, "','") + "')";
         jdbcTemplate.execute(sql);
         logger.info("deleteSQL:" + sql);
     }
