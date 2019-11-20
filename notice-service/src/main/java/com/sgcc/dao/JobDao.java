@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +18,6 @@ public class JobDao {
     private JobEnum jobStatus;
     private String jobRepairPersonnel;
     private String jobReason;
-    private String submitDate;
+    private Date submitDate;
 }
 

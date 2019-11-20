@@ -27,7 +27,7 @@ public class RepairProgressRepository {
     public void deleteRepairProgress(List<String> ids){
 
     }
-    public List<RepairProgressDao> selectRepairProgress(String jobId){
+    public List<RepairProgressDao> selectRepairProgressList(String jobId){
         return null;
     }
 }

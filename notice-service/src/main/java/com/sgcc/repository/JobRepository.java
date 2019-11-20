@@ -1,5 +1,6 @@
 package com.sgcc.repository;
 
+import com.sgcc.Enum.JobEnum;
 import com.sgcc.dao.JobDao;
 import com.sgcc.dao.RepairProgressDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class JobRepository {
     public void insertJob(JobDao jobDao){
 
     }
-    public void updatejobStatus(String  jobId,String jobStatus){
+    public void updatejobStatus(String  jobId, JobEnum jobStatus){
 
     }
     public void deleteJob(List<String> ids){

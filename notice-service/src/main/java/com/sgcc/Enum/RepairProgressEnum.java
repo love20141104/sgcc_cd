@@ -1,7 +1,7 @@
 package com.sgcc.Enum;
 
 public enum RepairProgressEnum {
-    已受理("已受理"),抢修中("抢修中"),已完成("已完成");
+    ACCEPTED("已受理"),RUSHREPAIR("抢修中"),FINISHED("已完成");
     //成员变量
     private String name;
 
