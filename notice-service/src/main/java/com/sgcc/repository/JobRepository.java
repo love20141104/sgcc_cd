@@ -2,12 +2,17 @@ package com.sgcc.repository;
 
 import com.example.Utils;
 import com.sgcc.dao.JobDao;
+import com.sgcc.dao.NoticeAndJobDao;
+import com.sgcc.dao.NoticeDao;
 import com.sgcc.dao.RepairProgressDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 @Repository
@@ -19,6 +24,7 @@ public class JobRepository {
 
     @Value("${precompile}")
     private Boolean precompile;
+    //保存工单
     public void insertJob(JobDao jobDao){
         String sql = "INSERT INTO b_job(job_id" +
                 ",job_no" +
@@ -40,15 +46,44 @@ public class JobRepository {
         logger.info("SQL:" + sql);
         jdbcTemplate.execute(sql);
     }
+    //更新工单状态
     public void updatejobStatus(String  jobId, String jobStatus){
         String sql = "update b_job set job_status = '"+jobStatus+"' where job_id ='"+jobId+"'";
         logger.info("SQL:" + sql);
         jdbcTemplate.execute(sql);
     }
     public void deleteJob(List<String> ids){
-
+        String sql = "delete from b_job where id in('" + Utils.joinStrings(ids, "','") + "')";
+        jdbcTemplate.execute(sql);
+        logger.info("deleteSQL:" + sql);
     }
-    public List<RepairProgressDao> selectJob(){
-        return null;
+    public List<NoticeAndJobDao> selectNoticeAndJob(){
+        String sql = "select id,bn.notice_id notice_id,notice_district,notice_type,notice_range,notice_date " +
+                " ,job_id ,job_no ,user_open_id,job_status,job_repair_personnel,job_reason,submit_date "
+                +" from b_blackout_notice bn right join  b_job j on bn.notice_id=j.notice_id   ";
+        logger.info("SQL:" + sql);
+        return jdbcTemplate.query(sql, new NoticeAndJobDaoRowMapper());
+    }
+    class NoticeAndJobDaoRowMapper implements RowMapper<NoticeAndJobDao> {
+        @Override
+        public NoticeAndJobDao mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new NoticeAndJobDao(
+                    rs.getString("id"),
+                    rs.getString("notice_id"),
+                    rs.getString("notice_district"),
+                    rs.getString("notice_type"),
+                    rs.getString("notice_range"),
+                    rs.getString("notice_date"),
+
+                    rs.getString("job_id"),
+                    rs.getString("job_no"),
+                    rs.getString("user_open_id"),
+                    rs.getString("job_status"),
+                    rs.getString("job_repair_personnel"),
+                    rs.getString("job_reason"),
+                    Utils.GetDate(rs.getString("submit_date"))
+            );
+        }
+
     }
 }

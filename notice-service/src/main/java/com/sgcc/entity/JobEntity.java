@@ -2,6 +2,7 @@ package com.sgcc.entity;
 
 
 import com.sgcc.dao.JobDao;
+import com.sgcc.dao.NoticeAndJobDao;
 import com.sgcc.dao.RepairProgressDao;
 import com.sgcc.repository.JobRepository;
 import com.sgcc.repository.RepairProgressRepository;
@@ -36,13 +37,11 @@ public class JobEntity {
         );
         repairProgressRepository.insertRepairProgress(repairProgressDao);
     }
-    public void updatejobStatus(JobDao jobDao){
 
-    }
     public void deleteJob(List<String> ids){
-
+        jobRepository.deleteJob( ids);
     }
-    public List<RepairProgressDao> selectJob(){
-        return null;
+    public List<NoticeAndJobDao> selectNoticeAndJob(){
+        return jobRepository.selectNoticeAndJob();
     }
 }

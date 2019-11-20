@@ -22,6 +22,7 @@ public class RepairProgressRepository {
 
     @Value("${precompile}")
     private Boolean precompile;
+    //保存抢修进度
     public void insertRepairProgress(RepairProgressDao progressDao){
         String sql = "INSERT INTO b_repair_progress(id" +
                 ",user_open_id" +
@@ -47,11 +48,13 @@ public class RepairProgressRepository {
     public void updateRepairProgress(RepairProgressDao progressDao){
 
     }
+    //删除抢修进度
     public void deleteRepairProgress(List<String> ids){
         String sql = "delete from b_repair_progress where id in('" + Utils.joinStrings(ids, "','") + "')";
         jdbcTemplate.execute(sql);
         logger.info("deleteSQL:" + sql);
     }
+    //通过工单id查询抢修进度
     public List<RepairProgressDao> selectRepairProgressList(String jobId){
         String sql = "select id,user_open_id,job_id,progress_status,progress_date"
                 + ",progress_img1,progress_img2,progress_img3 "
@@ -63,7 +66,7 @@ public class RepairProgressRepository {
             return null;
         }
     }
-
+    //通过停电公告id查询抢修进度
     public List<RepairProgressDao> selectRepairProgressListByNoticeId(String noticeId) {
         String sql = "select id,user_open_id,job_id,progress_status,progress_date"
                 + ",progress_img1,progress_img2,progress_img3 "
