@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,6 +53,7 @@ public class JobRepository {
         logger.info("SQL:" + sql);
         jdbcTemplate.execute(sql);
     }
+    @Transactional
     public void deleteJob(List<String> ids){
         String sql = "delete from b_job where id in('" + Utils.joinStrings(ids, "','") + "')";
         jdbcTemplate.execute(sql);
