@@ -1,6 +1,7 @@
 package com.sgcc.entity;
 
 
+import com.sgcc.dao.JobAndRepairProgressDao;
 import com.sgcc.dao.RepairProgressDao;
 import com.sgcc.repository.JobRepository;
 import com.sgcc.repository.RepairProgressRepository;
@@ -54,7 +55,7 @@ public class RepairProgressEntity {
      * @param noticeId
      * @return
      */
-    public List<RepairProgressDao> selectRepairProgressListByNoticeId(String noticeId){
+    public List<JobAndRepairProgressDao> selectRepairProgressListByNoticeId(String noticeId){
         return repairProgressRepository.selectRepairProgressListByNoticeId(noticeId);
     }
 }
