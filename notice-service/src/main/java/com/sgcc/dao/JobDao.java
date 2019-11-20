@@ -1,5 +1,6 @@
 package com.sgcc.dao;
 
+import com.sgcc.Enum.JobEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ public class JobDao {
     private String jobNo;
     private String userOpenId;
     private String noticeId;
-    private String jobStatus;
+    private JobEnum jobStatus;
     private String jobRepairPersonnel;
     private String jobReason;
     private String submitDate;

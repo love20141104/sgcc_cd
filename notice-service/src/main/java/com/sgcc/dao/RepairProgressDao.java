@@ -1,5 +1,6 @@
 package com.sgcc.dao;
 
+import com.sgcc.Enum.RepairProgressEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ public class RepairProgressDao {
     private String id;
     private String userOpenId;
     private String jobId;
-    private String progressStatus;
+    private RepairProgressEnum progressStatus;
     private String progressDate;
     private String progressImg1;
     private String progressImg2;
