@@ -17,6 +17,11 @@ public class RepairProgressEntity {
     private RepairProgressRepository repairProgressRepository;
     @Autowired
     private JobRepository jobRepository;
+
+    /**
+     * 保存抢修进度
+     * @param progressDao
+     */
     @Transactional
     public void saveRepairProgress(RepairProgressDao progressDao){
         //如果保存的该进度为抢修中 ，且数据库有该工单抢修中状态则覆盖
@@ -43,6 +48,12 @@ public class RepairProgressEntity {
     public void deleteRepairProgress(List<String> ids){
 
     }
+
+    /**
+     * 通过停电公告id查询抢修进度列表
+     * @param noticeId
+     * @return
+     */
     public List<RepairProgressDao> selectRepairProgressListByNoticeId(String noticeId){
         return repairProgressRepository.selectRepairProgressListByNoticeId(noticeId);
     }

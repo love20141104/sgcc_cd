@@ -21,6 +21,11 @@ public class JobEntity {
 
     @Autowired
     private RepairProgressRepository repairProgressRepository;
+
+    /**
+     * 保存工单
+     * @param jobDao
+     */
     @Transactional
     public void saveJob(JobDao jobDao){
         //同时保存抢修进度，状态为已受理
@@ -38,9 +43,18 @@ public class JobEntity {
         repairProgressRepository.insertRepairProgress(repairProgressDao);
     }
 
+    /**
+     * 删除工单
+     * @param ids
+     */
     public void deleteJob(List<String> ids){
         jobRepository.deleteJob( ids);
     }
+
+    /**
+     * 获取工单
+     * @return List<NoticeAndJobDao>
+     */
     public List<NoticeAndJobDao> selectNoticeAndJob(){
         return jobRepository.selectNoticeAndJob();
     }
