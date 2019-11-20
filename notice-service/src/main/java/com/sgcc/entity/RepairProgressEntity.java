@@ -43,7 +43,7 @@ public class RepairProgressEntity {
     public void deleteRepairProgress(List<String> ids){
 
     }
-    public List<RepairProgressDao> selectRepairProgressList(String jobId){
-        return repairProgressRepository.selectRepairProgressList(jobId);
+    public List<RepairProgressDao> selectRepairProgressListByNoticeId(String noticeId){
+        return repairProgressRepository.selectRepairProgressList(noticeId);
     }
 }
