@@ -4,6 +4,7 @@ import com.example.result.Result;
 import com.google.common.base.Strings;
 
 import com.sgcc.dao.RepairProgressDao;
+import com.sgcc.dto.JobEditDTO;
 import com.sgcc.dto.NewJobSubmitDTO;
 import com.sgcc.entity.JobEntity;
 import com.sgcc.entity.RepairProgressEntity;
@@ -65,10 +66,36 @@ public class JobService {
     /**
      * 修改工单
      * @param jobId
-     * @param jobEnum
+     * @param jobEditDTO
      * @return
      */
+    public Result updateJob(String jobId,JobEditDTO jobEditDTO) {
 
+        try {
+
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+    }
+
+    /**
+     * 查询工单
+     * @return
+     */
+    public Result selectJob() {
+
+        try {
+
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+    }
 
 
     /**
@@ -81,7 +108,9 @@ public class JobService {
             return Result.failure("传入参数为空");
         try {
             List<RepairProgressDao> repairProgressDaos = repairProgressEntity.selectRepairProgressListByNoticeId(noticeId);
-            return Result.success(repairProgressDaos);
+            JobModel model = new JobModel();
+            model.selectRepairProgressTransform(repairProgressDaos);
+            return Result.success(model.getRepairProgressViewDTOS());
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);

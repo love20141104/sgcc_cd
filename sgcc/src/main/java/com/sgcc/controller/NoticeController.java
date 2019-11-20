@@ -2,10 +2,7 @@ package com.sgcc.controller;
 
 import com.example.result.Result;
 
-import com.sgcc.dto.AddFormDTO;
-import com.sgcc.dto.NewJobSubmitDTO;
-import com.sgcc.dto.NoticeFormDTO;
-import com.sgcc.dto.UpdateFormDTO;
+import com.sgcc.dto.*;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.service.JobService;
 import com.sgcc.service.MessageNotificationService;
@@ -49,6 +46,17 @@ public class NoticeController {
     }
 
 
+    @ApiOperation(value = "工单-修改", notes = "")
+    @PutMapping(value = "/open-id/job/{jobId}")
+    public Result updateJob(@PathVariable String jobId, @RequestBody JobEditDTO jobEditDTO) {
+        return jobService.updateJob(jobId,jobEditDTO);
+    }
+
+    @ApiOperation(value = "工单-查询", notes = "")
+    @PutMapping(value = "/open-id/job")
+    public Result selectJob() {
+        return jobService.selectJob();
+    }
 
 
     @ApiOperation(value = "抢修进度-查询", notes = "")

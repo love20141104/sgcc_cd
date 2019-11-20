@@ -24,7 +24,6 @@ public class JobRepository {
                 ",job_no" +
                 ",user_open_id" +
                 ",notice_id" +
-
                 ",job_status" +
                 ",job_repair_personnel" +
                 ",job_reason" +
