@@ -70,7 +70,7 @@ public class JobRepository {
         return jdbcTemplate.query(sql, new NoticeAndJobDaoRowMapper());
     }
     public String selectJobIdByNoticeId(String noticeId){
-        String sql = "select job_id  from   b_job notice_id= '"+noticeId+"'";
+        String sql = "select job_id  from b_job where notice_id= '"+noticeId+"'";
         logger.info("SQL:" + sql);
         return jdbcTemplate.queryForObject(sql, String.class);
     }

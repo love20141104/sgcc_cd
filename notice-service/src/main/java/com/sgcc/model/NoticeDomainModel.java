@@ -1,5 +1,6 @@
 package com.sgcc.model;
 
+import com.example.Utils;
 import com.sgcc.dao.NoticeDao;
 import com.sgcc.dto.AddFormDTO;
 import com.sgcc.dto.NoticeFormDTO;
@@ -45,12 +46,15 @@ public class NoticeDomainModel {
      */
     public void selectByDistrictTransform(){
         this.noticeDaos.forEach(noticeDao -> {
-            this.noticeFormDTOS.add(new NoticeFormDTO(
-                    noticeDao.getTypeName(),
-                    noticeDao.getNoticeDate(),
-                    noticeDao.getRange()
-                    )
-            );
+            System.out.println("DATE："+Utils.GetDate(noticeDao.getNoticeDate().substring(11,21)+" 23:59:59"));
+            if(Utils.GetCurTime().getTime() < Utils.GetDate(noticeDao.getNoticeDate().substring(11,21)+" 23:59:59").getTime()) {
+                this.noticeFormDTOS.add(new NoticeFormDTO(
+                        noticeDao.getTypeName(),
+                        noticeDao.getNoticeDate(),
+                        noticeDao.getRange()
+                        )
+                );
+            }
         });
     }
 

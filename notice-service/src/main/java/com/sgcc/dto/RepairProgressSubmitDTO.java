@@ -14,7 +14,7 @@ public class RepairProgressSubmitDTO implements Serializable {
 
     private static final long serialVersionUID = 2357394754223917414L;
 
-    private String jobId;
+    private String noticeId;
     private String progressStatus;
 //    private Date progressDate;
     private String progressImg1;

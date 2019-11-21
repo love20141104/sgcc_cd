@@ -1,6 +1,7 @@
 package com.sgcc.model;
 
 import com.example.Utils;
+import com.sgcc.dao.JobAndRepairProgressDao;
 import com.sgcc.dao.JobDao;
 import com.sgcc.dao.NoticeAndJobDao;
 import com.sgcc.dao.RepairProgressDao;
@@ -55,12 +56,14 @@ public class JobModel {
     }
 
 
-    public void selectRepairProgressTransform(List<RepairProgressDao> repairProgressDaos) {
+    public void selectRepairProgressTransform(List<JobAndRepairProgressDao> jobAndRepairProgressDaos) {
 
-        repairProgressDaos.forEach(dao->{
+        jobAndRepairProgressDaos.forEach(dao->{
             this.repairProgressViewDTOS.add(new RepairProgressViewDTO(
                     dao.getProgressStatus(),
                     Utils.GetTime(dao.getProgressDate()),
+                    dao.getProgressStatus().equals("抢修中") ? dao.getJobRepairPersonnel():"",
+                    dao.getProgressStatus().equals("抢修中") ? dao.getJobReason():"",
                     dao.getProgressImg1(),
                     dao.getProgressImg2(),
                     dao.getProgressImg3()
@@ -74,7 +77,7 @@ public class JobModel {
         this.repairProgressDao = new RepairProgressDao(
                 id,
                 openId,
-                repairProgressSubmitDTO.getJobId(),
+                null,
                 repairProgressSubmitDTO.getProgressStatus(),
                 Utils.GetCurTime(),
                 repairProgressSubmitDTO.getProgressImg1(),

@@ -3,6 +3,7 @@ package com.sgcc.service;
 import com.example.result.Result;
 import com.google.common.base.Strings;
 
+import com.sgcc.dao.JobAndRepairProgressDao;
 import com.sgcc.dao.NoticeAndJobDao;
 import com.sgcc.dao.RepairProgressDao;
 import com.sgcc.dto.JobEditDTO;
@@ -95,7 +96,7 @@ public class JobService {
         if (Strings.isNullOrEmpty(noticeId))
             return Result.failure("传入参数为空");
         try {
-            List<RepairProgressDao> repairProgressDaos = repairProgressEntity.selectRepairProgressListByNoticeId(noticeId);
+            List<JobAndRepairProgressDao> repairProgressDaos = repairProgressEntity.selectRepairProgressListByNoticeId(noticeId);
             JobModel model = new JobModel();
             model.selectRepairProgressTransform(repairProgressDaos);
             return Result.success(model.getRepairProgressViewDTOS());
@@ -118,7 +119,7 @@ public class JobService {
         try {
             JobModel model = new JobModel();
             model.addProgressTransform(openId,repairProgressSubmitDTO);
-            repairProgressEntity.saveRepairProgress(model.getRepairProgressDao());
+            repairProgressEntity.saveRepairProgress(repairProgressSubmitDTO.getNoticeId(),model.getRepairProgressDao());
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();

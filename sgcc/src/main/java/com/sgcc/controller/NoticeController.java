@@ -46,12 +46,6 @@ public class NoticeController {
     }
 
 
-//    @ApiOperation(value = "工单-修改", notes = "")
-//    @PutMapping(value = "/open-id/job/{jobId}")
-//    public Result updateJob(@PathVariable String jobId, @RequestBody JobEditDTO jobEditDTO) {
-//        return jobService.updateJob(jobId,jobEditDTO);
-//    }
-
     @ApiOperation(value = "工单-查询", notes = "")
     @GetMapping(value = "/open-id/job")
     public Result selectJobs() {

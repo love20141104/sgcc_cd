@@ -15,6 +15,10 @@ public class RepairProgressViewDTO implements Serializable {
 
     private String progress_status;
     private String progress_date;
+
+    private String jobRepairPersonnel;
+    private String jobReason;
+
     private String progress_img1;
     private String progress_img2;
     private String progress_img3;

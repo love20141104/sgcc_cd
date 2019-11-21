@@ -87,7 +87,7 @@ public class TestNotice {
                 ,"21"
                 ,"31"
         );
-        repairProgressEntity.saveRepairProgress(repairProgressDao);
+//        repairProgressEntity.saveRepairProgress(repairProgressDao);
     }
     @Test
     public void test6(){
@@ -101,14 +101,14 @@ public class TestNotice {
                 ,""
                 ,""
         );
-        repairProgressEntity.saveRepairProgress(repairProgressDao);
+//        repairProgressEntity.saveRepairProgress(repairProgressDao);
     }
     @Test
     public void test7(){
-        List<RepairProgressDao> repairProgressDaos = repairProgressEntity.selectRepairProgressListByNoticeId("1001");
-        repairProgressDaos.forEach(progressDao -> {
-            System.out.println(progressDao.getProgressStatus());
-        });
+////        List<RepairProgressDao> repairProgressDaos = repairProgressEntity.selectRepairProgressListByNoticeId("1001");
+//        repairProgressDaos.forEach(progressDao -> {
+//            System.out.println(progressDao.getProgressStatus());
+//        });
     }
     @Test
     public void test8(){
