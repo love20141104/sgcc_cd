@@ -36,4 +36,8 @@ public class NoticeQueryEntity {
         noticeRepository.delNoticeById(ids);
     }
 
+    public Boolean noticeOverdue(String noticeId){
+        return noticeRepository.noticeOverdue( noticeId);
+    }
+
 }

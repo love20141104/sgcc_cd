@@ -10,6 +10,7 @@ import com.sgcc.dto.JobEditDTO;
 import com.sgcc.dto.NewJobSubmitDTO;
 import com.sgcc.dto.RepairProgressSubmitDTO;
 import com.sgcc.entity.JobEntity;
+import com.sgcc.entity.NoticeQueryEntity;
 import com.sgcc.entity.RepairProgressEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.JobModel;
@@ -26,6 +27,8 @@ public class JobService {
 
     @Autowired
     private RepairProgressEntity repairProgressEntity;
+    @Autowired
+    private NoticeQueryEntity noticeQueryEntity;
 
     /**
      * 新增工单
@@ -34,6 +37,9 @@ public class JobService {
      * @return
      */
     public Result saveJob(String openId, NewJobSubmitDTO newJobSubmitDTO) {
+        if(noticeQueryEntity.noticeOverdue(newJobSubmitDTO.getNoticeId())){
+            return Result.failure("公告已过期");
+        }
         if (Strings.isNullOrEmpty(openId) || newJobSubmitDTO == null)
             return Result.failure("传入参数为空");
         try {
