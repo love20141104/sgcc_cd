@@ -6,11 +6,13 @@ import com.sgcc.dao.JobAndRepairProgressDao;
 import com.sgcc.dao.RepairProgressDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -26,25 +28,48 @@ public class RepairProgressRepository {
     private Boolean precompile;
     //保存抢修进度
     public void insertRepairProgress(RepairProgressDao progressDao){
-        String sql = "INSERT INTO b_repair_progress(id" +
-                ",user_open_id" +
-                ",job_id" +
-                ",progress_status" +
-                ",progress_date" +
-                ",progress_img1" +
-                ",progress_img2" +
-                ",progress_img3) VALUES ( '" +
-                progressDao.getId()+"'" +
-                ",'"+progressDao.getUserOpenId()+"'"+
-                ",'"+progressDao.getJobId()+"'"+
-                ",'"+progressDao.getProgressStatus()+"'"+
+        if (precompile) {
+            String sql = "INSERT INTO b_repair_progress(id" +
+                    ",user_open_id" +
+                    ",job_id" +
+                    ",progress_status" +
+                    ",progress_date" +
+                    ",progress_img1" +
+                    ",progress_img2" +
+                    ",progress_img3) VALUES (?,?,?,?,? ,?,?,? )";
+            logger.info("SQL:" + sql);
+            jdbcTemplate.update(sql,new Object[]{
+                    progressDao.getId()
+                    ,progressDao.getUserOpenId()
+                    ,progressDao.getJobId()
+                    ,progressDao.getProgressStatus()
 
-                ",'"+Utils.GetTime(progressDao.getProgressDate())+"'"+
-                ",'"+progressDao.getProgressImg1()+"'"+
-                ",'"+progressDao.getProgressImg2()+"'"+
-                ",'"+progressDao.getProgressImg3()+"')";
-        logger.info("SQL:" + sql);
-        jdbcTemplate.execute(sql);
+                    , Utils.GetTime(progressDao.getProgressDate())
+                    ,progressDao.getProgressImg1()
+                    ,progressDao.getProgressImg2()
+                    ,progressDao.getProgressImg3()
+            });
+        }else {
+            String sql = "INSERT INTO b_repair_progress(id" +
+                    ",user_open_id" +
+                    ",job_id" +
+                    ",progress_status" +
+                    ",progress_date" +
+                    ",progress_img1" +
+                    ",progress_img2" +
+                    ",progress_img3) VALUES ( '" +
+                    progressDao.getId() + "'" +
+                    ",'" + progressDao.getUserOpenId() + "'" +
+                    ",'" + progressDao.getJobId() + "'" +
+                    ",'" + progressDao.getProgressStatus() + "'" +
+
+                    ",'" + Utils.GetTime(progressDao.getProgressDate()) + "'" +
+                    ",'" + progressDao.getProgressImg1() + "'" +
+                    ",'" + progressDao.getProgressImg2() + "'" +
+                    ",'" + progressDao.getProgressImg3() + "')";
+            logger.info("SQL:" + sql);
+            jdbcTemplate.execute(sql);
+        }
 
     }
     public void updateRepairProgress(RepairProgressDao progressDao){
@@ -53,32 +78,70 @@ public class RepairProgressRepository {
     //删除抢修进度
     @Transactional
     public void deleteRepairProgress(List<String> ids){
-        String sql = "delete from b_repair_progress where id in('" + Utils.joinStrings(ids, "','") + "')";
-        jdbcTemplate.execute(sql);
-        logger.info("deleteSQL:" + sql);
+        if (precompile) {
+            String sql = "delete from b_repair_progress where id = ? ";
+            jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
+                public int getBatchSize() {
+                    return ids.size();
+                }
+                public void setValues(PreparedStatement ps, int i)
+                        throws SQLException {
+                    ps.setString(1,ids.get(i));
+                }
+            });
+            logger.info("deleteSQL:" + sql);
+        }else {
+            String sql = "delete from b_repair_progress where id in('" + Utils.joinStrings(ids, "','") + "')";
+            jdbcTemplate.execute(sql);
+            logger.info("deleteSQL:" + sql);
+        }
     }
     //通过工单id查询抢修进度
     public List<RepairProgressDao> selectRepairProgressList(String jobId){
-        String sql = "select id,user_open_id,job_id,progress_status,progress_date"
-                + ",progress_img1,progress_img2,progress_img3 "
-                + "from b_repair_progress where job_id = '" + jobId + " '";
-        try {
-            logger.info("SQL:" + sql);
-            return jdbcTemplate.query(sql, new RepairProgressDaoRowMapper());
-        } catch (Exception e) {
-            return null;
+        if (precompile) {
+            String sql = "select id,user_open_id,job_id,progress_status,progress_date"
+                    + ",progress_img1,progress_img2,progress_img3 "
+                    + "from b_repair_progress where job_id = ? ";
+            try {
+                logger.info("SQL:" + sql);
+                return jdbcTemplate.query(sql,new Object[]{jobId}, new RepairProgressDaoRowMapper());
+            } catch (Exception e) {
+                return null;
+            }
+        }else {
+            String sql = "select id,user_open_id,job_id,progress_status,progress_date"
+                    + ",progress_img1,progress_img2,progress_img3 "
+                    + "from b_repair_progress where job_id = '" + jobId + " '";
+            try {
+                logger.info("SQL:" + sql);
+                return jdbcTemplate.query(sql, new RepairProgressDaoRowMapper());
+            } catch (Exception e) {
+                return null;
+            }
         }
     }
     //通过停电公告id查询抢修进度
     public List<JobAndRepairProgressDao> selectRepairProgressListByNoticeId(String noticeId) {
-        String sql = "select job_repair_personnel,job_reason, id,rp.user_open_id user_open_id,j.job_id,progress_status,progress_date,progress_img1,progress_img2,progress_img3 " +
-                "from b_repair_progress rp left join b_job j on rp.job_id=j.job_id where  j.notice_id ="+noticeId+" order by progress_date asc";
-        try {
-            logger.info("SQL:" + sql);
-            return jdbcTemplate.query(sql, new JobAndRepairProgressDaoRowMapper());
-        } catch (Exception e) {
-            return null;
+        if (precompile) {
+            String sql = "select job_repair_personnel,job_reason, id,rp.user_open_id user_open_id,j.job_id,progress_status,progress_date,progress_img1,progress_img2,progress_img3 " +
+                    "from b_repair_progress rp left join b_job j on rp.job_id=j.job_id where  j.notice_id = ? order by progress_date asc";
+            try {
+                logger.info("SQL:" + sql);
+                return jdbcTemplate.query(sql,new Object[]{noticeId}, new JobAndRepairProgressDaoRowMapper());
+            } catch (Exception e) {
+                return null;
+            }
+        }else {
+            String sql = "select job_repair_personnel,job_reason, id,rp.user_open_id user_open_id,j.job_id,progress_status,progress_date,progress_img1,progress_img2,progress_img3 " +
+                    "from b_repair_progress rp left join b_job j on rp.job_id=j.job_id where  j.notice_id =" + noticeId + " order by progress_date asc";
+            try {
+                logger.info("SQL:" + sql);
+                return jdbcTemplate.query(sql, new JobAndRepairProgressDaoRowMapper());
+            } catch (Exception e) {
+                return null;
+            }
         }
+
     }
 
     class RepairProgressDaoRowMapper implements RowMapper<RepairProgressDao> {

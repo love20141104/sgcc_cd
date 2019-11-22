@@ -202,15 +202,27 @@ public class NoticeRepository {
     }
 
     public Boolean noticeOverdue(String noticeId) {
-        String sql="select notice_date from b_blackout_notice where notice_id ='"+noticeId+"'";
-        logger.info("SQL:" + sql);
-        String s = jdbcTemplate.queryForObject(sql, String.class);
-        if(!Strings.isNullOrEmpty(s)){
-            if(Utils.GetCurTime().getTime() < Utils.GetDate(s.substring(11,21)+" 23:59:59").getTime()){
-                return false;
+        if (precompile) {
+            String sql = "select notice_date from b_blackout_notice where notice_id = ? ";
+            logger.info("SQL:" + sql);
+            String s = jdbcTemplate.queryForObject(sql,new Object[]{noticeId}, String.class);
+            if (!Strings.isNullOrEmpty(s)) {
+                if (Utils.GetCurTime().getTime() < Utils.GetDate(s.substring(11, 21) + " 23:59:59").getTime()) {
+                    return false;
+                }
             }
+            return true;
+        }else {
+            String sql = "select notice_date from b_blackout_notice where notice_id ='" + noticeId + "'";
+            logger.info("SQL:" + sql);
+            String s = jdbcTemplate.queryForObject(sql, String.class);
+            if (!Strings.isNullOrEmpty(s)) {
+                if (Utils.GetCurTime().getTime() < Utils.GetDate(s.substring(11, 21) + " 23:59:59").getTime()) {
+                    return false;
+                }
+            }
+            return true;
         }
-        return true;
     }
 
     class NoticeRowMapper implements RowMapper<NoticeDao> {
