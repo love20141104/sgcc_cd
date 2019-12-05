@@ -26,29 +26,29 @@ public class ConsumerManagerDao implements Serializable {
     @Indexed
     private String consumerManagerId;
 
-    private String consumerManagerName;
+    private String consumerManagerName="";
 
-    private String consumerManagerTel;
+    private String consumerManagerTel="";
 
     //服务区域
-    private String consumerManagerServiceArea;
+    private String consumerManagerServiceArea="";
 
     @Indexed
     //所属行政区域
-    private String consumerManagerAdministrativeRegion;
+    private String consumerManagerAdministrativeRegion="";
 
-    private String consumerManagerDuty;
+    private String consumerManagerDuty="";
 
-    private String consumerManagerWorkTime;
+    private String consumerManagerWorkTime="";
 
-    private String consumerManagerEmergencyTel;
+    private String consumerManagerEmergencyTel="";
 
     @Indexed
-    private String consumerManagerWorkUnit;
+    private String consumerManagerWorkUnit="";
 
-    private String consumerManagerCategory;
+    private String consumerManagerCategory="";
 
-    private String consumerManagerImg;
+    private String consumerManagerImg="";
 
 
 

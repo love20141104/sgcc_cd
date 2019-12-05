@@ -12,16 +12,16 @@ import java.io.Serializable;
 public class ConsumerManagerInsertDTO implements Serializable {
     private static final long serialVersionUID = -6959601097856347077L;
 
-    private String consumerManagerName;
-    private String consumerManagerTel;
+    private String consumerManagerName="";
+    private String consumerManagerTel="";
     //服务区域
-    private String consumerManagerServiceArea;
+    private String consumerManagerServiceArea="";
     //所属行政区域
-    private String consumerManagerAdministrativeRegion;
-    private String consumerManagerDuty;
-    private String consumerManagerWorkTime;
-    private String consumerManagerEmergencyTel;
-    private String consumerManagerWorkUnit;
-    private String consumerManagerCategory;
-    private String consumerManagerImg;
+    private String consumerManagerAdministrativeRegion="";
+    private String consumerManagerDuty="";
+    private String consumerManagerWorkTime="";
+    private String consumerManagerEmergencyTel="";
+    private String consumerManagerWorkUnit="";
+    private String consumerManagerCategory="";
+    private String consumerManagerImg="";
 }
