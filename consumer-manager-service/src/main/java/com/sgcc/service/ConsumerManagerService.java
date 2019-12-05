@@ -32,16 +32,17 @@ public class ConsumerManagerService {
 
         //参数检查start
         if (
-                Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerName()) ||
+                Strings.isNullOrEmpty(
+                        consumerManagerInsertDTO.getConsumerManagerName()) ||
                         Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerTel()) ||
                         Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerServiceArea()) ||
-                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerAdministrativeRegion()) ||
+                        //Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerAdministrativeRegion()) ||
                         Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerDuty()) ||
-                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerWorkTime()) ||
-                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerEmergencyTel()) ||
-                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerWorkUnit()) ||
-                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerCategory()) ||
-                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerImg())
+                        Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerWorkTime())
+                        //Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerEmergencyTel()) ||
+                        //Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerWorkUnit()) ||
+                        //Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerCategory()) ||
+                        //Strings.isNullOrEmpty(consumerManagerInsertDTO.getConsumerManagerImg())
                 ) {
             return Result.failure(TopErrorCode.PARAMETER_ERR);
         }
