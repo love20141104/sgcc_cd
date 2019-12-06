@@ -138,11 +138,11 @@ public class WeChatController {
         }
     }
     /**
-     * 发送消息
+     * 获取模板
      * @return
      */
     @ApiOperation(value = "getTempList", notes = "")
-    @PostMapping(value = "/getTempList")
+    @GetMapping(value = "/getTempList")
     public Result getTempList(){
         return weChatService.getTempList();
     }

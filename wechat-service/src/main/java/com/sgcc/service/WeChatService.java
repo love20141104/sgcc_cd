@@ -187,10 +187,27 @@ public class WeChatService {
         tempDetails2.add(tempDetail12);
         tempDetails2.add(tempDetail13);
         tempDetails2.add(tempDetail5);
-        TempDTO tempDTO2 = new TempDTO("FlIAd8y-RBTSmwnPMCNY80O5wrKPFfMVFOHMAhhrNcM","电费月度账单通知",tempDetails2);
+        TempDTO tempDTO2 = new TempDTO("FlIAd8y-RBTSmwnPMCNY80O5wrKPFfMVFOHMAhhrNcM","月度账单",tempDetails2);
+
+        ArrayList<TempDetail> tempDetails3 = new ArrayList<>();
+
+        TempDetail tempDetail14 = new TempDetail("本月读数", "keyword1");
+        TempDetail tempDetail15 = new TempDetail("上月读数", "keyword2");
+        TempDetail tempDetail16 = new TempDetail("本期电量", "keyword3");
+        TempDetail tempDetail17 = new TempDetail("本期电费", "keyword4");
+        tempDetails3.add(tempDetail);
+        tempDetails3.add(tempDetail14);
+        tempDetails3.add(tempDetail15);
+        tempDetails3.add(tempDetail16);
+        tempDetails3.add(tempDetail17);
+        tempDetails3.add(tempDetail5);
+        TempDTO tempDTO3 = new TempDTO("V4zLn0ZN8nSDnPEyuvOmjynB4t5U19tkyjjLpMHHy54","用电分析",tempDetails3);
+
+
         tempDTOs.add(tempDTO);
         tempDTOs.add(tempDTO1);
         tempDTOs.add(tempDTO2);
+        tempDTOs.add(tempDTO3);
         return Result.success(tempDTOs);
     }
     public Result sendMsg(String openId, MsgDTO msgDTO){
@@ -208,7 +225,7 @@ public class WeChatService {
             TemplateMessage templateMessage = new TemplateMessage(
                     msgDTO.getTempId(),//"PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
                     openId,     //  o7sDrsqAggP4dwbNnVMEC-JX__tE    o7sDrso9Jk1F_lhoItpSY2xTqEmY
-                    "https://sgcc.link",
+                    msgDTO.getTempId().equalsIgnoreCase("FlIAd8y-RBTSmwnPMCNY80O5wrKPFfMVFOHMAhhrNcM")||msgDTO.getTempId().equalsIgnoreCase("V4zLn0ZN8nSDnPEyuvOmjynB4t5U19tkyjjLpMHHy54")?"http://weixin.sc.sgcc.com.cn/SEH/energyAnalysis/energyPowerPage":"https://sgcc.link",
                     data
             );
             weChatEntity.sendTempMsg(templateMessage);
