@@ -5,6 +5,10 @@ import com.example.constant.CommonConstants;
 import com.example.constant.WechatURLConstants;
 import com.example.errorcode.WechatURLErrorcode;
 import com.example.result.Result;
+import com.google.common.base.Strings;
+import com.sgcc.dto.MsgDTO;
+import com.sgcc.dto.TempDTO;
+import com.sgcc.dto.TempDetail;
 import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import com.sgcc.dtomodel.wechat.template.TemplateData;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
@@ -18,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -125,9 +130,85 @@ public class WeChatService {
 //            data.put("remark",new TemplateData("申请成功！","#173177"));
 
             TemplateMessage templateMessage = new TemplateMessage(
-                    "ozATnici3NmV_yv1mnfofZRd1IUUfZ2UwKJqRF896IQ",//"PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
+                    "EmOAEkiGGpwT0XUAmaeEnIb2S6Y5an_78gKs2qvh9vY",//"PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
                     openId,     //  o7sDrsqAggP4dwbNnVMEC-JX__tE    o7sDrso9Jk1F_lhoItpSY2xTqEmY
                     "https://cdgd.pryun.vip",
+                    data
+            );
+            weChatEntity.sendTempMsg(templateMessage);
+            return Result.success();
+        } catch (Exception e) {
+            System.out.println("模板消息发送失败！");
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+    }
+    public Result getTempList(){
+        ArrayList<TempDTO> tempDTOs = new ArrayList<>();
+
+        ArrayList<TempDetail> tempDetails = new ArrayList<>();
+        TempDetail tempDetail = new TempDetail("提示", "first");
+        TempDetail tempDetail1 = new TempDetail("户号", "keyword1");
+        TempDetail tempDetail2 = new TempDetail("地址", "keyword2");
+        TempDetail tempDetail3 = new TempDetail("支付金额", "keyword3");
+        TempDetail tempDetail4 = new TempDetail("收款单位", "keyword4");
+        TempDetail tempDetail5 = new TempDetail("备注", "remark");
+        tempDetails.add(tempDetail);
+        tempDetails.add(tempDetail1);
+        tempDetails.add(tempDetail2);
+        tempDetails.add(tempDetail3);
+        tempDetails.add(tempDetail4);
+        tempDetails.add(tempDetail5);
+        TempDTO tempDTO = new TempDTO("EmOAEkiGGpwT0XUAmaeEnIb2S6Y5an_78gKs2qvh9vY", "缴费成功通知",tempDetails);
+
+        ArrayList<TempDetail> tempDetails1 = new ArrayList<>();
+
+        TempDetail tempDetail6 = new TempDetail("帐号余额", "keyword1");
+        TempDetail tempDetail7 = new TempDetail("通知时间", "keyword2");
+        TempDetail tempDetail8 = new TempDetail("备注说明", "keyword3");
+
+        tempDetails1.add(tempDetail);
+        tempDetails1.add(tempDetail6);
+        tempDetails1.add(tempDetail7);
+        tempDetails1.add(tempDetail8);
+        tempDetails1.add(tempDetail5);
+        TempDTO tempDTO1 = new TempDTO("4nEG5kchS6_9ayaA6ZWe6_00ea-7D9uBgClcsCHcacQ", "欠费通知",tempDetails1);
+
+        ArrayList<TempDetail> tempDetails2 = new ArrayList<>();
+
+        TempDetail tempDetail10 = new TempDetail("本月读数", "keyword1");
+        TempDetail tempDetail11 = new TempDetail("上月读数", "keyword2");
+        TempDetail tempDetail12 = new TempDetail("本期电量", "keyword3");
+        TempDetail tempDetail13 = new TempDetail("本期电费", "keyword4");
+        tempDetails2.add(tempDetail);
+        tempDetails2.add(tempDetail10);
+        tempDetails2.add(tempDetail11);
+        tempDetails2.add(tempDetail12);
+        tempDetails2.add(tempDetail13);
+        tempDetails2.add(tempDetail5);
+        TempDTO tempDTO2 = new TempDTO("FlIAd8y-RBTSmwnPMCNY80O5wrKPFfMVFOHMAhhrNcM","电费月度账单通知",tempDetails2);
+        tempDTOs.add(tempDTO);
+        tempDTOs.add(tempDTO1);
+        tempDTOs.add(tempDTO2);
+        return Result.success(tempDTOs);
+    }
+    public Result sendMsg(String openId, MsgDTO msgDTO){
+        try {
+            Map<String, TemplateData> data = new LinkedHashMap<>();
+            data.put("first",new TemplateData(msgDTO.getFirst(),"#173177"));
+            data.put("keyword1",new TemplateData(msgDTO.getKeyword1()+"\n","#173177"));
+            data.put("keyword2",new TemplateData(msgDTO.getKeyword2(),"#173177"));
+            data.put("keyword3",new TemplateData(msgDTO.getKeyword3(),"#173177"));
+            if(!msgDTO.getTempId().equalsIgnoreCase("4nEG5kchS6_9ayaA6ZWe6_00ea-7D9uBgClcsCHcacQ")){
+                data.put("keyword4",new TemplateData(msgDTO.getKeyword4(),"#173177"));
+            }
+            data.put("remark",new TemplateData(msgDTO.getRemark(),"#173177"));
+
+            TemplateMessage templateMessage = new TemplateMessage(
+                    msgDTO.getTempId(),//"PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
+                    openId,     //  o7sDrsqAggP4dwbNnVMEC-JX__tE    o7sDrso9Jk1F_lhoItpSY2xTqEmY
+                    "https://sgcc.link",
                     data
             );
             weChatEntity.sendTempMsg(templateMessage);
