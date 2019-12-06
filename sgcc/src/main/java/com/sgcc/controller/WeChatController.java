@@ -4,6 +4,7 @@ import com.example.Utils;
 import com.example.constant.WechatURLConstants;
 import com.example.errorcode.WechatURLErrorcode;
 import com.example.result.Result;
+import com.sgcc.dto.MsgDTO;
 import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.service.WeChatService;
@@ -136,6 +137,29 @@ public class WeChatController {
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
+    }
+    /**
+     * 发送消息
+     * @return
+     */
+    @ApiOperation(value = "sendMessage", notes = "")
+    @PostMapping(value = "/sendMessage/{openId}")
+    public Result sendMessage(@PathVariable("openId") String openId,@RequestBody MsgDTO msgDTO){
+        try {
+            return weChatService.sendMsg(openId,msgDTO);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+    /**
+     * 获取模板
+     * @return
+     */
+    @ApiOperation(value = "getTempList", notes = "")
+    @GetMapping(value = "/getTempList")
+    public Result getTempList(){
+        return weChatService.getTempList();
     }
 
     /**
