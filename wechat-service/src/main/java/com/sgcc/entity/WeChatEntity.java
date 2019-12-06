@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.FileUtil;
 import com.example.constant.CommonConstants;
 import com.example.constant.WechatURLConstants;
-import com.sgcc.dto.GetMaterialDTO;
-import com.sgcc.dto.MaterialsDTO;
+import com.google.common.base.Strings;
+import com.sgcc.dto.*;
 import com.sgcc.dtomodel.wechat.*;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
 import com.sgcc.wechat.SignatureModel;
@@ -13,7 +13,6 @@ import com.sgcc.dao.AccessTokenDao;
 import com.sgcc.dao.JSApiTicketDao;
 import com.sgcc.entity.event.AccessTokenEntity;
 import com.sgcc.entity.query.AccessTokenQueryEntity;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
@@ -24,9 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.net.URLDecoder;
-import java.util.Map;
+import java.util.List;
 
 @Component
 public class WeChatEntity {
@@ -182,11 +179,36 @@ public class WeChatEntity {
         return JSONObject.parseObject(result);
     }
 
+    /**
+     * 获取公众号中所有user_open_id
+     */
+    public UserIDListDTO getOpenIds(String nextOpenID){
+
+        String URL = WechatURLConstants.GET_OPENIDS
+                .replace("ACCESS_TOKEN",getAccessToken().getAccess_token());
+        if( !Strings.isNullOrEmpty(nextOpenID) )
+        {
+            URL += "&next_openid=" + nextOpenID;
+        }
+        UserIDListDTO userIDListDTO = restTemplate.getForObject(URL, UserIDListDTO.class);
+        return userIDListDTO;
+    }
 
 
+    /**
+     * 获取公众号中所有用户信息
+     */
+    public UserInfoList getUserInfosByOpenIds(List<UserListSubmitDTO> userListDTOS){
 
+        String URL = WechatURLConstants.BATCH_GET_USER
+                .replace("ACCESS_TOKEN",getAccessToken().getAccess_token());
 
+        if (userListDTOS != null){
+            return restTemplate.postForObject(URL, userListDTOS, UserInfoList.class);
+        }
 
+        return null;
+    }
 
 
 

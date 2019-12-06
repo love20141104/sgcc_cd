@@ -26,6 +26,21 @@ public class WeChatController {
 
     @Autowired
     private WeChatService weChatService;
+
+
+
+    /**
+     * 获取微信公众号所有用户信息
+     * @return Result
+     */
+    @ApiOperation(value = "getUserInfos", notes = "")
+    @GetMapping(value = "/userInfos")
+    public Result getUserInfos(@RequestParam String openID) {
+        return weChatService.getUserInfos(openID);
+    }
+
+
+
     /**
      * 获取AccessToken
      * @return Result
@@ -154,7 +169,19 @@ public class WeChatController {
         }
     }
 
-
+    /**
+     * @return
+     */
+    @ApiOperation(value = "GetAllUsers", notes = "")
+    @GetMapping(value = "/AllUsers")
+    public Result GetAllUserInfos(){
+        try {
+            return weChatService.GetAllUserInfos();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
 
 
 }
