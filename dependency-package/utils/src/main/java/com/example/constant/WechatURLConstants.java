@@ -37,6 +37,8 @@ public class WechatURLConstants {
 
     public static final String BATCH_GET_USER = BASE+"/cgi-bin/user/info/batchget?access_token=ACCESS_TOKEN";
 
+    public static final String TEMPLATE = BASE+"/cgi-bin/template/get_all_private_template?access_token=ACCESS_TOKEN";
+
     //public static final  String mch_id = "1550585661";      // 电享+
     public static final  String mch_id = "1555016091";    // 索思科得
     public static final  String APPKEY = "SSCDGDabcdefghijklmnopqrstuvwxyz";
