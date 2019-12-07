@@ -11,6 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class WeChatBaseDTO implements Serializable {
 
+    private static final long serialVersionUID = 5843567000663057884L;
     private int errcode;
     private String errmsg;
 }

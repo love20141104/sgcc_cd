@@ -3,6 +3,7 @@ package com.sgcc.dtomodel.wechat.template;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -10,8 +11,9 @@ import java.util.Map;
  * 模板消息基类
  */
 @Data
-public class TemplateMessage {
+public class TemplateMessage implements Serializable {
 
+    private static final long serialVersionUID = -243068796402898935L;
     private String template_id;                 //模板ID
     private String touser;                      //目标客户
     private String url;                         //用户点击模板信息的跳转页面

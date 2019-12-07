@@ -124,6 +124,10 @@ public class WeChatEntity {
     }
 
 
+
+
+
+
     /**
      * 获取素材列表
      * @param type

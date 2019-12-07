@@ -15,5 +15,4 @@ public class TempMessageDTO extends WeChatBaseDTO {
     private String msgid;
 
 
-
 }

@@ -222,22 +222,48 @@ public class WeChatService {
         tempDTOs.add(tempDTO3);
         return Result.success(tempDTOs);
     }
+
+    private String GetURL(String tempID )
+    {
+        switch ( tempID )
+        {
+            case "JXw2Xh4izWGxGNsLUkRexEGkxv42NdVcMLuiqLQ0EPg":
+                return "http://weixin.sc.sgcc.com.cn/SEH/elecAnalysis/to_pay_recordPage";
+//            case "1":
+//            case "2":
+//                return "http://weixin.sc.sgcc.com.cn/SEH/energyAnalysis/energyPowerPage";
+            default:
+                return "https://sgcc.link";
+        }
+    }
+
     public Result sendMsg(String openId, MsgDTO msgDTO){
+        if( msgDTO == null || Strings.isNullOrEmpty(msgDTO.getTempId()) ||
+                msgDTO.getData() == null || msgDTO.getData().size() < 1)
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
         try {
             Map<String, TemplateData> data = new LinkedHashMap<>();
-            data.put("first",new TemplateData(msgDTO.getFirst(),"#173177"));
-            data.put("keyword1",new TemplateData(msgDTO.getKeyword1()+"\n","#173177"));
-            data.put("keyword2",new TemplateData(msgDTO.getKeyword2(),"#173177"));
-            data.put("keyword3",new TemplateData(msgDTO.getKeyword3(),"#173177"));
-            if(!msgDTO.getTempId().equalsIgnoreCase("4nEG5kchS6_9ayaA6ZWe6_00ea-7D9uBgClcsCHcacQ")){
-                data.put("keyword4",new TemplateData(msgDTO.getKeyword4(),"#173177"));
+            if( msgDTO.getData().containsKey("first"))
+            {
+                data.put("first",new TemplateData(msgDTO.getData().get("first"),"#173177"));
             }
-            data.put("remark",new TemplateData(msgDTO.getRemark(),"#173177"));
+            else if( msgDTO.getData().containsKey("remark"))
+            {
+                data.put("remark",new TemplateData(msgDTO.getData().get("remark"),"#173177"));
+            }
+
+            for( String key : msgDTO.getData().keySet() )
+            {
+                if( key.contains("keyword"))
+                {
+                    data.put(key,new TemplateData(msgDTO.getData().get(key),"#173177"));
+                }
+            }
 
             TemplateMessage templateMessage = new TemplateMessage(
                     msgDTO.getTempId(),//"PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
                     openId,     //  o7sDrsqAggP4dwbNnVMEC-JX__tE    o7sDrso9Jk1F_lhoItpSY2xTqEmY
-                    msgDTO.getTempId().equalsIgnoreCase("FlIAd8y-RBTSmwnPMCNY80O5wrKPFfMVFOHMAhhrNcM")||msgDTO.getTempId().equalsIgnoreCase("V4zLn0ZN8nSDnPEyuvOmjynB4t5U19tkyjjLpMHHy54")?"http://weixin.sc.sgcc.com.cn/SEH/energyAnalysis/energyPowerPage":"https://sgcc.link",
+                    GetURL(msgDTO.getTempId()),
                     data
             );
             weChatEntity.sendTempMsg(templateMessage);
@@ -312,6 +338,7 @@ public class WeChatService {
             List<String> ids = new ArrayList<>();
             ids.addAll( dto.getData().getOpenid());
 
+            // 去取数据次数
             int cycle1 = dto.getTotal()/10000;
             if( dto.getTotal()%10000 != 0 )
                 cycle1 ++ ;
