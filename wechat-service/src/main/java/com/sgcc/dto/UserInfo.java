@@ -3,13 +3,14 @@ package com.sgcc.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class UserInfo implements Serializable {
-    private String subscribe;
+    private Integer subscribe;
     private String openid;
     private String nickname;
-    private String sex;
+    private Integer sex;
     private String language;
     private String city;
     private String province;
@@ -18,9 +19,9 @@ public class UserInfo implements Serializable {
     private String subscribe_time;
     private String unionid;
     private String remark;
-    private String groupid;
-    private String tagid_list;
+    private Integer groupid;
+    private List<Integer> tagid_list;
     private String subscribe_scene;
-    private String qr_scene;
+    private Integer qr_scene;
     private String qr_scene_str;
 }

@@ -34,11 +34,11 @@ public class WeChatController {
      * 获取微信公众号所有用户信息
      * @return Result
      */
-    @ApiOperation(value = "getUserInfos", notes = "")
-    @GetMapping(value = "/userInfos")
-    public Result getUserInfos(@RequestParam String openID) {
-        return weChatService.getUserInfos(openID);
-    }
+//    @ApiOperation(value = "getUserInfos", notes = "")
+//    @GetMapping(value = "/userInfos")
+//    public Result getUserInfos(@RequestParam String openID) {
+//        return weChatService.getUserInfos(openID);
+//    }
 
 
 
@@ -196,16 +196,38 @@ public class WeChatController {
     /**
      * @return
      */
-    @ApiOperation(value = "GetAllUsers", notes = "")
+//    @ApiOperation(value = "GetAllUsers", notes = "")
+//    @GetMapping(value = "/AllUsers")
+//    public Result GetAllUserInfos(){
+//        try {
+//            return weChatService.GetAllUserInfos();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return Result.failure(TopErrorCode.GENERAL_ERR);
+//        }
+//    }
+
+    @ApiOperation(value = "SyncAllUsers", notes = "")
     @GetMapping(value = "/AllUsers")
-    public Result GetAllUserInfos(){
+    public Result SyncAllUsers(){
         try {
-            return weChatService.GetAllUserInfos();
+            return weChatService.SyncUserInfos();
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
+
+
+    /**
+     * @return
+     */
+    @ApiOperation(value = "findUsers", notes = "")
+    @GetMapping(value = "/users")
+    public Result findUsers(){
+        return weChatService.findUsers();
+    }
+
 
 
 }

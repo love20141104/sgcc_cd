@@ -14,6 +14,6 @@ public class WxOpenIdInfoDTO implements Serializable {
 
     private static final long serialVersionUID = 3177769607245527446L;
 
-    private List<String> openIds;
+    private List<String> openid;
 
 }

@@ -190,6 +190,7 @@ public class WeChatEntity {
         {
             URL += "&next_openid=" + nextOpenID;
         }
+        System.out.println(URL);
         UserIDListDTO userIDListDTO = restTemplate.getForObject(URL, UserIDListDTO.class);
         return userIDListDTO;
     }
@@ -198,11 +199,11 @@ public class WeChatEntity {
     /**
      * 获取公众号中所有用户信息
      */
-    public UserInfoList getUserInfosByOpenIds(List<UserListSubmitDTO> userListDTOS){
+    public UserInfoList getUserInfosByOpenIds(UserListSubmitDTO userListDTOS){
 
         String URL = WechatURLConstants.BATCH_GET_USER
                 .replace("ACCESS_TOKEN",getAccessToken().getAccess_token());
-
+        System.out.println(URL);
         if (userListDTOS != null){
             return restTemplate.postForObject(URL, userListDTOS, UserInfoList.class);
         }

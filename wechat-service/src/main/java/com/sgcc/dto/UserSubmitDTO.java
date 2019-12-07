@@ -5,13 +5,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserListSubmitDTO implements Serializable {
+public class UserSubmitDTO implements Serializable {
 
     private static final long serialVersionUID = -3651963881700598173L;
-    private List<UserSubmitDTO> user_list;
+
+    private String openid;
+
+    private String lang = "zh_CN";
+
+
+
+
 }

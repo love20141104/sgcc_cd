@@ -3,8 +3,8 @@ package com.sgcc.service;
 import com.example.Utils;
 import com.example.constant.WechatURLConstants;
 import com.example.result.Result;
+import com.google.common.base.Converter;
 import com.sgcc.dto.*;
-import com.google.common.base.Strings;
 import com.sgcc.dto.MsgDTO;
 import com.sgcc.dto.TempDTO;
 import com.sgcc.dto.TempDetail;
@@ -12,6 +12,8 @@ import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import com.sgcc.dtomodel.wechat.template.TemplateData;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
 import com.sgcc.entity.WeChatEntity;
+import com.sgcc.entity.event.WeChatEventEntity;
+import com.sgcc.entity.query.WeChatQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.wxpay.Sgcc_WXPay;
 import com.sgcc.wxpay.sdk.WXPayUtil;
@@ -20,8 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -33,6 +33,14 @@ public class WeChatService {
 
     @Autowired
     private WeChatEntity weChatEntity;
+
+    @Autowired
+    private WeChatQueryEntity weChatQueryEntity;
+
+    @Autowired
+    private WeChatEventEntity weChatEventEntity;
+
+
 
     static int retries = 0;
     /**
@@ -292,65 +300,70 @@ public class WeChatService {
      * 获取微信公众号所有用户信息
      * @return Result
      */
-    public Result getUserInfos(String nextOpenID) {
-        try {
-
-            UserIDListDTO dto = weChatEntity.getOpenIds(nextOpenID);
-            if( dto.getData() == null || dto.getData().getOpenIds() == null )
-                return Result.failure(TopErrorCode.NO_DATAS);
-
-            List<String> ids = dto.getData().getOpenIds();
-            List<UserListSubmitDTO> userListSubmitDTOlist = new ArrayList<>();
-            for ( String id : ids ) {
-                userListSubmitDTOlist.add( new UserListSubmitDTO(id,"zh_CN"));
-            }
-
-            UserInfoList list = weChatEntity.getUserInfosByOpenIds(userListSubmitDTOlist);
-            if( list == null || list.getUser_info_list() == null )
-                return Result.failure(TopErrorCode.NO_DATAS);
-
-            UserTableDTO ret = new UserTableDTO();
-            for( UserInfo item : list.getUser_info_list() )
-            {
-                if( item.getSubscribe() == "1" )
-                {
-                    UserInfoViewDTO t = new UserInfoViewDTO();
-                    BeanUtils.copyProperties(item,t);
-                    ret.getUserInfoList().add(t);
-                }
-            }
-            return Result.success(ret);
-        }catch (Exception e){
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.GENERAL_ERR);
-        }
-
-    }
+//    public Result getUserInfos(String nextOpenID) {
+//        try {
+//
+//            UserIDListDTO dto = weChatEntity.getOpenIds(nextOpenID);
+//            if( dto.getData() == null || dto.getData().getOpenid() == null )
+//                return Result.failure(TopErrorCode.NO_DATAS);
+//
+//            List<String> ids = dto.getData().getOpenid();
+//            List<UserSubmitDTO> userListSubmitDTOlist = new ArrayList<>();
+//            for ( String id : ids ) {
+//                userListSubmitDTOlist.add( new UserSubmitDTO(id,"zh_CN"));
+//            }
+//
+//            UserInfoList list = weChatEntity.getUserInfosByOpenIds(userListSubmitDTOlist);
+//            if( list == null || list.getUser_info_list() == null )
+//                return Result.failure(TopErrorCode.NO_DATAS);
+//
+//            UserTableDTO ret = new UserTableDTO();
+//            for( UserInfo item : list.getUser_info_list() )
+//            {
+//                if( item.getSubscribe() == 1 )
+//                {
+//                    UserInfoViewDTO t = new UserInfoViewDTO();
+//                    BeanUtils.copyProperties(item,t);
+//                    ret.getUserInfoList().add(t);
+//                }
+//            }
+//            return Result.success(ret);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return Result.failure(TopErrorCode.GENERAL_ERR);
+//        }
+//
+//    }
 
     /**
      * 获取微信公众号所有用户信息
      * @return Result
      */
-    public Result GetAllUserInfos() {
+    public Result SyncUserInfos() {
         String nextOpenID = "";
         try
         {
-            // 取出所有公众号的用户ID
+            UserIDListDTO dto = weChatEntity.getOpenIds( nextOpenID );
+            if( dto.getCount() < 1 )
+                return Result.failure(TopErrorCode.NO_DATAS);
+
             List<String> ids = new ArrayList<>();
-            while( true ){
-                UserIDListDTO dto = weChatEntity.getOpenIds( nextOpenID );
-                if( dto.getData() == null || dto.getData().getOpenIds() == null )
-                    return Result.failure(TopErrorCode.NO_DATAS) ;
-                if( dto.getCount() < 1 )
-                    break;
-                ids.addAll( dto.getData().getOpenIds());
-                nextOpenID = dto.getNext_openid();
+            ids.addAll( dto.getData().getOpenid());
+
+            int cycle1 = dto.getTotal()/10000;
+            if( dto.getTotal()%10000 != 0 )
+                cycle1 ++ ;
+
+            while( cycle1 > 1 ){
+                dto = weChatEntity.getOpenIds( dto.getNext_openid() );
+                ids.addAll( dto.getData().getOpenid());
+                cycle1 -- ;
             }
 
             // 创建 post 数据结构
-            List<UserListSubmitDTO> userListSubmitDTOlist = new ArrayList<>();
+            List<UserSubmitDTO> userListSubmitDTOlist = new ArrayList<>();
             for ( String id : ids ) {
-                userListSubmitDTOlist.add( new UserListSubmitDTO(id,"zh_CN"));
+                userListSubmitDTOlist.add( new UserSubmitDTO(id,"zh_CN"));
             }
 
             // 循环多少次
@@ -358,33 +371,57 @@ public class WeChatService {
             if( ids.size()%100 != 0 )
                 cycle ++ ;
 
-            UserTableDTO ret = new UserTableDTO();
 
             for( int i = 0 ; i < cycle ; i++ )
             {
-                UserInfoList list = weChatEntity.getUserInfosByOpenIds(userListSubmitDTOlist.subList(i*cycle,100));
-                if( list == null || list.getUser_info_list() == null )
-                    return Result.failure(TopErrorCode.NO_DATAS);
-
-                for( UserInfo item : list.getUser_info_list() )
-                {
-                    if( item.getSubscribe() == "1" )
-                    {
-                        UserInfoViewDTO t = new UserInfoViewDTO();
-                        BeanUtils.copyProperties(item,t);
-                        ret.getUserInfoList().add(t);
-                    }
-                }
+//                SaveUsers(new UserListSubmitDTO(userListSubmitDTOlist.subList(i*cycle,size)));
             }
 
-            return Result.success(ret);
+            return Result.success(ids);
         }catch (Exception e){
             e.printStackTrace();
-            return Result.failure(TopErrorCode.NO_DATAS);
+            return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
 
-    public void SyncUserInfos( UserTableDTO param ) {
-        // 写入用户数据表
+    private void SaveUsers( UserListSubmitDTO dto )
+    {
+        UserInfoList list = weChatEntity.getUserInfosByOpenIds(dto);
+        if( list == null || list.getUser_info_list() == null )
+            return ;
+
+        UserTableDTO ret = new UserTableDTO();
+        if( ret.getUserInfoList() == null ){
+            ret.setUserInfoList(new ArrayList<>());
+        }
+
+        for( UserInfo item : list.getUser_info_list() )
+        {
+            if( item.getSubscribe() == 1 )
+            {
+                UserInfoViewDTO t = new UserInfoViewDTO();
+                BeanUtils.copyProperties(item,t);
+                ret.getUserInfoList().add(t);
+            }
+        }
+        weChatEventEntity.saveUsers(ret.getUserInfoList());
     }
+
+    public Result findUsers() {
+        try {
+            return Result.success( weChatQueryEntity.findUsers());
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+
+
+
+
+
+
+
 }
