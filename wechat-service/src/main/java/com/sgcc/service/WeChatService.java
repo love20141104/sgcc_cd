@@ -157,7 +157,8 @@ public class WeChatService {
 
     }
     public Result getTempList(){
-        ArrayList<TempDTO> tempDTOs = new ArrayList<>();
+
+        /*ArrayList<TempDTO> tempDTOs = new ArrayList<>();
 
         ArrayList<TempDetail> tempDetails = new ArrayList<>();
         TempDetail tempDetail = new TempDetail("提示", "first");
@@ -219,8 +220,10 @@ public class WeChatService {
         tempDTOs.add(tempDTO);
         tempDTOs.add(tempDTO1);
         tempDTOs.add(tempDTO2);
-        tempDTOs.add(tempDTO3);
-        return Result.success(tempDTOs);
+        tempDTOs.add(tempDTO3);*/
+
+        List<TempDTO> tempList = weChatEntity.getTempList();
+        return Result.success(tempList);
     }
 
     private String GetURL(String tempID )
