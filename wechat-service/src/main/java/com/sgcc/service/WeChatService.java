@@ -254,7 +254,7 @@ public class WeChatService {
 
             for( String key : msgDTO.getData().keySet() )
             {
-                if( key.contains("keyword"))
+                if( !(key.contains("first") && key.contains("remark")) )
                 {
                     data.put(key,new TemplateData(msgDTO.getData().get(key),"#000000"));
                 }
