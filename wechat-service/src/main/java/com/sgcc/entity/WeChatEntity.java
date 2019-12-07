@@ -161,43 +161,15 @@ public class WeChatEntity {
      * 获取模板列表
      * @return
      */
-    public List<TempDTO> getTempList(){
+    public TemplateRetListDTO getTempList()
+    {
         String URL = WechatURLConstants.TEMPLATE.replace("ACCESS_TOKEN",getAccessToken().getAccess_token());
-        String forObject = restTemplate.getForObject(URL, String.class);
-        System.out.println(forObject);
-        JSONObject jsonObject = JSONObject.parseObject(forObject);
-        String template_list = jsonObject.getString("template_list");
-        JSONArray objects = JSONObject.parseArray(template_list);
-        List<TempDTO> collect = objects.stream().map(temp -> {
-            JSONObject tempJson = JSONObject.parseObject(temp.toString());
-            String template_id = tempJson.getString("template_id");
-            String title = tempJson.getString("title");
-            String content = tempJson.getString("content");
-            String[] split = content.split("\\n");
-            /*{ {result.DATA} }
-            \n\n领奖金额:{ {withdrawMoney.DATA} }
-            \n领奖时间:  { {withdrawTime.DATA} }
-            \n银行信息: { {cardInfo.DATA} }
-            \n到账时间:  { {arrivedTime.DATA} }
-            \n{ {remark.DATA} }*/
-            ArrayList<TempDetail> tempDetails = new ArrayList<>();
-            TempDetail tempDetail = new TempDetail("提示", "first");
-            tempDetails.add(tempDetail);
-            for (int i = 0; i < split.length; i++) {
-                if (split[i].contains(":")) {
-                    String[] split1 = split[i].split(":");
-                    String replace = "keyword";
-                    TempDetail tempDetail1 = new TempDetail(split1[0], replace + (i + 1));
-                    tempDetails.add(tempDetail1);
-                }
-            }
-            TempDetail tempDetail5 = new TempDetail("备注", "remark");
-            tempDetails.add(tempDetail5);
+        TemplateRetListDTO ret  = restTemplate.getForObject(URL, TemplateRetListDTO.class);
+        System.out.println(ret);
+        if( ret == null || ret.getTemplate_list() == null || ret.getTemplate_list().size() < 1)
+            return null;
 
-            TempDTO tempDTO = new TempDTO(template_id, title, tempDetails);
-            return tempDTO;
-        }).collect(Collectors.toList());
-        return  collect;
+        return ret;
     }
 
 

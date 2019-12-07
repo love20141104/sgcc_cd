@@ -126,104 +126,34 @@ public class WeChatService {
         return null;
     }
 
-    public Result sendTempMsg(String openId){
-        try {
-            Map<String, TemplateData> data = new LinkedHashMap<>();
-            data.put("first",new TemplateData("停电通知","#173177"));
-            data.put("keyword1",new TemplateData("2019-11-12 8:00 ~ 2019-11-12 18:00\n","#173177"));
-            data.put("keyword2",new TemplateData("华府大道沿线","#173177"));
-            data.put("keyword3",new TemplateData("线路检修","#173177"));
-            data.put("remark",new TemplateData("如有不便敬请谅解！","#173177"));
-
-//            data.put("first",new TemplateData("申请成功模板消息测试","#173177"));
-//            data.put("event",new TemplateData("超级","#173177"));
-//            data.put("dept",new TemplateData("神部","#173177"));
-//            data.put("date",new TemplateData("2019年10月09日","#173177"));
-//            data.put("remark",new TemplateData("申请成功！","#173177"));
-
-            TemplateMessage templateMessage = new TemplateMessage(
-                    "EmOAEkiGGpwT0XUAmaeEnIb2S6Y5an_78gKs2qvh9vY",//"PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
-                    openId,     //  o7sDrsqAggP4dwbNnVMEC-JX__tE    o7sDrso9Jk1F_lhoItpSY2xTqEmY
-                    "https://cdgd.pryun.vip",
-                    data
-            );
-            weChatEntity.sendTempMsg(templateMessage);
-            return Result.success();
-        } catch (Exception e) {
-            System.out.println("模板消息发送失败！");
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.GENERAL_ERR);
-        }
-
-    }
     public Result getTempList(){
+        TemplateRetListDTO tmplt_list = weChatEntity.getTempList();
+        if( tmplt_list == null )
+            return Result.failure( TopErrorCode.NO_DATAS );
 
-        /*ArrayList<TempDTO> tempDTOs = new ArrayList<>();
+        List<TemplateViewDTO> list = new ArrayList<>();
+        for( TemplateRetDTO item : tmplt_list.getTemplate_list() )
+        {
+            TemplateViewDTO temp = Convert2(item);
+            if( temp != null )
+                list.add(temp);
+        }
+        return Result.success(list);
+    }
 
-        ArrayList<TempDetail> tempDetails = new ArrayList<>();
-        TempDetail tempDetail = new TempDetail("提示", "first");
-        TempDetail tempDetail1 = new TempDetail("户号", "keyword1");
-        TempDetail tempDetail2 = new TempDetail("地址", "keyword2");
-        TempDetail tempDetail3 = new TempDetail("支付金额", "keyword3");
-        TempDetail tempDetail4 = new TempDetail("收款单位", "keyword4");
-        TempDetail tempDetail5 = new TempDetail("备注", "remark");
-        tempDetails.add(tempDetail);
-        tempDetails.add(tempDetail1);
-        tempDetails.add(tempDetail2);
-        tempDetails.add(tempDetail3);
-        tempDetails.add(tempDetail4);
-        tempDetails.add(tempDetail5);
-        TempDTO tempDTO = new TempDTO("EmOAEkiGGpwT0XUAmaeEnIb2S6Y5an_78gKs2qvh9vY", "缴费成功通知",tempDetails);
+    private TemplateViewDTO Convert2( TemplateRetDTO src )
+    {
+        if( src == null )
+            return null;
 
-        ArrayList<TempDetail> tempDetails1 = new ArrayList<>();
-
-        TempDetail tempDetail6 = new TempDetail("帐号余额", "keyword1");
-        TempDetail tempDetail7 = new TempDetail("通知时间", "keyword2");
-        TempDetail tempDetail8 = new TempDetail("备注说明", "keyword3");
-
-        tempDetails1.add(tempDetail);
-        tempDetails1.add(tempDetail6);
-        tempDetails1.add(tempDetail7);
-        tempDetails1.add(tempDetail8);
-        tempDetails1.add(tempDetail5);
-        TempDTO tempDTO1 = new TempDTO("4nEG5kchS6_9ayaA6ZWe6_00ea-7D9uBgClcsCHcacQ", "欠费通知",tempDetails1);
-
-        ArrayList<TempDetail> tempDetails2 = new ArrayList<>();
-
-        TempDetail tempDetail10 = new TempDetail("本月读数", "keyword1");
-        TempDetail tempDetail11 = new TempDetail("上月读数", "keyword2");
-        TempDetail tempDetail12 = new TempDetail("本期电量", "keyword3");
-        TempDetail tempDetail13 = new TempDetail("本期电费", "keyword4");
-        tempDetails2.add(tempDetail);
-        tempDetails2.add(tempDetail10);
-        tempDetails2.add(tempDetail11);
-        tempDetails2.add(tempDetail12);
-        tempDetails2.add(tempDetail13);
-        tempDetails2.add(tempDetail5);
-        TempDTO tempDTO2 = new TempDTO("FlIAd8y-RBTSmwnPMCNY80O5wrKPFfMVFOHMAhhrNcM","月度账单",tempDetails2);
-
-        ArrayList<TempDetail> tempDetails3 = new ArrayList<>();
-
-        TempDetail tempDetail14 = new TempDetail("本月读数", "keyword1");
-        TempDetail tempDetail15 = new TempDetail("上月读数", "keyword2");
-        TempDetail tempDetail16 = new TempDetail("本期电量", "keyword3");
-        TempDetail tempDetail17 = new TempDetail("本期电费", "keyword4");
-        tempDetails3.add(tempDetail);
-        tempDetails3.add(tempDetail14);
-        tempDetails3.add(tempDetail15);
-        tempDetails3.add(tempDetail16);
-        tempDetails3.add(tempDetail17);
-        tempDetails3.add(tempDetail5);
-        TempDTO tempDTO3 = new TempDTO("V4zLn0ZN8nSDnPEyuvOmjynB4t5U19tkyjjLpMHHy54","用电分析",tempDetails3);
-
-
-        tempDTOs.add(tempDTO);
-        tempDTOs.add(tempDTO1);
-        tempDTOs.add(tempDTO2);
-        tempDTOs.add(tempDTO3);*/
-
-        List<TempDTO> tempList = weChatEntity.getTempList();
-        return Result.success(tempList);
+        TemplateViewDTO ret = new TemplateViewDTO();
+        ret.setTemplate_id( src.getTemplate_id() );
+        ret.setTitle( src.getTitle() );
+        Map<String,String> content = Utils.ParseTemplateInfoContent( src.getContent() );
+        if( content == null || content.size() < 2 )
+            return null;
+        ret.setDatas(content);
+        return ret;
     }
 
     private String GetURL(String tempID )
@@ -233,8 +163,8 @@ public class WeChatService {
             case "JXw2Xh4izWGxGNsLUkRexEGkxv42NdVcMLuiqLQ0EPg":
                 return "http://weixin.sc.sgcc.com.cn/SEH/elecAnalysis/to_pay_recordPage";
 //            case "1":
-//            case "2":
-//                return "http://weixin.sc.sgcc.com.cn/SEH/energyAnalysis/energyPowerPage";
+            case "ALuxFbuNFnZmMkfoQ9nKmmdJUukBLIZ0LntwxmSZInY":
+                return "http://weixin.sc.sgcc.com.cn/SEH/electricPower/microhall/list_page";
             default:
                 return "https://sgcc.link";
         }

@@ -3,8 +3,10 @@ package com.example;
 import com.example.constant.WechatURLConstants;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -266,6 +268,61 @@ public class Utils {
 //            e.printStackTrace();
 //            return null;
 //        }
+//    }
+
+    public static Map<String,String> ParseTemplateInfoContent(String ctnt)
+    {
+        if( Strings.isNullOrEmpty(ctnt) )
+            return null;
+        Map<String,String> ret = new HashMap<>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(ctnt.getBytes(Charset.forName("utf8"))), Charset.forName("utf8")));
+        String line = "";
+        try
+        {
+            int idx = 1;
+            while ( (line = br.readLine()) != null )
+            {
+                int startPos = line.lastIndexOf("{");
+                int endPos = line.indexOf("}");
+                String str = line.substring( startPos + 1 , endPos );
+                int keyPos = str.indexOf(".DATA");
+                String strKey = line.substring(startPos + 1, keyPos + startPos + 1);
+                String strValue ="";
+                int pos = line.indexOf("{");
+                if( pos == 0 )
+                {
+                    if( idx == 1 )
+                    {
+                        strValue = "提示";
+                    }
+                    else
+                    {
+                        strValue = "备注";
+                    }
+                }
+                else
+                {
+                    strValue = line.substring(0,pos - 1 );
+                }
+                if( !ret.containsKey(strKey) )
+                    ret.put(strKey,strValue);
+                idx++;
+            }
+            return ret;
+        }catch (IOException e )
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+//    public static void main(String[] args) {
+//
+//        String content = "{{first.DATA}}\n缴费金额：{{keyword1.DATA}}\n缴费时间：{{keyword2.DATA}}\n{{remark.DATA}}";
+//
+//        Map<String,String> ret = ParseTemplateInfoContent(content);
+//        System.out.println(ret);
 //    }
 
 }
