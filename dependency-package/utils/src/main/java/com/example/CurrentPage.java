@@ -1,6 +1,9 @@
 package com.example;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +14,8 @@ import java.util.List;
  * @param <E>
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CurrentPage<E> implements Serializable {
 
     private static final long serialVersionUID = -4354920168995602471L;

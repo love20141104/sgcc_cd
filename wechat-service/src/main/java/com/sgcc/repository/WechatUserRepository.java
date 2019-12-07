@@ -1,5 +1,7 @@
 package com.sgcc.repository;
 
+import com.example.CurrentPage;
+import com.example.PaginationHelper;
 import com.sgcc.dao.UserDao;
 import com.sgcc.dto.UserInfoViewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,35 @@ public class WechatUserRepository {
         return jdbcTemplate.query(sql,new WechatUsersRowMapper());
 
     }
+
+
+    public CurrentPage<UserDao> findPageList(int getPageNo, int getPageSize) {
+        PaginationHelper<UserDao> ph = new PaginationHelper<>();
+        // 持久化
+        String sql = "select id,user_open_id,nick_name,sex,city,head_img_url from t_wechat_users";
+        String countSql = "SELECT Count(id) FROM t_wechat_users;";
+        try {
+            return ph.fetchPage(jdbcTemplate, countSql, sql, new Object[]{}, getPageNo,getPageSize, new WechatUsersRowMapper());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public CurrentPage<UserDao> findUsersByNickName(String nickName,int getPageNo, int getPageSize) {
+        PaginationHelper<UserDao> ph = new PaginationHelper<>();
+        // 持久化
+        String sql = "select id,user_open_id,nick_name,sex,city,head_img_url from t_wechat_users " +
+                " where nick_name like '%"+nickName+"%'";
+        String countSql = "SELECT Count(id) FROM t_wechat_users" + " where nick_name like '%"+nickName+"%'";
+        try {
+            return ph.fetchPage(jdbcTemplate, countSql, sql, new Object[]{}, getPageNo,getPageSize, new WechatUsersRowMapper());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     class WechatUsersRowMapper implements RowMapper<UserDao> {
 

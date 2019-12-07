@@ -29,7 +29,6 @@ public class WeChatController {
     private WeChatService weChatService;
 
 
-
     /**
      * 获取微信公众号所有用户信息
      * @return Result
@@ -41,9 +40,9 @@ public class WeChatController {
 //    }
 
 
-
     /**
      * 获取AccessToken
+     *
      * @return Result
      */
     @ApiOperation(value = "getAccessToken", notes = "")
@@ -54,20 +53,18 @@ public class WeChatController {
 
     /**
      * 获取JsApiTicket
+     *
      * @return Result
      */
     @ApiOperation(value = "getJsApiTicket", notes = "")
     @GetMapping(value = "/JsApiTicket")
     public Result getJsApiTicket() {
         JSAPITicketDTO jsapiTicketDTO = weChatService.getJsApiTicket();
-        if( jsapiTicketDTO.getErrcode() == WechatURLErrorcode.SYS_BUSY )
-        {
+        if (jsapiTicketDTO.getErrcode() == WechatURLErrorcode.SYS_BUSY) {
             try {
                 Thread.sleep(1000);
                 return Result.success(weChatService.getJsApiTicket());
-            }
-            catch (InterruptedException e )
-            {
+            } catch (InterruptedException e) {
 
             }
         }
@@ -79,13 +76,12 @@ public class WeChatController {
      * @return Result
      */
     /**
-     *
-     * @param url   url
-     * @return  SignatureDTO
+     * @param url url
+     * @return SignatureDTO
      */
     @ApiOperation(value = "WXConfig", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "url",value = "url")
+            @ApiImplicitParam(name = "url", value = "url")
     })
     @GetMapping(value = "/WXConfig")
     public Result getSignature(@RequestParam String url) {
@@ -97,10 +93,10 @@ public class WeChatController {
      */
     @ApiOperation(value = "Prepay", notes = "")
     @GetMapping(value = "/Prepay")
-    public Result getPrepay(@RequestParam String openId,@RequestParam String totalFee) {
+    public Result getPrepay(@RequestParam String openId, @RequestParam String totalFee) {
 
         try {
-            return weChatService.getPrepay(openId,totalFee);
+            return weChatService.getPrepay(openId, totalFee);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -126,39 +122,44 @@ public class WeChatController {
 
     /**
      * 发送模板消息
+     *
      * @return
      */
     @ApiOperation(value = "sendTempMessage", notes = "")
     @PostMapping(value = "/sendTempMessage")
-    public Result sendTempMessage(@RequestParam String openId){
+    public Result sendTempMessage(@RequestParam String openId) {
         try {
             return weChatService.sendTempMsg(openId);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
+
     /**
      * 发送消息
+     *
      * @return
      */
     @ApiOperation(value = "sendMessage", notes = "")
     @PostMapping(value = "/sendMessage/{openId}")
-    public Result sendMessage(@PathVariable("openId") String openId,@RequestBody MsgDTO msgDTO){
+    public Result sendMessage(@PathVariable("openId") String openId, @RequestBody MsgDTO msgDTO) {
         try {
-            return weChatService.sendMsg(openId,msgDTO);
-        }catch (Exception e){
+            return weChatService.sendMsg(openId, msgDTO);
+        } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
+
     /**
      * 获取模板
+     *
      * @return
      */
     @ApiOperation(value = "getTempList", notes = "")
     @GetMapping(value = "/getTempList")
-    public Result getTempList(){
+    public Result getTempList() {
         return weChatService.getTempList();
     }
 
@@ -167,27 +168,27 @@ public class WeChatController {
      */
     @ApiOperation(value = "Materials", notes = "获取素材")
     @PostMapping(value = "/Materials")
-    public Result getMaterial(@RequestParam String type,@RequestParam int offset,@RequestParam int count){
+    public Result getMaterial(@RequestParam String type, @RequestParam int offset, @RequestParam int count) {
         try {
-            return weChatService.getMaterial(type,offset,count);
-        }catch (Exception e){
+            return weChatService.getMaterial(type, offset, count);
+        } catch (Exception e) {
             e.printStackTrace();
-            return Result.failure(TopErrorCode.GENERAL_ERR,e);
+            return Result.failure(TopErrorCode.GENERAL_ERR, e);
         }
     }
 
 
-
     /**
      * 新增图文消息图片
+     *
      * @return
      */
     @ApiOperation(value = "uploadImg", notes = "")
-    @PostMapping(value = "/uploadImg",headers = "content-type=multipart/form-data")
-    public Result uploadImg(@ApiParam(required = true) MultipartFile file){
+    @PostMapping(value = "/uploadImg", headers = "content-type=multipart/form-data")
+    public Result uploadImg(@ApiParam(required = true) MultipartFile file) {
         try {
             return weChatService.uploadImg(file);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
@@ -207,27 +208,53 @@ public class WeChatController {
 //        }
 //    }
 
-    @ApiOperation(value = "SyncAllUsers", notes = "")
-    @GetMapping(value = "/AllUsers")
-    public Result SyncAllUsers(){
-        try {
-            return weChatService.SyncUserInfos();
-        }catch (Exception e){
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.GENERAL_ERR);
-        }
-    }
+    /**
+     * 获取公众号所用用户信息并存到数据库
+     */
+//    @ApiOperation(value = "SyncAllUsers", notes = "")
+//    @GetMapping(value = "/AllUsers")
+//    public Result SyncAllUsers(){
+//        try {
+//            return weChatService.SyncUserInfos();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return Result.failure(TopErrorCode.GENERAL_ERR);
+//        }
+//    }
 
 
     /**
+     * 查询所有用户信息
      * @return
      */
     @ApiOperation(value = "findUsers", notes = "")
     @GetMapping(value = "/users")
-    public Result findUsers(){
+    public Result findUsers() {
         return weChatService.findUsers();
     }
 
 
+    /**
+     * 根据昵称查询
+     * @return
+     */
+    @ApiOperation(value = "findUsersByNickName", notes = "")
+    @GetMapping(value = "/users/nickName")
+    public Result findUsersByNickName(@RequestParam(required = false) String nickName,@RequestParam int pageNo,@RequestParam int pageSize) {
+        return weChatService.findUsersByNickName(nickName,pageNo,pageSize);
+    }
+
+    /**
+     * 分页查询
+     * @return
+     */
+    @ApiOperation(value = "findPageList", notes = "")
+    @GetMapping(value = "/users/pageList")
+    public Result findPageList(@RequestParam int pageNo,@RequestParam int pageSize) {
+        return weChatService.findPageList(pageNo,pageSize);
+    }
+
 
 }
+
+

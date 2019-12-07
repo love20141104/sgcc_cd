@@ -1,6 +1,7 @@
 package com.sgcc.entity.query;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.CurrentPage;
 import com.example.FileUtil;
 import com.example.constant.CommonConstants;
 import com.example.constant.WechatURLConstants;
@@ -37,6 +38,16 @@ public class WeChatQueryEntity {
 
     public List<UserDao> findUsers(){
         return wechatUserRepository.findUsers();
+    }
+
+
+    public CurrentPage<UserDao> findUsersByNickName(String nickName,int pageNo,int pageSize){
+        return wechatUserRepository.findUsersByNickName(nickName,pageNo,pageSize);
+    }
+
+
+    public CurrentPage<UserDao> findPageList(int pageNo, int pageSize){
+        return wechatUserRepository.findPageList(pageNo, pageSize);
     }
 
 

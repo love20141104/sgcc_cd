@@ -1,9 +1,12 @@
 package com.sgcc.service;
 
+import com.example.CurrentPage;
 import com.example.Utils;
 import com.example.constant.WechatURLConstants;
 import com.example.result.Result;
 import com.google.common.base.Converter;
+import com.google.common.base.Strings;
+import com.sgcc.dao.UserDao;
 import com.sgcc.dto.*;
 import com.sgcc.dto.MsgDTO;
 import com.sgcc.dto.TempDTO;
@@ -294,47 +297,6 @@ public class WeChatService {
 //
 //    }
 
-
-
-    /**
-     * 获取微信公众号所有用户信息
-     * @return Result
-     */
-//    public Result getUserInfos(String nextOpenID) {
-//        try {
-//
-//            UserIDListDTO dto = weChatEntity.getOpenIds(nextOpenID);
-//            if( dto.getData() == null || dto.getData().getOpenid() == null )
-//                return Result.failure(TopErrorCode.NO_DATAS);
-//
-//            List<String> ids = dto.getData().getOpenid();
-//            List<UserSubmitDTO> userListSubmitDTOlist = new ArrayList<>();
-//            for ( String id : ids ) {
-//                userListSubmitDTOlist.add( new UserSubmitDTO(id,"zh_CN"));
-//            }
-//
-//            UserInfoList list = weChatEntity.getUserInfosByOpenIds(userListSubmitDTOlist);
-//            if( list == null || list.getUser_info_list() == null )
-//                return Result.failure(TopErrorCode.NO_DATAS);
-//
-//            UserTableDTO ret = new UserTableDTO();
-//            for( UserInfo item : list.getUser_info_list() )
-//            {
-//                if( item.getSubscribe() == 1 )
-//                {
-//                    UserInfoViewDTO t = new UserInfoViewDTO();
-//                    BeanUtils.copyProperties(item,t);
-//                    ret.getUserInfoList().add(t);
-//                }
-//            }
-//            return Result.success(ret);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return Result.failure(TopErrorCode.GENERAL_ERR);
-//        }
-//
-//    }
-
     /**
      * 获取微信公众号所有用户信息
      * @return Result
@@ -367,14 +329,20 @@ public class WeChatService {
             }
 
             // 循环多少次
-            int cycle = ids.size()/100;
-            if( ids.size()%100 != 0 )
+            int perSize = 100;
+            int cycle = ids.size()/perSize;
+            if( ids.size()%perSize != 0 )
                 cycle ++ ;
 
+            System.out.println("cycle = " + cycle);
+            System.out.println("ids.size() = " + ids.size());
 
             for( int i = 0 ; i < cycle ; i++ )
             {
-//                SaveUsers(new UserListSubmitDTO(userListSubmitDTOlist.subList(i*cycle,size)));
+                if( ids.size() - i*perSize < perSize )
+                    SaveUsers(new UserListSubmitDTO(userListSubmitDTOlist.subList(i*perSize,ids.size())));
+                else
+                    SaveUsers(new UserListSubmitDTO(userListSubmitDTOlist.subList(i*perSize, (i+1)*perSize)));
             }
 
             return Result.success(ids);
@@ -417,9 +385,50 @@ public class WeChatService {
     }
 
 
+    public Result findUsersByNickName(String nickName,int pageNo,int pageSize ) {
+        if ( pageNo < 1 || pageSize < 1)
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        try {
+            if (Strings.isNullOrEmpty(nickName)){
+                return this.findPageList(pageNo,pageSize);
+            }else {
+                CurrentPage<UserDao> userDaos = weChatQueryEntity.findUsersByNickName(nickName,pageNo,pageSize);
+                if( userDaos == null ||userDaos.getPageItems() == null || userDaos.getTotal() < 1 )
+                    return Result.failure(TopErrorCode.NO_DATAS);
+
+                UserPageableListDTO ret = new UserPageableListDTO(userDaos.getPageNo(),userDaos.getPageSize(),
+                        userDaos.getPagesAvailable(),userDaos.getTotal(),userDaos.getPageItems());
+                return Result.success(ret);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+    }
+
+
+    public Result findPageList(int pageNo,int pageSize) {
+        if ( pageNo < 1 || pageSize < 1)
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        try {
+            CurrentPage<UserDao> userDaos = weChatQueryEntity.findPageList(pageNo,pageSize);
+            if( userDaos == null ||userDaos.getPageItems() == null || userDaos.getTotal() < 1 )
+                return Result.failure(TopErrorCode.NO_DATAS);
+
+            UserPageableListDTO ret = new UserPageableListDTO(userDaos.getPageNo(),userDaos.getPageSize(),
+                    userDaos.getPagesAvailable(),userDaos.getTotal(),userDaos.getPageItems());
+
+            return Result.success(ret);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
 
 
 
+    }
 
 
 
