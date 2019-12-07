@@ -256,7 +256,7 @@ public class WeChatService {
             {
                 if( key.contains("keyword"))
                 {
-                    data.put(key,new TemplateData(msgDTO.getData().get(key),"#173177"));
+                    data.put(key,new TemplateData(msgDTO.getData().get(key),"#000000"));
                 }
             }
 
