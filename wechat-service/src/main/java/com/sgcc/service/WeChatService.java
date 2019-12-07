@@ -160,11 +160,14 @@ public class WeChatService {
     {
         switch ( tempID )
         {
-            case "JXw2Xh4izWGxGNsLUkRexEGkxv42NdVcMLuiqLQ0EPg":
+            case "JXw2Xh4izWGxGNsLUkRexEGkxv42NdVcMLuiqLQ0EPg":     // 缴费成功通知
                 return "http://weixin.sc.sgcc.com.cn/SEH/elecAnalysis/to_pay_recordPage";
-//            case "1":
-            case "ALuxFbuNFnZmMkfoQ9nKmmdJUukBLIZ0LntwxmSZInY":
+            case "ALuxFbuNFnZmMkfoQ9nKmmdJUukBLIZ0LntwxmSZInY":     // 余额不足提醒
+            case "h6L7RyWgqQJ9dkYfKJ5rV35-VkYMf7POBxQNJXIDaws":     // 电费阈值提醒
                 return "http://weixin.sc.sgcc.com.cn/SEH/electricPower/microhall/list_page";
+            case "VRAOumHGKZ-StF_nNKVmL9wY25-Sm0IRktxz8LNh1Ks":     // 月度账单
+            case "ek1UgAqBw-3KITByVmBMdPvdTyMN8OXZqBW2MOFflOM":     // 电费月度账单
+                return "http://weixin.sc.sgcc.com.cn/SEH/energyAnalysis/energyPowerPage";
             default:
                 return "https://sgcc.link";
         }

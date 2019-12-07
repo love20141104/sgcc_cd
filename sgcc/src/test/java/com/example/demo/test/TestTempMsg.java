@@ -17,7 +17,7 @@ public class TestTempMsg {
 
     @Test
     public void testMsg() throws Exception {
-        System.out.println(weChatService.sendTempMsg("o7sDrso9Jk1F_lhoItpSY2xTqEmY").toString());
+//        System.out.println(weChatService.sendTempMsg("o7sDrso9Jk1F_lhoItpSY2xTqEmY").toString());
 
     }
 
