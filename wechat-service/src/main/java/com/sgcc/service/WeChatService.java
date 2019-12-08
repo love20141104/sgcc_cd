@@ -197,8 +197,8 @@ public class WeChatService {
             }
 
             TemplateMessage templateMessage = new TemplateMessage(
-                    msgDTO.getTempId(),//"PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
-                    openId,     //  o7sDrsqAggP4dwbNnVMEC-JX__tE    o7sDrso9Jk1F_lhoItpSY2xTqEmY
+                    msgDTO.getTempId(),
+                    openId,
                     GetURL(msgDTO.getTempId()),
                     data
             );
@@ -267,7 +267,7 @@ public class WeChatService {
         String nextOpenID = "";
         try
         {
-            UserIDListDTO dto = weChatEntity.getOpenIds( nextOpenID );
+            UserIDListDTO dto = weChatEntity.getOpenIds( nextOpenID );      // openID一次最多获取10000
             if( dto.getCount() < 1 )
                 return Result.failure(TopErrorCode.NO_DATAS);
 
@@ -317,7 +317,7 @@ public class WeChatService {
 
     private void SaveUsers( UserListSubmitDTO dto )
     {
-        UserInfoList list = weChatEntity.getUserInfosByOpenIds(dto);
+        UserInfoList list = weChatEntity.getUserInfosByOpenIds(dto);    // 最多一次拉取100条数据
         if( list == null || list.getUser_info_list() == null )
             return ;
 
@@ -392,6 +392,23 @@ public class WeChatService {
 
 
     }
+
+
+    public Result findUsersByFullNickName(String fullNickName) {
+        if (Strings.isNullOrEmpty(fullNickName))
+            return Result.failure(TopErrorCode.NO_DATAS);
+        try {
+            List<UserDao> userDaos = weChatQueryEntity.findUsersByFullNickName(fullNickName);
+            if (userDaos.size() < 1)
+                return Result.failure(TopErrorCode.NO_DATAS);
+            return Result.success(userDaos.get(0));
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+    }
+
 
 
 

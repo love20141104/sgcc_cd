@@ -58,6 +58,13 @@ public class WechatUserRepository {
     }
 
 
+    public List<UserDao> findUsersByFullNickName(String fullNickName) {
+        String sql = "select id,user_open_id,nick_name,sex,city,head_img_url from t_wechat_users " +
+                "where nick_name = '"+fullNickName+"'";
+        return jdbcTemplate.query(sql,new WechatUsersRowMapper());
+    }
+
+
     class WechatUsersRowMapper implements RowMapper<UserDao> {
 
         @Override

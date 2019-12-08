@@ -51,5 +51,8 @@ public class WeChatQueryEntity {
     }
 
 
+    public List<UserDao> findUsersByFullNickName(String fullNickName){
+        return wechatUserRepository.findUsersByFullNickName(fullNickName);
+    }
 
 }
