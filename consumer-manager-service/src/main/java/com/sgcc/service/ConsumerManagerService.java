@@ -159,15 +159,15 @@ public class ConsumerManagerService {
 
     /**
      * 取出五条客户经理信息，返回一条数据
-     * @param openId
+     * @param consumerManagerID
      * @return
      */
-    public Result selectConsumerManagerByUserId(String openId) {
+    public Result selectConsumerManagerById(String consumerManagerID) {
         try {
 
 //            List<ConsumerManagerDao> consumerManagerDaos = new ArrayList<>(consumerManagerQueryEntity.findFiveConsumerManagerDaos());
 //            ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerDaos.get(0));
-            ConsumerManagerDao dao = consumerManagerQueryEntity.findById("f45a0b36-83d0-41ef-82a3-167d3bc94473");
+            ConsumerManagerDao dao = consumerManagerQueryEntity.findById(consumerManagerID);
             ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(dao);
             consumerManagerDomainModel.selectTransform();
             ConsumerManagerDTO consumerManagerDTO = consumerManagerDomainModel.getConsumerManagerDTO();
