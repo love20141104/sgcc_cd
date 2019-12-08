@@ -64,11 +64,11 @@ public class UserRepository {
         if(dao.getIs_sub_bill() != null)
             stringBuffer.append("is_sub_bill='"+dao.getIs_sub_bill()+"',");
         if(dao.getIs_sub_pay() != null)
-            stringBuffer.append("is_sub_pay='"+dao.getIs_sub_bill()+"',");
+            stringBuffer.append("is_sub_pay='"+dao.getIs_sub_pay()+"',");
         if(dao.getIs_sub_notice_pay() != null)
-            stringBuffer.append("is_sub_notice_pay='"+dao.getIs_sub_bill()+"',");
+            stringBuffer.append("is_sub_notice_pay='"+dao.getIs_sub_notice_pay()+"',");
         if(dao.getIs_sub_analysis() != null)
-            stringBuffer.append("is_sub_analysis='"+dao.getIs_sub_bill()+"',");
+            stringBuffer.append("is_sub_analysis='"+dao.getIs_sub_analysis()+"',");
 
         if (!Strings.isNullOrEmpty(stringBuffer.toString())){
             sql += stringBuffer.substring(0,stringBuffer.lastIndexOf(",")) +sqlWhere;

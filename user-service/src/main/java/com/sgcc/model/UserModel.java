@@ -334,13 +334,13 @@ public class UserModel {
 
         SubscribeDao subscribeDao = new SubscribeDao();
         for (String key:keyValue.keySet()){
-            if (key.contains("is_sub_bill"))
+            if (key.equals("is_sub_bill"))
                 subscribeDao.setIs_sub_bill(keyValue.get(key));
-            if (key.contains("is_sub_pay"))
+            if (key.equals("is_sub_pay"))
                 subscribeDao.setIs_sub_pay(keyValue.get(key));
-            if (key.contains("is_sub_notice_pay"))
+            if (key.equals("is_sub_notice_pay"))
                 subscribeDao.setIs_sub_notice_pay(keyValue.get(key));
-            if (key.contains("is_sub_analysis"))
+            if (key.equals("is_sub_analysis"))
                 subscribeDao.setIs_sub_analysis(keyValue.get(key));
         }
         subscribeDao.setUser_open_id(openId);
