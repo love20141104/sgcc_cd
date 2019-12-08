@@ -168,6 +168,8 @@ public class WeChatService {
             case "VRAOumHGKZ-StF_nNKVmL9wY25-Sm0IRktxz8LNh1Ks":     // 月度账单
             case "ek1UgAqBw-3KITByVmBMdPvdTyMN8OXZqBW2MOFflOM":     // 电费月度账单
                 return "http://weixin.sc.sgcc.com.cn/SEH/energyAnalysis/energyPowerPage";
+            case "z7oknZqf2sG_vhdtS-NRLEwYQiNRb5UtnRgqyjK4Aao":
+                return "https://sgcc.link/proposalList";
             default:
                 return "https://sgcc.link";
         }
@@ -211,39 +213,6 @@ public class WeChatService {
         }
 
     }
-
-    /**
-     * 缴费成功通知
-     * @param openId
-     * @return
-     */
-    public Result sendRechargeSuccessTempMsg(String openId,String userNo,Double money){
-        try {
-            Map<String, TemplateData> data = new LinkedHashMap<>();
-            data.put("first",new TemplateData("电费充值成功","#173177"));
-            data.put("keyword1",new TemplateData(userNo,"#173177"));
-            data.put("keyword2",new TemplateData( money.toString(),"#173177"));
-            data.put("keyword3",new TemplateData("电费充值","#173177"));
-            data.put("keyword4",new TemplateData("微信支付","#173177"));
-            data.put("remark",new TemplateData("电费下发可能存在延迟,如有疑问请电话咨询客户经理。","#173177"));
-
-
-            TemplateMessage templateMessage = new TemplateMessage(
-                    "YCaPG0ADMBTYaj4eHiQqJF2y2fmeCwNefuPDQUjWTNw",//"PtiXzgOlsGB2B2NaOMNtJhHdYaxD5Df41pZEe8RIj1A",
-                    openId,     //  o7sDrsqAggP4dwbNnVMEC-JX__tE    o7sDrso9Jk1F_lhoItpSY2xTqEmY
-                    "https://cdgd.pryun.vip",
-                    data
-            );
-            weChatEntity.sendTempMsg(templateMessage);
-            return Result.success();
-        } catch (Exception e) {
-            System.out.println("充值提醒消息发送失败！");
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.GENERAL_ERR);
-        }
-
-    }
-
 
     /**
      * 获取微信公众号所有openids

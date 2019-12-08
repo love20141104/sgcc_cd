@@ -4,13 +4,16 @@ import com.example.result.Result;
 import com.sgcc.dto.*;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.service.SuggestionService;
+import com.sgcc.service.WeChatService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api(value = "", tags = "意见建议接口")
 @RestController
@@ -19,6 +22,8 @@ import java.util.List;
 public class SuggestionController {
     @Autowired
     private SuggestionService suggestionService;
+    @Autowired
+    private WeChatService weChatService;
 
     @ApiOperation(value = "获取意见列表", notes = "")
     @GetMapping(value = "/users/{id}")
@@ -50,7 +55,28 @@ public class SuggestionController {
     @ApiOperation(value = "回复意见", notes = "")
     @PutMapping(value = "/{id}")
     public Result reply(@RequestBody SuggestionReplyDTO suggestionReplyDTO, @PathVariable("id") String suggestionId) {
-        return suggestionService.reply(suggestionReplyDTO);
+        Result ret = suggestionService.reply(suggestionReplyDTO);
+        if( ret != null && ret.getResultCode() == 0  )
+        {
+            Result temp = suggestionService.getSuggestion(suggestionId);
+            if( temp != null && temp.getResultCode() == 0 )
+            {
+                SuggestionDetailDTO dto = (SuggestionDetailDTO)(temp.getData());
+                if( dto != null )
+                {
+                    Map<String,String> map = new HashMap<>();
+                    map.put("first","你好，你的意见建议已回复!");
+                    map.put("keyworld1","意见建议");
+                    map.put("keyworld2","国网工作人员");
+                    map.put("keyworld3",dto.getReplyContent());
+                    map.put("remark","你好，你的意见建议已回复!");
+                    weChatService.sendMsg( dto.getUserId(),new MsgDTO("z7oknZqf2sG_vhdtS-NRLEwYQiNRb5UtnRgqyjK4Aao",map));
+                }
+            }
+
+
+        }
+        return ret;
     }
 
     @ApiOperation(value = "批量删除意见", notes = "")
