@@ -172,6 +172,22 @@ public class WeChatService {
                 return "https://sgcc.link";
         }
     }
+    private String GetKey(String tempID )
+    {
+        switch ( tempID )
+        {
+            case "JXw2Xh4izWGxGNsLUkRexEGkxv42NdVcMLuiqLQ0EPg":     // 缴费成功通知
+                return "is_sub_notice_pay";
+            case "ALuxFbuNFnZmMkfoQ9nKmmdJUukBLIZ0LntwxmSZInY":     // 余额不足提醒
+                return "is_sub_pay";
+            case "h6L7RyWgqQJ9dkYfKJ5rV35-VkYMf7POBxQNJXIDaws":     // 用电分析  VRAOumHGKZ-StF_nNKVmL9wY25-Sm0IRktxz8LNh1Ks
+                return "is_sub_analysis";
+            case "ek1UgAqBw-3KITByVmBMdPvdTyMN8OXZqBW2MOFflOM":     // 电费月度账单
+                return "is_sub_bill";
+            default:
+                return "没有此模板";
+        }
+    }
 
     public Result sendMsg(String openId, MsgDTO msgDTO){
         if( msgDTO == null || Strings.isNullOrEmpty(msgDTO.getTempId()) ||
@@ -195,6 +211,11 @@ public class WeChatService {
                     data.put(key,new TemplateData(msgDTO.getData().get(key),"#000000"));
                 }
             }
+
+            Integer flag = weChatQueryEntity.findUsersByOpenID(openId,GetKey(msgDTO.getTempId()));
+            System.out.println(flag);
+            if (flag != 1)
+                return Result.success();
 
             TemplateMessage templateMessage = new TemplateMessage(
                     msgDTO.getTempId(),

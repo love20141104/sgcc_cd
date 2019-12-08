@@ -55,4 +55,10 @@ public class WeChatQueryEntity {
         return wechatUserRepository.findUsersByFullNickName(fullNickName);
     }
 
+
+    public Integer findUsersByOpenID(String openId,String temp){
+        return wechatUserRepository.findUsersByOpenID(openId,temp);
+    }
+
+
 }

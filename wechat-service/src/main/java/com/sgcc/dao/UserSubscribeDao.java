@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDao implements Serializable {
+public class UserSubscribeDao implements Serializable {
 
     private static final long serialVersionUID = -3191679164828729329L;
     private String id;
@@ -18,6 +18,10 @@ public class UserDao implements Serializable {
     private Integer sex;
     private String city;
     private String headimgurl;
+    private Integer is_sub_bill;
+    private Integer is_sub_pay;
+    private Integer is_sub_notice_pay;
+    private Integer is_sub_analysis;
 
 
 

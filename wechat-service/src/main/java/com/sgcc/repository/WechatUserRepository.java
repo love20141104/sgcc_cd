@@ -3,6 +3,7 @@ package com.sgcc.repository;
 import com.example.CurrentPage;
 import com.example.PaginationHelper;
 import com.sgcc.dao.UserDao;
+import com.sgcc.dao.UserSubscribeDao;
 import com.sgcc.dto.UserInfoViewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -21,6 +22,13 @@ public class WechatUserRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+
+    public Integer findUsersByOpenID(String openId,String temp){
+        String sql = "select "+temp+" from t_wechat_users " +
+                "where user_open_id = '"+openId+"'";
+        return jdbcTemplate.queryForObject(sql,Integer.class);
+    }
 
 
     public List<UserDao> findUsers(){
@@ -64,13 +72,32 @@ public class WechatUserRepository {
         return jdbcTemplate.query(sql,new WechatUsersRowMapper());
     }
 
+    class WechatUserRowMapper implements RowMapper<UserSubscribeDao> {
+
+        @Override
+        public UserSubscribeDao mapRow(ResultSet rs, int i) throws SQLException {
+            return new UserSubscribeDao(
+                    rs.getString("id"),
+                    rs.getString("user_open_id"),
+                    rs.getString("nick_name"),
+                    rs.getInt("sex"),
+                    rs.getString("city"),
+                    rs.getString("head_img_url"),
+                    rs.getInt("is_sub_bill"),
+                    rs.getInt("is_sub_pay"),
+                    rs.getInt("is_sub_notice_pay"),
+                    rs.getInt("is_sub_analysis")
+
+            );
+        }
+    }
 
     class WechatUsersRowMapper implements RowMapper<UserDao> {
 
         @Override
         public UserDao mapRow(ResultSet rs, int i) throws SQLException {
             return new UserDao(
-                rs.getString("id"),
+                    rs.getString("id"),
                     rs.getString("user_open_id"),
                     rs.getString("nick_name"),
                     rs.getInt("sex"),
