@@ -1,10 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
-import com.sgcc.dto.HouseholdInfoPostDTO;
-import com.sgcc.dto.OrderTransDTO;
-import com.sgcc.dto.PayResultSubmitDTO;
-import com.sgcc.dto.UserSubscribeDTO;
+import com.sgcc.dto.*;
 import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
 import com.sgcc.dto.commerce.CommerceInfoCorrectSubmitDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectEditDTO;
@@ -17,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +58,8 @@ public class UserController {
     @ApiOperation(value = "订阅状态", notes = "")
     @GetMapping(value = "/Sub/{openId}")
     public Result MessageSub(@PathVariable(required = true) String openId) {
-        Map<String,String> dic = new HashMap<>();
-        return Result.success(dic);
+        List<UserSubDTO> list = new ArrayList<>();
+        return Result.success(list);
     }
 
     @ApiOperation(value = "查询缴费记录", notes = "")
