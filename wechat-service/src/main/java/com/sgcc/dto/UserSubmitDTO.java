@@ -15,7 +15,7 @@ public class UserSubmitDTO implements Serializable {
 
     private String openid;
 
-    private String lang = "zh_CN";
+    private String lang;
 
 
 

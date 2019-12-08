@@ -30,17 +30,6 @@ public class WeChatController {
 
 
     /**
-     * 获取微信公众号所有用户信息
-     * @return Result
-     */
-//    @ApiOperation(value = "getUserInfos", notes = "")
-//    @GetMapping(value = "/userInfos")
-//    public Result getUserInfos(@RequestParam String openID) {
-//        return weChatService.getUserInfos(openID);
-//    }
-
-
-    /**
      * 获取AccessToken
      *
      * @return Result
@@ -122,7 +111,7 @@ public class WeChatController {
 
 
     /**
-     * 发送消息
+     * 发送模板消息
      *
      * @return
      */
@@ -138,7 +127,7 @@ public class WeChatController {
     }
 
     /**
-     * 获取模板
+     * 获取模板列表
      *
      * @return
      */
@@ -179,19 +168,6 @@ public class WeChatController {
         }
     }
 
-    /**
-     * @return
-     */
-//    @ApiOperation(value = "GetAllUsers", notes = "")
-//    @GetMapping(value = "/AllUsers")
-//    public Result GetAllUserInfos(){
-//        try {
-//            return weChatService.GetAllUserInfos();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return Result.failure(TopErrorCode.GENERAL_ERR);
-//        }
-//    }
 
     /**
      * 获取公众号所用用户信息并存到数据库
@@ -230,7 +206,20 @@ public class WeChatController {
     }
 
     /**
-     * 分页查询
+     * 昵称精准查询
+     * @param fullNickName
+     * @return
+     */
+    @ApiOperation(value = "findUsersByFullNickName", notes = "")
+    @GetMapping(value = "/users/fullNickName")
+    public Result findUsersByNickName(@RequestParam String fullNickName) {
+        return weChatService.findUsersByFullNickName(fullNickName);
+    }
+
+
+
+    /**
+     * 分页查询所有用户信息
      * @return
      */
     @ApiOperation(value = "findPageList", notes = "")
