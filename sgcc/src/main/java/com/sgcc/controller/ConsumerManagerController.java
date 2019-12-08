@@ -29,11 +29,12 @@ public class ConsumerManagerController {
         return consumerManagerService.selectConsumerManager();
     }
 
-//    @ApiOperation(value = "查询用户对应的客户经理", notes = "")
-//    @GetMapping(value = "/ConsumerManager/openId/{openId}")
-//    public Result selectConsumerManagerByUserId(@PathVariable String openId) {
-//        return consumerManagerService.selectConsumerManagerByUserId(openId);
-//    }
+    @ApiOperation(value = "查询用户对应的客户经理", notes = "")
+    @GetMapping(value = "/ConsumerManager/openId/{openId}")
+    public Result selectConsumerManagerByUserId(@PathVariable String openId) {
+        return consumerManagerService.selectConsumerManagerById("");
+    }
+
     @ApiOperation(value = "查询客户经理", notes = "")
     @GetMapping(value = "/ConsumerManager/{Id}")
     public Result GetConsumerManagerById(@PathVariable String Id) {
