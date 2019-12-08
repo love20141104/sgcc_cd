@@ -119,7 +119,10 @@ public class WeChatController {
     @PostMapping(value = "/sendMessage/{openId}")
     public Result sendMessage(@PathVariable("openId") String openId, @RequestBody MsgDTO msgDTO) {
         try {
-            return weChatService.sendMsg(openId, msgDTO);
+            if( weChatService.isSend(openId,msgDTO.getTempId()) )
+                return weChatService.sendMsg(openId, msgDTO);
+            else
+                return Result.success();
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);

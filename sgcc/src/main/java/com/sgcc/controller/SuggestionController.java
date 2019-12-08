@@ -66,9 +66,9 @@ public class SuggestionController {
                 {
                     Map<String,String> map = new HashMap<>();
                     map.put("first","你好，你的意见建议已回复!");
-                    map.put("keyworld1","意见建议");
-                    map.put("keyworld2","国网工作人员");
-                    map.put("keyworld3",dto.getReplyContent());
+                    map.put("keyword1","意见建议");
+                    map.put("keyword2","国网工作人员");
+                    map.put("keyword3",dto.getReplyContent());
                     map.put("remark","你好，你的意见建议已回复!");
                     weChatService.sendMsg( dto.getUserId(),new MsgDTO("z7oknZqf2sG_vhdtS-NRLEwYQiNRb5UtnRgqyjK4Aao",map));
                     return Result.success(new MsgDTO("z7oknZqf2sG_vhdtS-NRLEwYQiNRb5UtnRgqyjK4Aao",map));
