@@ -48,19 +48,23 @@ public class UserController {
         return userService.queryBillInfoById(userNo, date);
     }
 
+
+
     @ApiOperation(value = "订阅与关闭", notes = "")
     @PostMapping(value = "/Sub/{openId}")
     public Result MessageSub(@PathVariable(required = true) String openId,
-                                @RequestBody(required = true) Map<String,String> keyValue) {
-        return Result.success();
+                                @RequestBody(required = true) Map<String,Integer> keyValue) {
+        return userService.updateSubscribe(openId,keyValue);
     }
 
     @ApiOperation(value = "订阅状态", notes = "")
     @GetMapping(value = "/Sub/{openId}")
     public Result MessageSub(@PathVariable(required = true) String openId) {
-        List<UserSubDTO> list = new ArrayList<>();
-        return Result.success(list);
+        return userService.findSubscribe(openId);
     }
+
+
+
 
     @ApiOperation(value = "查询缴费记录", notes = "")
     @GetMapping(value = "/record/recordInfo/{userNo}")

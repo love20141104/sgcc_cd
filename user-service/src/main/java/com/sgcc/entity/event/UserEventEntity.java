@@ -1,4 +1,4 @@
-package com.sgcc.entity.query;
+package com.sgcc.entity.event;
 
 import com.sgcc.dao.SubscribeDao;
 import com.sgcc.dto.HouseholdInfosDTO;
@@ -7,18 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserQueryEntity {
+public class UserEventEntity {
     @Autowired
     private UserRepository userRepository;
 
-    public HouseholdInfosDTO getDefaultHousehold(String openId) {
-        return userRepository.getDefaultHousehold(openId);
+    public int updateSubscribe(SubscribeDao dao) {
+        return userRepository.updateSubscribe(dao);
     }
-
-    public SubscribeDao findSubscribe(String openId) {
-        return userRepository.findSubscribe(openId);
-    }
-
 
 
 

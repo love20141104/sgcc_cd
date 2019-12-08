@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
 import com.sgcc.dao.PayResultDao;
+import com.sgcc.dao.SubscribeDao;
 import com.sgcc.des.DesUtil;
 import com.sgcc.dto.*;
 import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 @Data
 @NoArgsConstructor
@@ -56,6 +58,11 @@ public class UserModel {
     public UserModel(List<PayResultDao> payResultDaos) {
         this.payResultDaos = payResultDaos;
     }
+
+
+
+
+
 
 
 
@@ -319,6 +326,41 @@ public class UserModel {
         payResultViewsDTO.setTotal(total);
         payResultViewsDTO.setPayResultViewDTOS(this.payResultViewDTOS);
         return payResultViewsDTO;
+    }
+
+
+
+    public SubscribeDao updateSubscribeTransform(String openId, Map<String, Integer> keyValue) {
+
+        SubscribeDao subscribeDao = new SubscribeDao();
+        for (String key:keyValue.keySet()){
+            if (key.equals("is_sub_bill"))
+                subscribeDao.setIs_sub_bill(keyValue.get(key));
+            if (key.equals("is_sub_pay"))
+                subscribeDao.setIs_sub_pay(keyValue.get(key));
+            if (key.equals("is_sub_notice_pay"))
+                subscribeDao.setIs_sub_notice_pay(keyValue.get(key));
+            if (key.equals("is_sub_analysis"))
+                subscribeDao.setIs_sub_analysis(keyValue.get(key));
+        }
+        subscribeDao.setUser_open_id(openId);
+        return subscribeDao;
+    }
+
+    public List<UserSubDTO> findSubscribeTransform(SubscribeDao dao) {
+        List<UserSubDTO> list = new ArrayList<>();
+
+        UserSubDTO userSubDTO1 = new UserSubDTO("is_sub_bill","月度账单",dao.getIs_sub_bill());
+        UserSubDTO userSubDTO2 = new UserSubDTO("is_sub_pay","缴费通知",dao.getIs_sub_pay());
+        UserSubDTO userSubDTO3 = new UserSubDTO("is_sub_notice_pay","欠费提醒",dao.getIs_sub_notice_pay());
+        UserSubDTO userSubDTO4 = new UserSubDTO("is_sub_analysis","用能分析",dao.getIs_sub_analysis());
+
+        list.add(userSubDTO1);
+        list.add(userSubDTO2);
+        list.add(userSubDTO3);
+        list.add(userSubDTO4);
+        return list;
+
     }
 
 

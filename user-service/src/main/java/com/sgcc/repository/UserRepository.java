@@ -1,8 +1,10 @@
 package com.sgcc.repository;
 
 import com.example.Utils;
+import com.google.common.base.Strings;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
+import com.sgcc.dao.SubscribeDao;
 import com.sgcc.dto.HouseholdInfosDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,61 @@ public class UserRepository {
     private JdbcTemplate jdbcTemplate;
     @Value("${precompile}")
     private Boolean precompile;
+
+
+    public SubscribeDao findSubscribe(String openId){
+
+        String sql = "select id,user_open_id,nick_name,sex,city,head_img_url,is_sub_bill,is_sub_pay,is_sub_notice_pay,is_sub_analysis " +
+                "from t_wechat_users where user_open_id = '"+openId+"'";
+        return jdbcTemplate.queryForObject(sql,new SubscribeRowMapper());
+
+    }
+
+    class SubscribeRowMapper implements RowMapper<SubscribeDao>{
+
+        @Override
+        public SubscribeDao mapRow(ResultSet rs, int i) throws SQLException {
+            return new SubscribeDao(
+                   rs.getString("id"),
+                    rs.getString("user_open_id"),
+                    rs.getString("nick_name"),
+                    rs.getInt("sex"),
+                    rs.getString("city"),
+                    rs.getString("head_img_url"),
+                    rs.getInt("is_sub_bill"),
+                    rs.getInt("is_sub_pay"),
+                    rs.getInt("is_sub_notice_pay"),
+                    rs.getInt("is_sub_analysis")
+            );
+        }
+    }
+
+
+    public int updateSubscribe(SubscribeDao dao){
+
+        String sql = "update t_wechat_users set ";
+        String sqlWhere = " where user_open_id='"+dao.getUser_open_id()+"'";
+
+        StringBuffer stringBuffer = new StringBuffer();
+        if(dao.getIs_sub_bill() != null)
+            stringBuffer.append("is_sub_bill='"+dao.getIs_sub_bill()+"',");
+        if(dao.getIs_sub_pay() != null)
+            stringBuffer.append("is_sub_pay='"+dao.getIs_sub_pay()+"',");
+        if(dao.getIs_sub_notice_pay() != null)
+            stringBuffer.append("is_sub_notice_pay='"+dao.getIs_sub_notice_pay()+"',");
+        if(dao.getIs_sub_analysis() != null)
+            stringBuffer.append("is_sub_analysis='"+dao.getIs_sub_analysis()+"',");
+
+        if (!Strings.isNullOrEmpty(stringBuffer.toString())){
+            sql += stringBuffer.substring(0,stringBuffer.lastIndexOf(",")) +sqlWhere;
+        }
+
+        return jdbcTemplate.update(sql);
+
+    }
+
+
+
 
     /**
      * 查询默认户号信息
