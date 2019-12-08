@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,13 @@ public class UserController {
     public Result MessageSub(@PathVariable(required = true) String openId,
                                 @RequestBody(required = true) Map<String,String> keyValue) {
         return Result.success();
+    }
+
+    @ApiOperation(value = "订阅状态", notes = "")
+    @GetMapping(value = "/Sub/{openId}")
+    public Result MessageSub(@PathVariable(required = true) String openId) {
+        Map<String,String> dic = new HashMap<>();
+        return Result.success(dic);
     }
 
     @ApiOperation(value = "查询缴费记录", notes = "")
