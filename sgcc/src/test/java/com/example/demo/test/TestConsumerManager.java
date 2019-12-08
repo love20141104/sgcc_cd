@@ -37,7 +37,7 @@ public class TestConsumerManager {
      */
     @Test
     public void selectConsumerManagerByUserId(){
-        logger.info(JSON.toJSONString(consumerManagerService.selectConsumerManagerByUserId("operid").getData()));
+//        logger.info(JSON.toJSONString(consumerManagerService.selectConsumerManagerByUserId("operid").getData()));
     }
 
     /**
