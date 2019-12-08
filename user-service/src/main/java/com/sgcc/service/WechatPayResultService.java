@@ -126,42 +126,4 @@ public class WechatPayResultService {
     }
 
 
-
-    /**
-     * 新增缴费成功结果
-     * @param payResultSubmitDTO
-     * @return
-     */
-//    public Result insertPayResult(PayResultSubmitDTO payResultSubmitDTO){
-//        if (payResultSubmitDTO == null)
-//            return Result.failure(TopErrorCode.NULL_OBJ);
-//
-//        try {
-//
-//            UserModel userModel = new UserModel(payResultSubmitDTO);
-//            userModel.insertTransform();
-//            int count = payResultEntity.insertPayResult(userModel.getPayResultDao());
-//            if (count > 0){
-//                Result result = householdService.getSubscribeInfo(userModel.getPayResultDao().getOpenId());
-//                if(null != result.getData()){
-//                    SubscribeInfoDTO subscribeInfoDTO = (SubscribeInfoDTO)result.getData();
-//                    if(subscribeInfoDTO == null || subscribeInfoDTO.getSubPay()){
-//                        weChatService.sendRechargeSuccessTempMsg(userModel.getPayResultDao().getOpenId(),userModel.getPayResultDao().getUserNo(),userModel.getPayResultDao().getMoney());
-//                    }
-//                }
-//                return Result.success("新增支付结果成功！");
-//            }else {
-//                return Result.failure(TopErrorCode.SAVE_OBJ_ERR);
-//            }
-//
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return Result.failure(TopErrorCode.INVALID_PARAMS);
-//        }
-//
-//
-//    }
-
-
-
 }

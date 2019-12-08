@@ -179,15 +179,38 @@ public class WeChatService {
         switch ( tempID )
         {
             case "JXw2Xh4izWGxGNsLUkRexEGkxv42NdVcMLuiqLQ0EPg":     // 缴费成功通知
-                return "is_sub_notice_pay";
-            case "ALuxFbuNFnZmMkfoQ9nKmmdJUukBLIZ0LntwxmSZInY":     // 余额不足提醒
                 return "is_sub_pay";
-            case "h6L7RyWgqQJ9dkYfKJ5rV35-VkYMf7POBxQNJXIDaws":     // 用电分析  VRAOumHGKZ-StF_nNKVmL9wY25-Sm0IRktxz8LNh1Ks
+            case "h6L7RyWgqQJ9dkYfKJ5rV35-VkYMf7POBxQNJXIDaws":     // 余额不足提醒
+                return "is_sub_notice_pay";
+            case "VRAOumHGKZ-StF_nNKVmL9wY25-Sm0IRktxz8LNh1Ks":     // 用电分析  VRAOumHGKZ-StF_nNKVmL9wY25-Sm0IRktxz8LNh1Ks
                 return "is_sub_analysis";
             case "ek1UgAqBw-3KITByVmBMdPvdTyMN8OXZqBW2MOFflOM":     // 电费月度账单
                 return "is_sub_bill";
+            case "z7oknZqf2sG_vhdtS-NRLEwYQiNRb5UtnRgqyjK4Aao":     // 电费月度账单
+                return "KeepSend";
             default:
-                return "没有此模板";
+                return "default";
+        }
+    }
+    public boolean isSend( String openId,String templateId )
+    {
+        String key = GetKey( templateId );
+        if( key.equals("default") )
+        {
+            return false;
+        }
+        else if( "KeepSend".equals(key) )
+        {
+            return true;
+        }
+        else
+        {
+            Integer flag = weChatQueryEntity.findUsersByOpenID(openId,key);
+            System.out.println(flag);
+            if (flag == 1)
+                return true;
+            else
+                return false;
         }
     }
 
@@ -213,11 +236,6 @@ public class WeChatService {
                     data.put(key,new TemplateData(msgDTO.getData().get(key),"#000000"));
                 }
             }
-
-            Integer flag = weChatQueryEntity.findUsersByOpenID(openId,GetKey(msgDTO.getTempId()));
-            System.out.println(flag);
-            if (flag != 1)
-                return Result.success();
 
             TemplateMessage templateMessage = new TemplateMessage(
                     msgDTO.getTempId(),
