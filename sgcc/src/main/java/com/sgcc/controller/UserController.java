@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Api(value = "", tags = "用户相关业务接口")
@@ -48,6 +49,12 @@ public class UserController {
         return userService.queryBillInfoById(userNo, date);
     }
 
+    @ApiOperation(value = "订阅与关闭", notes = "")
+    @PostMapping(value = "/Sub/{openId}")
+    public Result MessageSub(@PathVariable(required = true) String openId,
+                                @RequestBody(required = true) Map<String,String> keyValue) {
+        return Result.success();
+    }
 
     @ApiOperation(value = "查询缴费记录", notes = "")
     @GetMapping(value = "/record/recordInfo/{userNo}")
