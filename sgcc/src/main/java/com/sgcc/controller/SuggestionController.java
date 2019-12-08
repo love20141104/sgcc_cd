@@ -71,12 +71,13 @@ public class SuggestionController {
                     map.put("keyworld3",dto.getReplyContent());
                     map.put("remark","你好，你的意见建议已回复!");
                     weChatService.sendMsg( dto.getUserId(),new MsgDTO("z7oknZqf2sG_vhdtS-NRLEwYQiNRb5UtnRgqyjK4Aao",map));
+                    return Result.success(new MsgDTO("z7oknZqf2sG_vhdtS-NRLEwYQiNRb5UtnRgqyjK4Aao",map));
                 }
             }
 
 
         }
-        return ret;
+        return Result.success();
     }
 
     @ApiOperation(value = "批量删除意见", notes = "")
