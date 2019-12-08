@@ -93,14 +93,6 @@ public class UserController {
         return wechatPayResultService.findRecentlyTransform(openId);
     }
 
-
-    @ApiOperation(value = "新增缴费结果", notes = "")
-    @PostMapping(value = "/payResult/payInfo")
-    public Result addpayResult(@RequestBody PayResultSubmitDTO payResultSubmitDTO) {
-        return wechatPayResultService.insertPayResult(payResultSubmitDTO);
-    }
-
-
     /******************************************信息修正*********************************************/
 
     @ApiOperation(value = "信息修正-居民-新增", notes = "")
