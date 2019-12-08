@@ -5,6 +5,7 @@ import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
+import com.sgcc.dao.SubscribeDao;
 import com.sgcc.des.DesUtil;
 import com.sgcc.dto.*;
 import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
@@ -13,6 +14,7 @@ import com.sgcc.dto.inhabitant.InhabitantInfoCorrectEditDTO;
 import com.sgcc.dto.inhabitant.InhabitantInfoCorrectSubmitDTO;
 import com.sgcc.entity.event.CommerceEventEntity;
 import com.sgcc.entity.event.InhabitantEventEntity;
+import com.sgcc.entity.event.UserEventEntity;
 import com.sgcc.entity.query.CommerceQueryEntity;
 import com.sgcc.entity.query.HouseholdQueryEntity;
 import com.sgcc.entity.query.InhabitantQueryEntity;
@@ -41,6 +43,52 @@ public class UserService {
 
     @Autowired
     private UserQueryEntity userQueryEntity;
+
+    @Autowired
+    private UserEventEntity userEventEntity;
+
+
+
+    public Result findSubscribe(String openId) {
+        if (Strings.isNullOrEmpty(openId))
+            return Result.failure(TopErrorCode.NO_DATAS);
+        try {
+            SubscribeDao dao = userQueryEntity.findSubscribe(openId);
+            UserModel model = new UserModel();
+            List<UserSubDTO> userSubDTOS = model.findSubscribeTransform(dao);
+
+            return Result.success(userSubDTOS);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+
+    public Result updateSubscribe(String openId,Map<String,Integer> keyValue) {
+        if (Strings.isNullOrEmpty(openId) || keyValue.size() < 1)
+            return Result.failure(TopErrorCode.NO_DATAS);
+        try {
+            UserModel model = new UserModel();
+            SubscribeDao dao = model.updateSubscribeTransform(openId,keyValue);
+            int count = userEventEntity.updateSubscribe(dao);
+            if (count > 0){
+                return Result.success();
+            }else {
+                return Result.failure("修改失败");
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+
+
 
 
 
