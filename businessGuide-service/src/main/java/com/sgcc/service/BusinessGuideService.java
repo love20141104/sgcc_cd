@@ -47,14 +47,14 @@ public class BusinessGuideService {
         businessGuideDao.setCreateDate(new Date());
         businessGuideDao.setId(UUID.randomUUID().toString());
         businessGuideRepository.insertBusinessGuide(businessGuideDao);
-        businessGuideProducer.CacheAllSuggestionsMQ();
+        initRedisBusinessGuide();
         return Result.success();
     }
 
     public Result updateBusinessGuide(BusinessGuideDto businessGuideDto){
         BusinessGuideDao businessGuideDao = BusinessModel.dtotodaoBG(businessGuideDto);
         businessGuideRepository.updateBusinessGuide(businessGuideDao);
-        businessGuideProducer.CacheAllSuggestionsMQ();
+        initRedisBusinessGuide();
         return Result.success();
     }
 
@@ -63,7 +63,7 @@ public class BusinessGuideService {
             return Result.failure(TopErrorCode.INVALID_PARAMS);
         }
         businessGuideRepository.deleteBusinessGuide(businessGuideDeleteDto.getBusinessGuideIds());
-        businessGuideProducer.CacheAllSuggestionsMQ();
+        initRedisBusinessGuide();
         return Result.success();
     }
 
@@ -72,7 +72,7 @@ public class BusinessGuideService {
         List<BusinessGuideDao> businessGuideDaos;
         if(Strings.isNullOrEmpty(cid)) {
             List<BusinessGuideRedisDao> all = (List)bgRedisRepository.findAll();
-            if(all!=null||all.size()>0) {
+            if(all!=null&&all.size()>0) {
 
                 businessGuideDtos = BusinessModel.redisdaoTodtoBG(all);
             }else {
@@ -80,17 +80,17 @@ public class BusinessGuideService {
                 List<BusinessGuideRedisDao> businessGuideDaos1 = BusinessModel.daooToredisdaoBG(businessGuideDaos);
                 businessGuideDtos = BusinessModel.redisdaoTodtoBG(businessGuideDaos1);
                 //初始化Redis
-                businessGuideProducer.CacheAllSuggestionsMQ();
+                initRedisBusinessGuide();
             }
         }else{
             List<BusinessGuideRedisDao> allByCategoryId = bgRedisRepository.findAllByCategoryId(cid);
-            if(allByCategoryId!=null||allByCategoryId.size()>0){
+            if(allByCategoryId!=null&&allByCategoryId.size()>0){
                 businessGuideDtos = BusinessModel.redisdaoTodtoBG(allByCategoryId);
             }else{
                 businessGuideDaos = businessGuideRepository.selectBusinessGuide(cid);
                 businessGuideDtos = BusinessModel.daoTodtoBG(businessGuideDaos);
                 //初始化Redis
-                businessGuideProducer.CacheAllSuggestionsMQ();
+                initRedisBusinessGuide();
             }
         }
         return Result.success(businessGuideDtos);
