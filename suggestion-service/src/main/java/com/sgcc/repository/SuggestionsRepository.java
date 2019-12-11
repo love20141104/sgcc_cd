@@ -32,7 +32,7 @@ public class SuggestionsRepository {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
                "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bs.reply_user_id,bs.reply_content,bs.reply_date" +
                 " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
-                " where bsr.reply_openid = ? and bsr.check_state is null ";
+                " where bsr.reply_openid = ? and bsr.reply_content is null and bsr.check_date is null ";
 
         return jdbcTemplate.query(sql,new Object[]{reply_openId}, new suggestionRowMapper());
     }
