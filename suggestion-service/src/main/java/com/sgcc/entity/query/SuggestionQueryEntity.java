@@ -1,9 +1,6 @@
 package com.sgcc.entity.query;
 
-import com.sgcc.dao.ReplierAndCheckerDao;
-import com.sgcc.dao.SuggestionDao;
-import com.sgcc.dao.SuggestionRedisDao;
-import com.sgcc.dao.SuggestionReplyInstDao;
+import com.sgcc.dao.*;
 import com.sgcc.repository.ReplierAndCheckerRepository;
 import com.sgcc.repository.SuggestionRedisRepository;
 import com.sgcc.repository.SuggestionReplyRepository;
@@ -28,6 +25,10 @@ public class SuggestionQueryEntity {
     {
         return suggestionReplyRepository.getInst( sgstId );
     }
+    public SuggestionReplyMappingDao GetBySuggestionID(String sgstid )
+    {
+        return suggestionReplyRepository.GetBySuggestionID(sgstid);
+    }
 
     public List<SuggestionRedisDao> GetAllsuggestions(String userId)
     {
@@ -49,10 +50,16 @@ public class SuggestionQueryEntity {
     {
         return suggestionsRepository.findBySuggestionId(suggestionId);
     }
-    public List<SuggestionDao> findAll()
+    public List<SuggestionDao> findAllByReplyOpenID( String reply_openid)
     {
-        return suggestionsRepository.findAll();
+        return suggestionsRepository.findAllByReplyOpenID(reply_openid);
     }
+
+    public List<SuggestionDao> findAllByCheckOpenID( String reply_openid)
+    {
+        return suggestionsRepository.findAllByCheckOpenID(reply_openid);
+    }
+
     public SuggestionDao findById(String id)
     {
         return suggestionsRepository.findById(id);

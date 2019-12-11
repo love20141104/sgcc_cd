@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.ReplierAndCheckerDao;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionReplyInstDao;
+import com.sgcc.dao.SuggestionReplyMappingDao;
 import com.sgcc.dto.*;
 import com.sgcc.dtomodel.wechat.template.TemplateData;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
@@ -120,8 +121,9 @@ public class SuggestionController {
         }
 
         suggestionService.ReplyCheck( dto );
+        SuggestionReplyMappingDao dao = suggestionService.GetFullReplyInfo( dto.getSuggestion_id());
         Result ret = suggestionService.reply( new SuggestionReplyDTO(dto.getSuggestion_id(),
-                dto.getReply_openid(),dto.getReply_content()) );
+                dao.getReply_openid(),dao.getReply_content()) );
         if( ret != null && ret.getResultCode() == 0  )
         {
             SuggestionDetailDTO detailDTO = (SuggestionDetailDTO)suggestionService.getSuggestion(dto.getSuggestion_id()).getData() ;
@@ -140,7 +142,7 @@ public class SuggestionController {
                 map.put("keyword1",new TemplateData(detailDTO.getSuggestionContact(),"#000000"));
                 map.put("keyword2",new TemplateData(detailDTO.getSuggestionTel(),"#000000"));
                 map.put("keyword3",new TemplateData(Utils.GetTime(detailDTO.getReplyDate()),"#000000"));
-                map.put("keyword4",new TemplateData(dto.getReply_content(),"#000000"));
+                map.put("keyword4",new TemplateData(dao.getReply_content(),"#000000"));
                 map.put("remark",new TemplateData("感谢您的意见，谢谢!","#000000"));
                 temp.setData( map );
 
@@ -235,6 +237,26 @@ public class SuggestionController {
     @PutMapping(value = "/ReplyConfig")
     public Result UpdateReplyConfig( @RequestBody ReplierAndCheckerUpdateDTO dto ) {
         return suggestionService.UpdateReplierAndChecker( dto );
+    }
+
+    /**
+     * 查询回复者所有意见建议
+     * @return
+     */
+    @ApiOperation(value = "findAllSuggestionsNotReply", notes = "")
+    @GetMapping(value = "/NotReply")
+    public Result findAllSuggestionsNotReply( @RequestParam String reply_openid ) {
+        return Result.success( suggestionService.findNotReply(reply_openid) );
+    }
+
+    /**
+     * 查询审核者所有待审核
+     * @return
+     */
+    @ApiOperation(value = "findAllSuggestionsNotCheck", notes = "")
+    @GetMapping(value = "/NotCheck")
+    public Result findAllSuggestionsNotCheck( @RequestParam String check_openid ) {
+        return Result.success( suggestionService.findNotCheck(check_openid) );
     }
 
 }

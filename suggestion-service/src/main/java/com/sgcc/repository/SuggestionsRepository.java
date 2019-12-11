@@ -27,7 +27,24 @@ public class SuggestionsRepository {
 
     private Logger logger = Logger.getLogger(SuggestionsRepository.class.toString());
 
+    public List<SuggestionDao> findAllByReplyOpenID(String reply_openId )
+    {
+        String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
+               "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bs.reply_user_id,bs.reply_content,bs.reply_date" +
+                " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
+                " where bsr.reply_openid = ? and bsr.check_state is null ";
 
+        return jdbcTemplate.query(sql,new Object[]{reply_openId}, new suggestionRowMapper());
+    }
+    public List<SuggestionDao> findAllByCheckOpenID(String check_openId )
+    {
+        String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
+                "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bsr.reply_openid as reply_user_id,bsr.reply_content,bsr.reply_date" +
+                " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
+                " where bsr.check_openid = ? and bsr.reply_content is not null and bsr.check_date is null ";
+
+        return jdbcTemplate.query(sql,new Object[]{check_openId}, new suggestionRowMapper());
+    }
     public List<SuggestionDao> findAllByUserID(String userId){
         if (precompile) {
             String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +

@@ -44,6 +44,10 @@ public class SuggestionService {
 
         return Result.success( model.RedisDAO2DetailDTO(model.Dao2RedisDao(dao)) );
     }
+    public List<SuggestionDao> findAllByReplyOpenID(String reply_openId)
+    {
+        return suggestionQueryEntity.findAllByReplyOpenID(reply_openId);
+    }
 
     public List<SuggestionViewDTO> getSuggestions( String openId ) {
         SuggestionModel model = new SuggestionModel( );
@@ -63,6 +67,21 @@ public class SuggestionService {
         return model.DAOS2DTOS(daos);
     }
 
+    public List<SuggestionMappingDTO> findNotReply( String reply_openid )
+    {
+        List<SuggestionDao> daos = suggestionQueryEntity.findAllByReplyOpenID(reply_openid);
+        SuggestionModel model = new SuggestionModel( );
+        return model.DAOs2MapDTOs(daos);
+    }
+
+    public List<SuggestionMappingDTO> findNotCheck( String check_openid )
+    {
+        List<SuggestionDao> daos = suggestionQueryEntity.findAllByCheckOpenID(check_openid);
+        SuggestionModel model = new SuggestionModel( );
+        return model.DAOs2MapDTOs(daos);
+
+    }
+
     public Result submit(SuggestionSubmitDTO submitDTO, String openId) {
         SuggestionModel model = new SuggestionModel( submitDTO );
         SuggestionDao dao = model.DTO2DAO();
@@ -80,6 +99,10 @@ public class SuggestionService {
     public SuggestionReplyInstDao GetBySuggestionID(String sugstID )
     {
         return suggestionQueryEntity.getInstReply(sugstID);
+    }
+    public SuggestionReplyMappingDao GetFullReplyInfo(String sugstID)
+    {
+        return suggestionQueryEntity.GetBySuggestionID(sugstID);
     }
 
     public Result reply(SuggestionReplyDTO updateDTO ) {
