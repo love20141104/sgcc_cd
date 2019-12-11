@@ -213,6 +213,19 @@ public class WeChatService {
                 return false;
         }
     }
+    public Result SimpleSendMsg( TemplateMessage templateMessage )
+    {
+        try {
+            weChatEntity.sendTempMsg(templateMessage);
+            return Result.success();
+        }
+        catch (Exception e )
+        {
+            System.out.println("模板消息发送失败！");
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
 
     public Result sendMsg(String openId, MsgDTO msgDTO){
         if( msgDTO == null || Strings.isNullOrEmpty(msgDTO.getTempId()) ||
@@ -305,9 +318,6 @@ public class WeChatService {
             if( ids.size()%perSize != 0 )
                 cycle ++ ;
 
-            System.out.println("cycle = " + cycle);
-            System.out.println("ids.size() = " + ids.size());
-
             for( int i = 0 ; i < cycle ; i++ )
             {
                 if( ids.size() - i*perSize < perSize )
@@ -355,7 +365,6 @@ public class WeChatService {
         }
     }
 
-
     public Result findUsersByNickName(String nickName,int pageNo,int pageSize ) {
         if ( pageNo < 1 || pageSize < 1)
             return Result.failure(TopErrorCode.PARAMETER_ERR);
@@ -379,7 +388,6 @@ public class WeChatService {
 
     }
 
-
     public Result findPageList(int pageNo,int pageSize) {
         if ( pageNo < 1 || pageSize < 1)
             return Result.failure(TopErrorCode.PARAMETER_ERR);
@@ -401,7 +409,6 @@ public class WeChatService {
 
     }
 
-
     public Result findUsersByFullNickName(String fullNickName) {
         if (Strings.isNullOrEmpty(fullNickName))
             return Result.failure(TopErrorCode.NO_DATAS);
@@ -416,9 +423,6 @@ public class WeChatService {
         }
 
     }
-
-
-
 
 
 }

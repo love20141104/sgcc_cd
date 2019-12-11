@@ -1,10 +1,18 @@
 package com.sgcc.controller;
 
+import com.example.Utils;
 import com.example.result.Result;
+import com.google.common.base.Strings;
+import com.sgcc.dao.ReplierAndCheckerDao;
+import com.sgcc.dao.SuggestionDao;
+import com.sgcc.dao.SuggestionReplyInstDao;
 import com.sgcc.dto.*;
+import com.sgcc.dtomodel.wechat.template.TemplateData;
+import com.sgcc.dtomodel.wechat.template.TemplateMessage;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.service.SuggestionService;
 import com.sgcc.service.WeChatService;
+import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,43 +50,111 @@ public class SuggestionController {
 
     @ApiOperation(value = "提交意见", notes = "")
     @PostMapping(value = "/users/{id}")
-    public Result submit(@RequestBody SuggestionSubmitDTO suggestionSubmitDTO, @PathVariable("id") String userId) {
+    public Result submit(@RequestBody SuggestionSubmitDTO suggestionSubmitDTO,
+                         @PathVariable("id") String userId) {
+        Result ret = suggestionService.submit(suggestionSubmitDTO,userId);
+        // Todo 发送消息到信息回复人员
+        SuggestionReplyInstDao dao = suggestionService.GetBySuggestionID( ret.getMsg() );
+        if( dao != null )
+        {
+            TemplateMessage temp = new TemplateMessage();
+            temp.setTemplate_id("HAv_qhY1qWVNXw20c1Fc_UBv02vtPAFSh1EiZvtp_qk");
+            temp.setTouser(dao.getReply_openid());
+            temp.setUrl("");
 
-        return suggestionService.submit(suggestionSubmitDTO,userId);
+            Map<String, TemplateData> map = new LinkedHashMap<>();
+            map.put("serviceInfo",new TemplateData("你好，有新的意见建议需要回复!","#000000"));
+            map.put("serviceType",new TemplateData("意见建议","#000000"));
+            map.put("serviceStatus",new TemplateData("刚提交","#000000"));
+            map.put("time",new TemplateData(Utils.GetCurrentTime(),"#000000"));
+            map.put("remark",new TemplateData("请尽快回复，谢谢!","#000000"));
+            temp.setData( map );
+
+            weChatService.SimpleSendMsg( temp );
+        }
+        return ret;
     }
+
+    @ApiOperation(value = "回复意见", notes = "")
+    @PostMapping(value = "/SuggestionReply/{id}")
+    public Result suggestionReply(@RequestBody  SuggestionReplyContentDTO dto,
+                         @PathVariable("id") String openID) {
+        if( dto == null )
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        suggestionService.ReplyContent( dto );
+        // Todo 发送消息到信息审核人员
+        SuggestionReplyInstDao dao = suggestionService.GetBySuggestionID( dto.getSuggestion_id() );
+        if( dao != null )
+        {
+            TemplateMessage temp = new TemplateMessage();
+            temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
+            temp.setTouser( dao.getCheck_openid() );
+            temp.setUrl("");
+
+            Map<String, TemplateData> map = new LinkedHashMap<>();
+            map.put("first",new TemplateData("你好，有新的意见建议回复需要审核!","#000000"));
+            map.put("keyword1",new TemplateData("意见建议回复人员","#000000"));
+            map.put("keyword2",new TemplateData(Utils.GetCurrentTime(),"#000000"));
+            map.put("keyword3",new TemplateData(dto.getReply_content(),"#000000"));
+            map.put("remark",new TemplateData("请尽快审核，谢谢!","#000000"));
+            temp.setData( map );
+
+            weChatService.SimpleSendMsg( temp );
+        }
+
+        return Result.success();
+    }
+
+    @ApiOperation(value = "审核意见", notes = "")
+    @PostMapping(value = "/SuggestionCheck/{id}")
+    public Result suggestionCheck(@RequestBody SuggestionReplyCheckDTO dto,
+                         @PathVariable("id") String openID)
+    {
+        if( dto == null )
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+
+        if( dto.getCheck_state() == 0 )
+        {
+            // 审核未通过
+            return Result.success();
+        }
+
+        suggestionService.ReplyCheck( dto );
+        Result ret = suggestionService.reply( new SuggestionReplyDTO(dto.getSuggestion_id(),
+                dto.getReply_openid(),dto.getReply_content()) );
+        if( ret != null && ret.getResultCode() == 0  )
+        {
+            SuggestionDetailDTO detailDTO = (SuggestionDetailDTO)suggestionService.getSuggestion(dto.getSuggestion_id()).getData() ;
+            if( detailDTO != null && !Strings.isNullOrEmpty(detailDTO.getUserId()) )
+            {
+                // Todo 发送消息到用户
+                // Yfv4siCzMo9MkeM9BEs61SlBf1KMTj2pHtMxn-OTYnc
+
+                TemplateMessage temp = new TemplateMessage();
+                temp.setTemplate_id("Yfv4siCzMo9MkeM9BEs61SlBf1KMTj2pHtMxn-OTYnc");
+                temp.setTouser( detailDTO.getUserId() );
+                temp.setUrl("");
+
+                Map<String, TemplateData> map = new LinkedHashMap<>();
+                map.put("first",new TemplateData("您好，您的意见建议已回复!","#000000"));
+                map.put("keyword1",new TemplateData(detailDTO.getSuggestionContact(),"#000000"));
+                map.put("keyword2",new TemplateData(detailDTO.getSuggestionTel(),"#000000"));
+                map.put("keyword3",new TemplateData(Utils.GetTime(detailDTO.getReplyDate()),"#000000"));
+                map.put("keyword4",new TemplateData(dto.getReply_content(),"#000000"));
+                map.put("remark",new TemplateData("感谢您的意见，谢谢!","#000000"));
+                temp.setData( map );
+
+                weChatService.SimpleSendMsg( temp );
+            }
+        }
+        return Result.success();
+    }
+
 
     @ApiOperation(value = "查看意见", notes = "")
     @GetMapping(value = "/{id}")
     public Result Suggestion(@PathVariable("id") String suggestionId) {
         return suggestionService.getSuggestion(suggestionId);
-    }
-
-    @ApiOperation(value = "回复意见", notes = "")
-    @PutMapping(value = "/{id}")
-    public Result reply(@RequestBody SuggestionReplyDTO suggestionReplyDTO, @PathVariable("id") String suggestionId) {
-        Result ret = suggestionService.reply(suggestionReplyDTO);
-        if( ret != null && ret.getResultCode() == 0  )
-        {
-            Result temp = suggestionService.getSuggestion(suggestionId);
-            if( temp != null && temp.getResultCode() == 0 )
-            {
-                SuggestionDetailDTO dto = (SuggestionDetailDTO)(temp.getData());
-                if( dto != null )
-                {
-                    Map<String,String> map = new HashMap<>();
-                    map.put("first","你好，你的意见建议已回复!");
-                    map.put("keyword1","意见建议");
-                    map.put("keyword2","国网工作人员");
-                    map.put("keyword3",dto.getReplyContent());
-                    map.put("remark","你好，你的意见建议已回复!");
-                    weChatService.sendMsg( dto.getUserId(),new MsgDTO("z7oknZqf2sG_vhdtS-NRLEwYQiNRb5UtnRgqyjK4Aao",map));
-                    return Result.success(new MsgDTO("z7oknZqf2sG_vhdtS-NRLEwYQiNRb5UtnRgqyjK4Aao",map));
-                }
-            }
-
-
-        }
-        return Result.success();
     }
 
     @ApiOperation(value = "批量删除意见", notes = "")
@@ -129,4 +206,35 @@ public class SuggestionController {
     public Result deletes(@RequestBody SuggestionDeleteDTO dto ) {
         return suggestionService.delete(dto);
     }
+
+    /**
+     * 查询回复者和审核者用户信息
+     * @return
+     */
+    @ApiOperation(value = "Get config", notes = "")
+    @GetMapping(value = "/ReplyConfig")
+    public Result findReplyConfig( @RequestParam(value = "region", required = false) String region ) {
+        return Result.success(suggestionService.GetReplierAndChecker( region));
+    }
+
+    /**
+     * 保存回复者和审核者用户信息
+     * @return
+     */
+    @ApiOperation(value = "Save config", notes = "")
+    @PostMapping(value = "/ReplyConfig")
+    public Result SaveReplyConfig( @RequestBody ReplierAndCheckerSubmitDTO dto ) {
+        return suggestionService.SaveReplierAndChecker( dto );
+    }
+
+    /**
+     * 修改回复者和审核者用户信息
+     * @return
+     */
+    @ApiOperation(value = "Update config", notes = "")
+    @PutMapping(value = "/ReplyConfig")
+    public Result UpdateReplyConfig( @RequestBody ReplierAndCheckerUpdateDTO dto ) {
+        return suggestionService.UpdateReplierAndChecker( dto );
+    }
+
 }

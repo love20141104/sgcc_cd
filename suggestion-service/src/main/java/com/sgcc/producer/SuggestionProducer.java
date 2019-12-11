@@ -4,6 +4,8 @@ import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dao.SuggestionRedisDaos;
 import com.sgcc.dto.SuggestionDeleteDTO;
+import com.sgcc.dto.SuggestionMidDTO;
+import com.sgcc.dto.SuggestionReplyInitDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.jms.core.JmsMessagingTemplate;
@@ -23,6 +25,12 @@ public class SuggestionProducer {
     private static final String Suggestion_CacheMQ = "Suggestion_mq_cache";
     private static final String Suggestion_ReloadMQ = "Suggestion_mq_r";
     private static final String Suggestion_DeleteMQ = "Suggestion_mq_d";
+    private static final String Suggestion_ReplyInit = "SuggestionReply_mq_p";
+
+    public void SaveRepySuggestionMQ( SuggestionMidDTO dto )
+    {
+        jmsMessagingTemplate.convertAndSend(Suggestion_ReplyInit,dto );
+    }
 
     public void SaveSuggestionMQ( SuggestionDao dao )
     {

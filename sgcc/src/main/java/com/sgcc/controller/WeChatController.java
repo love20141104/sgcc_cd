@@ -5,6 +5,8 @@ import com.example.constant.WechatURLConstants;
 import com.example.errorcode.WechatURLErrorcode;
 import com.example.result.Result;
 import com.sgcc.dto.MsgDTO;
+import com.sgcc.dto.ReplierAndCheckerSubmitDTO;
+import com.sgcc.dto.ReplierAndCheckerUpdateDTO;
 import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.service.WeChatService;
@@ -219,8 +221,6 @@ public class WeChatController {
         return weChatService.findUsersByFullNickName(fullNickName);
     }
 
-
-
     /**
      * 分页查询所有用户信息
      * @return
@@ -231,7 +231,15 @@ public class WeChatController {
         return weChatService.findPageList(pageNo,pageSize);
     }
 
-
+    /**
+     * 同步所有用户信息
+     * @return
+     */
+    @ApiOperation(value = "Sync", notes = "")
+    @GetMapping(value = "/users/Sync")
+    public Result SyncUsers() {
+        return weChatService.SyncUserInfos();
+    }
 }
 
 

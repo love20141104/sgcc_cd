@@ -2,6 +2,7 @@ package com.sgcc.dtomodel.wechat.template;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
  * 模板消息基类
  */
 @Data
+@NoArgsConstructor
 public class TemplateMessage implements Serializable {
 
     private static final long serialVersionUID = -243068796402898935L;

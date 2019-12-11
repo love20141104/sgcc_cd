@@ -1,8 +1,9 @@
 package com.sgcc.entity.event;
 
-import com.sgcc.dao.SuggestionDao;
-import com.sgcc.dao.SuggestionRedisDao;
+import com.sgcc.dao.*;
+import com.sgcc.repository.ReplierAndCheckerRepository;
 import com.sgcc.repository.SuggestionRedisRepository;
+import com.sgcc.repository.SuggestionReplyRepository;
 import com.sgcc.repository.SuggestionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,10 @@ public class SuggestionEventEntity {
     private SuggestionsRepository suggestionsRepository;
     @Autowired
     private SuggestionRedisRepository suggestionRedisRepository;
+    @Autowired
+    private ReplierAndCheckerRepository replierAndCheckerRepository;
+    @Autowired
+    private SuggestionReplyRepository suggestionReplyRepository;
 
     public void Save( SuggestionDao dao ){
         List<SuggestionDao> daos = new ArrayList<>();
@@ -55,4 +60,25 @@ public class SuggestionEventEntity {
         suggestionRedisRepository.deleteAll(daos);
     }
 
+    public void save( ReplierAndCheckerDao dao )
+    {
+        replierAndCheckerRepository.save(dao);
+    }
+    public void update( ReplierAndCheckerDao dao )
+    {
+        replierAndCheckerRepository.update(dao);
+    }
+
+    public void InitReplyID(SuggestionReplyInitDao dao )
+    {
+        suggestionReplyRepository.save(dao);
+    }
+    public void ContentReply (SuggestionReplyDao dao )
+    {
+        suggestionReplyRepository.update(dao);
+    }
+    public void CheckReply (SuggestionCheckDao dao )
+    {
+        suggestionReplyRepository.update(dao);
+    }
 }

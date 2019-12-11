@@ -13,6 +13,7 @@ import java.util.Date;
 public class SuggestionSubmitDTO implements Serializable {
     private static final long serialVersionUID = -2451743385362120087L;
     private String userId;
+    private String userLocation;
     private String suggestionContent;
     private String suggestionContact;
     private String suggestionTel;

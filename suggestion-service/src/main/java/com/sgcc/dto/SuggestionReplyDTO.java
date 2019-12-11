@@ -14,5 +14,4 @@ public class SuggestionReplyDTO implements Serializable{
     private String suggestionId;
     private String replyUserId;
     private String replyContent;
-    private Date replyDate;
 }

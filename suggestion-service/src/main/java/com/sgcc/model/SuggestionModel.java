@@ -2,14 +2,13 @@ package com.sgcc.model;
 
 import com.example.Utils;
 import com.google.common.base.Strings;
-import com.sgcc.dao.SuggestionDao;
-import com.sgcc.dao.SuggestionRedisDao;
-import com.sgcc.dao.SuggestionRedisDaos;
+import com.sgcc.dao.*;
 import com.sgcc.dto.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -47,6 +46,40 @@ public class SuggestionModel {
     public SuggestionModel( String userId ){
         m_userId = userId;
     }
+
+    public ReplierAndCheckerDao GetFirstMatch(List<ReplierAndCheckerDao> daos , String location )
+    {
+        if( daos == null || daos.size() < 1 || Strings.isNullOrEmpty(location) )
+            return null;
+        for( ReplierAndCheckerDao dao : daos )
+        {
+            if( location.contains( dao.getMajor_region() ) )
+            {
+                return dao;
+            }
+        }
+        return null;
+    }
+    public SuggestionReplyDao GetSuggestionReplyDao( SuggestionReplyContentDTO dto )
+    {
+        SuggestionReplyDao dao = new SuggestionReplyDao();
+        dao.setId( UUID.randomUUID().toString() );
+        dao.setSuggestion_id( dto.getSuggestion_id() );
+        dao.setReply_content( dto.getReply_content() );
+        dao.setReply_date( Utils.GetCurrentTime() );
+        return dao;
+    }
+
+    public SuggestionCheckDao GetSuggestionCheckDao( SuggestionReplyCheckDTO dto )
+    {
+        SuggestionCheckDao dao = new SuggestionCheckDao();
+        dao.setId( UUID.randomUUID().toString() );
+        dao.setSuggestion_id( dto.getSuggestion_id() );
+        dao.setCheck_date( Utils.GetCurrentTime() );
+        dao.setCheck_state( dto.getCheck_state() );
+        return dao;
+    }
+
 
     public List<SuggestionViewDTO> DAOS2DTOS( List<SuggestionDao> daos )
     {

@@ -1,20 +1,21 @@
 package com.sgcc.service;
 
 import com.example.result.Result;
-import com.sgcc.dao.SuggestionDao;
-import com.sgcc.dao.SuggestionRedisDao;
-import com.sgcc.dao.SuggestionRedisDaos;
+import com.google.common.base.Strings;
+import com.sgcc.dao.*;
 import com.sgcc.dto.*;
 import com.sgcc.entity.query.SuggestionQueryEntity;
 import com.sgcc.entity.event.SuggestionEventEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.SuggestionModel;
 import com.sgcc.producer.SuggestionProducer;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SuggestionService {
@@ -69,8 +70,16 @@ public class SuggestionService {
         suggestionEventEntity.Cache( model.Dao2RedisDao(dao) );
         // 异步消息写MySQL，然后刷新 Redis 缓存
         suggestionProducer.SaveSuggestionMQ( dao );
+        // 创建回复单据
+        CreateSuggestionReply( new SuggestionMidDTO(dao.getSuggestionId() , submitDTO.getUserLocation()) );
+        Result ret = Result.success( getSuggestions(openId) );
+        ret.setMsg( dao.getSuggestionId() );
+        return ret;
+    }
 
-        return Result.success( getSuggestions(openId) );
+    public SuggestionReplyInstDao GetBySuggestionID(String sugstID )
+    {
+        return suggestionQueryEntity.getInstReply(sugstID);
     }
 
     public Result reply(SuggestionReplyDTO updateDTO ) {
@@ -113,27 +122,22 @@ public class SuggestionService {
         List<SuggestionRedisDao> redisdaos = model.ListDao2ListRedisDao(daos);
         suggestionEventEntity.CacheAll( redisdaos );
     }
-
     public void CacheSuggestions( SuggestionRedisDaos daos )
     {
         suggestionEventEntity.CacheAll( daos.getSuggestionRedisDaoList() );
     }
-
     public void CacheSuggestion( SuggestionRedisDao dao )
     {
         suggestionEventEntity.Cache( dao );
     }
-
     public void SaveSuggestion( SuggestionDao dao)
     {
         suggestionEventEntity.Save( dao );
     }
-
     public void DeleteSuggestions(List<String> suggestionIds )
     {
         suggestionEventEntity.DeleteSuggestions(suggestionIds);
     }
-
     public Result AddSuggestion(SuggestionMappingDTO dto )
     {
         SuggestionModel model = new SuggestionModel();
@@ -153,6 +157,61 @@ public class SuggestionService {
             e.printStackTrace();
             return Result.failure(TopErrorCode.PARAMETER_ERR);
         }
+    }
+    public void CreateSuggestionReply( SuggestionMidDTO dto )
+    {
+        try {
+            String location = dto.getUser_location();
+            List<ReplierAndCheckerDao> daos = suggestionQueryEntity.GetAll();
+            SuggestionModel model = new SuggestionModel();
+            ReplierAndCheckerDao dao = model.GetFirstMatch(daos,location);
+            if( dao == null )
+                return;
+            suggestionEventEntity.InitReplyID( new SuggestionReplyInitDao(
+                    UUID.randomUUID().toString(),
+                    dto.getSuggestion_id(),
+                    dao.getReplier_openid(),
+                    dao.getChecker_openid()
+            ) );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void ReplyContent( SuggestionReplyContentDTO dto )
+    {
+        SuggestionModel model = new SuggestionModel();
+        suggestionEventEntity.ContentReply( model.GetSuggestionReplyDao(dto));
+    }
+    public void ReplyCheck( SuggestionReplyCheckDTO dto )
+    {
+        SuggestionModel model = new SuggestionModel();
+        suggestionEventEntity.CheckReply( model.GetSuggestionCheckDao(dto));
+    }
+    public List<ReplierAndCheckerDao> GetReplierAndChecker( String region )
+    {
+        if( !Strings.isNullOrEmpty( region) )
+        {
+            return suggestionQueryEntity.findAllByRegion(region) ;
+        }
+        else
+        {
+            return suggestionQueryEntity.GetAll() ;
+        }
+    }
+    public Result SaveReplierAndChecker( ReplierAndCheckerSubmitDTO dto )
+    {
+        ReplierAndCheckerDao dao = new ReplierAndCheckerDao();
+        dao.setId(UUID.randomUUID().toString());
+        BeanUtils.copyProperties(dto,dao);
+        suggestionEventEntity.save(dao);
+        return Result.success();
+    }
+    public Result UpdateReplierAndChecker( ReplierAndCheckerUpdateDTO dto )
+    {
+        ReplierAndCheckerDao dao = new ReplierAndCheckerDao();
+        BeanUtils.copyProperties(dto,dao);
+        suggestionEventEntity.update(dao);
+        return Result.success();
     }
 }
 
