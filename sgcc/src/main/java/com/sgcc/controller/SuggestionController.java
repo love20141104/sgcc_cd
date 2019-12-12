@@ -133,6 +133,7 @@ public class SuggestionController {
             map.put("remark",new TemplateData("请尽快修改，谢谢!","#000000"));
             temp.setData( map );
 
+            weChatService.SimpleSendMsg( temp );
             return Result.success();
         }
 
