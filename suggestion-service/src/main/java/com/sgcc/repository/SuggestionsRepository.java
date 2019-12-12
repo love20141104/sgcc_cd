@@ -28,6 +28,7 @@ public class SuggestionsRepository {
 
     private Logger logger = Logger.getLogger(SuggestionsRepository.class.toString());
 
+    // 回复人员未回复
     public List<SuggestionDao> findAllByReplyOpenID(String reply_openId )
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
@@ -38,7 +39,7 @@ public class SuggestionsRepository {
         return jdbcTemplate.query(sql,new Object[]{reply_openId}, new suggestionRowMapper());
     }
 
-    // 回复人员被驳回
+    // 回复人员回复被驳回
     public List<SuggestionRejectDao> findCheckNotPassedByReplyOpenID(String reply_openId )
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
@@ -60,12 +61,13 @@ public class SuggestionsRepository {
         return jdbcTemplate.query(sql,new Object[]{check_openid}, new SuggestionRejectDaoRowMapper());
     }
 
+    // 审核人员待审核
     public List<SuggestionDao> findAllByCheckOpenID(String check_openId )
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
                 "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bsr.reply_openid as reply_user_id,bsr.reply_content,bsr.reply_date" +
                 " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
-                " where bsr.check_openid = ? and bsr.reply_content is not null and bsr.check_date is null ";
+                " where bsr.check_openid = ? and bsr.reply_content is not null and bsr.check_date is null and bsr.check_reject is null";
 
         return jdbcTemplate.query(sql,new Object[]{check_openId}, new suggestionRowMapper());
     }
