@@ -277,13 +277,23 @@ public class SuggestionController {
     }
 
     /**
-     * 查询审核者所有驳回
+     * 回复人员查询所有驳回
      * @return
      */
     @ApiOperation(value = "findAllSuggestionsReject", notes = "")
     @GetMapping(value = "/Reject")
-    public Result findAllSuggestionsReject( @RequestParam String check_openid ) {
-        return Result.success( suggestionService.findCheckNotPassedByReplyOpenID(check_openid) );
+    public Result findAllSuggestionsReject( @RequestParam String reply_openid ) {
+        return Result.success( suggestionService.findCheckNotPassedByReplyOpenID(reply_openid) );
+    }
+
+    /**
+     * 审核人员查询所有驳回
+     * @return
+     */
+    @ApiOperation(value = "findRejected", notes = "")
+    @GetMapping(value = "/Rejected")
+    public Result findAllSuggestionsRejected( @RequestParam String check_openid ) {
+        return Result.success( suggestionService.findRejected(check_openid) );
     }
 
 
