@@ -33,7 +33,7 @@ public class NoticeController {
 
     /******************************************工单**********************************************/
 
-    @ApiOperation(value = "工单-新增", notes = "")
+    @ApiOperation(value = "工单-新增",            notes = "")
     @PostMapping(value = "/open-id/{openId}/job")
     public Result saveJob(@PathVariable String openId, @RequestBody NewJobSubmitDTO newJobSubmitDTO) {
         return jobService.saveJob(openId,newJobSubmitDTO);
@@ -60,7 +60,7 @@ public class NoticeController {
     }
 
     @ApiOperation(value = "抢修进度-新增", notes = "")
-    @PostMapping(value = "/open-id/{openId}/job-no/progress")
+    @PostMapping(value = "/open-id/{openId}/progress")
     public Result addProgress(@PathVariable String openId,@RequestBody RepairProgressSubmitDTO repairProgressSubmitDTO) {
         return jobService.addProgress(openId,repairProgressSubmitDTO);
     }

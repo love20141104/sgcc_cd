@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,8 +47,10 @@ public class NoticeDomainModel {
      */
     public void selectByDistrictTransform(){
         this.noticeDaos.forEach(noticeDao -> {
-            System.out.println("DATE："+Utils.GetDate(noticeDao.getNoticeDate().substring(11,21)+" 23:59:59"));
-            if(Utils.GetCurTime().getTime() < Utils.GetDate(noticeDao.getNoticeDate().substring(11,21)+" 23:59:59").getTime()) {
+            String dateUtil = noticeDao.getNoticeDate();
+            Date date = Utils.GetDate(dateUtil.substring(dateUtil.indexOf("至")+1,dateUtil.length())+":59");
+            System.out.println("DATE："+date);
+            if(Utils.GetCurTime().getTime() < date.getTime()) {
                 this.noticeFormDTOS.add(new NoticeFormDTO(
                         noticeDao.getTypeName(),
                         noticeDao.getNoticeDate(),
