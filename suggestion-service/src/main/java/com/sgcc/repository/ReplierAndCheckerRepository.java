@@ -17,9 +17,9 @@ public class ReplierAndCheckerRepository {
     private JdbcTemplate jdbcTemplate;
 
     public List<ReplierAndCheckerDao> findAllByRegion(String region ){
-        String sql = "select id,major_region,replier_openid,replier_name,checker_openid,checker_name from d_customer_service_staff" +
-                "where major_region like '%?%'";
-        return jdbcTemplate.query(sql,new Object[]{region},new ReplierAndCheckerRowMapper());
+        String sql = "select id,major_region,replier_openid,replier_name,checker_openid,checker_name from d_customer_service_staff " +
+                " where major_region like ? ";
+        return jdbcTemplate.query(sql,new Object[]{"%"+region+"%"},new ReplierAndCheckerRowMapper());
     }
 
     public List<ReplierAndCheckerDao> findAll(   ){
