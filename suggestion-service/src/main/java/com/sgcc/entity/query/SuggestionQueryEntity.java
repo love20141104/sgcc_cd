@@ -60,6 +60,11 @@ public class SuggestionQueryEntity {
         return suggestionsRepository.findAllByCheckOpenID(reply_openid);
     }
 
+    public List<SuggestionRejectDao> findCheckNotPassedByReplyOpenID( String reply_openid)
+    {
+        return suggestionsRepository.findCheckNotPassedByReplyOpenID(reply_openid);
+    }
+
     public SuggestionDao findById(String id)
     {
         return suggestionsRepository.findById(id);

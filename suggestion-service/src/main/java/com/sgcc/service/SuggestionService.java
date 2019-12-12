@@ -82,6 +82,15 @@ public class SuggestionService {
 
     }
 
+    public List<SuggestionRejectDTO> findCheckNotPassedByReplyOpenID( String check_openid )
+    {
+        List<SuggestionRejectDao> daos = suggestionQueryEntity.findCheckNotPassedByReplyOpenID(check_openid);
+        SuggestionModel model = new SuggestionModel( );
+        return model.DAOs2RejectDTOs(daos);
+
+    }
+
+
     public Result submit(SuggestionSubmitDTO submitDTO, String openId) {
         SuggestionModel model = new SuggestionModel( submitDTO );
         SuggestionDao dao = model.DTO2DAO();
@@ -209,6 +218,11 @@ public class SuggestionService {
     {
         SuggestionModel model = new SuggestionModel();
         suggestionEventEntity.CheckReply( model.GetSuggestionCheckDao(dto));
+    }
+    public void ReplyReject( String suggestionId,String check_reject )
+    {
+        SuggestionModel model = new SuggestionModel();
+        suggestionEventEntity.CheckReject( suggestionId , check_reject);
     }
     public List<ReplierAndCheckerDao> GetReplierAndChecker( String region )
     {

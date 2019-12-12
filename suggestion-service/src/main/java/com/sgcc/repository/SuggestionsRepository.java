@@ -4,6 +4,7 @@ import com.example.CurrentPage;
 import com.example.PaginationHelper;
 import com.example.Utils;
 import com.sgcc.dao.SuggestionDao;
+import com.sgcc.dao.SuggestionRejectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -36,6 +37,17 @@ public class SuggestionsRepository {
 
         return jdbcTemplate.query(sql,new Object[]{reply_openId}, new suggestionRowMapper());
     }
+
+    public List<SuggestionRejectDao> findCheckNotPassedByReplyOpenID(String reply_openId )
+    {
+        String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
+                "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bsr.reply_openid as reply_user_id,bsr.reply_content,bsr.reply_date" +
+                " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
+                " where bsr.reply_openid = ? and bsr.check_reject is not null ";
+
+        return jdbcTemplate.query(sql,new Object[]{reply_openId}, new SuggestionRejectDaoRowMapper());
+    }
+
     public List<SuggestionDao> findAllByCheckOpenID(String check_openId )
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
@@ -293,4 +305,36 @@ public class SuggestionsRepository {
             return dao;
         }
     }
+
+    class SuggestionRejectDaoRowMapper implements RowMapper<SuggestionRejectDao>{
+        @Override
+        public SuggestionRejectDao mapRow(ResultSet rs, int i) throws SQLException {
+            SuggestionRejectDao dao = new SuggestionRejectDao(
+                    rs.getString("id"),
+                    rs.getString("suggestion_id"),
+                    rs.getString("user_id"),
+                    rs.getString("suggestion_content"),
+                    rs.getString("suggestion_contact"),
+                    rs.getString("suggestion_tel"),
+                    null,
+                    rs.getString("img_1"),
+                    rs.getString("img_2"),
+                    rs.getString("img_3"),
+                    rs.getString("reply_user_id"),
+                    rs.getString("reply_content"),
+                    null,
+                    rs.getString("check_reject")
+            );
+            if( rs.getDate("submit_date") != null )
+            {
+                dao.setSubmitDate( Utils.GetDate( rs.getString("submit_date")) );
+            }
+
+            if( rs.getDate("reply_date") != null ){
+                dao.setReplyDate( Utils.GetDate( rs.getString("reply_date") ));
+            }
+            return dao;
+        }
+    }
+
 }

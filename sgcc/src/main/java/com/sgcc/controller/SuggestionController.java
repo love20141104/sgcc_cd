@@ -114,9 +114,25 @@ public class SuggestionController {
         if( dto == null )
             return Result.failure(TopErrorCode.PARAMETER_ERR);
 
-        if( dto.getCheck_state() == 0 )
+        if( dto.getCheck_state() == 0 && !Strings.isNullOrEmpty(dto.getCheck_reject()) )
         {
-            // 审核未通过
+            // 审核未通过 todo
+            // AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE
+            suggestionService.ReplyReject( dto.getSuggestion_id(),dto.getCheck_reject() );
+
+            TemplateMessage temp = new TemplateMessage();
+            temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
+            temp.setTouser( dto.getCheck_openid() );
+            temp.setUrl("");
+
+            Map<String, TemplateData> map = new LinkedHashMap<>();
+            map.put("first",new TemplateData("你好，你的回复未通过审核!","#000000"));
+            map.put("keyword1",new TemplateData("意见建议回复审核人员","#000000"));
+            map.put("keyword2",new TemplateData(Utils.GetCurrentTime(),"#000000"));
+            map.put("keyword3",new TemplateData(dto.getCheck_reject(),"#000000"));
+            map.put("remark",new TemplateData("请尽快修改，谢谢!","#000000"));
+            temp.setData( map );
+
             return Result.success();
         }
 
@@ -258,5 +274,16 @@ public class SuggestionController {
     public Result findAllSuggestionsNotCheck( @RequestParam String check_openid ) {
         return Result.success( suggestionService.findNotCheck(check_openid) );
     }
+
+    /**
+     * 查询审核者所有驳回
+     * @return
+     */
+    @ApiOperation(value = "findAllSuggestionsReject", notes = "")
+    @GetMapping(value = "/Reject")
+    public Result findAllSuggestionsReject( @RequestParam String check_openid ) {
+        return Result.success( suggestionService.findCheckNotPassedByReplyOpenID(check_openid) );
+    }
+
 
 }

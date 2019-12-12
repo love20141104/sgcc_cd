@@ -44,6 +44,13 @@ public class SuggestionReplyRepository {
         String sql = "UPDATE b_suggestion_reply SET check_state = ?,check_date = ? where suggestion_id = ?";
         jdbcTemplate.update(sql,new Object[]{dao.getCheck_state(),dao.getCheck_date(),dao.getSuggestion_id() });
     }
+
+    @Transactional
+    public void update( String sid,String reject ){
+        String sql = "UPDATE b_suggestion_reply SET check_reject = ? where suggestion_id = ?";
+        jdbcTemplate.update(sql,new Object[]{reject,sid});
+    }
+
     public SuggestionReplyMappingDao GetBySuggestionID(String suggestionId )
     {
         String sql = "select id,suggestion_id,reply_content,reply_openid,reply_date,check_openid,check_state,check_date" +
