@@ -33,19 +33,31 @@ public class SuggestionsRepository {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
                "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bs.reply_user_id,bs.reply_content,bs.reply_date" +
                 " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
-                " where bsr.reply_openid = ? and bsr.reply_content is null and bsr.check_date is null ";
+                " where bsr.reply_openid = ? and bsr.reply_content is null and bsr.check_date is null and bsr.check_reject is null";
 
         return jdbcTemplate.query(sql,new Object[]{reply_openId}, new suggestionRowMapper());
     }
 
+    // 回复人员被驳回
     public List<SuggestionRejectDao> findCheckNotPassedByReplyOpenID(String reply_openId )
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
                 "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bsr.reply_openid as reply_user_id,bsr.reply_content,bsr.reply_date" +
-                " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
+                ",bsr.check_reject from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
                 " where bsr.reply_openid = ? and bsr.check_reject is not null ";
 
         return jdbcTemplate.query(sql,new Object[]{reply_openId}, new SuggestionRejectDaoRowMapper());
+    }
+
+    // 审核人员已驳回
+    public List<SuggestionRejectDao> findRejected(String check_openid )
+    {
+        String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
+                "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bsr.reply_openid as reply_user_id,bsr.reply_content,bsr.reply_date" +
+                ",bsr.check_reject from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
+                " where bsr.check_openid = ? and bsr.check_reject is not null ";
+
+        return jdbcTemplate.query(sql,new Object[]{check_openid}, new SuggestionRejectDaoRowMapper());
     }
 
     public List<SuggestionDao> findAllByCheckOpenID(String check_openId )

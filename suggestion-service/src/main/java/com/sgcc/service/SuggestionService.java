@@ -87,9 +87,15 @@ public class SuggestionService {
         List<SuggestionRejectDao> daos = suggestionQueryEntity.findCheckNotPassedByReplyOpenID(check_openid);
         SuggestionModel model = new SuggestionModel( );
         return model.DAOs2RejectDTOs(daos);
-
     }
 
+    public List<SuggestionRejectDTO> findRejected( String check_openid )
+    {
+        List<SuggestionRejectDao> daos = suggestionQueryEntity.findCheckNotPassedByReplyOpenID(check_openid);
+        SuggestionModel model = new SuggestionModel( );
+        return model.DAOs2RejectDTOs(daos);
+
+    }
 
     public Result submit(SuggestionSubmitDTO submitDTO, String openId) {
         SuggestionModel model = new SuggestionModel( submitDTO );
