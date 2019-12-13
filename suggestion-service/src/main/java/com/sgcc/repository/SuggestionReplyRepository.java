@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 
 @Repository
 public class SuggestionReplyRepository {
@@ -63,9 +65,46 @@ public class SuggestionReplyRepository {
 
     // 消息审核者根据自己openID查看所有需要审核的消息
     // 直接连表查询出数据
+    public List<SuggestionReplyCheckInfoDao> suggestionReplyCheckInfoDaoList(String checkerOpenid ,Boolean checkState){
+        String sql = "select s.id id,s.suggestion_id,user_id,suggestion_content,suggestion_contact," +
+                " suggestion_tel,submit_date,img_1,img_2,img_3," +
+                " sr.id reply_id,sr.reply_content reply_content,sr.reply_date reply_date,sr.check_reject check_reject,sr.check_state check_state,sr.check_date check_date" +
+                " from b_suggestion_reply sr left join b_suggestion s on sr.suggestion_id=s.suggestion_id " +
+                "  where check_state = ? and  sr.reply_openid in( " +
+                " select distinct(replier_openid) from d_customer_service_staff where checker_openid =? ) order by submit_date desc ";
+        return jdbcTemplate.query(sql,new Object[]{checkState,checkerOpenid}, new SuggestionReplyCheckInfoDaoRowMapper());
+
+    }
+
 
     //SuggestionReplyInstDao
 
+    class SuggestionReplyCheckInfoDaoRowMapper implements RowMapper<SuggestionReplyCheckInfoDao>{
+        @Override
+        public SuggestionReplyCheckInfoDao mapRow(ResultSet rs, int i) throws SQLException {
+            SuggestionReplyCheckInfoDao dao = new SuggestionReplyCheckInfoDao(
+                    rs.getString("id"),
+                    rs.getString("suggestion_id"),
+                    rs.getString("user_id"),
+                    rs.getString("suggestion_content"),
+                    rs.getString("suggestion_contact"),
+
+                    rs.getString("suggestion_tel"),
+                    Utils.GetDate(rs.getString("submit_date")),
+                    rs.getString("img_1"),
+                    rs.getString("img_2"),
+                    rs.getString("img_3"),
+
+                    rs.getString("reply_id"),
+                    rs.getString("reply_content"),
+                    Utils.GetDate(rs.getString("reply_date")),
+                    rs.getString("check_reject"),
+                    rs.getBoolean("check_state"),
+                    Utils.GetDate(rs.getString("check_date"))
+                    );
+            return dao;
+        }
+    }
     class SSuggestionReplyMappingDaoRowMapper implements RowMapper<SuggestionReplyMappingDao>{
         @Override
         public SuggestionReplyMappingDao mapRow(ResultSet rs, int i) throws SQLException {

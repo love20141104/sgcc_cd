@@ -75,7 +75,7 @@ public class SuggestionsRepository {
         if (precompile) {
             String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
                     "suggestion_tel," + Utils.GetSQLDateStr("submit_date") + ",img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion" +
-                    " where user_id = ? ";
+                    " where  user_id = ? ";
             logger.info("查询所有意见信息:" + sql);
             return jdbcTemplate.query(sql,new Object[]{userId}, new suggestionRowMapper());
 //        DATE_FORMAT(你的日期字段 ,"%Y-%m-%d") AS date

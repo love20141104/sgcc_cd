@@ -256,5 +256,11 @@ public class SuggestionService {
         suggestionEventEntity.update(dao);
         return Result.success();
     }
+    public Result getRoleByOpenId(String openId){
+        return Result.success(suggestionQueryEntity.getRoleByOpenId(openId));
+    }
+    public Result suggestionReplyCheckInfoList(String checkerOpenid ,Boolean checkState){
+        return Result.success(suggestionQueryEntity.suggestionReplyCheckInfoList(checkerOpenid,checkState));
+    }
 }
 
