@@ -249,6 +249,15 @@ public class SuggestionController {
         return Result.success( suggestionService.findNotReply(reply_openid) );
     }
 
+
+    @ApiOperation(value = "getSuggestionReplyByOpenId", notes = "")
+    @GetMapping(value = "/Reply/{openId}")
+    public Result getSuggestionReplyByOpenId(@PathVariable String openId,@RequestParam boolean status) {
+        return suggestionService.getSuggestionReplyByOpenId(openId,status);
+    }
+
+
+
     /**
      * 查询审核者所有待审核
      * @return

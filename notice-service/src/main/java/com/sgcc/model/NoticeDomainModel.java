@@ -107,4 +107,12 @@ public class NoticeDomainModel {
             );
         });
     }
+
+
+    public static void main(String[] args) {
+        String str = "2019-12-12 05:00至2019-12-12 07:30";
+        System.out.println(""+str.substring(str.indexOf("至")+1,str.length())+":59");
+    }
+
+
 }

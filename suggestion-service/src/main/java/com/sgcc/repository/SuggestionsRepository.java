@@ -36,6 +36,7 @@ public class SuggestionsRepository {
 
         return jdbcTemplate.query(sql,new Object[]{reply_openId}, new suggestionRowMapper());
     }
+
     public List<SuggestionDao> findAllByCheckOpenID(String check_openId )
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
@@ -45,6 +46,7 @@ public class SuggestionsRepository {
 
         return jdbcTemplate.query(sql,new Object[]{check_openId}, new suggestionRowMapper());
     }
+
     public List<SuggestionDao> findAllByUserID(String userId){
         if (precompile) {
             String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
@@ -64,6 +66,7 @@ public class SuggestionsRepository {
 //        DATE_FORMAT(你的日期字段 ,"%Y-%m-%d") AS date
         }
     }
+
 
     public SuggestionDao findBySuggestionId(String suggestion_id){
         if (precompile) {
@@ -88,6 +91,8 @@ public class SuggestionsRepository {
             }
         }
     }
+
+
     public SuggestionDao findById(String id){
         if (precompile) {
             try {
@@ -109,6 +114,7 @@ public class SuggestionsRepository {
             }
         }
     }
+
     public SuggestionDao findByReplyUserId(String reply_user_id){
         try{
             String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class SuggestionReplyRepository {
@@ -53,6 +54,31 @@ public class SuggestionReplyRepository {
 
     // 消息回复者根据自己openID查看所有需要回复的消息
     // 直接连表查询出数据
+    public List<SuggestionReplyInfoDao> getSuggestionReplyByOpenId(String openId,boolean status){
+
+        if (status){
+            String sql = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel," +
+                    "s.submit_date,s.img_1,s.img_2,s.img_3,r.id,r.suggestion_id,r.reply_content," +
+                    "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
+                    " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
+                    " and r.reply_openid = ? and r.reply_content is not null and r.reply_openid is not null " +
+                    " and r.reply_date is not null ";
+            return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
+        }else {
+            String sql = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel," +
+                    "s.submit_date,s.img_1,s.img_2,s.img_3,r.id,r.suggestion_id,r.reply_content," +
+                    "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
+                    " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
+                    " and r.reply_openid = ? and r.reply_content is null and r.reply_openid is null " +
+                    " and r.reply_date is null ";
+            return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
+        }
+
+
+    }
+
+
+
 
     // 消息审核者根据自己openID查看所有需要审核的消息
     // 直接连表查询出数据
@@ -87,4 +113,32 @@ public class SuggestionReplyRepository {
             return dao;
         }
     }
+
+
+    class SuggestionReplyInfoRowMapper implements RowMapper<SuggestionReplyInfoDao>{
+        @Override
+        public SuggestionReplyInfoDao mapRow(ResultSet rs, int i) throws SQLException {
+            SuggestionReplyInfoDao dao = new SuggestionReplyInfoDao(
+                    rs.getString("user_id"),
+                    rs.getString("suggestion_content"),
+                    rs.getString("suggestion_contact"),
+                    rs.getString("suggestion_tel"),
+                    Utils.GetDate(rs.getString("submit_date")),
+                    rs.getString("img_1"),
+                    rs.getString("img_2"),
+                    rs.getString("img_3"),
+                    rs.getString("id"),
+                    rs.getString("suggestion_id"),
+                    rs.getString("reply_content"),
+                    rs.getString("reply_openid"),
+                    rs.getString("reply_date"),
+                    rs.getString("check_openid"),
+                    rs.getInt("check_state"),
+                    rs.getString("check_date"));
+            return dao;
+        }
+    }
+
+
+
 }

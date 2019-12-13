@@ -26,6 +26,33 @@ public class SuggestionService {
     @Autowired
     private SuggestionProducer suggestionProducer;
 
+    /**
+     * 消息回复者根据自己openID查看所有需要回复的消息
+     * @param openId
+     * @return
+     */
+    public Result getSuggestionReplyByOpenId(String openId,boolean status) {
+        try {
+            List<SuggestionReplyInfoDao> suggestionReplyInfoDaos =
+                    suggestionQueryEntity.getSuggestionReplyByOpenId(openId,status);
+
+            SuggestionModel model = new SuggestionModel();
+            List<SuggestionReplyInfoDTO> suggestionReplyInfoDTOS =
+                    model.getSuggestionReplyByOpenIdTrans(suggestionReplyInfoDaos);
+            if (suggestionReplyInfoDTOS.size() > 0){
+                return Result.success(suggestionReplyInfoDTOS);
+            }else{
+                return Result.failure("没有回复消息");
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+    }
+
+
     public Result getSuggestion( String suggestionId ) {
         SuggestionModel model = new SuggestionModel( );
         // 读Redis

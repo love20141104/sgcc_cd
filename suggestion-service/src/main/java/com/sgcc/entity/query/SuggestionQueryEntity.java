@@ -21,6 +21,13 @@ public class SuggestionQueryEntity {
     @Autowired
     private SuggestionReplyRepository suggestionReplyRepository;
 
+
+
+    public List<SuggestionReplyInfoDao> getSuggestionReplyByOpenId(String openId,boolean status){
+        return suggestionReplyRepository.getSuggestionReplyByOpenId(openId,status);
+    }
+
+
     public SuggestionReplyInstDao getInstReply(String sgstId )
     {
         return suggestionReplyRepository.getInst( sgstId );
