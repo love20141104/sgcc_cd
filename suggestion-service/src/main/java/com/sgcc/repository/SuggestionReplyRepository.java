@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,16 +71,37 @@ public class SuggestionReplyRepository {
                     "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
                     " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
                     " and r.reply_openid = ? and r.reply_content is not null and r.reply_openid is not null " +
-                    " and r.reply_date is not null ";
+                    " and r.reply_date is not null and r.check_openid is not null and r.check_date=1 and " +
+                    " r.check_date is not null and r.check_reject is not null ";
             return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
         }else {
-            String sql = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel," +
+            String sql1 = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel," +
                     "s.submit_date,s.img_1,s.img_2,s.img_3,r.id,r.suggestion_id,r.reply_content," +
                     "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
                     " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
                     " and r.reply_openid = ? and r.reply_content is null and r.reply_openid is null " +
-                    " and r.reply_date is null ";
-            return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
+                    " and r.reply_date is null and r.check_openid is null and r.check_date=1 and " +
+                    " r.check_date is null and r.check_reject is null";
+
+            String sql2 = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel," +
+                    "s.submit_date,s.img_1,s.img_2,s.img_3,r.id,r.suggestion_id,r.reply_content," +
+                    "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
+                    " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
+                    " and r.reply_openid = ? and r.reply_content is not null and r.reply_openid is not null " +
+                    " and r.reply_date is not null and r.check_openid is not null and r.check_date=1 and " +
+                    " r.check_date is not null and r.check_reject is not null and r.check_date=0";
+
+            List<SuggestionReplyInfoDao> suggestionReplyInfoDaos1 =
+                    jdbcTemplate.query(sql1,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
+
+            List<SuggestionReplyInfoDao> suggestionReplyInfoDaos2 =
+                    jdbcTemplate.query(sql2,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
+
+            List<SuggestionReplyInfoDao> daos = new ArrayList<>();
+            daos.addAll(suggestionReplyInfoDaos1);
+            daos.addAll(suggestionReplyInfoDaos2);
+
+            return daos;
         }
 
 
@@ -103,6 +125,37 @@ public class SuggestionReplyRepository {
 
 
     //SuggestionReplyInstDao
+    class SuggestionRejectDaoRowMapper implements RowMapper<SuggestionRejectDao>{
+        @Override
+        public SuggestionRejectDao mapRow(ResultSet rs, int i) throws SQLException {
+            SuggestionRejectDao dao = new SuggestionRejectDao(
+                    rs.getString("id"),
+                    rs.getString("suggestion_id"),
+                    rs.getString("user_id"),
+                    rs.getString("suggestion_content"),
+                    rs.getString("suggestion_contact"),
+                    rs.getString("suggestion_tel"),
+                    null,
+                    rs.getString("img_1"),
+                    rs.getString("img_2"),
+                    rs.getString("img_3"),
+                    rs.getString("reply_user_id"),
+                    rs.getString("reply_content"),
+                    null,
+                    rs.getString("check_reject")
+            );
+            if( rs.getDate("submit_date") != null )
+            {
+                dao.setSubmitDate( Utils.GetDate( rs.getString("submit_date")) );
+            }
+
+            if( rs.getDate("reply_date") != null ){
+                dao.setReplyDate( Utils.GetDate( rs.getString("reply_date") ));
+            }
+            return dao;
+        }
+    }
+
 
     class SuggestionReplyCheckInfoDaoRowMapper implements RowMapper<SuggestionReplyCheckInfoDao>{
         @Override
