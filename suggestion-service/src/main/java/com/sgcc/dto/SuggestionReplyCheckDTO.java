@@ -14,4 +14,5 @@ public class SuggestionReplyCheckDTO implements Serializable {
     protected String suggestion_id;
     protected String check_openid;
     protected int check_state;
+    protected String check_reject;
 }

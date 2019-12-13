@@ -114,9 +114,26 @@ public class SuggestionController {
         if( dto == null )
             return Result.failure(TopErrorCode.PARAMETER_ERR);
 
-        if( dto.getCheck_state() == 0 )
+        if( dto.getCheck_state() == 0 && !Strings.isNullOrEmpty(dto.getCheck_reject()) )
         {
-            // 审核未通过
+            // 审核未通过 todo
+            // AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE
+            suggestionService.ReplyReject( dto.getSuggestion_id(),dto.getCheck_reject() );
+
+            TemplateMessage temp = new TemplateMessage();
+            temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
+            temp.setTouser( dto.getCheck_openid() );
+            temp.setUrl("");
+
+            Map<String, TemplateData> map = new LinkedHashMap<>();
+            map.put("first",new TemplateData("你好，你的回复未通过审核!","#000000"));
+            map.put("keyword1",new TemplateData("意见建议回复审核人员","#000000"));
+            map.put("keyword2",new TemplateData(Utils.GetCurrentTime(),"#000000"));
+            map.put("keyword3",new TemplateData(dto.getCheck_reject(),"#000000"));
+            map.put("remark",new TemplateData("请尽快修改，谢谢!","#000000"));
+            temp.setData( map );
+
+            weChatService.SimpleSendMsg( temp );
             return Result.success();
         }
 
@@ -209,6 +226,8 @@ public class SuggestionController {
         return suggestionService.delete(dto);
     }
 
+
+
     /**
      * 查询回复者和审核者用户信息
      * @return
@@ -267,5 +286,26 @@ public class SuggestionController {
     public Result findAllSuggestionsNotCheck( @RequestParam String check_openid ) {
         return Result.success( suggestionService.findNotCheck(check_openid) );
     }
+
+    /**
+     * 回复人员查询所有驳回
+     * @return
+     */
+    @ApiOperation(value = "findAllSuggestionsReject", notes = "")
+    @GetMapping(value = "/Reject")
+    public Result findAllSuggestionsReject( @RequestParam String reply_openid ) {
+        return Result.success( suggestionService.findCheckNotPassedByReplyOpenID(reply_openid) );
+    }
+
+    /**
+     * 审核人员查询所有驳回
+     * @return
+     */
+    @ApiOperation(value = "findRejected", notes = "")
+    @GetMapping(value = "/Rejected")
+    public Result findAllSuggestionsRejected( @RequestParam String check_openid ) {
+        return Result.success( suggestionService.findRejected(check_openid) );
+    }
+
 
 }

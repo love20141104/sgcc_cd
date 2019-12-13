@@ -374,4 +374,35 @@ public class SuggestionModel {
 
 
 
+    public SuggestionRejectDTO DAO2RejectDTO(SuggestionRejectDao dao)
+    {
+        SuggestionRejectDTO dto = new SuggestionRejectDTO();
+        dto.setId(dao.getId());
+        dto.setSuggestionId(dao.getSuggestionId());
+        dto.setSuggestionContact(dao.getSuggestionContact());
+        dto.setSuggestionContent(dao.getSuggestionContent());
+        dto.setSuggestionTel(dao.getSuggestionTel());
+        dto.setUserId(dao.getUserId());
+        dto.setSubmitDate(dao.getSubmitDate());
+        dto.setReplyUserId(dao.getReplyUserId());
+        dto.setReplyDate(dao.getReplyDate());
+        dto.setReplyContent(dao.getReplyContent());
+        dto.setImg_1(dao.getImg_1());
+        dto.setImg_2(dao.getImg_2());
+        dto.setImg_3(dao.getImg_3());
+        dto.setReplyReject(dao.getCheck_reject());
+        return dto;
+    }
+
+    public List<SuggestionRejectDTO> DAOs2RejectDTOs(List<SuggestionRejectDao> daos)
+    {
+        if( daos == null || daos.size() < 1 )
+            return null;
+        List<SuggestionRejectDTO> dtos = new ArrayList<>();
+        for( SuggestionRejectDao dao : daos )
+        {
+            dtos.add( DAO2RejectDTO(dao) );
+        }
+        return dtos;
+    }
 }
