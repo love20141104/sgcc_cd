@@ -95,4 +95,23 @@ public class SuggestionQueryEntity {
         return replierAndCheckerRepository.findAll();
     }
 
+    public Integer getRoleByOpenId(String openId){
+        Boolean replier = replierAndCheckerRepository.replierByOpenId(openId);
+        Boolean checker = replierAndCheckerRepository.checkerByOpenId(openId);
+        if(replier&&checker){
+            return 4;
+        }
+        if(checker){
+            return 3;
+        }
+        if(replier){
+            return 2;
+        }else {
+            return 1;
+        }
+    }
+    public List<SuggestionReplyCheckInfoDao> suggestionReplyCheckInfoList(String checkerOpenid ,Boolean checkState){
+        return  suggestionReplyRepository.suggestionReplyCheckInfoDaoList(checkerOpenid,checkState);
+    }
+
 }

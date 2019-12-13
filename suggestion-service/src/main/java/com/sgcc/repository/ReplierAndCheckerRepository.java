@@ -43,11 +43,26 @@ public class ReplierAndCheckerRepository {
                 dao.getReplier_openid(),dao.getReplier_name(),dao.getChecker_openid(),dao.getChecker_name(),dao.getId()});
     }
 
-    @Transactional
-    public void delete( String id ){
-        String sql = "delete from d_customer_service_staff where id = ?";
-        jdbcTemplate.update(sql,new Object[]{ id });
+    public Boolean replierByOpenId( String openId ){
+        String sql = "select count(replier_openid) from d_customer_service_staff where replier_openid = ? ";
+        Integer integer = jdbcTemplate.queryForObject(sql,new Object[]{openId }, Integer.class);
+        if(integer>0){
+            return true;
+        }else {
+            return false;
+        }
     }
+    public Boolean checkerByOpenId( String openId ){
+        String sql = "select count(checker_openid) from d_customer_service_staff where checker_openid = ? ";
+        Integer integer = jdbcTemplate.queryForObject(sql,new Object[]{ openId}, Integer.class);
+        if(integer>0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
 
     class ReplierAndCheckerRowMapper implements RowMapper<ReplierAndCheckerDao> {
         @Override
