@@ -239,10 +239,13 @@ public class SuggestionRepository {
                     rs.getString("img_1"),
                     rs.getString("img_2"),
                     rs.getString("img_3"),
+                    rs.getString("user_location"),
                     rs.getString("reply_user_id"),
                     rs.getString("reply_content"),
-                    null
+                    null,
+                    rs.getBoolean("")
                     );
+
             if( rs.getDate("submit_date") != null )
             {
                 dao.setSubmitDate( Utils.GetDate( rs.getString("submit_date")) );

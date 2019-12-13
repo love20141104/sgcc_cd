@@ -55,12 +55,12 @@ public class SuggestionController {
                          @PathVariable("id") String userId) {
         Result ret = suggestionService.submit(suggestionSubmitDTO,userId);
         // Todo 发送消息到信息回复人员
-        SuggestionReplyInstDao dao = suggestionService.GetBySuggestionID( ret.getMsg() );
-        if( dao != null )
+        String replyOpenId = suggestionService.getReplyOpenId(suggestionSubmitDTO.getUserLocation());
+      /*  if( replyOpenId != null )
         {
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("HAv_qhY1qWVNXw20c1Fc_UBv02vtPAFSh1EiZvtp_qk");
-            temp.setTouser(dao.getReply_openid());
+            temp.setTouser(replyOpenId);
             temp.setUrl("");
 
             Map<String, TemplateData> map = new LinkedHashMap<>();
@@ -72,7 +72,7 @@ public class SuggestionController {
             temp.setData( map );
 
             weChatService.SimpleSendMsg( temp );
-        }
+        }*/
         return ret;
     }
 

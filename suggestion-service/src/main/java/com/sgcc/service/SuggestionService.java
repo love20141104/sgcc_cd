@@ -130,7 +130,8 @@ public class SuggestionService {
         // 缓存到redis
         suggestionEventEntity.Cache( model.Dao2RedisDao(dao) );
         // 异步消息写MySQL，然后刷新 Redis 缓存
-        suggestionProducer.SaveSuggestionMQ( dao );
+        //suggestionProducer.SaveSuggestionMQ( dao );
+        suggestionEventEntity.Save( dao );
         // 创建回复单据
         CreateSuggestionReply( new SuggestionMidDTO(dao.getSuggestionId() , submitDTO.getUserLocation()) );
         Result ret = Result.success( getSuggestions(openId) );
@@ -288,6 +289,10 @@ public class SuggestionService {
     }
     public Result suggestionReplyCheckInfoList(String checkerOpenid ,Boolean checkState){
         return Result.success(suggestionQueryEntity.suggestionReplyCheckInfoList(checkerOpenid,checkState));
+    }
+
+    public String getReplyOpenId(String userLocation) {
+        return suggestionQueryEntity.getReplyOpenId( userLocation);
     }
 }
 

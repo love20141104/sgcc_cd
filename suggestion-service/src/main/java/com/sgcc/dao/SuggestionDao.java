@@ -43,9 +43,14 @@ public class SuggestionDao implements Serializable{
 
     private String img_3;
 
+    private String userLocation;
+
     private String replyUserId;
 
     private String replyContent;
 
     private Date replyDate;
+
+    private Boolean checkState;
+
 }

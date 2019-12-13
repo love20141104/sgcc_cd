@@ -74,23 +74,13 @@ public class SuggestionsRepository {
     }
 
     public List<SuggestionDao> findAllByUserID(String userId){
-        if (precompile) {
-            String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                    "suggestion_tel," + Utils.GetSQLDateStr("submit_date") + ",img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion" +
-                    " where  user_id = ? ";
-            logger.info("查询所有意见信息:" + sql);
-            return jdbcTemplate.query(sql,new Object[]{userId}, new suggestionRowMapper());
+        String sql = "select s.id id,s.suggestion_id suggestion_id,user_id,suggestion_content,suggestion_contact," +
+                "suggestion_tel," + Utils.GetSQLDateStr("submit_date") + ",img_1,img_2,img_3,r.reply_openid,r.reply_content,r.reply_date,r.check_state " +
+                " from b_suggestion s left join b_suggestion_reply r on s.suggestion_id= r.suggestion_id " +
+                " where  user_id = ? ";
+        logger.info("查询所有意见信息:" + sql);
+        return jdbcTemplate.query(sql,new Object[]{userId}, new suggestionRowMapper());
 //        DATE_FORMAT(你的日期字段 ,"%Y-%m-%d") AS date
-        }else {
-            String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                    "suggestion_tel," + Utils.GetSQLDateStr("submit_date") + ",img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
-//        String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-//                "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
-            sql = sql + " where user_id = '" + userId + "'";
-            logger.info("查询所有意见信息:" + sql);
-            return jdbcTemplate.query(sql, new suggestionRowMapper());
-//        DATE_FORMAT(你的日期字段 ,"%Y-%m-%d") AS date
-        }
     }
 
 
@@ -226,7 +216,7 @@ public class SuggestionsRepository {
     @Transactional
     public void saveAll(List<SuggestionDao> suggestionDaoList){
         String sql = "insert into b_suggestion(id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                "suggestion_tel,submit_date,img_1,img_2,img_3) values(?,?,?,?,?,?,?,?,?,?)";
+                "suggestion_tel,submit_date,img_1,img_2,img_3 ,user_location) values(?,?,?,?,? ,?,?,?,?,? ,?)";
         logger.info("添加意见信息:"+sql);
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
@@ -241,6 +231,7 @@ public class SuggestionsRepository {
                 ps.setString(8,suggestionDaoList.get(i).getImg_1());
                 ps.setString(9,suggestionDaoList.get(i).getImg_2());
                 ps.setString(10,suggestionDaoList.get(i).getImg_3());
+                ps.setString(11,suggestionDaoList.get(i).getUserLocation());
             }
 
             @Override
@@ -310,10 +301,15 @@ public class SuggestionsRepository {
                     rs.getString("img_1"),
                     rs.getString("img_2"),
                     rs.getString("img_3"),
-                    rs.getString("reply_user_id"),
-                    rs.getString("reply_content"),
-                    null
+                    rs.getString("img_3"),
+                    rs.getString("user_location"),
+                    null,
+                    null,
+                    rs.getBoolean("check_state")
                     );
+            if(rs.getBoolean("check_state")){
+                dao.setReplyContent(rs.getString("reply_content"));
+            }
             if( rs.getDate("submit_date") != null )
             {
                 dao.setSubmitDate( Utils.GetDate( rs.getString("submit_date")) );

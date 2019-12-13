@@ -70,25 +70,26 @@ public class SuggestionReplyRepository {
                     "s.submit_date,s.img_1,s.img_2,s.img_3,r.id,r.suggestion_id,r.reply_content," +
                     "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
                     " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
-                    " and r.reply_openid = ? and r.reply_content is not null and r.reply_openid is not null " +
-                    " and r.reply_date is not null and r.check_openid is not null and r.check_date=1 and " +
-                    " r.check_date is not null and r.check_reject is not null ";
+                    " and s.user_location in(select major_region from d_customer_service_staff where replier_openid = ?) " +
+                    " and (r.reply_content is not null or r.check_state=1 )";
             return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
         }else {
             String sql1 = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel," +
                     "s.submit_date,s.img_1,s.img_2,s.img_3,r.id,r.suggestion_id,r.reply_content," +
                     "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
                     " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
-                    " and r.reply_openid = ? and r.reply_content is null and r.reply_openid is null " +
-                    " and r.reply_date is null and r.check_openid is null and r.check_date=1 and " +
+                    " and s.user_location in(select major_region from d_customer_service_staff where replier_openid = ?)" +
+                    " and r.reply_content is null and r.reply_openid is null " +
+                    " and r.reply_date is null and r.check_openid is null and r.check_state=1 and " +
                     " r.check_date is null and r.check_reject is null";
 
             String sql2 = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel," +
                     "s.submit_date,s.img_1,s.img_2,s.img_3,r.id,r.suggestion_id,r.reply_content," +
                     "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
                     " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
-                    " and r.reply_openid = ? and r.reply_content is not null and r.reply_openid is not null " +
-                    " and r.reply_date is not null and r.check_openid is not null and r.check_date=1 and " +
+                    " and s.user_location in(select major_region from d_customer_service_staff where replier_openid = ?) " +
+                    " and r.reply_content is not null and r.reply_openid is not null " +
+                    " and r.reply_date is not null and r.check_openid is not null and r.check_state=1 and " +
                     " r.check_date is not null and r.check_reject is not null and r.check_date=0";
 
             List<SuggestionReplyInfoDao> suggestionReplyInfoDaos1 =

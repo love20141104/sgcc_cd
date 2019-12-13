@@ -98,12 +98,7 @@ public class SuggestionModel {
             return null;
 
         SuggestionViewDTO dto = new SuggestionViewDTO();
-        dto.setSuggestionId(dao.getSuggestionId());
-        dto.setSuggestionContent( dao.getSuggestionContent());
-        dto.setImg_1( dao.getImg_1());
-        dto.setImg_2( dao.getImg_2());
-        dto.setImg_3( dao.getImg_3());
-        dto.setSuggestionReply(dao.getReplyContent());
+        BeanUtils.copyProperties(dao,dto);
         return dto;
     }
     public List<SuggestionViewDTO> RedisDAOS2DTOS( List<SuggestionRedisDao> daos )
@@ -123,15 +118,7 @@ public class SuggestionModel {
             return null;
 
         SuggestionViewDTO dto = new SuggestionViewDTO();
-        dto.setSuggestionId(dao.getSuggestionId());
-        dto.setSuggestionContent( dao.getSuggestionContent());
-        dto.setImg_1( dao.getImg_1());
-        dto.setMedia_1( dao.getMediaId_1());
-        dto.setImg_2( dao.getImg_2());
-        dto.setMedia_2( dao.getMediaId_2());
-        dto.setImg_3( dao.getImg_3());
-        dto.setMedia_3( dao.getMediaId_3());
-        dto.setSuggestionReply(dao.getReplyContent());
+        BeanUtils.copyProperties(dao,dto);
         return dto;
     }
 
@@ -250,6 +237,8 @@ public class SuggestionModel {
         dao.setSuggestionContent(m_suggestionSubmitDTO.getSuggestionContent());
         dao.setUserId(m_suggestionSubmitDTO.getUserId());
         dao.setSubmitDate(new Date());
+        dao.setUserLocation(m_suggestionSubmitDTO.getUserLocation());
+        dao.setCheckState(false);
 
         if( !Strings.isNullOrEmpty( m_suggestionSubmitDTO.getMedia_1() ) )
             dao.setImg_1(m_suggestionSubmitDTO.getMedia_1());

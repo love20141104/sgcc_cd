@@ -114,4 +114,7 @@ public class SuggestionQueryEntity {
         return  suggestionReplyRepository.suggestionReplyCheckInfoDaoList(checkerOpenid,checkState);
     }
 
+    public String getReplyOpenId(String userLocation) {
+        return  replierAndCheckerRepository.getReplyOpenId(userLocation);
+    }
 }
