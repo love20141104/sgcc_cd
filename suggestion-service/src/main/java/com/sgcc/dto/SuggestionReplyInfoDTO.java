@@ -15,7 +15,7 @@ public class SuggestionReplyInfoDTO implements Serializable {
     private static final long serialVersionUID = 8881547566687943859L;
 
     // 用户id
-//    private String userId;
+    private String userId;
 
     // 意见内容
     private String suggestionContent;
@@ -27,7 +27,7 @@ public class SuggestionReplyInfoDTO implements Serializable {
     private String suggestionTel;
 
     // 意见提交时间
-    private String submitDate;
+    private Date submitDate;
 
     private String img_1;
 
@@ -40,10 +40,11 @@ public class SuggestionReplyInfoDTO implements Serializable {
     private String suggestion_id;
     private String reply_content;     // 回复内容
     private String reply_openid;  // 回复人
-//    private String reply_date;    // 回复时间
-//    private String check_openid;  // 审核人
-//    private int check_state;      // 审核状态
-//    private String check_date;    // 审核时间
+    private String reply_date;    // 回复时间
+    private String check_openid;  // 审核人
+    private int check_state;      // 审核状态
+    private String check_reject;
+    private String check_date;    // 审核时间
 
 
 

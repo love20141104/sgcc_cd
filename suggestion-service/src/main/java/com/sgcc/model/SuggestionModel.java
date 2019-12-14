@@ -341,19 +341,9 @@ public class SuggestionModel {
 
         List<SuggestionReplyInfoDTO> dtos = new ArrayList<>();
         suggestionReplyInfoDaos.forEach(dao->{
-            dtos.add(new SuggestionReplyInfoDTO(
-                    dao.getSuggestionContent(),
-                    dao.getSuggestionContact(),
-                    dao.getSuggestionTel(),
-                    Utils.GetTime(dao.getSubmitDate()),
-                    dao.getImg_1(),
-                    dao.getImg_2(),
-                    dao.getImg_3(),
-                    dao.getId(),
-                    dao.getSuggestion_id(),
-                    dao.getReply_content(),
-                    dao.getReply_openid()
-            ));
+            SuggestionReplyInfoDTO suggestionReplyInfoDTO = new SuggestionReplyInfoDTO();
+            BeanUtils.copyProperties(dao,suggestionReplyInfoDTO);
+            dtos.add(suggestionReplyInfoDTO);
         });
 
         return dtos;

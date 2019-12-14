@@ -56,7 +56,7 @@ public class SuggestionController {
         Result ret = suggestionService.submit(suggestionSubmitDTO,userId);
         // Todo 发送消息到信息回复人员
         String replyOpenId = suggestionService.getReplyOpenId(suggestionSubmitDTO.getUserLocation());
-      /*  if( replyOpenId != null )
+        if( replyOpenId != null )
         {
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("HAv_qhY1qWVNXw20c1Fc_UBv02vtPAFSh1EiZvtp_qk");
@@ -72,7 +72,7 @@ public class SuggestionController {
             temp.setData( map );
 
             weChatService.SimpleSendMsg( temp );
-        }*/
+        }
         return ret;
     }
 
@@ -269,9 +269,9 @@ public class SuggestionController {
     }
 
 
-    @ApiOperation(value = "getSuggestionReplyByOpenId", notes = "")
+    @ApiOperation(value = "getSuggestionReplyByOpenId", notes = "1 处理人为回复 2未审批 3 审批未通过 4 审批通过")
     @GetMapping(value = "/Reply/{openId}")
-    public Result getSuggestionReplyByOpenId(@PathVariable String openId,@RequestParam boolean status) {
+    public Result getSuggestionReplyByOpenId(@PathVariable String openId,@RequestParam Integer status) {
         return suggestionService.getSuggestionReplyByOpenId(openId,status);
     }
 

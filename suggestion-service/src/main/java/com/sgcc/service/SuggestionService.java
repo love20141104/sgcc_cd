@@ -31,7 +31,7 @@ public class SuggestionService {
      * @param openId
      * @return
      */
-    public Result getSuggestionReplyByOpenId(String openId,boolean status) {
+    public Result getSuggestionReplyByOpenId(String openId,Integer status) {
         try {
             List<SuggestionReplyInfoDao> suggestionReplyInfoDaos =
                     suggestionQueryEntity.getSuggestionReplyByOpenId(openId,status);
@@ -56,20 +56,20 @@ public class SuggestionService {
     public Result getSuggestion( String suggestionId ) {
         SuggestionModel model = new SuggestionModel( );
         // 读Redis
-        SuggestionRedisDao redisDao = suggestionQueryEntity.GetRedisSuggestion(suggestionId);
+       /* SuggestionRedisDao redisDao = suggestionQueryEntity.GetRedisSuggestion(suggestionId);
         if( redisDao != null ){
             return Result.success( model.RedisDAO2DetailDTO(redisDao) );
-        }
+        }*/
         // 读MySQL
-        SuggestionDao dao = suggestionQueryEntity.GetSuggestion(suggestionId);
+        SuggestionReplyInfoDao dao = suggestionQueryEntity.GetSuggestion(suggestionId);
         if( dao == null )
             return Result.failure(TopErrorCode.NO_DATAS);
 
         // 重新加载数据到 Redis
         // 根据 userId 装载所有的意见列表
-        suggestionProducer.ReloadSuggestionsMQ( dao.getUserId() );
-
-        return Result.success( model.RedisDAO2DetailDTO(model.Dao2RedisDao(dao)) );
+        //suggestionProducer.ReloadSuggestionsMQ( dao.getUserId() );
+        return Result.success( dao );
+        //return Result.success( model.RedisDAO2DetailDTO(model.Dao2RedisDao(dao)) );
     }
     public List<SuggestionDao> findAllByReplyOpenID(String reply_openId)
     {
