@@ -90,8 +90,7 @@ public class SuggestionsRepository {
                 String sql = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel" +
                         ",s.submit_date,s.img_1,s.img_2,s.img_3,r.id,s.suggestion_id,r.reply_content" +
                         ",r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_reject,r.check_date " +
-                        "from b_suggestion s LEFT JOIN b_suggestion_reply r on s.suggestion_id=r.suggestion_id   ";
-                sql = sql + " where s.suggestion_id = ? ";
+                        "from b_suggestion s LEFT JOIN b_suggestion_reply r on s.suggestion_id=r.suggestion_id where s.suggestion_id = ? ";
                 logger.info("查询所有意见信息:" + sql);
                 return jdbcTemplate.queryForObject(sql,new Object[]{suggestion_id}, new SuggestionReplyInfoRowMapper());
             } catch (Exception e) {
@@ -338,7 +337,7 @@ public class SuggestionsRepository {
                     rs.getString("suggestion_content"),
                     rs.getString("suggestion_contact"),
                     rs.getString("suggestion_tel"),
-                    Utils.GetDate(rs.getString("submit_date")),
+                    rs.getString("submit_date")==null?null:Utils.GetDate(rs.getString("submit_date")),
                     rs.getString("img_1"),
                     rs.getString("img_2"),
                     rs.getString("img_3"),
@@ -346,11 +345,11 @@ public class SuggestionsRepository {
                     rs.getString("suggestion_id"),
                     rs.getString("reply_content"),
                     rs.getString("reply_openid"),
-                    rs.getString("reply_date"),
+                    rs.getString("reply_date")==null?null:Utils.GetDate(rs.getString("reply_date")),
                     rs.getString("check_openid"),
                     rs.getInt("check_state"),
                     rs.getString("check_reject"),
-                    rs.getString("check_date"));
+                    rs.getString("check_date")==null?null:Utils.GetDate(rs.getString("check_date")));
             return dao;
         }
     }

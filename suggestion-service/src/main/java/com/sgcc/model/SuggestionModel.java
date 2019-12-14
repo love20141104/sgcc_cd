@@ -4,6 +4,7 @@ import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.*;
 import com.sgcc.dto.*;
+import com.sgcc.repository.SuggestionReplyRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -341,9 +342,43 @@ public class SuggestionModel {
 
         List<SuggestionReplyInfoDTO> dtos = new ArrayList<>();
         suggestionReplyInfoDaos.forEach(dao->{
-            SuggestionReplyInfoDTO suggestionReplyInfoDTO = new SuggestionReplyInfoDTO();
-            BeanUtils.copyProperties(dao,suggestionReplyInfoDTO);
-            dtos.add(suggestionReplyInfoDTO);
+            SuggestionReplyInfoDTO dto = new SuggestionReplyInfoDTO();
+            BeanUtils.copyProperties(dao,dto);
+            //1 处理人未回复 2未审批 3 审批未通过 4 审批通过
+            if (dao.getReply_content()==null
+                    &&dao.getReply_date()==null
+                    &&dao.getCheck_date()==null
+                    &&dao.getCheck_reject()==null
+                    &&dao.getCheck_state()==0)
+            {
+                dto.setState("1");
+            }
+
+            if (dao.getReply_content()!=null
+                    &&dao.getReply_date()!=null
+                    &&dao.getCheck_date()==null
+                    &&dao.getCheck_reject()==null
+                    &&dao.getCheck_state()==0){
+                dto.setState("2");
+            }
+            if (dao.getReply_content()!=null
+                    &&dao.getReply_date()!=null
+                    &&dao.getCheck_date()!=null
+                    &&dao.getCheck_reject()!=null
+                    &&dao.getCheck_state()==0){
+                dto.setState("3");
+            }
+
+            if (dao.getReply_content()!=null
+                    &&dao.getReply_date()!=null
+                    &&dao.getCheck_date()!=null
+                    &&dao.getCheck_state()==1){
+                dto.setState("4");
+            }
+            dto.setSubmitDate(Utils.GetTime(dao.getSubmitDate()));
+            dto.setReply_date(Utils.GetTime(dao.getReply_date()));
+            dto.setCheck_date(Utils.GetTime(dao.getCheck_date()));
+            dtos.add(dto);
         });
 
         return dtos;
@@ -400,7 +435,7 @@ public class SuggestionModel {
                     dao.getImg_3(),
                     dao.getReplyId(),
                     dao.getReplyContent(),
-                    Utils.GetTime(dao.getReplyDate())
+                    dao.getReplyDate()==null?null:Utils.GetTime(dao.getReplyDate())
 
             ));
         });

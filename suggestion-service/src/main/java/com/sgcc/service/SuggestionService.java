@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class SuggestionService {
      * @param openId
      * @return
      */
-    public Result getSuggestionReplyByOpenId(String openId,Integer status) {
+    public Result getSuggestionReplyByOpenId(String openId,Boolean status) {
         try {
             List<SuggestionReplyInfoDao> suggestionReplyInfoDaos =
                     suggestionQueryEntity.getSuggestionReplyByOpenId(openId,status);
@@ -285,9 +286,17 @@ public class SuggestionService {
         return Result.success();
     }
     public Result getRoleByOpenId(String openId){
-        return Result.success(suggestionQueryEntity.getRoleByOpenId(openId));
+        Integer role = suggestionQueryEntity.getRoleByOpenId(openId);
+        Integer count=0;
+        if(role>1){
+            count= suggestionQueryEntity.getCountByOpenId(openId,role);
+        }
+        HashMap<String,Integer> map=new HashMap<>();
+        map.put("role",role);
+        map.put("count",count);
+        return Result.success(map);
     }
-    public Result suggestionReplyCheckInfoList(String checkerOpenid ,Boolean checkState){
+    public Result suggestionReplyCheckInfoList(String checkerOpenid ,Integer checkState){
         if (Strings.isNullOrEmpty(checkerOpenid))
             return Result.failure(TopErrorCode.NO_DATAS);
 
@@ -298,7 +307,7 @@ public class SuggestionService {
             if(dtos.size() > 0){
                 return Result.success(dtos);
             }else {
-                return Result.failure("没有匹配数据");
+                return Result.failure(TopErrorCode.NO_DATAS);
             }
         }catch (Exception e){
             e.printStackTrace();

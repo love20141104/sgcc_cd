@@ -90,7 +90,7 @@ public class SuggestionController {
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
             temp.setTouser( dao.getCheck_openid() );
-            temp.setUrl("");
+            temp.setUrl("http://119.23.22.176:80/feedback");
 
             Map<String, TemplateData> map = new LinkedHashMap<>();
             map.put("first",new TemplateData("你好，有新的意见建议回复需要审核!","#000000"));
@@ -123,7 +123,7 @@ public class SuggestionController {
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
             temp.setTouser( dto.getCheck_openid() );
-            temp.setUrl("");
+            temp.setUrl("http://119.23.22.176:80/approval");
 
             Map<String, TemplateData> map = new LinkedHashMap<>();
             map.put("first",new TemplateData("你好，你的回复未通过审核!","#000000"));
@@ -269,9 +269,9 @@ public class SuggestionController {
     }
 
 
-    @ApiOperation(value = "getSuggestionReplyByOpenId", notes = "1 处理人为回复 2未审批 3 审批未通过 4 审批通过")
+    @ApiOperation(value = "getSuggestionReplyByOpenId", notes = "flase 待处理 true 已完成    ;;;1 处理人未回复 2未审批 3 审批未通过 4 审批通过")
     @GetMapping(value = "/Reply/{openId}")
-    public Result getSuggestionReplyByOpenId(@PathVariable String openId,@RequestParam Integer status) {
+    public Result getSuggestionReplyByOpenId(@PathVariable String openId,@RequestParam Boolean status) {
         return suggestionService.getSuggestionReplyByOpenId(openId,status);
     }
 
@@ -313,9 +313,9 @@ public class SuggestionController {
     }
 
 
-    @ApiOperation(value = "通过checherOpenid,checkState意见建议列表", notes = "")
+    @ApiOperation(value = "通过checherOpenid,checkState意见建议列表", notes = "1 处理人未回复；2 未审批；3已审批")
     @GetMapping(value = "/checkState/{openId}")
-    public Result suggestionReplyCheckInfoDaoList(@PathVariable String openId ,Boolean checkState){
+    public Result suggestionReplyCheckInfoDaoList(@PathVariable String openId ,Integer checkState){
         return suggestionService.suggestionReplyCheckInfoList(openId,checkState);
     }
 

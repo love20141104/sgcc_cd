@@ -68,6 +68,30 @@ public class ReplierAndCheckerRepository {
         return s;
     }
 
+    public Integer getCountByOpenId(String openId, Integer role) {
+        if(2==role){
+            String sql = "select count(id) from (" +
+                    "select s.id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel" +
+                    ",s.submit_date,s.img_1,s.img_2,s.img_3,s.suggestion_id,r.reply_content" +
+                    ",r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_reject,r.check_date " +
+                    "from b_suggestion s LEFT JOIN b_suggestion_reply r on s.suggestion_id=r.suggestion_id   " +
+                    " where  s.user_location in(select major_region from d_customer_service_staff " +
+                    " where replier_openid = ? )) a where a.check_state = 0 or a.check_state is null";
+            Integer s = jdbcTemplate.queryForObject(sql, new Object[]{openId}, Integer.class);
+            return s;
+        }
+        if(3==role){
+            String sql = "select count(s.id) from b_suggestion_reply sr left join b_suggestion s on sr.suggestion_id=s.suggestion_id " +
+                    "  where check_state is null  and  sr.reply_openid in( " +
+                    " select distinct(replier_openid) from d_customer_service_staff where checker_openid =? )  ";
+            Integer s = jdbcTemplate.queryForObject(sql, new Object[]{openId}, Integer.class);
+            return s;
+        }else {
+            return null;
+        }
+
+    }
+
 
     class ReplierAndCheckerRowMapper implements RowMapper<ReplierAndCheckerDao> {
         @Override

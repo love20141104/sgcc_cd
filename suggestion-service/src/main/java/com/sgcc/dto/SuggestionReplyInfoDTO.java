@@ -27,7 +27,7 @@ public class SuggestionReplyInfoDTO implements Serializable {
     private String suggestionTel;
 
     // 意见提交时间
-    private Date submitDate;
+    private String submitDate;
 
     private String img_1;
 
@@ -45,6 +45,7 @@ public class SuggestionReplyInfoDTO implements Serializable {
     private int check_state;      // 审核状态
     private String check_reject;
     private String check_date;    // 审核时间
+    private String state;
 
 
 

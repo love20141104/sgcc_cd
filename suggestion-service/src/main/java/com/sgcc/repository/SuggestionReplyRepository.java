@@ -63,8 +63,8 @@ public class SuggestionReplyRepository {
 
     // 消息回复者根据自己openID查看所有需要回复的消息
     // 直接连表查询出数据
-    public List<SuggestionReplyInfoDao> getSuggestionReplyByOpenId(String openId,Integer status){
-        //1 处理人为回复 2未审批 3 审批未通过 4 审批通过
+    public List<SuggestionReplyInfoDao> getSuggestionReplyByOpenId(String openId,Boolean status){
+        //Flase 待处理 true 审批通过
         String sql0="select user_id,suggestion_content,suggestion_contact,suggestion_tel " +
                 " ,submit_date,img_1,img_2,img_3,id,suggestion_id,reply_content,reply_openid " +
                 " ,reply_date,check_openid,check_state,check_reject,check_date from (" +
@@ -74,28 +74,15 @@ public class SuggestionReplyRepository {
                 "from b_suggestion s LEFT JOIN b_suggestion_reply r on s.suggestion_id=r.suggestion_id   " +
                 " where  s.user_location in(select major_region from d_customer_service_staff " +
                 " where replier_openid = ? )) a ";
-        if (1==status){
-            String sql = sql0 +
-                    " where a.reply_content is null and a.id is null;";
-            return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
-        }
-        if (2==status){
-            String sql = sql0+
-                    "where a.check_openid is null and a.check_state is null and a.check_date " +
-                    " is null and a.id is not null;";
-            return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
-        }
-        if (3==status){
-            String sql = sql0 +
-                    "where a.check_state = 0;";
-            return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
-        }
-        if (4==status){
+        if (status){
             String sql = sql0 +
                     "where a.check_state = 1;";
             return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
         }else {
-            return null;
+            String sql = sql0 +
+                    "where a.check_state = 0 or a.check_state is null;";
+            return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
+
         }
 
 
@@ -106,14 +93,44 @@ public class SuggestionReplyRepository {
 
     // 消息审核者根据自己openID查看所有需要审核的消息
     // 直接连表查询出数据
-    public List<SuggestionReplyCheckInfoDao> suggestionReplyCheckInfoDaoList(String checkerOpenid ,Boolean checkState){
-        String sql = "select s.id id,s.suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                " suggestion_tel,submit_date,img_1,img_2,img_3," +
-                " sr.id reply_id,sr.reply_content reply_content,sr.reply_date reply_date,sr.check_reject check_reject,sr.check_state check_state,sr.check_date check_date" +
-                " from b_suggestion_reply sr left join b_suggestion s on sr.suggestion_id=s.suggestion_id " +
-                "  where check_state = ? and  sr.reply_openid in( " +
-                " select distinct(replier_openid) from d_customer_service_staff where checker_openid =? ) order by submit_date desc ";
-        return jdbcTemplate.query(sql,new Object[]{checkState,checkerOpenid}, new SuggestionReplyCheckInfoDaoRowMapper());
+    public List<SuggestionReplyCheckInfoDao> suggestionReplyCheckInfoDaoList(String checkerOpenid ,Integer checkState){
+        //1 处理人未回复；2 未审批；3已审批
+        if(checkState==1){
+            String sql = "select s.id id,s.suggestion_id,user_id,suggestion_content,suggestion_contact, suggestion_tel" +
+                    ",submit_date,img_1,img_2,img_3, sr.id reply_id,sr.reply_content reply_content" +
+                    ",sr.reply_date reply_date,sr.check_reject check_reject,sr.check_state check_state" +
+                    ",sr.check_date check_date from b_suggestion_reply sr right join b_suggestion s on sr.suggestion_id=s.suggestion_id   " +
+                    "where sr.reply_content is null and sr.reply_date is null and  s.user_location =(  select major_region " +
+                    "from d_customer_service_staff where checker_openid =? ) order by submit_date desc ";
+            return jdbcTemplate.query(sql,new Object[]{checkerOpenid}, new SuggestionReplyCheckInfoDaoRowMapper());
+
+        }
+        if(checkState==2||checkState==3){
+            Boolean state=false;
+            if (checkState==3){
+                state=true;
+                String sql = "select s.id id,s.suggestion_id,user_id,suggestion_content,suggestion_contact," +
+                        " suggestion_tel,submit_date,img_1,img_2,img_3," +
+                        " sr.id reply_id,sr.reply_content reply_content,sr.reply_date reply_date,sr.check_reject check_reject,sr.check_state check_state,sr.check_date check_date" +
+                        " from b_suggestion_reply sr left join b_suggestion s on sr.suggestion_id=s.suggestion_id " +
+                        "  where check_state = ? and  sr.reply_openid in( " +
+                        " select distinct(replier_openid) from d_customer_service_staff where checker_openid =? ) order by submit_date desc ";
+                return jdbcTemplate.query(sql,new Object[]{state,checkerOpenid}, new SuggestionReplyCheckInfoDaoRowMapper());
+
+            }else {
+                String sql = "select s.id id,s.suggestion_id,user_id,suggestion_content,suggestion_contact," +
+                        " suggestion_tel,submit_date,img_1,img_2,img_3, sr.id reply_id,sr.reply_content reply_content," +
+                        "sr.reply_date reply_date,sr.check_reject check_reject,sr.check_state check_state," +
+                        "sr.check_date check_date from b_suggestion_reply sr left join b_suggestion s " +
+                        "on sr.suggestion_id=s.suggestion_id   where check_state is null and sr.reply_content is not null " +
+                        "and  sr.reply_openid in(  select distinct(replier_openid) from d_customer_service_staff" +
+                        " where checker_openid =?  ) order by submit_date desc ";
+                return jdbcTemplate.query(sql, new Object[]{ checkerOpenid}, new SuggestionReplyCheckInfoDaoRowMapper());
+            }
+        }
+        else {
+            return null;
+        }
     }
 
 
@@ -168,10 +185,10 @@ public class SuggestionReplyRepository {
 
                     rs.getString("reply_id"),
                     rs.getString("reply_content"),
-                    Utils.GetDate(rs.getString("reply_date")),
+                    rs.getString("reply_date")==null?null:Utils.GetDate(rs.getString("reply_date")),
                     rs.getString("check_reject"),
                     rs.getBoolean("check_state"),
-                    Utils.GetDate(rs.getString("check_date"))
+                    rs.getString("check_date")==null?null:Utils.GetDate(rs.getString("check_date"))
                     );
             return dao;
         }
@@ -222,11 +239,11 @@ public class SuggestionReplyRepository {
                     rs.getString("suggestion_id"),
                     rs.getString("reply_content"),
                     rs.getString("reply_openid"),
-                    rs.getString("reply_date"),
+                    Utils.GetDate(rs.getString("reply_date")),
                     rs.getString("check_openid"),
                     rs.getInt("check_state"),
                     rs.getString("check_reject"),
-                    rs.getString("check_date"));
+            Utils.GetDate(rs.getString("check_date")));
             return dao;
         }
     }

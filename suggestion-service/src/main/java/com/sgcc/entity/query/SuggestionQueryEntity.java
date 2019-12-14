@@ -23,7 +23,7 @@ public class SuggestionQueryEntity {
 
 
 
-    public List<SuggestionReplyInfoDao> getSuggestionReplyByOpenId(String openId,Integer status){
+    public List<SuggestionReplyInfoDao> getSuggestionReplyByOpenId(String openId,Boolean status){
         return suggestionReplyRepository.getSuggestionReplyByOpenId(openId,status);
     }
 
@@ -110,11 +110,15 @@ public class SuggestionQueryEntity {
             return 1;
         }
     }
-    public List<SuggestionReplyCheckInfoDao> suggestionReplyCheckInfoList(String checkerOpenid ,Boolean checkState){
+    public List<SuggestionReplyCheckInfoDao> suggestionReplyCheckInfoList(String checkerOpenid ,Integer checkState){
         return  suggestionReplyRepository.suggestionReplyCheckInfoDaoList(checkerOpenid,checkState);
     }
 
     public String getReplyOpenId(String userLocation) {
         return  replierAndCheckerRepository.getReplyOpenId(userLocation);
+    }
+
+    public Integer getCountByOpenId(String openId, Integer role) {
+        return  replierAndCheckerRepository.getCountByOpenId( openId,  role);
     }
 }
