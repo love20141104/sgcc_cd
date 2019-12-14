@@ -44,6 +44,7 @@ public class SuggestionReplyInfoDao implements Serializable {
     private String reply_date;    // 回复时间
     private String check_openid;  // 审核人
     private int check_state;      // 审核状态
+    private String check_reject;
     private String check_date;    // 审核时间
 
 

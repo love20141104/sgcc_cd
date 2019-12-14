@@ -23,7 +23,7 @@ public class SuggestionQueryEntity {
 
 
 
-    public List<SuggestionReplyInfoDao> getSuggestionReplyByOpenId(String openId,boolean status){
+    public List<SuggestionReplyInfoDao> getSuggestionReplyByOpenId(String openId,Integer status){
         return suggestionReplyRepository.getSuggestionReplyByOpenId(openId,status);
     }
 
@@ -53,7 +53,7 @@ public class SuggestionQueryEntity {
         return suggestionRedisRepository.findBySuggestionId(suggestionId);
     }
 
-    public SuggestionDao GetSuggestion(String suggestionId )
+    public SuggestionReplyInfoDao GetSuggestion(String suggestionId )
     {
         return suggestionsRepository.findBySuggestionId(suggestionId);
     }

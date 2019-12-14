@@ -63,46 +63,39 @@ public class SuggestionReplyRepository {
 
     // 消息回复者根据自己openID查看所有需要回复的消息
     // 直接连表查询出数据
-    public List<SuggestionReplyInfoDao> getSuggestionReplyByOpenId(String openId,boolean status){
-
-        if (status){
-            String sql = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel," +
-                    "s.submit_date,s.img_1,s.img_2,s.img_3,r.id,r.suggestion_id,r.reply_content," +
-                    "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
-                    " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
-                    " and s.user_location in(select major_region from d_customer_service_staff where replier_openid = ?) " +
-                    " and (r.reply_content is not null or r.check_state=1 )";
+    public List<SuggestionReplyInfoDao> getSuggestionReplyByOpenId(String openId,Integer status){
+        //1 处理人为回复 2未审批 3 审批未通过 4 审批通过
+        String sql0="select user_id,suggestion_content,suggestion_contact,suggestion_tel " +
+                " ,submit_date,img_1,img_2,img_3,id,suggestion_id,reply_content,reply_openid " +
+                " ,reply_date,check_openid,check_state,check_reject,check_date from (" +
+                "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel" +
+                ",s.submit_date,s.img_1,s.img_2,s.img_3,r.id,s.suggestion_id,r.reply_content" +
+                ",r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_reject,r.check_date " +
+                "from b_suggestion s LEFT JOIN b_suggestion_reply r on s.suggestion_id=r.suggestion_id   " +
+                " where  s.user_location in(select major_region from d_customer_service_staff " +
+                " where replier_openid = ? )) a ";
+        if (1==status){
+            String sql = sql0 +
+                    " where a.reply_content is null and a.id is null;";
+            return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
+        }
+        if (2==status){
+            String sql = sql0+
+                    "where a.check_openid is null and a.check_state is null and a.check_date " +
+                    " is null and a.id is not null;";
+            return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
+        }
+        if (3==status){
+            String sql = sql0 +
+                    "where a.check_state = 0;";
+            return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
+        }
+        if (4==status){
+            String sql = sql0 +
+                    "where a.check_state = 1;";
             return jdbcTemplate.query(sql,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
         }else {
-            String sql1 = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel," +
-                    "s.submit_date,s.img_1,s.img_2,s.img_3,r.id,r.suggestion_id,r.reply_content," +
-                    "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
-                    " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
-                    " and s.user_location in(select major_region from d_customer_service_staff where replier_openid = ?)" +
-                    " and r.reply_content is null and r.reply_openid is null " +
-                    " and r.reply_date is null and r.check_openid is null and r.check_state=1 and " +
-                    " r.check_date is null and r.check_reject is null";
-
-            String sql2 = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel," +
-                    "s.submit_date,s.img_1,s.img_2,s.img_3,r.id,r.suggestion_id,r.reply_content," +
-                    "r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_date" +
-                    " from b_suggestion_reply r,b_suggestion s where r.suggestion_id = s.suggestion_id" +
-                    " and s.user_location in(select major_region from d_customer_service_staff where replier_openid = ?) " +
-                    " and r.reply_content is not null and r.reply_openid is not null " +
-                    " and r.reply_date is not null and r.check_openid is not null and r.check_state=1 and " +
-                    " r.check_date is not null and r.check_reject is not null and r.check_date=0";
-
-            List<SuggestionReplyInfoDao> suggestionReplyInfoDaos1 =
-                    jdbcTemplate.query(sql1,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
-
-            List<SuggestionReplyInfoDao> suggestionReplyInfoDaos2 =
-                    jdbcTemplate.query(sql2,new SuggestionReplyInfoRowMapper(),new Object[]{openId});
-
-            List<SuggestionReplyInfoDao> daos = new ArrayList<>();
-            daos.addAll(suggestionReplyInfoDaos1);
-            daos.addAll(suggestionReplyInfoDaos2);
-
-            return daos;
+            return null;
         }
 
 
@@ -232,6 +225,7 @@ public class SuggestionReplyRepository {
                     rs.getString("reply_date"),
                     rs.getString("check_openid"),
                     rs.getInt("check_state"),
+                    rs.getString("check_reject"),
                     rs.getString("check_date"));
             return dao;
         }

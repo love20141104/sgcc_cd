@@ -5,6 +5,7 @@ import com.example.PaginationHelper;
 import com.example.Utils;
 import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRejectDao;
+import com.sgcc.dao.SuggestionReplyInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -84,28 +85,18 @@ public class SuggestionsRepository {
     }
 
 
-    public SuggestionDao findBySuggestionId(String suggestion_id){
-        if (precompile) {
+    public SuggestionReplyInfoDao findBySuggestionId(String suggestion_id){
             try {
-                String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                        "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
-                sql = sql + " where suggestion_id = ? ";
+                String sql = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel" +
+                        ",s.submit_date,s.img_1,s.img_2,s.img_3,r.id,s.suggestion_id,r.reply_content" +
+                        ",r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_reject,r.check_date " +
+                        "from b_suggestion s LEFT JOIN b_suggestion_reply r on s.suggestion_id=r.suggestion_id   ";
+                sql = sql + " where s.suggestion_id = ? ";
                 logger.info("查询所有意见信息:" + sql);
-                return jdbcTemplate.queryForObject(sql,new Object[]{suggestion_id}, new suggestionRowMapper());
+                return jdbcTemplate.queryForObject(sql,new Object[]{suggestion_id}, new SuggestionReplyInfoRowMapper());
             } catch (Exception e) {
                 return null;
             }
-        }else {
-            try {
-                String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                        "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
-                sql = sql + " where suggestion_id = '" + suggestion_id + "'";
-                logger.info("查询所有意见信息:" + sql);
-                return jdbcTemplate.queryForObject(sql, new suggestionRowMapper());
-            } catch (Exception e) {
-                return null;
-            }
-        }
     }
 
 
@@ -145,7 +136,6 @@ public class SuggestionsRepository {
 
     @Transactional
     public SuggestionDao update(String reply_user_id , String reply_content, Date reply_date, String suggestion_id){
-        if (precompile) {
             String sql = "update b_suggestion set reply_user_id=? ," +
                     "reply_content = ? ," + "reply_date = ? ";
             sql = sql + " where suggestion_id = ? ";
@@ -154,19 +144,12 @@ public class SuggestionsRepository {
                     ,reply_content
                     , Utils.GetTime(reply_date)
                     ,suggestion_id});
-            return findBySuggestionId(suggestion_id);
-        }else {
-            String sql = "update b_suggestion set reply_user_id='" + reply_user_id + "'," +
-                    "reply_content = '" + reply_content + "'," + "reply_date = '" + Utils.GetTime(reply_date) + "'";
-            sql = sql + " where suggestion_id = '" + suggestion_id + "'";
-            jdbcTemplate.execute(sql);
-            return findBySuggestionId(suggestion_id);
-        }
+            return null;
+
     }
 
     @Transactional
     public SuggestionDao update(SuggestionDao dao){
-        if (precompile) {
             String sql = "update b_suggestion set reply_user_id=? ," +
                     "reply_content = ? ," + "reply_date = ? ";
             sql = sql + " where suggestion_id = ? ";
@@ -176,13 +159,7 @@ public class SuggestionsRepository {
                     , Utils.GetTime(dao.getReplyDate())
                     ,dao.getSuggestionId()});
             return dao;
-        }else {
-            String sql = "update b_suggestion set reply_user_id='" + dao.getReplyUserId() + "'," +
-                    "reply_content = '" + dao.getReplyContent() + "'," + "reply_date = '" + Utils.GetTime(dao.getReplyDate()) + "'";
-            sql = sql + " where suggestion_id = '" + dao.getSuggestionId() + "'";
-            jdbcTemplate.execute(sql);
-            return findBySuggestionId(dao.getSuggestionId());
-        }
+
     }
     /**
      * 查询所有意见信息
@@ -349,6 +326,31 @@ public class SuggestionsRepository {
             if( rs.getDate("reply_date") != null ){
                 dao.setReplyDate( Utils.GetDate( rs.getString("reply_date") ));
             }
+            return dao;
+        }
+    }
+
+    class SuggestionReplyInfoRowMapper implements RowMapper<SuggestionReplyInfoDao>{
+        @Override
+        public SuggestionReplyInfoDao mapRow(ResultSet rs, int i) throws SQLException {
+            SuggestionReplyInfoDao dao = new SuggestionReplyInfoDao(
+                    rs.getString("user_id"),
+                    rs.getString("suggestion_content"),
+                    rs.getString("suggestion_contact"),
+                    rs.getString("suggestion_tel"),
+                    Utils.GetDate(rs.getString("submit_date")),
+                    rs.getString("img_1"),
+                    rs.getString("img_2"),
+                    rs.getString("img_3"),
+                    rs.getString("id"),
+                    rs.getString("suggestion_id"),
+                    rs.getString("reply_content"),
+                    rs.getString("reply_openid"),
+                    rs.getString("reply_date"),
+                    rs.getString("check_openid"),
+                    rs.getInt("check_state"),
+                    rs.getString("check_reject"),
+                    rs.getString("check_date"));
             return dao;
         }
     }
