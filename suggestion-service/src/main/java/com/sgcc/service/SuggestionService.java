@@ -288,7 +288,22 @@ public class SuggestionService {
         return Result.success(suggestionQueryEntity.getRoleByOpenId(openId));
     }
     public Result suggestionReplyCheckInfoList(String checkerOpenid ,Boolean checkState){
-        return Result.success(suggestionQueryEntity.suggestionReplyCheckInfoList(checkerOpenid,checkState));
+        if (Strings.isNullOrEmpty(checkerOpenid))
+            return Result.failure(TopErrorCode.NO_DATAS);
+
+        try {
+            List<SuggestionReplyCheckInfoDao> daos = suggestionQueryEntity.suggestionReplyCheckInfoList(checkerOpenid,checkState);
+            SuggestionModel model = new SuggestionModel();
+            List<SuggestionReplyCheckInfoDTO> dtos = model.suggestionReplyCheckInfoListTrans(daos);
+            if(dtos.size() > 0){
+                return Result.success(dtos);
+            }else {
+                return Result.failure("没有匹配数据");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
     }
 
     public String getReplyOpenId(String userLocation) {

@@ -121,7 +121,6 @@ public class SuggestionReplyRepository {
                 "  where check_state = ? and  sr.reply_openid in( " +
                 " select distinct(replier_openid) from d_customer_service_staff where checker_openid =? ) order by submit_date desc ";
         return jdbcTemplate.query(sql,new Object[]{checkState,checkerOpenid}, new SuggestionReplyCheckInfoDaoRowMapper());
-
     }
 
 

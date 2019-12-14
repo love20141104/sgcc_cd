@@ -394,4 +394,29 @@ public class SuggestionModel {
         }
         return dtos;
     }
+
+    public List<SuggestionReplyCheckInfoDTO> suggestionReplyCheckInfoListTrans(List<SuggestionReplyCheckInfoDao> daos) {
+        List<SuggestionReplyCheckInfoDTO> suggestionReplyCheckInfoDTOS = new ArrayList<>();
+        daos.forEach(dao->{
+            suggestionReplyCheckInfoDTOS.add(new SuggestionReplyCheckInfoDTO(
+                    dao.getSuggestionId(),
+                    dao.getUserId(),
+                    dao.getSuggestionContent(),
+                    dao.getSuggestionContact(),
+                    dao.getSuggestionTel(),
+                    Utils.GetTime(dao.getSubmitDate()),
+                    dao.getImg_1(),
+                    dao.getImg_2(),
+                    dao.getImg_3(),
+                    dao.getReplyId(),
+                    dao.getReplyContent(),
+                    Utils.GetTime(dao.getReplyDate())
+
+            ));
+        });
+        return suggestionReplyCheckInfoDTOS;
+    }
+
+
+
 }

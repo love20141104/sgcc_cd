@@ -318,4 +318,10 @@ public class SuggestionController {
     public Result suggestionReplyCheckInfoDaoList(@PathVariable String openId ,Boolean checkState){
         return suggestionService.suggestionReplyCheckInfoList(openId,checkState);
     }
+
+
+
+
+
+
 }
