@@ -3,6 +3,8 @@ package com.sgcc.repository;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.sgcc.dao.QuestionAnswerDao;
+import com.sgcc.dao.QuestionAnswerDetailDao;
+import com.sgcc.dao.QuestionCategoryDao;
 import com.sgcc.dtomodel.question.QAnswerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,12 +31,32 @@ public class QAnswerRepository {
     @Value("${precompile}")
     private Boolean precompile;
 
+
+    public List<QuestionAnswerDetailDao> findAllQAnswerDetail(String id){
+        String sql = "select a.id,a.category_id,b.category_desc,a.question_desc,a.answer,a.available " +
+                "from d_question_answer a,d_question_category b " +
+                "where a.category_id=b.category_id and a.available = 1 and a.id = ?;";
+        List<QuestionAnswerDetailDao> answerDaoList = jdbcTemplate.query(sql,new Object[]{id},new answerDetailRowMapper());
+        return answerDaoList;
+    }
+
+
+    public List<QuestionCategoryDao> findQCategorys(){
+
+        String sql = "select id,category_id,category_desc,category_order,category_available,category_detail from d_question_category"
+                + " where category_available = 1 ";
+        List<QuestionCategoryDao> questionCategoryDaos = jdbcTemplate.query(sql,new answerCategoryRowMapper());
+        return questionCategoryDaos;
+    }
+
     /**
      * 查询所有问题回答
      * @param
      */
-    public List<QuestionAnswerDao> findAllQAnswer(){
+    public List<QuestionAnswerDao> findAllQAnswer(String keyword){
         String sql = "select id,category_id,question_desc,answer,available from d_question_answer where available = 1 ";
+        if (!Strings.isNullOrEmpty(keyword))
+            sql += " and question_desc like '%"+keyword+"%'";
         List<QuestionAnswerDao> answerDaoList = jdbcTemplate.query(sql,new answerRowMapper());
         return answerDaoList;
     }
@@ -125,6 +147,36 @@ public class QAnswerRepository {
             logger.info("SQL:" + sql);
             jdbcTemplate.update(sql);
         }
+    }
+
+    class answerCategoryRowMapper implements RowMapper<QuestionCategoryDao> {
+        @Override
+        public QuestionCategoryDao mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new QuestionCategoryDao(
+                    rs.getString("id"),
+                    rs.getString("category_id"),
+                    rs.getString("category_desc"),
+                    rs.getInt("category_order"),
+                    rs.getBoolean("category_available"),
+                    rs.getString("category_detail")
+            );
+        }
+
+    }
+
+    class answerDetailRowMapper implements RowMapper<QuestionAnswerDetailDao> {
+        @Override
+        public QuestionAnswerDetailDao mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new QuestionAnswerDetailDao(
+                    rs.getString("id"),
+                    rs.getString("category_id"),
+                    rs.getString("category_desc"),
+                    rs.getString("question_desc"),
+                    rs.getString("answer"),
+                    rs.getBoolean("available")
+            );
+        }
+
     }
 
     class answerRowMapper implements RowMapper<QuestionAnswerDao> {

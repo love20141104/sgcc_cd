@@ -2,6 +2,7 @@ package com.sgcc.entity.query;
 
 import com.sgcc.dao.HotQuestionDao;
 import com.sgcc.dao.QuestionAnswerDao;
+import com.sgcc.dao.QuestionAnswerDetailDao;
 import com.sgcc.dao.QuestionCategoryDao;
 import com.sgcc.dtomodel.question.QAnswerDTO;
 import com.sgcc.repository.*;
@@ -22,6 +23,23 @@ public class QAQueryEntity {
     private QCategorysRepository qCategorysRepository;
     @Autowired
     private HotCategoryRepositry hotCategoryRepositry;
+    @Autowired
+    private QAnswerRepository qAnswerRepository;
+
+
+    public List<QuestionAnswerDao> findAllQAnswer(String keyword){
+        return qAnswerRepository.findAllQAnswer(keyword);
+    }
+
+    public List<QuestionCategoryDao> findQCategorys(){
+        return qAnswerRepository.findQCategorys();
+    }
+
+    public List<QuestionAnswerDetailDao> findAllQAnswerDetail(String id){
+        return qAnswerRepository.findAllQAnswerDetail(id);
+    }
+
+
 
     /**
      * 从mysql中查询可用的问题分类列表

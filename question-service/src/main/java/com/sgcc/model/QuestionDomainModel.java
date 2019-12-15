@@ -2,7 +2,11 @@ package com.sgcc.model;
 
 import com.google.common.base.Strings;
 import com.sgcc.dao.QuestionAnswerDao;
+import com.sgcc.dao.QuestionAnswerDetailDao;
 import com.sgcc.dao.QuestionCategoryDao;
+import com.sgcc.dto.QuestionAnswerDTO;
+import com.sgcc.dto.QuestionAnswerDetailDTO;
+import com.sgcc.dto.QuestionAnwserListDTO;
 import com.sgcc.dtomodel.question.QADTO;
 import com.sgcc.dtomodel.question.QAListDTO;
 import com.sgcc.dtomodel.question.QuestionCategoryDTO;
@@ -59,5 +63,55 @@ public class QuestionDomainModel {
             }};
         });
     }
+
+
+    public List<QuestionAnwserListDTO> getAllQuestionAnwsersListTrans(List<QuestionAnswerDao> questionAnswerDaos,
+                                               List<QuestionCategoryDao> questionCategoryDaos) {
+        List<QuestionAnwserListDTO> questionAnwserListDTOS = new ArrayList<>();
+        List<QuestionAnswerDTO> list = new ArrayList<>();
+
+        for (int i = 0; i < questionCategoryDaos.size(); i++) {
+            for (int j = 0; j < questionAnswerDaos.size(); j++) {
+                if (questionAnswerDaos.get(j).getCategoryId().equals(questionCategoryDaos.get(i).getCategoryId())){
+                    list.add(new QuestionAnswerDTO(
+                            questionAnswerDaos.get(j).getId(),
+                            questionAnswerDaos.get(j).getQuestionDesc()
+                    ));
+                }
+            }
+            questionAnwserListDTOS.add(new QuestionAnwserListDTO(questionCategoryDaos.get(i).getCategoryDesc(),
+                    questionCategoryDaos.get(i).getId(),list));
+        }
+
+//        questionCategoryDaos.forEach(dao->{
+//            questionAnswerDaos.forEach(qdao->{
+//                if (qdao.getCategoryId().equals(dao.getCategoryId())){
+//                    list.add(new QuestionAnswerDTO(
+//                            qdao.getId(),
+//                            qdao.getQuestionDesc()
+//                    ));
+//                    questionAnwserListDTOS.add(new QuestionAnwserListDTO(dao.getCategoryDesc(),dao.getId(),list));
+//                }
+//
+//            });
+//
+//        });
+
+        return questionAnwserListDTOS;
+    }
+
+
+    public List<QuestionAnswerDetailDTO> QuestionAnwsersDetailTrans(List<QuestionAnswerDetailDao> questionAnswerDetailDaos) {
+        List<QuestionAnswerDetailDTO> questionAnswerDetailDTOS = new ArrayList<>();
+        questionAnswerDetailDaos.forEach(dao->{
+            questionAnswerDetailDTOS.add(new QuestionAnswerDetailDTO(
+                    dao.getCategoryName(),
+                    dao.getQuestionDesc(),
+                    dao.getAnswer()
+            ));
+        });
+        return questionAnswerDetailDTOS;
+    }
+
 
 }

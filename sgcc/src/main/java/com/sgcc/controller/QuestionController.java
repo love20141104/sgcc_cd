@@ -17,6 +17,22 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
+
+    @ApiOperation(value = "查询所有问题列表", notes = "")
+    @GetMapping(value = "/AllQuestionAnwsers")
+    public Result getAllQuestionAnwsersList(@RequestParam(required = false) String keyword) {
+        return questionService.getAllQuestionAnwsersList(keyword);
+    }
+
+    @ApiOperation(value = "查询所有问题信息", notes = "")
+    @GetMapping(value = "/AllQuestionAnwsersDetail")
+    public Result getAllQuestionAnwsersDetail(@RequestParam String id) {
+        return questionService.getAllQuestionAnwsersDetail(id);
+    }
+
+
+
+
     /**
      * 查问题分类列表
      *

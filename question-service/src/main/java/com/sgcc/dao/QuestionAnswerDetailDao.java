@@ -9,24 +9,25 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
 
+import java.io.Serializable;
+
 /**
  * 常见问题
  */
-@Wither
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash("question_answer")
-public class QuestionAnswerDao {
-    @TimeToLive
-    private long timetolive = 60;
+public class QuestionAnswerDetailDao implements Serializable {
+    private static final long serialVersionUID = -5305322832633688504L;
 
     // 问题id
-    @Id
+
     private String id;
-    @Indexed
+
     // 问题类别id
     private String categoryId;
+
+    private String categoryName;
 
     // 问题描述
     private String questionDesc;
@@ -34,16 +35,7 @@ public class QuestionAnswerDao {
     // 问题回答
     private String answer;
 
-    @Indexed
     // 是否可用
     private Boolean categoryAvailable;
-
-    public QuestionAnswerDao(String id,String categoryId,String questionDesc,String answer,Boolean categoryAvailable){
-        this.id = id;
-        this.categoryId = categoryId;
-        this.questionDesc = questionDesc;
-        this.answer = answer;
-        this.categoryAvailable = categoryAvailable;
-    }
 
 }

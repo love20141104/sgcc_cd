@@ -4,7 +4,10 @@ import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.HotQuestionDao;
 import com.sgcc.dao.QuestionAnswerDao;
+import com.sgcc.dao.QuestionAnswerDetailDao;
 import com.sgcc.dao.QuestionCategoryDao;
+import com.sgcc.dto.QuestionAnswerDetailDTO;
+import com.sgcc.dto.QuestionAnwserListDTO;
 import com.sgcc.dtomodel.question.*;
 import com.sgcc.entity.event.QAEventEntity;
 import com.sgcc.entity.query.QAQueryEntity;
@@ -249,6 +252,49 @@ public class QuestionService {
             e.printStackTrace();
             return Result.failure(TopErrorCode.PARAMETER_ERR);
         }
+    }
+
+    /**
+     * 查询所有问题列表
+     * @param keyword
+     * @return
+     */
+    public Result getAllQuestionAnwsersList(String keyword) {
+
+        try {
+            List<QuestionAnswerDao> questionAnswerDaos = qaQueryEntity.findAllQAnswer(keyword);
+            List<QuestionCategoryDao> questionCategoryDaos =  qaQueryEntity.findQCategorys();
+            QuestionDomainModel model = new QuestionDomainModel();
+            List<QuestionAnwserListDTO> dtos = model.getAllQuestionAnwsersListTrans(questionAnswerDaos,questionCategoryDaos);
+            if (dtos.size() > 0)
+                return Result.success(dtos);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+    /**
+     * 查询所有问题信息
+     * @param id
+     * @return
+     */
+    public Result getAllQuestionAnwsersDetail(String id) {
+        if (Strings.isNullOrEmpty(id))
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        try {
+            List<QuestionAnswerDetailDao> questionAnswerDetailDaos = qaQueryEntity.findAllQAnswerDetail(id);
+            QuestionDomainModel model = new QuestionDomainModel();
+            List<QuestionAnswerDetailDTO> detailDTOS=model.QuestionAnwsersDetailTrans(questionAnswerDetailDaos);
+            if (detailDTOS.size() > 0)
+                return Result.success(detailDTOS);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
     }
 
     /**
