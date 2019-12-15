@@ -81,5 +81,7 @@ public class SuggestionEventEntity {
     {
         suggestionReplyRepository.update(dao);
     }
-    public void CheckReject(String sid , String reject){ suggestionReplyRepository.update(sid,reject);}
+    public void CheckReject(String sid, String reject, int check_state, Date date){
+        suggestionReplyRepository.update(sid,reject,check_state,date);
+    }
 }

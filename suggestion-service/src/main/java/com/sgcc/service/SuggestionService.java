@@ -254,10 +254,10 @@ public class SuggestionService {
         SuggestionModel model = new SuggestionModel();
         suggestionEventEntity.CheckReply( model.GetSuggestionCheckDao(dto));
     }
-    public void ReplyReject( String suggestionId,String check_reject )
+    public void ReplyReject(String suggestionId, String check_reject, int check_state, Date date)
     {
         SuggestionModel model = new SuggestionModel();
-        suggestionEventEntity.CheckReject( suggestionId , check_reject);
+        suggestionEventEntity.CheckReject( suggestionId , check_reject,check_state,date);
     }
     public List<ReplierAndCheckerDao> GetReplierAndChecker( String region )
     {
@@ -317,6 +317,10 @@ public class SuggestionService {
 
     public String getReplyOpenId(String userLocation) {
         return suggestionQueryEntity.getReplyOpenId( userLocation);
+    }
+
+    public String getReplyOpenIdByCheckOpenId(String check_openid) {
+        return suggestionQueryEntity.getReplyOpenIdByCheckOpenId( check_openid);
     }
 }
 

@@ -20,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Api(value = "", tags = "意见建议接口")
 @RestController
@@ -118,11 +115,11 @@ public class SuggestionController {
         {
             // 审核未通过 todo
             // AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE
-            suggestionService.ReplyReject( dto.getSuggestion_id(),dto.getCheck_reject() );
-
+            suggestionService.ReplyReject( dto.getSuggestion_id(),dto.getCheck_reject(),dto.getCheck_state(),new Date());
+            String replyopenid= suggestionService.getReplyOpenIdByCheckOpenId(dto.getCheck_openid());
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
-            temp.setTouser( dto.getCheck_openid() );
+            temp.setTouser( replyopenid );
             temp.setUrl("http://119.23.22.176:80/approval");
 
             Map<String, TemplateData> map = new LinkedHashMap<>();

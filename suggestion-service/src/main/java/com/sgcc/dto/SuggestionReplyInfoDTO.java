@@ -36,7 +36,7 @@ public class SuggestionReplyInfoDTO implements Serializable {
     private String img_3;
 
 
-    private String id;
+    //private String id;
     private String suggestion_id;
     private String reply_content;     // 回复内容
     private String reply_openid;  // 回复人

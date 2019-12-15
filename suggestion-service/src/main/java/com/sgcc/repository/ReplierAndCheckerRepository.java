@@ -63,7 +63,7 @@ public class ReplierAndCheckerRepository {
     }
 
     public String getReplyOpenId(String userLocation) {
-        String sql = "select checker_openid from d_customer_service_staff where major_region like ? ";
+        String sql = "select replier_openid from d_customer_service_staff where major_region like ? ";
         String s = jdbcTemplate.queryForObject(sql, new Object[]{"%" + userLocation + "%"}, String.class);
         return s;
     }
@@ -90,6 +90,12 @@ public class ReplierAndCheckerRepository {
             return null;
         }
 
+    }
+
+    public String getReplyOpenIdByCheckOpenId(String check_openid) {
+        String sql = "select replier_openid from d_customer_service_staff where checker_openid like ? ";
+        String s = jdbcTemplate.queryForObject(sql, new Object[]{check_openid}, String.class);
+        return s;
     }
 
 

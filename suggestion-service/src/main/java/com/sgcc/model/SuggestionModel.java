@@ -375,9 +375,9 @@ public class SuggestionModel {
                     &&dao.getCheck_state()==1){
                 dto.setState("4");
             }
-            dto.setSubmitDate(Utils.GetTime(dao.getSubmitDate()));
-            dto.setReply_date(Utils.GetTime(dao.getReply_date()));
-            dto.setCheck_date(Utils.GetTime(dao.getCheck_date()));
+            dto.setSubmitDate(dao.getSubmitDate()==null?null:Utils.GetTime(dao.getSubmitDate()));
+            dto.setReply_date(dao.getReply_date()==null?null:Utils.GetTime(dao.getReply_date()));
+            dto.setCheck_date(dao.getCheck_date()==null?null:Utils.GetTime(dao.getCheck_date()));
             dtos.add(dto);
         });
 

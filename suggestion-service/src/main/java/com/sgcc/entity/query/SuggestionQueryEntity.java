@@ -121,4 +121,8 @@ public class SuggestionQueryEntity {
     public Integer getCountByOpenId(String openId, Integer role) {
         return  replierAndCheckerRepository.getCountByOpenId( openId,  role);
     }
+
+    public String getReplyOpenIdByCheckOpenId(String check_openid) {
+        return replierAndCheckerRepository.getReplyOpenIdByCheckOpenId( check_openid);
+    }
 }

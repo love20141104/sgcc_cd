@@ -49,9 +49,9 @@ public class SuggestionReplyRepository {
     }
 
     @Transactional
-    public void update( String sid,String reject ){
-        String sql = "UPDATE b_suggestion_reply SET check_reject = ? where suggestion_id = ?";
-        jdbcTemplate.update(sql,new Object[]{reject,sid});
+    public void update(String sid, String reject, int check_state, Date date){
+        String sql = "UPDATE b_suggestion_reply SET check_reject = ? ,check_state=?,check_date=? where suggestion_id = ?";
+        jdbcTemplate.update(sql,new Object[]{reject,check_state,Utils.GetTime(date),sid});
     }
 
     public SuggestionReplyMappingDao GetBySuggestionID(String suggestionId )
@@ -231,7 +231,7 @@ public class SuggestionReplyRepository {
                     rs.getString("suggestion_content"),
                     rs.getString("suggestion_contact"),
                     rs.getString("suggestion_tel"),
-                    Utils.GetDate(rs.getString("submit_date")),
+                    rs.getString("submit_date")==null?null:Utils.GetDate(rs.getString("submit_date")),
                     rs.getString("img_1"),
                     rs.getString("img_2"),
                     rs.getString("img_3"),
@@ -239,11 +239,11 @@ public class SuggestionReplyRepository {
                     rs.getString("suggestion_id"),
                     rs.getString("reply_content"),
                     rs.getString("reply_openid"),
-                    Utils.GetDate(rs.getString("reply_date")),
+                    rs.getString("reply_date")==null?null:Utils.GetDate(rs.getString("reply_date")),
                     rs.getString("check_openid"),
                     rs.getInt("check_state"),
                     rs.getString("check_reject"),
-            Utils.GetDate(rs.getString("check_date")));
+                    rs.getString("check_date")==null?null:Utils.GetDate(rs.getString("check_date")));
             return dao;
         }
     }
