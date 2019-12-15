@@ -58,7 +58,7 @@ public class SuggestionController {
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("HAv_qhY1qWVNXw20c1Fc_UBv02vtPAFSh1EiZvtp_qk");
             temp.setTouser(replyOpenId);
-            temp.setUrl("");
+            temp.setUrl("https://sgcc.link/feedback");
 
             Map<String, TemplateData> map = new LinkedHashMap<>();
             map.put("serviceInfo",new TemplateData("你好，有新的意见建议需要回复!","#000000"));
@@ -87,7 +87,7 @@ public class SuggestionController {
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
             temp.setTouser( dao.getCheck_openid() );
-            temp.setUrl("http://119.23.22.176:80/feedback");
+            temp.setUrl("https://sgcc.link/approval");
 
             Map<String, TemplateData> map = new LinkedHashMap<>();
             map.put("first",new TemplateData("你好，有新的意见建议回复需要审核!","#000000"));
@@ -120,7 +120,7 @@ public class SuggestionController {
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
             temp.setTouser( replyopenid );
-            temp.setUrl("http://119.23.22.176:80/approval");
+            temp.setUrl("https://sgcc.link/feedback");
 
             Map<String, TemplateData> map = new LinkedHashMap<>();
             map.put("first",new TemplateData("你好，你的回复未通过审核!","#000000"));
@@ -149,7 +149,7 @@ public class SuggestionController {
                 TemplateMessage temp = new TemplateMessage();
                 temp.setTemplate_id("Yfv4siCzMo9MkeM9BEs61SlBf1KMTj2pHtMxn-OTYnc");
                 temp.setTouser( detailDTO.getUserId() );
-                temp.setUrl("");
+                temp.setUrl("https://sgcc.link/proposalList");
 
                 Map<String, TemplateData> map = new LinkedHashMap<>();
                 map.put("first",new TemplateData("您好，您的意见建议已回复!","#000000"));

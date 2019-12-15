@@ -37,8 +37,8 @@ public class SuggestionReplyRepository {
 
     @Transactional
     public void update( SuggestionReplyDao dao  ){
-        String sql = "UPDATE b_suggestion_reply SET reply_content = ?,reply_date = ? where suggestion_id = ?";
-        jdbcTemplate.update(sql,new Object[]{dao.getReply_content(),dao.getReply_date(),dao.getSuggestion_id() });
+        String sql = "UPDATE b_suggestion_reply SET reply_content = ?,reply_date = ?,check_state = ?,check_date = ?,check_reject=? where suggestion_id = ?";
+        jdbcTemplate.update(sql,new Object[]{dao.getReply_content(),dao.getReply_date(),null,null,null,dao.getSuggestion_id() });
 //                new java.sql.Date(Utils.GetDate(dao.getReply_date()).getTime()),dao.getSuggestion_id() });
     }
 

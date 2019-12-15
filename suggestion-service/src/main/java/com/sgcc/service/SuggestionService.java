@@ -43,7 +43,7 @@ public class SuggestionService {
             if (suggestionReplyInfoDTOS.size() > 0){
                 return Result.success(suggestionReplyInfoDTOS);
             }else{
-                return Result.failure("没有回复消息");
+                return Result.failure(TopErrorCode.NO_DATAS);
             }
 
         }catch (Exception e){
@@ -131,8 +131,8 @@ public class SuggestionService {
         // 缓存到redis
         suggestionEventEntity.Cache( model.Dao2RedisDao(dao) );
         // 异步消息写MySQL，然后刷新 Redis 缓存
-        //suggestionProducer.SaveSuggestionMQ( dao );
-        suggestionEventEntity.Save( dao );
+        suggestionProducer.SaveSuggestionMQ( dao );
+        //suggestionEventEntity.Save( dao );
         // 创建回复单据
         CreateSuggestionReply( new SuggestionMidDTO(dao.getSuggestionId() , submitDTO.getUserLocation()) );
         Result ret = Result.success( getSuggestions(openId) );

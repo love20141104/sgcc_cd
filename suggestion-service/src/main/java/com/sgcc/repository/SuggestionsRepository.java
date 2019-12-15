@@ -33,7 +33,7 @@ public class SuggestionsRepository {
     public List<SuggestionDao> findAllByReplyOpenID(String reply_openId )
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
-               "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bs.reply_user_id,bs.reply_content,bs.reply_date" +
+               "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bs.user_location,bs.reply_user_id,bs.reply_content,bs.reply_date" +
                 " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
                 " where bsr.reply_openid = ? and bsr.reply_content is null and bsr.check_date is null and bsr.check_reject is null";
 
@@ -67,7 +67,7 @@ public class SuggestionsRepository {
     public List<SuggestionDao> findAllByCheckOpenID(String check_openId )
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
-                "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bsr.reply_openid as reply_user_id,bsr.reply_content,bsr.reply_date" +
+                "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bs.user_location,bsr.reply_openid as reply_user_id,bsr.reply_content,bsr.reply_date" +
                 " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
                 " where bsr.check_openid = ? and bsr.reply_content is not null and bsr.check_date is null and bsr.check_reject is null";
 
@@ -76,7 +76,7 @@ public class SuggestionsRepository {
 
     public List<SuggestionDao> findAllByUserID(String userId){
         String sql = "select s.id id,s.suggestion_id suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                "suggestion_tel," + Utils.GetSQLDateStr("submit_date") + ",img_1,img_2,img_3,r.reply_openid,r.reply_content,r.reply_date,r.check_state " +
+                "suggestion_tel," + Utils.GetSQLDateStr("submit_date") + ",img_1,img_2,img_3,user_location,r.reply_openid,r.reply_content,r.reply_date,r.check_state " +
                 " from b_suggestion s left join b_suggestion_reply r on s.suggestion_id= r.suggestion_id " +
                 " where  user_id = ? ";
         logger.info("查询所有意见信息:" + sql);
@@ -103,7 +103,7 @@ public class SuggestionsRepository {
         if (precompile) {
             try {
                 String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                        "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
+                        "suggestion_tel,submit_date,img_1,img_2,img_3,user_location,reply_user_id,reply_content,reply_date from b_suggestion";
                 sql = sql + " where id = ? ";
                 return jdbcTemplate.queryForObject(sql,new Object[]{id}, new suggestionRowMapper());
             } catch (Exception e) {
@@ -112,7 +112,7 @@ public class SuggestionsRepository {
         }else {
             try {
                 String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
-                        "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
+                        "suggestion_tel,submit_date,img_1,img_2,img_3,user_location,reply_user_id,reply_content,reply_date from b_suggestion";
                 sql = sql + " where id = '" + id + "'";
                 return jdbcTemplate.queryForObject(sql, new suggestionRowMapper());
             } catch (Exception e) {
@@ -277,8 +277,8 @@ public class SuggestionsRepository {
                     rs.getString("img_1"),
                     rs.getString("img_2"),
                     rs.getString("img_3"),
-                    rs.getString("img_3"),
                     rs.getString("user_location"),
+                    rs.getString("reply_openid"),
                     null,
                     null,
                     rs.getBoolean("check_state")
