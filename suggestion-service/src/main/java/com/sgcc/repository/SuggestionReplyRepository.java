@@ -37,7 +37,7 @@ public class SuggestionReplyRepository {
 
     @Transactional
     public void update( SuggestionReplyDao dao  ){
-        String sql = "UPDATE b_suggestion_reply SET reply_content = ?,reply_date = ?,check_state = ?,check_date = ?,check_reject=? where suggestion_id = ?";
+        String sql = "UPDATE b_suggestion_reply SET reply_content = ?,reply_date = ?,check_reject=?,check_date=?,check_state=? where suggestion_id = ?";
         jdbcTemplate.update(sql,new Object[]{dao.getReply_content(),dao.getReply_date(),null,null,null,dao.getSuggestion_id() });
 //                new java.sql.Date(Utils.GetDate(dao.getReply_date()).getTime()),dao.getSuggestion_id() });
     }
@@ -131,6 +131,16 @@ public class SuggestionReplyRepository {
         else {
             return null;
         }
+    }
+
+    public List<SuggestionReplyCheckInfoDao> getSuggestionsByUser(String userId) {
+        String sql = "select s.id id,s.suggestion_id,user_id,suggestion_content,suggestion_contact," +
+                " suggestion_tel,submit_date,img_1,img_2,img_3," +
+                " sr.id reply_id,sr.reply_content reply_content,sr.reply_date reply_date,sr.check_reject check_reject,sr.check_state check_state,sr.check_date check_date" +
+                " from b_suggestion_reply sr left join b_suggestion s on sr.suggestion_id=s.suggestion_id " +
+                "  where user_id =?  order by submit_date desc ";
+        return jdbcTemplate.query(sql,new Object[]{userId}, new SuggestionReplyCheckInfoDaoRowMapper());
+
     }
 
 

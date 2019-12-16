@@ -1,12 +1,11 @@
 package com.sgcc.model;
 
+import com.example.Utils;
 import com.sgcc.dao.BusinessCategoryDao;
+import com.sgcc.dao.BusinessGuideBriefDao;
 import com.sgcc.dao.BusinessGuideDao;
 import com.sgcc.dao.BusinessGuideRedisDao;
-import com.sgcc.dto.BusinessCategoryDto;
-import com.sgcc.dto.BusinessCategorySubmitDto;
-import com.sgcc.dto.BusinessGuideDto;
-import com.sgcc.dto.BusinessGuideSubmitDto;
+import com.sgcc.dto.*;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
@@ -57,6 +56,7 @@ public class BusinessModel {
         List<BusinessGuideDto> collect = businessGuideDaos.stream().map(businessGuideDao -> {
             BusinessGuideDto businessGuideDto = new BusinessGuideDto();
             BeanUtils.copyProperties( businessGuideDao,businessGuideDto);
+            businessGuideDto.setCreateDate(Utils.GetTime(businessGuideDao.getCreateDate()));
             return businessGuideDto;
         }).collect(Collectors.toList());
         return collect;
@@ -82,4 +82,44 @@ public class BusinessModel {
         return businessCategoryDao;
     }
 
+
+    public static List<BusinessGuideBriefDao> redisDaoToBriefDaoBG(List<BusinessGuideRedisDao> daos){
+        List<BusinessGuideBriefDao> collect = daos.stream().map(businessGuideDao -> {
+            BusinessGuideBriefDao briefDao = new BusinessGuideBriefDao();
+            BeanUtils.copyProperties( businessGuideDao,briefDao);
+            return briefDao;
+        }).collect(Collectors.toList());
+        return collect;
+    }
+    public static List<BusinessGuideRedisDao> briefDaoToRedisdaoBG(List<BusinessGuideBriefDao> daos){
+        List<BusinessGuideRedisDao> collect = daos.stream().map(businessGuideDao -> {
+            BusinessGuideRedisDao BusinessGuideRedisDao = new BusinessGuideRedisDao();
+            BeanUtils.copyProperties(businessGuideDao, BusinessGuideRedisDao);
+            return BusinessGuideRedisDao;
+        }).collect(Collectors.toList());
+        return collect;
+    }
+    public static List<BusinessGuideBriefDto> briefDaoToBriefDtoBG(List<BusinessGuideBriefDao> daos){
+        List<BusinessGuideBriefDto> collect = daos.stream().map(businessGuideDao -> {
+            BusinessGuideBriefDto dto = new BusinessGuideBriefDto();
+            BeanUtils.copyProperties(businessGuideDao, dto);
+            return dto;
+        }).collect(Collectors.toList());
+        return collect;
+    }
+    public static List<BusinessGuideBriefDto> briefRedisDaoToBriefDtoBG(List<BusinessGuideRedisDao> daos){
+        List<BusinessGuideBriefDto> collect = daos.stream().map(businessGuideDao -> {
+            BusinessGuideBriefDto dto = new BusinessGuideBriefDto();
+            BeanUtils.copyProperties(businessGuideDao, dto);
+            return dto;
+        }).collect(Collectors.toList());
+        return collect;
+    }
+
+    public static BusinessGuideDto businessGuideDaoToBusinessGuideDto(BusinessGuideDao businessGuideDao) {
+        BusinessGuideDto dto=new BusinessGuideDto();
+        BeanUtils.copyProperties(businessGuideDao, dto);
+        dto.setCreateDate(Utils.GetTime(businessGuideDao.getCreateDate()));
+        return dto;
+    }
 }

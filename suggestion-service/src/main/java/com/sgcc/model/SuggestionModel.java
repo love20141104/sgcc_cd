@@ -100,6 +100,8 @@ public class SuggestionModel {
 
         SuggestionViewDTO dto = new SuggestionViewDTO();
         BeanUtils.copyProperties(dao,dto);
+        dto.setReplyDate(Utils.GetTime(dao.getReplyDate()));
+        dto.setSubmitDate(Utils.GetTime(dao.getSubmitDate()));
         return dto;
     }
     public List<SuggestionViewDTO> RedisDAOS2DTOS( List<SuggestionRedisDao> daos )

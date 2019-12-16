@@ -319,8 +319,19 @@ public class SuggestionService {
         return suggestionQueryEntity.getReplyOpenId( userLocation);
     }
 
-    public String getReplyOpenIdByCheckOpenId(String check_openid) {
+    public ReplierAndCheckerDao getReplyOpenIdByCheckOpenId(String check_openid) {
         return suggestionQueryEntity.getReplyOpenIdByCheckOpenId( check_openid);
+    }
+
+    public ReplierAndCheckerDao getReplyOpenIdByReplyOpenId(String reply_openid) {
+        return suggestionQueryEntity.getReplyOpenIdByReplyOpenId( reply_openid);
+    }
+
+    public List<SuggestionReplyCheckInfoDTO> getSuggestionsByUserId(String userId) {
+        List<SuggestionReplyCheckInfoDao> daos = suggestionQueryEntity.getSuggestionsByUserId(userId);
+        SuggestionModel model = new SuggestionModel();
+        List<SuggestionReplyCheckInfoDTO> dtos = model.suggestionReplyCheckInfoListTrans(daos);
+        return dtos;
     }
 }
 

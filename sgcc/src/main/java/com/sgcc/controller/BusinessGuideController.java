@@ -15,10 +15,21 @@ public class BusinessGuideController {
     @Autowired
     private BusinessGuideService businessGuideService;
 
-    @ApiOperation(value = "查询业务指南列表", notes = "")
+    /*@ApiOperation(value = "查询业务指南列表", notes = "")
     @GetMapping(value = "/businessGuides")
     public Result find( String cid) {
         return businessGuideService.getBusinessGuideList(cid);
+    }*/
+
+    @ApiOperation(value = "查询业务指南列表", notes = "")
+    @GetMapping(value = "/List")
+    public Result findBusinessGuides( String cid,String title) {
+        return businessGuideService.getList(cid,title);
+    }
+    @ApiOperation(value = "查询业务指南列表", notes = "")
+    @GetMapping(value = "/{id}")
+    public Result findBusinessGuides(@PathVariable String id) {
+        return businessGuideService.getBusinessGuide(id);
     }
 
     @ApiOperation(value = "后台查询业务指南列表", notes = "")

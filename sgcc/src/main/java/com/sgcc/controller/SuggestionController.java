@@ -3,10 +3,7 @@ package com.sgcc.controller;
 import com.example.Utils;
 import com.example.result.Result;
 import com.google.common.base.Strings;
-import com.sgcc.dao.ReplierAndCheckerDao;
-import com.sgcc.dao.SuggestionDao;
-import com.sgcc.dao.SuggestionReplyInstDao;
-import com.sgcc.dao.SuggestionReplyMappingDao;
+import com.sgcc.dao.*;
 import com.sgcc.dto.*;
 import com.sgcc.dtomodel.wechat.template.TemplateData;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
@@ -35,7 +32,7 @@ public class SuggestionController {
     @ApiOperation(value = "获取意见列表", notes = "")
     @GetMapping(value = "/users/{id}")
     public Result Suggestions(@PathVariable("id") String userId) {
-        List<SuggestionViewDTO> dtos = suggestionService.getSuggestions(userId);
+        List<SuggestionReplyCheckInfoDTO>  dtos = suggestionService.getSuggestionsByUserId(userId);
 
         if( dtos == null )
             return Result.failure( TopErrorCode.NO_DATAS);
@@ -82,6 +79,7 @@ public class SuggestionController {
         suggestionService.ReplyContent( dto );
         // Todo 发送消息到信息审核人员
         SuggestionReplyInstDao dao = suggestionService.GetBySuggestionID( dto.getSuggestion_id() );
+        ReplierAndCheckerDao replyer=suggestionService.getReplyOpenIdByReplyOpenId(dto.getReply_openid());
         if( dao != null )
         {
             TemplateMessage temp = new TemplateMessage();
@@ -91,7 +89,7 @@ public class SuggestionController {
 
             Map<String, TemplateData> map = new LinkedHashMap<>();
             map.put("first",new TemplateData("你好，有新的意见建议回复需要审核!","#000000"));
-            map.put("keyword1",new TemplateData("意见建议回复人员","#000000"));
+            map.put("keyword1",new TemplateData(replyer.getReplier_name(),"#000000"));
             map.put("keyword2",new TemplateData(Utils.GetCurrentTime(),"#000000"));
             map.put("keyword3",new TemplateData(dto.getReply_content(),"#000000"));
             map.put("remark",new TemplateData("请尽快审核，谢谢!","#000000"));
@@ -104,6 +102,57 @@ public class SuggestionController {
     }
 
     @ApiOperation(value = "审核意见", notes = "")
+    @PostMapping(value = "/SuggestionCheck")
+    public Result suggestionCheck(@RequestBody SuggestionReplyCheckDTO dto)
+    {
+        if( dto == null )
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        suggestionService.ReplyReject( dto.getSuggestion_id(),dto.getCheck_reject(),dto.getCheck_state(),new Date());
+        if( dto.getCheck_state() == 0 && !Strings.isNullOrEmpty(dto.getCheck_reject()) )
+        {
+            // 审核未通过 todo
+            // AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE
+
+            ReplierAndCheckerDao replyer= suggestionService.getReplyOpenIdByCheckOpenId(dto.getCheck_openid());
+            TemplateMessage temp = new TemplateMessage();
+            temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
+            temp.setTouser( replyer.getReplier_openid() );
+            temp.setUrl("https://sgcc.link/feedback");
+
+            Map<String, TemplateData> map = new LinkedHashMap<>();
+            map.put("first",new TemplateData("你好，你的回复未通过审核!","#000000"));
+            map.put("keyword1",new TemplateData(replyer.getReplier_name(),"#000000"));
+            map.put("keyword2",new TemplateData(Utils.GetCurrentTime(),"#000000"));
+            map.put("keyword3",new TemplateData(dto.getCheck_reject(),"#000000"));
+            map.put("remark",new TemplateData("请尽快修改，谢谢!","#000000"));
+            temp.setData( map );
+
+            weChatService.SimpleSendMsg( temp );
+            return Result.success();
+        }
+        else {
+            SuggestionReplyMappingDao dao = suggestionService.GetFullReplyInfo(dto.getSuggestion_id());
+            Result suggestion = suggestionService.getSuggestion(dto.getSuggestion_id());
+            SuggestionReplyInfoDao suggestionReplyInfoDao=(SuggestionReplyInfoDao)suggestion.getData();
+            TemplateMessage temp = new TemplateMessage();
+            temp.setTemplate_id("Yfv4siCzMo9MkeM9BEs61SlBf1KMTj2pHtMxn-OTYnc");
+            temp.setTouser(suggestionReplyInfoDao.getUserId());
+            temp.setUrl("https://sgcc.link/proposalList");
+
+            Map<String, TemplateData> map = new LinkedHashMap<>();
+            map.put("first", new TemplateData("您好，您的意见建议已回复!", "#000000"));
+            map.put("keyword1", new TemplateData(suggestionReplyInfoDao.getSuggestionContact(), "#000000"));
+            map.put("keyword2", new TemplateData(suggestionReplyInfoDao.getSuggestionTel(), "#000000"));
+            map.put("keyword3", new TemplateData(dao.getReply_date(), "#000000"));
+            map.put("keyword4", new TemplateData(dao.getReply_content(), "#000000"));
+            map.put("remark", new TemplateData("感谢您的意见，谢谢!", "#000000"));
+            temp.setData(map);
+            weChatService.SimpleSendMsg(temp);
+            return Result.success();
+        }
+    }
+
+    /*@ApiOperation(value = "审核意见", notes = "")
     @PostMapping(value = "/SuggestionCheck/{id}")
     public Result suggestionCheck(@RequestBody SuggestionReplyCheckDTO dto,
                          @PathVariable("id") String openID)
@@ -116,15 +165,15 @@ public class SuggestionController {
             // 审核未通过 todo
             // AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE
             suggestionService.ReplyReject( dto.getSuggestion_id(),dto.getCheck_reject(),dto.getCheck_state(),new Date());
-            String replyopenid= suggestionService.getReplyOpenIdByCheckOpenId(dto.getCheck_openid());
+            ReplierAndCheckerDao replyer= suggestionService.getReplyOpenIdByCheckOpenId(dto.getCheck_openid());
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
-            temp.setTouser( replyopenid );
+            temp.setTouser( replyer.getReplier_openid() );
             temp.setUrl("https://sgcc.link/feedback");
 
             Map<String, TemplateData> map = new LinkedHashMap<>();
             map.put("first",new TemplateData("你好，你的回复未通过审核!","#000000"));
-            map.put("keyword1",new TemplateData("意见建议回复审核人员","#000000"));
+            map.put("keyword1",new TemplateData(replyer.getReplier_name(),"#000000"));
             map.put("keyword2",new TemplateData(Utils.GetCurrentTime(),"#000000"));
             map.put("keyword3",new TemplateData(dto.getCheck_reject(),"#000000"));
             map.put("remark",new TemplateData("请尽快修改，谢谢!","#000000"));
@@ -164,7 +213,7 @@ public class SuggestionController {
             }
         }
         return Result.success();
-    }
+    }*/
 
 
     @ApiOperation(value = "查看意见", notes = "")

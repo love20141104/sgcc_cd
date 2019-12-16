@@ -122,7 +122,15 @@ public class SuggestionQueryEntity {
         return  replierAndCheckerRepository.getCountByOpenId( openId,  role);
     }
 
-    public String getReplyOpenIdByCheckOpenId(String check_openid) {
+    public ReplierAndCheckerDao getReplyOpenIdByCheckOpenId(String check_openid) {
         return replierAndCheckerRepository.getReplyOpenIdByCheckOpenId( check_openid);
+    }
+
+    public ReplierAndCheckerDao getReplyOpenIdByReplyOpenId(String reply_openid) {
+        return replierAndCheckerRepository.getReplyOpenIdByReplyOpenId( reply_openid);
+    }
+
+    public List<SuggestionReplyCheckInfoDao> getSuggestionsByUserId(String userId) {
+        return suggestionReplyRepository.getSuggestionsByUser(userId);
     }
 }

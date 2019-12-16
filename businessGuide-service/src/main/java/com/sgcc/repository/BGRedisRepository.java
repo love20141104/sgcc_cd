@@ -11,4 +11,5 @@ public interface BGRedisRepository extends CrudRepository<BusinessGuideRedisDao,
 
     List<BusinessGuideRedisDao> findAllByCategoryId(String cid);
     List<BusinessGuideRedisDao> findAllByTitle(String title);
+
 }

@@ -29,7 +29,7 @@ public class SuggestionViewDTO implements Serializable{
     private String suggestionTel;
 
     // 意见提交时间
-    private Date submitDate;
+    private String submitDate;
 
     private String img_1;
 
@@ -41,7 +41,7 @@ public class SuggestionViewDTO implements Serializable{
 
     private String replyContent;
 
-    private Date replyDate;
+    private String replyDate;
 
     private Boolean checkState;
 }

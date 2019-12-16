@@ -82,7 +82,7 @@ public class ReplierAndCheckerRepository {
         }
         if(3==role){
             String sql = "select count(s.id) from b_suggestion_reply sr left join b_suggestion s on sr.suggestion_id=s.suggestion_id " +
-                    "  where check_state is null  and  sr.reply_openid in( " +
+                    "  where check_state is null and sr.reply_content is not null  and  sr.reply_openid in( " +
                     " select distinct(replier_openid) from d_customer_service_staff where checker_openid =? )  ";
             Integer s = jdbcTemplate.queryForObject(sql, new Object[]{openId}, Integer.class);
             return s;
@@ -92,10 +92,17 @@ public class ReplierAndCheckerRepository {
 
     }
 
-    public String getReplyOpenIdByCheckOpenId(String check_openid) {
-        String sql = "select replier_openid from d_customer_service_staff where checker_openid like ? ";
-        String s = jdbcTemplate.queryForObject(sql, new Object[]{check_openid}, String.class);
-        return s;
+    public ReplierAndCheckerDao getReplyOpenIdByCheckOpenId(String check_openid) {
+        String sql = "select id,major_region,replier_openid,replier_name,checker_openid,checker_name " +
+                "from d_customer_service_staff where checker_openid = ? ";
+        return jdbcTemplate.queryForObject(sql, new Object[]{check_openid}, new ReplierAndCheckerRowMapper());
+
+    }
+
+    public ReplierAndCheckerDao getReplyOpenIdByReplyOpenId(String reply_openid) {
+        String sql = "select  id,major_region,replier_openid,replier_name,checker_openid,checker_name " +
+                "from d_customer_service_staff where replier_openid = ? ";
+        return jdbcTemplate.queryForObject(sql, new Object[]{reply_openid}, new ReplierAndCheckerRowMapper());
     }
 
 

@@ -2,10 +2,7 @@ package com.sgcc.service;
 
 import com.example.result.Result;
 import com.google.common.base.Strings;
-import com.sgcc.dao.BusinessCategoryDao;
-import com.sgcc.dao.BusinessCategoryRedisDao;
-import com.sgcc.dao.BusinessGuideDao;
-import com.sgcc.dao.BusinessGuideRedisDao;
+import com.sgcc.dao.*;
 import com.sgcc.dto.*;
 import com.sgcc.entity.BusinessGuideQueryEntity;
 import com.sgcc.exception.TopErrorCode;
@@ -67,7 +64,7 @@ public class BusinessGuideService {
         return Result.success();
     }
 
-    public Result getBusinessGuideList(String cid){
+/*    public Result getBusinessGuideList(String cid){
         List<BusinessGuideDto> businessGuideDtos;
         List<BusinessGuideDao> businessGuideDaos;
         if(Strings.isNullOrEmpty(cid)) {
@@ -94,7 +91,7 @@ public class BusinessGuideService {
             }
         }
         return Result.success(businessGuideDtos);
-    }
+    }*/
 
 
     public Result getBackstageBusinessGuideList(String cid) {
@@ -145,11 +142,34 @@ public class BusinessGuideService {
 
 
     public void initRedisBusinessGuide(){
-        List<BusinessGuideDao> businessGuideDaos = businessGuideRepository.selectBusinessGuide(null);
-        List<BusinessGuideRedisDao> businessGuideDaos1 = BusinessModel.daooToredisdaoBG(businessGuideDaos);
+        List<BusinessGuideBriefDao> daos = businessGuideRepository.selectBusinessGuideBrief(null, null);
+        List<BusinessGuideRedisDao> businessGuideDaos1 = BusinessModel.briefDaoToRedisdaoBG(daos);
         bgRedisRepository.deleteAll();
         bgRedisRepository.saveAll(businessGuideDaos1);
     }
 
 
+    public Result getList(String cid, String title) {
+        List<BusinessGuideBriefDto> dtos;
+        List<BusinessGuideBriefDao> daos;
+            //先查redis
+        //没有查mysql
+            List<BusinessGuideRedisDao> all = businessGuideQueryEntity.findByCidOrTitle( cid,  title);
+            if(all!=null&&all.size()>0) {
+
+                dtos = BusinessModel.briefRedisDaoToBriefDtoBG(all);
+            }else {
+                daos = businessGuideRepository.selectBusinessGuideBrief(cid,title);
+                dtos = BusinessModel.briefDaoToBriefDtoBG(daos);
+                //初始化Redis
+                initRedisBusinessGuide();
+            }
+        return Result.success(dtos);
+    }
+
+    public Result getBusinessGuide(String id) {
+        BusinessGuideDao businessGuideDao=businessGuideRepository.getBusinessGuide(id);
+        BusinessGuideDto businessGuideDto= BusinessModel.businessGuideDaoToBusinessGuideDto(businessGuideDao);
+        return Result.success(businessGuideDto);
+    }
 }
