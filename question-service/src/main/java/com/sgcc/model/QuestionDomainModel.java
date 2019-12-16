@@ -68,11 +68,11 @@ public class QuestionDomainModel {
     public List<QuestionAnwserListDTO> getAllQuestionAnwsersListTrans(List<QuestionAnswerDao> questionAnswerDaos,
                                                List<QuestionCategoryDao> questionCategoryDaos) {
         List<QuestionAnwserListDTO> questionAnwserListDTOS = new ArrayList<>();
-        List<QuestionAnswerDTO> list = new ArrayList<>();
 
         for (int i = 0; i < questionCategoryDaos.size(); i++) {
+            List<QuestionAnswerDTO> list = new ArrayList<>();
             for (int j = 0; j < questionAnswerDaos.size(); j++) {
-                if (questionAnswerDaos.get(j).getCategoryId().equals(questionCategoryDaos.get(i).getCategoryId())){
+                if (questionCategoryDaos.get(i).getCategoryId().equals(questionAnswerDaos.get(j).getCategoryId())){
                     list.add(new QuestionAnswerDTO(
                             questionAnswerDaos.get(j).getId(),
                             questionAnswerDaos.get(j).getQuestionDesc()
@@ -82,21 +82,6 @@ public class QuestionDomainModel {
             questionAnwserListDTOS.add(new QuestionAnwserListDTO(questionCategoryDaos.get(i).getCategoryDesc(),
                     questionCategoryDaos.get(i).getId(),list));
         }
-
-//        questionCategoryDaos.forEach(dao->{
-//            questionAnswerDaos.forEach(qdao->{
-//                if (qdao.getCategoryId().equals(dao.getCategoryId())){
-//                    list.add(new QuestionAnswerDTO(
-//                            qdao.getId(),
-//                            qdao.getQuestionDesc()
-//                    ));
-//                    questionAnwserListDTOS.add(new QuestionAnwserListDTO(dao.getCategoryDesc(),dao.getId(),list));
-//                }
-//
-//            });
-//
-//        });
-
         return questionAnwserListDTOS;
     }
 
