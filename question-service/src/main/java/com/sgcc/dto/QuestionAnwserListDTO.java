@@ -18,6 +18,8 @@ public class QuestionAnwserListDTO implements Serializable {
 
     private String categoryId;
 
+    private String categoryDetail;
+
     private List<QuestionAnswerDTO> questionAnswerDTOS;
 
 

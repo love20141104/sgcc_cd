@@ -80,7 +80,9 @@ public class QuestionDomainModel {
                 }
             }
             questionAnwserListDTOS.add(new QuestionAnwserListDTO(questionCategoryDaos.get(i).getCategoryDesc(),
-                    questionCategoryDaos.get(i).getId(),list));
+                    questionCategoryDaos.get(i).getId(),
+                    questionCategoryDaos.get(i).getCategoryDetail(),
+                    list));
         }
         return questionAnwserListDTOS;
     }
