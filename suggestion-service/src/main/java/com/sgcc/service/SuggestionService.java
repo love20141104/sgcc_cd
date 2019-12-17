@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class SuggestionService {
@@ -57,10 +58,10 @@ public class SuggestionService {
     public Result getSuggestion( String suggestionId ) {
         SuggestionModel model = new SuggestionModel( );
         // 读Redis
-       /* SuggestionRedisDao redisDao = suggestionQueryEntity.GetRedisSuggestion(suggestionId);
+        SuggestionRedisDao redisDao = suggestionQueryEntity.GetRedisSuggestion(suggestionId);
         if( redisDao != null ){
             return Result.success( model.RedisDAO2DetailDTO(redisDao) );
-        }*/
+        }
         // 读MySQL
         SuggestionReplyInfoDao dao = suggestionQueryEntity.GetSuggestion(suggestionId);
         if( dao == null )
@@ -134,7 +135,7 @@ public class SuggestionService {
         suggestionProducer.SaveSuggestionMQ( dao );
         //suggestionEventEntity.Save( dao );
         // 创建回复单据
-        CreateSuggestionReply( new SuggestionMidDTO(dao.getSuggestionId() , submitDTO.getUserLocation()) );
+        CreateSuggestionReply( new SuggestionMidDTO(dao.getId() , submitDTO.getUserLocation()) );
         Result ret = Result.success( getSuggestions(openId) );
         ret.setMsg( dao.getSuggestionId() );
         return ret;
@@ -331,7 +332,13 @@ public class SuggestionService {
         List<SuggestionReplyCheckInfoDao> daos = suggestionQueryEntity.getSuggestionsByUserId(userId);
         SuggestionModel model = new SuggestionModel();
         List<SuggestionReplyCheckInfoDTO> dtos = model.suggestionReplyCheckInfoListTrans(daos);
-        return dtos;
+        List<SuggestionReplyCheckInfoDTO> collect = dtos.stream().map(d -> {
+            if (!d.getCheckerState()) {
+                d.setReplyContent("");
+            }
+            return d;
+        }).collect(Collectors.toList());
+        return collect;
     }
 }
 

@@ -50,7 +50,7 @@ public class SuggestionQueryEntity {
 
     public SuggestionRedisDao GetRedisSuggestion(String suggestionId )
     {
-        return suggestionRedisRepository.findBySuggestionId(suggestionId);
+        return suggestionRedisRepository.findByID(suggestionId);
     }
 
     public SuggestionReplyInfoDao GetSuggestion(String suggestionId )

@@ -69,9 +69,9 @@ public class SuggestionReplyRepository {
                 " ,submit_date,img_1,img_2,img_3,id,suggestion_id,reply_content,reply_openid " +
                 " ,reply_date,check_openid,check_state,check_reject,check_date from (" +
                 "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel" +
-                ",s.submit_date,s.img_1,s.img_2,s.img_3,r.id,s.suggestion_id,r.reply_content" +
+                ",s.submit_date,s.img_1,s.img_2,s.img_3,s.id,s.suggestion_id,r.reply_content" +
                 ",r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_reject,r.check_date " +
-                "from b_suggestion s LEFT JOIN b_suggestion_reply r on s.suggestion_id=r.suggestion_id   " +
+                "from b_suggestion s LEFT JOIN b_suggestion_reply r on s.id=r.suggestion_id   " +
                 " where  s.user_location in(select major_region from d_customer_service_staff " +
                 " where replier_openid = ? )) a ";
         if (status){
@@ -99,7 +99,7 @@ public class SuggestionReplyRepository {
             String sql = "select s.id id,s.suggestion_id,user_id,suggestion_content,suggestion_contact, suggestion_tel" +
                     ",submit_date,img_1,img_2,img_3, sr.id reply_id,sr.reply_content reply_content" +
                     ",sr.reply_date reply_date,sr.check_reject check_reject,sr.check_state check_state" +
-                    ",sr.check_date check_date from b_suggestion_reply sr right join b_suggestion s on sr.suggestion_id=s.suggestion_id   " +
+                    ",sr.check_date check_date from b_suggestion_reply sr right join b_suggestion s on sr.suggestion_id=s.id   " +
                     "where sr.reply_content is null and sr.reply_date is null and  s.user_location =(  select major_region " +
                     "from d_customer_service_staff where checker_openid =? ) order by submit_date desc ";
             return jdbcTemplate.query(sql,new Object[]{checkerOpenid}, new SuggestionReplyCheckInfoDaoRowMapper());
@@ -112,7 +112,7 @@ public class SuggestionReplyRepository {
                 String sql = "select s.id id,s.suggestion_id,user_id,suggestion_content,suggestion_contact," +
                         " suggestion_tel,submit_date,img_1,img_2,img_3," +
                         " sr.id reply_id,sr.reply_content reply_content,sr.reply_date reply_date,sr.check_reject check_reject,sr.check_state check_state,sr.check_date check_date" +
-                        " from b_suggestion_reply sr left join b_suggestion s on sr.suggestion_id=s.suggestion_id " +
+                        " from b_suggestion_reply sr left join b_suggestion s on sr.suggestion_id=s.id " +
                         "  where check_state = ? and  sr.reply_openid in( " +
                         " select distinct(replier_openid) from d_customer_service_staff where checker_openid =? ) order by submit_date desc ";
                 return jdbcTemplate.query(sql,new Object[]{state,checkerOpenid}, new SuggestionReplyCheckInfoDaoRowMapper());
@@ -122,7 +122,7 @@ public class SuggestionReplyRepository {
                         " suggestion_tel,submit_date,img_1,img_2,img_3, sr.id reply_id,sr.reply_content reply_content," +
                         "sr.reply_date reply_date,sr.check_reject check_reject,sr.check_state check_state," +
                         "sr.check_date check_date from b_suggestion_reply sr left join b_suggestion s " +
-                        "on sr.suggestion_id=s.suggestion_id   where check_state is null and sr.reply_content is not null " +
+                        "on sr.suggestion_id=s.id   where check_state is null and sr.reply_content is not null " +
                         "and  sr.reply_openid in(  select distinct(replier_openid) from d_customer_service_staff" +
                         " where checker_openid =?  ) order by submit_date desc ";
                 return jdbcTemplate.query(sql, new Object[]{ checkerOpenid}, new SuggestionReplyCheckInfoDaoRowMapper());
@@ -137,7 +137,7 @@ public class SuggestionReplyRepository {
         String sql = "select s.id id,s.suggestion_id,user_id,suggestion_content,suggestion_contact," +
                 " suggestion_tel,submit_date,img_1,img_2,img_3," +
                 " sr.id reply_id,sr.reply_content reply_content,sr.reply_date reply_date,sr.check_reject check_reject,sr.check_state check_state,sr.check_date check_date" +
-                " from b_suggestion_reply sr left join b_suggestion s on sr.suggestion_id=s.suggestion_id " +
+                " from b_suggestion_reply sr left join b_suggestion s on sr.suggestion_id=s.id " +
                 "  where user_id =?  order by submit_date desc ";
         return jdbcTemplate.query(sql,new Object[]{userId}, new SuggestionReplyCheckInfoDaoRowMapper());
 

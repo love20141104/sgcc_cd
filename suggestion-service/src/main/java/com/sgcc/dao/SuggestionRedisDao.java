@@ -21,7 +21,8 @@ public class SuggestionRedisDao implements Serializable{
     @TimeToLive
     private long livetime = 600  ; //TTL
     @Id
-    private String id;
+    @Indexed
+    private String iD;
     // 意见id
     @Indexed
     private String suggestionId;

@@ -34,7 +34,7 @@ public class SuggestionsRepository {
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
                "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bs.user_location,bs.reply_user_id,bs.reply_content,bs.reply_date" +
-                " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
+                " from b_suggestion bs left join b_suggestion_reply bsr on bs.id = bsr.suggestion_id " +
                 " where bsr.reply_openid = ? and bsr.reply_content is null and bsr.check_date is null and bsr.check_reject is null";
 
         return jdbcTemplate.query(sql,new Object[]{reply_openId}, new suggestionRowMapper());
@@ -46,7 +46,7 @@ public class SuggestionsRepository {
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
                 "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bsr.reply_openid as reply_user_id,bsr.reply_content,bsr.reply_date" +
-                ",bsr.check_reject from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
+                ",bsr.check_reject from b_suggestion bs left join b_suggestion_reply bsr on bs.id = bsr.suggestion_id " +
                 " where bsr.reply_openid = ? and bsr.check_reject is not null ";
 
         return jdbcTemplate.query(sql,new Object[]{reply_openId}, new SuggestionRejectDaoRowMapper());
@@ -57,7 +57,7 @@ public class SuggestionsRepository {
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
                 "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bsr.reply_openid as reply_user_id,bsr.reply_content,bsr.reply_date" +
-                ",bsr.check_reject from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
+                ",bsr.check_reject from b_suggestion bs left join b_suggestion_reply bsr on bs.id = bsr.suggestion_id " +
                 " where bsr.check_openid = ? and bsr.check_reject is not null ";
 
         return jdbcTemplate.query(sql,new Object[]{check_openid}, new SuggestionRejectDaoRowMapper());
@@ -68,7 +68,7 @@ public class SuggestionsRepository {
     {
         String sql = "select bs.id,bs.suggestion_id,bs.user_id,bs.suggestion_content,bs.suggestion_contact,bs.suggestion_tel," +
                 "bs.submit_date,bs.img_1,bs.img_2,bs.img_3,bs.user_location,bsr.reply_openid as reply_user_id,bsr.reply_content,bsr.reply_date" +
-                " from b_suggestion bs left join b_suggestion_reply bsr on bs.suggestion_id = bsr.suggestion_id " +
+                " from b_suggestion bs left join b_suggestion_reply bsr on bs.id = bsr.suggestion_id " +
                 " where bsr.check_openid = ? and bsr.reply_content is not null and bsr.check_date is null and bsr.check_reject is null";
 
         return jdbcTemplate.query(sql,new Object[]{check_openId}, new suggestionRowMapper());
@@ -77,7 +77,7 @@ public class SuggestionsRepository {
     public List<SuggestionDao> findAllByUserID(String userId){
         String sql = "select s.id id,s.suggestion_id suggestion_id,user_id,suggestion_content,suggestion_contact," +
                 "suggestion_tel," + Utils.GetSQLDateStr("submit_date") + ",img_1,img_2,img_3,user_location,r.reply_openid,r.reply_content,r.reply_date,r.check_state " +
-                " from b_suggestion s left join b_suggestion_reply r on s.suggestion_id= r.suggestion_id " +
+                " from b_suggestion s left join b_suggestion_reply r on s.id= r.suggestion_id " +
                 " where  user_id = ? ";
         logger.info("查询所有意见信息:" + sql);
         return jdbcTemplate.query(sql,new Object[]{userId}, new suggestionRowMapper());
@@ -88,9 +88,9 @@ public class SuggestionsRepository {
     public SuggestionReplyInfoDao findBySuggestionId(String suggestion_id){
             try {
                 String sql = "select s.user_id,s.suggestion_content,s.suggestion_contact,s.suggestion_tel" +
-                        ",s.submit_date,s.img_1,s.img_2,s.img_3,r.id,s.suggestion_id,r.reply_content" +
+                        ",s.submit_date,s.img_1,s.img_2,s.img_3,s.id,s.suggestion_id,r.reply_content" +
                         ",r.reply_openid,r.reply_date,r.check_openid,r.check_state,r.check_reject,r.check_date " +
-                        "from b_suggestion s LEFT JOIN b_suggestion_reply r on s.suggestion_id=r.suggestion_id where s.suggestion_id = ? ";
+                        "from b_suggestion s LEFT JOIN b_suggestion_reply r on s.id=r.suggestion_id where s.id = ? ";
                 logger.info("查询所有意见信息:" + sql);
                 return jdbcTemplate.queryForObject(sql,new Object[]{suggestion_id}, new SuggestionReplyInfoRowMapper());
             } catch (Exception e) {
@@ -151,7 +151,7 @@ public class SuggestionsRepository {
     public SuggestionDao update(SuggestionDao dao){
             String sql = "update b_suggestion set reply_user_id=? ," +
                     "reply_content = ? ," + "reply_date = ? ";
-            sql = sql + " where suggestion_id = ? ";
+            sql = sql + " where id = ? ";
             jdbcTemplate.update(sql,new Object[]{
                     dao.getReplyUserId()
                     ,dao.getReplyContent()
@@ -249,7 +249,7 @@ public class SuggestionsRepository {
      */
     @Transactional
     public void deleteAll(List<String> suggestionIds){
-        String sql = "delete from b_suggestion where suggestion_id=?";
+        String sql = "delete from b_suggestion where id=?";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {

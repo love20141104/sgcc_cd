@@ -56,7 +56,7 @@ public class SuggestionRepository {
             try {
                 String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
                         "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
-                sql = sql + " where suggestion_id = ? ";
+                sql = sql + " where id = ? ";
                 logger.info("查询所有意见信息:" + sql);
                 return jdbcTemplate.queryForObject(sql,new Object[]{suggestion_id}, new suggestionRowMapper());
             } catch (Exception e) {
@@ -66,7 +66,7 @@ public class SuggestionRepository {
             try {
                 String sql = "select id,suggestion_id,user_id,suggestion_content,suggestion_contact," +
                         "suggestion_tel,submit_date,img_1,img_2,img_3,reply_user_id,reply_content,reply_date from b_suggestion";
-                sql = sql + " where suggestion_id = '" + suggestion_id + "'";
+                sql = sql + " where id = '" + suggestion_id + "'";
                 logger.info("查询所有意见信息:" + sql);
                 return jdbcTemplate.queryForObject(sql, new suggestionRowMapper());
             } catch (Exception e) {
@@ -101,7 +101,7 @@ public class SuggestionRepository {
     public SuggestionDao update(String reply_user_id , String reply_content, Date reply_date, String suggestion_id){
         String sql = "update b_suggestion set reply_user_id='" + reply_user_id+ "',"+
                 "reply_content = '" + reply_content +"'," + "reply_date = '" + Utils.GetTime(reply_date) +"'";
-        sql = sql + " where suggestion_id = '" + suggestion_id + "'";
+        sql = sql + " where id = '" + suggestion_id + "'";
         jdbcTemplate.execute(sql);
         return findBySuggestionId(suggestion_id);
     }
@@ -109,8 +109,8 @@ public class SuggestionRepository {
     @Transactional
     public SuggestionDao update(SuggestionDao dao){
         String sql = "update b_suggestion set reply_user_id='" + dao.getReplyUserId()+ "',"+
-                "reply_content = '" + dao.getReplyContent() +"'," + "reply_date = '" + Utils.GetTime(dao.getReplyDate()) +"'";
-        sql = sql + " where suggestion_id = '" + dao.getSuggestionId() + "'";
+                "reply_content = '" + dao.getReplyContent() +"'," + "reply_date = '" + Utils.GetTime(dao.getReplyDate()) +"' ";
+        sql = sql + " where  id = '" + dao.getSuggestionId() + "'";
         jdbcTemplate.execute(sql);
         return findBySuggestionId(dao.getSuggestionId());
     }
@@ -185,7 +185,7 @@ public class SuggestionRepository {
         if (precompile) {
             String sql = "update b_suggestion set suggestion_content=? " +
                     ",suggestion_contact=? " +
-                    ",suggestion_tel=?  where suggestion_id=? ";
+                    ",suggestion_tel=?  where id=? ";
 
             jdbcTemplate.update(sql,new Object[]{
                     suggestionDao.getSuggestionContent()
@@ -209,7 +209,7 @@ public class SuggestionRepository {
     @Transactional
     public void deleteAll(List<String> suggestionIds){
         if (precompile) {
-            String sql = "delete from b_suggestion where suggestion_id = ?";
+            String sql = "delete from b_suggestion where id = ?";
             jdbcTemplate.batchUpdate(sql,new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
                     return suggestionIds.size();

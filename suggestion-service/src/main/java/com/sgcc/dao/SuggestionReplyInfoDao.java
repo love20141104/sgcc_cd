@@ -14,7 +14,6 @@ public class SuggestionReplyInfoDao implements Serializable {
 
     private static final long serialVersionUID = -7698954629222840967L;
 
-
     // 用户id
     private String userId;
 

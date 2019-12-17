@@ -1,5 +1,6 @@
 package com.sgcc.model;
 
+import com.example.IDUtil;
 import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.*;
@@ -130,7 +131,7 @@ public class SuggestionModel {
         if( dao == null )
             return null;
         SuggestionRedisDao rdao = new SuggestionRedisDao();
-        rdao.setId(dao.getId());
+        rdao.setID(dao.getId());
         rdao.setSubmitDate(dao.getSubmitDate());
         rdao.setSuggestionContact(dao.getSuggestionContact());
         rdao.setSuggestionContent(dao.getSuggestionContent());
@@ -210,7 +211,7 @@ public class SuggestionModel {
         if( dao == null )
             return null;
         SuggestionDetailDTO dto = new SuggestionDetailDTO();
-        dto.setId(dao.getId());
+        dto.setId(dao.getID());
         dto.setSuggestionId( dao.getSuggestionId());
         dto.setUserId( dao.getUserId());
         dto.setSuggestionContent( dao.getSuggestionContent());
@@ -234,7 +235,7 @@ public class SuggestionModel {
 
         SuggestionDao dao = new SuggestionDao();
         dao.setId(UUID.randomUUID().toString());
-        dao.setSuggestionId(dao.getId());
+        dao.setSuggestionId(IDUtil.generate12NumId());
         dao.setSuggestionTel(m_suggestionSubmitDTO.getSuggestionTel());
         dao.setSuggestionContact(m_suggestionSubmitDTO.getSuggestionContact());
         dao.setSuggestionContent(m_suggestionSubmitDTO.getSuggestionContent());
@@ -265,7 +266,7 @@ public class SuggestionModel {
         if( m_dao == null )
             return null;
         SuggestionRedisDao rdao = new SuggestionRedisDao();
-        rdao.setId(m_dao.getId());
+        rdao.setID(m_dao.getId());
         rdao.setImg_1(m_dao.getImg_1());
         rdao.setImg_2(m_dao.getImg_2());
         rdao.setImg_3(m_dao.getImg_3());
@@ -425,21 +426,12 @@ public class SuggestionModel {
     public List<SuggestionReplyCheckInfoDTO> suggestionReplyCheckInfoListTrans(List<SuggestionReplyCheckInfoDao> daos) {
         List<SuggestionReplyCheckInfoDTO> suggestionReplyCheckInfoDTOS = new ArrayList<>();
         daos.forEach(dao->{
-            suggestionReplyCheckInfoDTOS.add(new SuggestionReplyCheckInfoDTO(
-                    dao.getSuggestionId(),
-                    dao.getUserId(),
-                    dao.getSuggestionContent(),
-                    dao.getSuggestionContact(),
-                    dao.getSuggestionTel(),
-                    Utils.GetTime(dao.getSubmitDate()),
-                    dao.getImg_1(),
-                    dao.getImg_2(),
-                    dao.getImg_3(),
-                    dao.getReplyId(),
-                    dao.getReplyContent(),
-                    dao.getReplyDate()==null?null:Utils.GetTime(dao.getReplyDate())
-
-            ));
+            SuggestionReplyCheckInfoDTO dto = new SuggestionReplyCheckInfoDTO();
+            BeanUtils.copyProperties(dao,dto);
+            dto.setReplyDate(dao.getReplyDate()==null?null:Utils.GetTime(dao.getReplyDate()));
+            dto.setSubmitDate(dao.getSubmitDate()==null?null:Utils.GetTime(dao.getSubmitDate()));
+            dto.setCheckerDate(dao.getCheckerDate()==null?null:Utils.GetTime(dao.getCheckerDate()));
+            suggestionReplyCheckInfoDTOS.add(dto);
         });
         return suggestionReplyCheckInfoDTOS;
     }

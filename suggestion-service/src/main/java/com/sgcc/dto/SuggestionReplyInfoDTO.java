@@ -13,7 +13,7 @@ import java.util.Date;
 public class SuggestionReplyInfoDTO implements Serializable {
 
     private static final long serialVersionUID = 8881547566687943859L;
-
+    private String id;
     // 用户id
     private String userId;
 

@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor  //生成无参构造函数
 public class SuggestionReplyCheckInfoDTO implements Serializable {
         private static final long serialVersionUID = 8649874743434273261L;
-//        private String id;
+        private String id;
 
         // 意见id
         private String suggestionId;
@@ -38,16 +38,17 @@ public class SuggestionReplyCheckInfoDTO implements Serializable {
 
         private String img_3;
 
-        private String replyId;
+       // private String replyId;
 
         private String replyContent;
 
         private String replyDate;
 
-//        private String checkReject;
-//
-//        private Boolean checkerState;
-//
-//        private Date checkerDate;
+        private String checkReject;
+
+        private Boolean checkerState;
+
+        private String checkerDate;
+
 
 }

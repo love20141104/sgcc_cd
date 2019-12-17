@@ -11,6 +11,7 @@ import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -35,8 +36,14 @@ public class BusinessGuideQueryEntity {
         if (!Strings.isNullOrEmpty(title)){
             return bgRedisRepository.findAllByTitle(title);
         }else {
-            List<BusinessGuideBriefDao> businessGuideBriefDaos = businessGuideRepository.selectBusinessGuideBrief(cid, title);
-            return BusinessModel.briefDaoToRedisdaoBG(businessGuideBriefDaos);
+            List<BusinessGuideRedisDao> list= new ArrayList<>();
+            Iterable<BusinessGuideRedisDao> all = bgRedisRepository.findAll();
+            all.forEach(dao->{
+                list.add(dao);
+            });
+            return list;
+            /*List<BusinessGuideBriefDao> businessGuideBriefDaos = businessGuideRepository.selectBusinessGuideBrief(cid, title);
+            return BusinessModel.briefDaoToRedisdaoBG(businessGuideBriefDaos);*/
         }
     }
 }

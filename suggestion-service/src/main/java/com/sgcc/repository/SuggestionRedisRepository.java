@@ -8,5 +8,5 @@ import java.util.List;
 public interface SuggestionRedisRepository extends CrudRepository<SuggestionRedisDao,String> {
     List<SuggestionRedisDao> findAllByUserId( String userId );
     void deleteAll( List<SuggestionRedisDao> sIds );
-    SuggestionRedisDao findBySuggestionId( String suggestionId);
+    SuggestionRedisDao findByID( String id);
 }
