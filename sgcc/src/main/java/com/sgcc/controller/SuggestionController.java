@@ -107,7 +107,7 @@ public class SuggestionController {
     {
         if( dto == null )
             return Result.failure(TopErrorCode.PARAMETER_ERR);
-        suggestionService.ReplyReject( dto.getSuggestion_id(),dto.getCheck_reject(),dto.getCheck_state(),new Date());
+        suggestionService.ReplyReject( dto.getSuggestion_id(),dto.getCheck_reject(),dto.getCheck_state(),new Date(),dto.getSuggestion_id());
         if( dto.getCheck_state() == 0 && !Strings.isNullOrEmpty(dto.getCheck_reject()) )
         {
             // 审核未通过 todo

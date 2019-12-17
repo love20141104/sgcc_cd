@@ -6,6 +6,7 @@ import com.sgcc.dao.SuggestionDao;
 import com.sgcc.dao.SuggestionRedisDaos;
 import com.sgcc.dao.SuggestionRedisDao;
 import com.sgcc.dto.SuggestionDeleteDTO;
+import com.sgcc.dto.SuggestionMidDTO;
 import com.sgcc.entity.WeChatEntity;
 import com.sgcc.service.SuggestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class SuggestionComsumer {
             dao.setImg_3(uploadFile(dao.getImg_3()));
             // 持久化
             suggestionService.SaveSuggestion(dao);
+            suggestionService.CreateSuggestionReply( new SuggestionMidDTO(dao.getId() , dao.getUserLocation()) );
             // 同步 Redis
             suggestionService.ReloadSuggestions( dao.getUserId() );
         }catch (Exception e){

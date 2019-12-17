@@ -69,9 +69,10 @@ public class SuggestionService {
 
         // 重新加载数据到 Redis
         // 根据 userId 装载所有的意见列表
-        //suggestionProducer.ReloadSuggestionsMQ( dao.getUserId() );
-        return Result.success( dao );
-        //return Result.success( model.RedisDAO2DetailDTO(model.Dao2RedisDao(dao)) );
+        suggestionProducer.ReloadSuggestionsMQ( dao.getUserId() );
+        //return Result.success( dao );
+        SuggestionDetailDTO dto=model.dAO2DetailDTO(dao);
+        return Result.success( dto );
     }
     public List<SuggestionDao> findAllByReplyOpenID(String reply_openId)
     {
@@ -135,7 +136,8 @@ public class SuggestionService {
         suggestionProducer.SaveSuggestionMQ( dao );
         //suggestionEventEntity.Save( dao );
         // 创建回复单据
-        CreateSuggestionReply( new SuggestionMidDTO(dao.getId() , submitDTO.getUserLocation()) );
+        //现已异步
+        //CreateSuggestionReply( new SuggestionMidDTO(dao.getId() , submitDTO.getUserLocation()) );
         Result ret = Result.success( getSuggestions(openId) );
         ret.setMsg( dao.getSuggestionId() );
         return ret;
@@ -249,16 +251,22 @@ public class SuggestionService {
     {
         SuggestionModel model = new SuggestionModel();
         suggestionEventEntity.ContentReply( model.GetSuggestionReplyDao(dto));
+        //更新redis
+        SuggestionReplyInfoDao dao = suggestionQueryEntity.GetSuggestion(dto.getSuggestion_id());
+        suggestionProducer.ReloadSuggestionsMQ( dao.getUserId() );
     }
     public void ReplyCheck( SuggestionReplyCheckDTO dto )
     {
         SuggestionModel model = new SuggestionModel();
         suggestionEventEntity.CheckReply( model.GetSuggestionCheckDao(dto));
     }
-    public void ReplyReject(String suggestionId, String check_reject, int check_state, Date date)
+    public void ReplyReject(String suggestionId, String check_reject, int check_state, Date date,String suggestion_id)
     {
         SuggestionModel model = new SuggestionModel();
         suggestionEventEntity.CheckReject( suggestionId , check_reject,check_state,date);
+        //更新redis
+        SuggestionReplyInfoDao dao = suggestionQueryEntity.GetSuggestion(suggestion_id);
+        suggestionProducer.ReloadSuggestionsMQ( dao.getUserId() );
     }
     public List<ReplierAndCheckerDao> GetReplierAndChecker( String region )
     {

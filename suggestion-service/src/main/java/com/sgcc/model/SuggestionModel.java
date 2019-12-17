@@ -217,15 +217,16 @@ public class SuggestionModel {
         dto.setSuggestionContent( dao.getSuggestionContent());
         dto.setSuggestionContact( dao.getSuggestionContact());
         dto.setSuggestionTel( dao.getSuggestionTel());
-        dto.setSubmitDate( dao.getSubmitDate());
+        dto.setSubmitDate( dao.getSubmitDate()==null?null:Utils.GetTime(dao.getSubmitDate()));
         dto.setImg_1( dao.getImg_1());
         dto.setMedia_1( dao.getMediaId_1());
         dto.setImg_2( dao.getImg_2());
         dto.setMedia_2( dao.getMediaId_2());
         dto.setImg_3( dao.getImg_3());
         dto.setMedia_3( dao.getMediaId_3());
+        dto.setCheck_state(dao.getCheckState()==null?false:dao.getCheckState());
         dto.setReplyContent(dao.getReplyContent());
-        dto.setReplyDate(dao.getReplyDate());
+        dto.setReplyDate(dao.getReplyDate()==null?null:Utils.GetTime(dao.getReplyDate()));
         return dto;
     }
     public SuggestionDao DTO2DAO(  )
@@ -437,5 +438,26 @@ public class SuggestionModel {
     }
 
 
-
+    public SuggestionDetailDTO dAO2DetailDTO(SuggestionReplyInfoDao dao) {
+        if( dao == null )
+            return null;
+        SuggestionDetailDTO dto = new SuggestionDetailDTO();
+        dto.setId(dao.getId());
+        dto.setSuggestionId( dao.getSuggestion_id());
+        dto.setUserId( dao.getUserId());
+        dto.setSuggestionContent( dao.getSuggestionContent());
+        dto.setSuggestionContact( dao.getSuggestionContact());
+        dto.setSuggestionTel( dao.getSuggestionTel());
+        dto.setSubmitDate(dao.getSubmitDate()==null?null:Utils.GetTime(dao.getSubmitDate()));
+        dto.setImg_1( dao.getImg_1());
+        //dto.setMedia_1( dao.getMediaId_1());
+        dto.setImg_2( dao.getImg_2());
+        //dto.setMedia_2( dao.getMediaId_2());
+        dto.setImg_3( dao.getImg_3());
+        //dto.setMedia_3( dao.getMediaId_3());
+        dto.setCheck_state(dao.getCheck_state()==1?true:false);
+        dto.setReplyContent(dao.getReply_content());
+        dto.setReplyDate(dao.getReply_date()==null?null:Utils.GetTime(dao.getReply_date()));
+        return dto;
+    }
 }
