@@ -127,7 +127,7 @@ public class BusinessGuideRepository {
 
     public List<BusinessGuideBriefDao> selectBusinessGuideBrief(String categoryId,String title) {
 
-        String sql = "select bg.id id ,bg.title title, bg.content_url content_url,"
+        String sql = "select bg.id id ,bg.title title,bg.content content, bg.content_url content_url,"
                 + " bg.category_id category_id ,bc.category_name category_name,bg.create_date create_date from"
                 + " d_business_guide bg left join d_business_category bc on bc.id=bg.category_id"
                 + " where 1=1 ";
@@ -183,6 +183,7 @@ public class BusinessGuideRepository {
             BusinessGuideBriefDao dao = new BusinessGuideBriefDao(
                     rs.getString("id"),
                     rs.getString("title"),
+                    rs.getString("content"),
                     rs.getString("content_url"),
                     rs.getString("category_id"),
                     rs.getString("category_name"),

@@ -58,6 +58,6 @@ public class SuggestionRedisDao implements Serializable{
 
     private Date replyDate;
 
-    private Boolean checkState;
+    private String checkState;
 
 }

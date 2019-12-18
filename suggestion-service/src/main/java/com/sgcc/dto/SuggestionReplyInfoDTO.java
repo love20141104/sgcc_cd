@@ -37,14 +37,14 @@ public class SuggestionReplyInfoDTO implements Serializable {
 
 
     //private String id;
-    private String suggestion_id;
-    private String reply_content;     // 回复内容
-    private String reply_openid;  // 回复人
-    private String reply_date;    // 回复时间
-    private String check_openid;  // 审核人
-    private int check_state;      // 审核状态
-    private String check_reject;
-    private String check_date;    // 审核时间
+    private String suggestionId;
+    private String replyContent;     // 回复内容
+    private String replyOpenid;  // 回复人
+    private String replyDate;    // 回复时间
+    private String checkOpenid;  // 审核人
+    private Boolean checkState;      // 审核状态
+    private String checkReject;
+    private String checkDate;    // 审核时间
     private String state;
 
 

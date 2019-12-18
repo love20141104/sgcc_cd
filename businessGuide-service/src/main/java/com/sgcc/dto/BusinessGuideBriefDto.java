@@ -14,7 +14,7 @@ import java.util.Date;
 public class BusinessGuideBriefDto {
     private String id;
     private String title;
-    //private String content;
+    private String content;
     private String contentUrl;
     private String categoryId;
     private String categoryName;

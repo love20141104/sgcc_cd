@@ -60,7 +60,11 @@ public class SuggestionService {
         // 读Redis
         SuggestionRedisDao redisDao = suggestionQueryEntity.GetRedisSuggestion(suggestionId);
         if( redisDao != null ){
-            return Result.success( model.RedisDAO2DetailDTO(redisDao) );
+            SuggestionDetailDTO dto = model.RedisDAO2DetailDTO(redisDao);
+            if(!dto.getCheckState()||dto.getCheckState()==null){
+                dto.setReplyContent("");
+            }
+            return Result.success( dto);
         }
         // 读MySQL
         SuggestionReplyInfoDao dao = suggestionQueryEntity.GetSuggestion(suggestionId);
@@ -72,6 +76,9 @@ public class SuggestionService {
         suggestionProducer.ReloadSuggestionsMQ( dao.getUserId() );
         //return Result.success( dao );
         SuggestionDetailDTO dto=model.dAO2DetailDTO(dao);
+        if(!dto.getCheckState()||dto.getCheckState()==null){
+            dto.setReplyContent("");
+        }
         return Result.success( dto );
     }
     public List<SuggestionDao> findAllByReplyOpenID(String reply_openId)
@@ -187,6 +194,7 @@ public class SuggestionService {
 
     public void ReloadSuggestions( String userId )
     {
+
         SuggestionModel model = new SuggestionModel( );
         List<SuggestionDao> daos = suggestionQueryEntity.GetAllSuggestions(userId);
         List<SuggestionRedisDao> redisdaos = model.ListDao2ListRedisDao(daos);
@@ -252,7 +260,7 @@ public class SuggestionService {
         SuggestionModel model = new SuggestionModel();
         suggestionEventEntity.ContentReply( model.GetSuggestionReplyDao(dto));
         //更新redis
-        SuggestionReplyInfoDao dao = suggestionQueryEntity.GetSuggestion(dto.getSuggestion_id());
+        SuggestionReplyInfoDao dao = suggestionQueryEntity.GetSuggestion(dto.getSuggestionId());
         suggestionProducer.ReloadSuggestionsMQ( dao.getUserId() );
     }
     public void ReplyCheck( SuggestionReplyCheckDTO dto )
@@ -337,8 +345,13 @@ public class SuggestionService {
     }
 
     public List<SuggestionReplyCheckInfoDTO> getSuggestionsByUserId(String userId) {
-        List<SuggestionReplyCheckInfoDao> daos = suggestionQueryEntity.getSuggestionsByUserId(userId);
         SuggestionModel model = new SuggestionModel();
+        List<SuggestionRedisDao> suggestionRedisDaos = suggestionQueryEntity.GetAllsuggestions(userId);
+        if(null!=suggestionRedisDaos&&suggestionRedisDaos.size()>0){
+            return model.replyCheckInfoListTrans(suggestionRedisDaos);
+        }
+        List<SuggestionReplyCheckInfoDao> daos = suggestionQueryEntity.getSuggestionsByUserId(userId);
+
         List<SuggestionReplyCheckInfoDTO> dtos = model.suggestionReplyCheckInfoListTrans(daos);
         List<SuggestionReplyCheckInfoDTO> collect = dtos.stream().map(d -> {
             if (!d.getCheckerState()) {
@@ -346,7 +359,19 @@ public class SuggestionService {
             }
             return d;
         }).collect(Collectors.toList());
+        //更新redis
+
+        suggestionProducer.ReloadSuggestionsMQ(userId );
         return collect;
+    }
+
+    public Result getSuggestionInfo(String suggestionId) {
+        SuggestionReplyInfoDao dao = suggestionQueryEntity.GetSuggestion(suggestionId);
+        if( dao == null )
+            return Result.failure(TopErrorCode.NO_DATAS);
+        SuggestionModel model = new SuggestionModel( );
+        SuggestionReplyInfoDTO dto=model.InfoDao2CheckInfoDTO(dao);
+        return Result.success( dto );
     }
 }
 

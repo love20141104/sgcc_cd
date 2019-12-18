@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -66,8 +67,8 @@ public class SuggestionModel {
     {
         SuggestionReplyDao dao = new SuggestionReplyDao();
         dao.setId( UUID.randomUUID().toString() );
-        dao.setSuggestion_id( dto.getSuggestion_id() );
-        dao.setReply_content( dto.getReply_content() );
+        dao.setSuggestion_id( dto.getSuggestionId() );
+        dao.setReply_content( dto.getReplyContent() );
         dao.setReply_date( Utils.GetCurrentTime() );
         return dao;
     }
@@ -76,9 +77,9 @@ public class SuggestionModel {
     {
         SuggestionCheckDao dao = new SuggestionCheckDao();
         dao.setId( UUID.randomUUID().toString() );
-        dao.setSuggestion_id( dto.getSuggestion_id() );
+        dao.setSuggestion_id( dto.getSuggestionId() );
         dao.setCheck_date( Utils.GetCurrentTime() );
-        dao.setCheck_state( dto.getCheck_state() );
+        dao.setCheck_state( dto.getCheckState() );
         return dao;
     }
 
@@ -123,6 +124,12 @@ public class SuggestionModel {
 
         SuggestionViewDTO dto = new SuggestionViewDTO();
         BeanUtils.copyProperties(dao,dto);
+        if(dao.getCheckState()==null||dao.getCheckState().equalsIgnoreCase("0")){
+            dto.setCheckState(false);
+        }
+        if(dao.getCheckState().equalsIgnoreCase("1")){
+            dto.setCheckState(true);
+        }
         return dto;
     }
 
@@ -141,7 +148,12 @@ public class SuggestionModel {
         rdao.setReplyUserId(dao.getReplyUserId());
         rdao.setReplyDate(dao.getReplyDate());
         rdao.setReplyContent(dao.getReplyContent());
-
+        if(dao.getCheckState()){
+            rdao.setCheckState("1");
+        }
+        if(!dao.getCheckState()||dao.getCheckState()==null){
+            rdao.setCheckState("0");
+        }
         if( !Strings.isNullOrEmpty(dao.getImg_1()) && Utils.verifyUrl(dao.getImg_1()) )
             rdao.setImg_1(dao.getImg_1());
         else
@@ -224,9 +236,15 @@ public class SuggestionModel {
         dto.setMedia_2( dao.getMediaId_2());
         dto.setImg_3( dao.getImg_3());
         dto.setMedia_3( dao.getMediaId_3());
-        dto.setCheck_state(dao.getCheckState()==null?false:dao.getCheckState());
+
         dto.setReplyContent(dao.getReplyContent());
         dto.setReplyDate(dao.getReplyDate()==null?null:Utils.GetTime(dao.getReplyDate()));
+        if(dao.getCheckState()==null||dao.getCheckState().equalsIgnoreCase("0")){
+            dto.setCheckState(false);
+        }
+        if(dao.getCheckState().equalsIgnoreCase("1")){
+            dto.setCheckState(true);
+        }
         return dto;
     }
     public SuggestionDao DTO2DAO(  )
@@ -280,6 +298,12 @@ public class SuggestionModel {
         rdao.setReplyUserId(m_dao.getReplyUserId());
         rdao.setReplyDate(m_dao.getReplyDate());
         rdao.setReplyContent(m_dao.getReplyContent());
+        if(m_dao.getCheckState()){
+            rdao.setCheckState("1");
+        }
+        if(!m_dao.getCheckState()){
+            rdao.setCheckState("0");
+        }
         return rdao;
     }
     public SuggestionDao MapDTO2DAO(SuggestionMappingDTO dto )
@@ -379,9 +403,15 @@ public class SuggestionModel {
                     &&dao.getCheck_state()==1){
                 dto.setState("4");
             }
+            dto.setSuggestionId(dao.getSuggestion_id());
+            dto.setReplyContent(dao.getReply_content());
+            dto.setReplyOpenid(dao.getReply_openid());
+            dto.setCheckOpenid(dao.getCheck_openid());
+            dto.setCheckState(dao.getCheck_state()==1?true:false);
+            dto.setCheckReject(dao.getCheck_reject());
             dto.setSubmitDate(dao.getSubmitDate()==null?null:Utils.GetTime(dao.getSubmitDate()));
-            dto.setReply_date(dao.getReply_date()==null?null:Utils.GetTime(dao.getReply_date()));
-            dto.setCheck_date(dao.getCheck_date()==null?null:Utils.GetTime(dao.getCheck_date()));
+            dto.setReplyDate(dao.getReply_date()==null?null:Utils.GetTime(dao.getReply_date()));
+            dto.setCheckDate(dao.getCheck_date()==null?null:Utils.GetTime(dao.getCheck_date()));
             dtos.add(dto);
         });
 
@@ -455,9 +485,52 @@ public class SuggestionModel {
         //dto.setMedia_2( dao.getMediaId_2());
         dto.setImg_3( dao.getImg_3());
         //dto.setMedia_3( dao.getMediaId_3());
-        dto.setCheck_state(dao.getCheck_state()==1?true:false);
+        dto.setCheckState(dao.getCheck_state()==1?true:false);
         dto.setReplyContent(dao.getReply_content());
         dto.setReplyDate(dao.getReply_date()==null?null:Utils.GetTime(dao.getReply_date()));
         return dto;
+    }
+
+
+    public SuggestionReplyInfoDTO InfoDao2CheckInfoDTO(SuggestionReplyInfoDao dao) {
+        SuggestionReplyInfoDTO dto = new SuggestionReplyInfoDTO();
+        BeanUtils.copyProperties(dao,dto);
+        /*private String suggestionId;
+        private String replyContent;     // 回复内容
+        private String replyOpenid;  // 回复人
+        private String replyDate;    // 回复时间
+        private String checkOpenid;  // 审核人
+        private Boolean checkState;      // 审核状态
+        private String checkReject;
+        private String checkDate;    // 审核时间
+        private String state;*/
+        dto.setSuggestionId(dao.getSuggestion_id());
+        dto.setReplyContent(dao.getReply_content());
+        dto.setReplyOpenid(dao.getReply_openid());
+        dto.setCheckOpenid(dao.getCheck_openid());
+        dto.setCheckState(dao.getCheck_state()==1?true:false);
+        dto.setCheckReject(dao.getCheck_reject());
+        dto.setSubmitDate(dao.getSubmitDate()==null?null:Utils.GetTime(dao.getSubmitDate()));
+        dto.setReplyDate(dao.getReply_date()==null?null:Utils.GetTime(dao.getReply_date()));
+        dto.setCheckDate(dao.getCheck_date()==null?null:Utils.GetTime(dao.getCheck_date()));
+        return dto;
+    }
+
+    public List<SuggestionReplyCheckInfoDTO> replyCheckInfoListTrans(List<SuggestionRedisDao> daos) {
+        List<SuggestionReplyCheckInfoDTO> collect = daos.stream().map(dao -> {
+            SuggestionReplyCheckInfoDTO dto = new SuggestionReplyCheckInfoDTO();
+            BeanUtils.copyProperties(dao, dto);
+            dto.setId(dao.getID());
+            dto.setSubmitDate(dao.getSubmitDate() == null ? null : Utils.GetTime(dao.getSubmitDate()));
+            dto.setReplyDate(dao.getReplyDate() == null ? null : Utils.GetTime(dao.getReplyDate()));
+            if(dao.getCheckState().equalsIgnoreCase("1")){
+                dto.setCheckerState(true);
+            }
+            if(dao.getCheckState()==null||dao.getCheckState().equalsIgnoreCase("0")){
+                dto.setCheckerState(false);
+            }
+            return dto;
+        }).collect(Collectors.toList());
+        return collect;
     }
 }

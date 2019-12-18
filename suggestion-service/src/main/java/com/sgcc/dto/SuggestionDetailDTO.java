@@ -24,7 +24,7 @@ public class SuggestionDetailDTO implements Serializable {
     private String img_2;
     private String media_3;
     private String img_3;
-    private Boolean check_state;
+    private Boolean checkState;
     private String replyContent;
     private String replyDate;
 }

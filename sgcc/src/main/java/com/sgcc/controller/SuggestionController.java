@@ -78,8 +78,8 @@ public class SuggestionController {
             return Result.failure(TopErrorCode.PARAMETER_ERR);
         suggestionService.ReplyContent( dto );
         // Todo 发送消息到信息审核人员
-        SuggestionReplyInstDao dao = suggestionService.GetBySuggestionID( dto.getSuggestion_id() );
-        ReplierAndCheckerDao replyer=suggestionService.getReplyOpenIdByReplyOpenId(dto.getReply_openid());
+        SuggestionReplyInstDao dao = suggestionService.GetBySuggestionID( dto.getSuggestionId() );
+        ReplierAndCheckerDao replyer=suggestionService.getReplyOpenIdByReplyOpenId(dto.getReplyOpenid());
         if( dao != null )
         {
             TemplateMessage temp = new TemplateMessage();
@@ -91,7 +91,7 @@ public class SuggestionController {
             map.put("first",new TemplateData("你好，有新的意见建议回复需要审核!","#000000"));
             map.put("keyword1",new TemplateData(replyer.getReplier_name(),"#000000"));
             map.put("keyword2",new TemplateData(Utils.GetCurrentTime(),"#000000"));
-            map.put("keyword3",new TemplateData(dto.getReply_content(),"#000000"));
+            map.put("keyword3",new TemplateData(dto.getReplyContent(),"#000000"));
             map.put("remark",new TemplateData("请尽快审核，谢谢!","#000000"));
             temp.setData( map );
 
@@ -105,15 +105,15 @@ public class SuggestionController {
     @PostMapping(value = "/SuggestionCheck")
     public Result suggestionCheck(@RequestBody SuggestionReplyCheckDTO dto)
     {
-        if( dto == null )
+        if( dto == null||(dto.getCheckState() == 0 && Strings.isNullOrEmpty(dto.getCheckReject())) )
             return Result.failure(TopErrorCode.PARAMETER_ERR);
-        suggestionService.ReplyReject( dto.getSuggestion_id(),dto.getCheck_reject(),dto.getCheck_state(),new Date(),dto.getSuggestion_id());
-        if( dto.getCheck_state() == 0 && !Strings.isNullOrEmpty(dto.getCheck_reject()) )
+        suggestionService.ReplyReject( dto.getSuggestionId(),dto.getCheckReject(),dto.getCheckState(),new Date(),dto.getSuggestionId());
+        if( dto.getCheckState() == 0 && !Strings.isNullOrEmpty(dto.getCheckReject()) )
         {
             // 审核未通过 todo
             // AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE
 
-            ReplierAndCheckerDao replyer= suggestionService.getReplyOpenIdByCheckOpenId(dto.getCheck_openid());
+            ReplierAndCheckerDao replyer= suggestionService.getReplyOpenIdByCheckOpenId(dto.getCheckOpenid());
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
             temp.setTouser( replyer.getReplier_openid() );
@@ -123,7 +123,7 @@ public class SuggestionController {
             map.put("first",new TemplateData("你好，你的回复未通过审核!","#000000"));
             map.put("keyword1",new TemplateData(replyer.getReplier_name(),"#000000"));
             map.put("keyword2",new TemplateData(Utils.GetCurrentTime(),"#000000"));
-            map.put("keyword3",new TemplateData(dto.getCheck_reject(),"#000000"));
+            map.put("keyword3",new TemplateData(dto.getCheckReject(),"#000000"));
             map.put("remark",new TemplateData("请尽快修改，谢谢!","#000000"));
             temp.setData( map );
 
@@ -131,18 +131,18 @@ public class SuggestionController {
             return Result.success();
         }
         else {
-            SuggestionReplyMappingDao dao = suggestionService.GetFullReplyInfo(dto.getSuggestion_id());
-            Result suggestion = suggestionService.getSuggestion(dto.getSuggestion_id());
-            SuggestionReplyInfoDao suggestionReplyInfoDao=(SuggestionReplyInfoDao)suggestion.getData();
+            SuggestionReplyMappingDao dao = suggestionService.GetFullReplyInfo(dto.getSuggestionId());
+            Result suggestion = suggestionService.getSuggestionInfo(dto.getSuggestionId());
+            SuggestionReplyInfoDTO replyInfodto=(SuggestionReplyInfoDTO)suggestion.getData();
             TemplateMessage temp = new TemplateMessage();
             temp.setTemplate_id("Yfv4siCzMo9MkeM9BEs61SlBf1KMTj2pHtMxn-OTYnc");
-            temp.setTouser(suggestionReplyInfoDao.getUserId());
+            temp.setTouser(replyInfodto.getUserId());
             temp.setUrl("https://sgcc.link/proposalList");
 
             Map<String, TemplateData> map = new LinkedHashMap<>();
             map.put("first", new TemplateData("您好，您的意见建议已回复!", "#000000"));
-            map.put("keyword1", new TemplateData(suggestionReplyInfoDao.getSuggestionContact(), "#000000"));
-            map.put("keyword2", new TemplateData(suggestionReplyInfoDao.getSuggestionTel(), "#000000"));
+            map.put("keyword1", new TemplateData(replyInfodto.getSuggestionContact(), "#000000"));
+            map.put("keyword2", new TemplateData(replyInfodto.getSuggestionTel(), "#000000"));
             map.put("keyword3", new TemplateData(dao.getReply_date(), "#000000"));
             map.put("keyword4", new TemplateData(dao.getReply_content(), "#000000"));
             map.put("remark", new TemplateData("感谢您的意见，谢谢!", "#000000"));
@@ -216,10 +216,15 @@ public class SuggestionController {
     }*/
 
 
-    @ApiOperation(value = "查看意见", notes = "")
+    @ApiOperation(value = "查看意见", notes = "用户先查看redis内容")
+    @GetMapping(value = "user/suggestion/{id}")
+    public Result userSuggestion(@PathVariable("id") String suggestionId) {
+        return suggestionService.getSuggestion(suggestionId);
+    }
+    @ApiOperation(value = "查看意见", notes = "管理员查看数据库实时内容")
     @GetMapping(value = "/{id}")
     public Result Suggestion(@PathVariable("id") String suggestionId) {
-        return suggestionService.getSuggestion(suggestionId);
+        return suggestionService.getSuggestionInfo(suggestionId);
     }
 
     @ApiOperation(value = "批量删除意见", notes = "")

@@ -84,4 +84,5 @@ public class SuggestionEventEntity {
     public void CheckReject(String sid, String reject, int check_state, Date date){
         suggestionReplyRepository.update(sid,reject,check_state,date);
     }
+
 }
