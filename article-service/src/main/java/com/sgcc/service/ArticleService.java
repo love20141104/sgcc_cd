@@ -1,6 +1,7 @@
 package com.sgcc.service;
 
 import com.example.result.Result;
+import com.google.common.base.Strings;
 import com.sgcc.dao.ArticleDao;
 import com.sgcc.dao.ArticleDaos;
 import com.sgcc.dao.ArticleRedisDao;
@@ -11,6 +12,7 @@ import com.sgcc.dto.ArticleUpdateDTO;
 import com.sgcc.dto.ArticleViewDTO;
 import com.sgcc.entity.event.ArticleEventEntity;
 import com.sgcc.entity.query.ArticleQueryEntity;
+import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.ArticleModel;
 import com.sgcc.producer.ArticleProducer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +161,9 @@ public class ArticleService {
         return model.daos2listmappingdtos(daos);
     }
     public Result changeOrder(String id1,String id2){
+        if (Strings.isNullOrEmpty(id1) || Strings.isNullOrEmpty(id2))
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+
         articleEventEntity.updateOrderById(id1, id2);
         Initialize(null);
         return Result.success();

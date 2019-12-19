@@ -50,7 +50,10 @@ public class ArticleEventEntity {
     public void updateOrderById(String upId,String downId) {
         Integer orderByupId = articleRepository.getOrderById(upId);
         Integer orderBydownId = articleRepository.getOrderById(downId);
-        articleRepository.updateOrderById(upId, orderBydownId);
-        articleRepository.updateOrderById(downId, orderByupId);
+        if(orderByupId > 0 && orderByupId!=null && orderBydownId > 0 && orderBydownId!=null ){
+            articleRepository.updateOrderById(upId, orderBydownId);
+            articleRepository.updateOrderById(downId, orderByupId);
+        }
+
     }
 }
