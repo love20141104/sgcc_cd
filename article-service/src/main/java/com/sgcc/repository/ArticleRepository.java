@@ -31,75 +31,43 @@ public class ArticleRepository {
     private Logger logger = Logger.getLogger(ArticleRepository.class.toString());
 
     public List<ArticleDao> findAll() {
-        if (precompile) {
-            String sql = "select id,article_title,article_desc,article_img,article_url," +
-                    "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
-            try {
-                logger.info("SQL:" + sql);
-                return jdbcTemplate.query(sql,new Object[]{}, new articleRowMapper());
-            } catch (NoSuchElementException e) {
-                return null;
-            }
-        } else {
-            String sql = "select id,article_title,article_desc,article_img,article_url," +
-                    "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
-            try {
-                logger.info("SQL:" + sql);
-                return jdbcTemplate.query(sql, new articleRowMapper());
-            } catch (NoSuchElementException e) {
-                return null;
-            }
+
+        String sql = "select id,article_title,article_desc,article_img,article_url," +
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")
+                + ",order_no from d_article order by order_no desc";
+        try {
+            logger.info("SQL:" + sql);
+            return jdbcTemplate.query(sql, new Object[]{}, new articleRowMapper());
+        } catch (NoSuchElementException e) {
+            return null;
         }
     }
 
-    public List<ArticleDao> findAllByRecommended( Boolean isRecommended ){
-        if (precompile) {
-            String sql = "select id,article_title,article_desc,article_img,article_url," +
-                    " article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article"
-                    + " where article_recommended = ? ";
-            try {
-                logger.info("SQL:" + sql);
-                return jdbcTemplate.query(sql,new Object[]{isRecommended}
-                , new articleRowMapper());
-            } catch (NoSuchElementException e) {
-                return null;
-            }
-        }else {
-
-            String sql = "select id,article_title,article_desc,article_img,article_url," +
-                    "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
-            sql = sql + " where article_recommended = '" + Utils.Boolean2Int(isRecommended) + "'";
-            try {
-                logger.info("SQL:" + sql);
-                return jdbcTemplate.query(sql, new articleRowMapper());
-            } catch (NoSuchElementException e) {
-                return null;
-            }
+    public List<ArticleDao> findAllByRecommended(Boolean isRecommended) {
+        String sql = "select id,article_title,article_desc,article_img,article_url," +
+                " article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")
+                + ",order_no from d_article"
+                + " where article_recommended = ? order by order_no desc";
+        try {
+            logger.info("SQL:" + sql);
+            return jdbcTemplate.query(sql, new Object[]{isRecommended}
+                    , new articleRowMapper());
+        } catch (NoSuchElementException e) {
+            return null;
         }
     }
 
-    public List<ArticleDao> findAllByArticleType( String articleType ){
-        if (precompile) {
-            String sql = "select id,article_title,article_desc,article_img,article_url," +
-                    " article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article"
-                    + " where article_type = ? ";
-            try {
-                logger.info("SQL:" + sql);
-                return jdbcTemplate.query(sql,new Object[]{articleType}, new articleRowMapper());
-            } catch (NoSuchElementException e) {
-                return null;
-            }
-        }else {
+    public List<ArticleDao> findAllByArticleType(String articleType) {
 
-            String sql = "select id,article_title,article_desc,article_img,article_url," +
-                    "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
-            sql = sql + " where article_type = '" + articleType + "'";
-            try {
-                logger.info("SQL:" + sql);
-                return jdbcTemplate.query(sql, new articleRowMapper());
-            } catch (NoSuchElementException e) {
-                return null;
-            }
+        String sql = "select id,article_title,article_desc,article_img,article_url," +
+                " article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")
+                + ",order_no from d_article"
+                + " where article_type = ? order by order_no desc";
+        try {
+            logger.info("SQL:" + sql);
+            return jdbcTemplate.query(sql, new Object[]{articleType}, new articleRowMapper());
+        } catch (NoSuchElementException e) {
+            return null;
         }
     }
     public ArticleDao findByID( String id ){
@@ -127,31 +95,24 @@ public class ArticleRepository {
     }
 
     @Transactional
-    public void save(ArticleDao dao){
-        if (precompile) {
-            String sql = "insert into d_article(id,article_title,article_desc,article_img,article_url," +
-                    "article_recommended,article_type,submit_time) values(?,?,?,? ,?,?,?,?)";
-            logger.info("SQL:" + sql);
-            jdbcTemplate.update(sql,new Object[]{
-                     dao.getId()
-                    ,dao.getArticle_title()
-                    ,dao.getArticle_desc()
-                    ,dao.getArticle_img()
+    public void save(ArticleDao dao) {
 
-                    ,dao.getArticle_url()
-                    ,dao.isArticle_recommended()
-                    ,dao.getArticle_type()
-                    ,Utils.GetTime(dao.getSubmit_time())
-            });
-        }else {
-            String sql = "insert into d_article(id,article_title,article_desc,article_img,article_url," +
-                    "article_recommended,article_type,submit_time) values('" + dao.getId() + "'" +
-                    ",'" + dao.getArticle_title() + "','" + dao.getArticle_desc() + "','" + dao.getArticle_img() + "'" +
-                    ",'" + dao.getArticle_url() + "','" + Utils.Boolean2Int(dao.isArticle_recommended()) + "'" +
-                    ",'" + dao.getArticle_type() + "','" + Utils.GetTime(dao.getSubmit_time()) + "')";
-            logger.info("SQL:" + sql);
-            jdbcTemplate.execute(sql);
-        }
+        String sql = "insert into d_article(id,article_title,article_desc,article_img,article_url," +
+                "article_recommended,article_type,submit_time,order_no) values(?,?,?,? ,?,?,?,?,?)";
+        logger.info("SQL:" + sql);
+        jdbcTemplate.update(sql, new Object[]{
+                dao.getId()
+                , dao.getArticle_title()
+                , dao.getArticle_desc()
+                , dao.getArticle_img()
+
+                , dao.getArticle_url()
+                , dao.isArticle_recommended()
+                , dao.getArticle_type()
+                , Utils.GetTime(dao.getSubmit_time())
+                ,dao.getOrder_no()
+        });
+
     }
 
     @Transactional
@@ -215,28 +176,44 @@ public class ArticleRepository {
     }
 
     public List<ArticleDao> findAllByArticleTitle(String articleTitle) {
-        if (precompile) {
-            articleTitle="%"+articleTitle+"%";
-            String sql = "select id,article_title,article_desc,article_img,article_url," +
-                    "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article"
-                    + " where article_title like ?";
-            try {
-                logger.info("SQL:" + sql);
-                return jdbcTemplate.query(sql,new Object[]{articleTitle}, new articleRowMapper());
-            } catch (NoSuchElementException e) {
-                return null;
-            }
-        }else {
-            String sql = "select id,article_title,article_desc,article_img,article_url," +
-                    "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time") + " from d_article";
-            sql = sql + " where article_title like '%" + articleTitle + "%'";
-            try {
-                logger.info("SQL:" + sql);
-                return jdbcTemplate.query(sql, new articleRowMapper());
-            } catch (NoSuchElementException e) {
-                return null;
-            }
+
+        articleTitle = "%" + articleTitle + "%";
+        String sql = "select id,article_title,article_desc,article_img,article_url," +
+                "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")
+                + ",order_no from d_article"
+                + " where article_title like ?";
+        try {
+            logger.info("SQL:" + sql);
+            return jdbcTemplate.query(sql, new Object[]{articleTitle}, new articleRowMapper());
+        } catch (NoSuchElementException e) {
+            return null;
         }
+
+    }
+    public Integer getOrderById(String id) {
+        String sql = "select order_no from d_article where id = ?";
+        try {
+            logger.info("SQL:" + sql);
+            return jdbcTemplate.queryForObject(sql,new Object[]{id}, Integer.class);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+    public Integer getMaxOrder() {
+        String sql = "select max(order_no) from d_article ";
+        try {
+            logger.info("SQL:" + sql);
+            return jdbcTemplate.queryForObject(sql, Integer.class);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+    public void updateOrderById(String id,Integer orderNo) {
+        String sql = "update d_article set order_no=? where id = ? ";
+
+            logger.info("SQL:" + sql);
+             jdbcTemplate.update(sql, new Object[]{orderNo,id});
+
     }
 
     class articleRowMapper implements RowMapper<ArticleDao>{
@@ -250,7 +227,8 @@ public class ArticleRepository {
                     rs.getString("article_url"),
                     Utils.Int2Boolean(rs.getInt("article_recommended")),
                     rs.getString("article_type"),
-                    null
+                    null,
+                    rs.getInt("order_no")
             );
             if( rs.getDate("submit_time") != null )
             {

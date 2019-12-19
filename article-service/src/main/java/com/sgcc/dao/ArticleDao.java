@@ -28,4 +28,6 @@ public class ArticleDao implements Serializable {
 
     private Date submit_time;
 
+    private Integer order_no;
+
 }
