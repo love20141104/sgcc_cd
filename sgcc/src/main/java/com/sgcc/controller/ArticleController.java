@@ -1,10 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
-import com.sgcc.dto.ArticleMappingDTO;
-import com.sgcc.dto.ArticleSubmitDTO;
-import com.sgcc.dto.ArticleUpdateDTO;
-import com.sgcc.dto.ArticleViewDTO;
+import com.sgcc.dto.*;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.service.ArticleService;
 import io.swagger.annotations.Api;
@@ -45,6 +42,7 @@ public class ArticleController {
             }
             // 所有
             return Result.failure(TopErrorCode.PARAMETER_ERR);
+
         }while(false);
 
         if( dtos == null )
@@ -114,5 +112,11 @@ public class ArticleController {
     public Result DeleteArticles( @RequestBody List<String> ids) {
         articleService.deletes(ids);
         return Result.success();
+    }
+
+    @ApiOperation(value = "改变两个文章位置 ", notes = "")
+    @PostMapping(value = "/changeOrder")
+    public Result changeOrder(@RequestBody ArticleChangeOrderDTO dto){
+        return articleService.changeOrder(dto.getId1(), dto.getId2());
     }
 }

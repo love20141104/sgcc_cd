@@ -56,4 +56,12 @@ public class ArticleQueryEntity {
     public List<ArticleDao> getArticlesByTitle(String articleTitle) {
         return articleRepository.findAllByArticleTitle(articleTitle);
     }
+
+    public Integer getOrderById(String id) {
+        return articleRepository.getOrderById(id);
+    }
+
+    public Integer getMaxOrder() {
+        return articleRepository.getMaxOrder();
+    }
 }

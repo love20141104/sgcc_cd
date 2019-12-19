@@ -1,5 +1,6 @@
 package com.sgcc.service;
 
+import com.example.result.Result;
 import com.sgcc.dao.ArticleDao;
 import com.sgcc.dao.ArticleDaos;
 import com.sgcc.dao.ArticleRedisDao;
@@ -122,9 +123,11 @@ public class ArticleService {
         ArticleDao dao = model.submitdto2dao(dto);
         if( dao == null )
             return;
-
+        Integer maxOrder = articleQueryEntity.getMaxOrder();
+        dao.setOrder_no(maxOrder+1);
         articleEventEntity.save(dao);
-        articleEventEntity.Cache(model.dao2redisdao(dao));
+        //更新redis
+        Initialize(null);
     }
 
     public void update( ArticleUpdateDTO dto )
@@ -154,5 +157,10 @@ public class ArticleService {
             return null;
         }
         return model.daos2listmappingdtos(daos);
+    }
+    public Result changeOrder(String id1,String id2){
+        articleEventEntity.updateOrderById(id1, id2);
+        Initialize(null);
+        return Result.success();
     }
 }

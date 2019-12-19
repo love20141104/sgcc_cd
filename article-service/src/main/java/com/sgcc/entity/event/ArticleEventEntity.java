@@ -6,6 +6,7 @@ import com.sgcc.repository.ArticleRedisRepository;
 import com.sgcc.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -43,5 +44,13 @@ public class ArticleEventEntity {
     public void deletes( List<String> articleIds)
     {
         articleRepository.deleteAll( articleIds );
+    }
+
+    @Transactional
+    public void updateOrderById(String upId,String downId) {
+        Integer orderByupId = articleRepository.getOrderById(upId);
+        Integer orderBydownId = articleRepository.getOrderById(downId);
+        articleRepository.updateOrderById(upId, orderBydownId);
+        articleRepository.updateOrderById(downId, orderByupId);
     }
 }
