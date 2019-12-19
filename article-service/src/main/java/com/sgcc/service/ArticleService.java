@@ -112,7 +112,7 @@ public class ArticleService {
         {
             return null;
         }
-        //articleProducer.CacheAllArticlesMQ( model.listdao2daos(daos) );
+        articleProducer.CacheAllArticlesMQ( model.listdao2daos(daos) );
         return model.daos2listviewdto(daos);
     }
 
