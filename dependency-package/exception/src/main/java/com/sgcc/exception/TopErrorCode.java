@@ -32,7 +32,8 @@ public enum TopErrorCode {
     NONE_HOUSEHOLD_INFO(20004,"请先绑定户号"),
     HOUSEHOLD_BIND_REPEAT(20005,"用户已绑定该户号，无法绑定"),
     DECRYPTION_FAILED(20006,"解密失败"),
-    HOUSEHOLD_NUM_ERR(20007,"户号长度错误");
+    HOUSEHOLD_NUM_ERR(20007,"户号长度错误"),
+    DEVICE_EXCEPTION(20008,"设备正在维护");
 
     //错误码
     private Integer errcode;
