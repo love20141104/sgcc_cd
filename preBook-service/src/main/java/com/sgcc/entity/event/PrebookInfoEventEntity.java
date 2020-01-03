@@ -1,5 +1,6 @@
 package com.sgcc.entity.event;
 
+import com.sgcc.dao.BlacklistDao;
 import com.sgcc.dao.CheckerInfoDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.repository.PreBookInfoRepository;
@@ -38,6 +39,12 @@ public class PrebookInfoEventEntity {
     public void delChecker(List<String> ids){
         preBookInfoRepository.delChecker(ids);
     }
+
+
+    public void addBlacklist(List<BlacklistDao> blacklistDaos){
+        preBookInfoRepository.addBlacklist(blacklistDaos);
+    }
+
 
 
 }

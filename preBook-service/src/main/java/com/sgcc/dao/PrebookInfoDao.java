@@ -32,4 +32,9 @@ public class PrebookInfoDao implements Serializable {
     private String rejectReason;
     private String checkerId;
 
+    private Date startDate;
+    private Date endDate;
+
+    private Integer ticketStatus;
+
 }

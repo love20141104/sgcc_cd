@@ -27,4 +27,6 @@ public class PrebookDetailViewDTO implements Serializable {
     private String rejectReason;
     private String checkerName;
 
+    private String prebookDate;
+
 }

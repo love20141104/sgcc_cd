@@ -25,7 +25,7 @@ public class BlacklistDao implements Serializable {
 
     private static final long serialVersionUID = 7136868697073821703L;
 
-    private String id;
+    private Integer id;
     private String userOpenId;
     private Date createDate;
 

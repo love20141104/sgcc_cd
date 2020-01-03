@@ -131,6 +131,13 @@ public class Utils {
         return df.format(date);
     }
 
+    public static String GetTimeForHMS(Date date )
+    {
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        return df.format(date);
+    }
+
+
     public static String GetMonth(Date date )
     {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

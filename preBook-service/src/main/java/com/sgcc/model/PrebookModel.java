@@ -4,7 +4,9 @@ import com.example.Utils;
 import com.sgcc.dao.CheckerInfoDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.dto.*;
+import com.sgcc.utils.DateUtils;
 
+import javax.rmi.CORBA.Util;
 import java.util.*;
 
 public class PrebookModel {
@@ -22,7 +24,7 @@ public class PrebookModel {
     }
 
 
-    public PrebookInfoDao addPrebookTrans(PrebookInfoSubmitDTO dto) {
+    public PrebookInfoDao addPrebookTrans(PrebookInfoSubmitDTO dto,Date startDate,Date endDate) {
 
         PrebookInfoDao prebookInfoDao = new PrebookInfoDao(
                 UUID.randomUUID().toString(),
@@ -39,7 +41,10 @@ public class PrebookModel {
                 new Date(),
                 1,
                 null,
-                null
+                null,
+                startDate,
+                endDate,
+                0
 
         );
 
@@ -67,6 +72,8 @@ public class PrebookModel {
 
     public PrebookDetailViewDTO getPrebookInfoDetailTrans(PrebookInfoDao prebookInfoDao,String checkName) {
 
+        String prebookDate = DateUtils.assembleDate(prebookInfoDao.getStartDate(),prebookInfoDao.getEndDate());
+
         PrebookDetailViewDTO prebookDetailViewDTO = new PrebookDetailViewDTO(
                 prebookInfoDao.getBusinessTypeName(),
                 prebookInfoDao.getServiceHallName(),
@@ -78,7 +85,8 @@ public class PrebookModel {
                 Utils.GetTime(prebookInfoDao.getSubmitDate()),
                 prebookInfoDao.getStatus(),
                 prebookInfoDao.getRejectReason(),
-                checkName
+                checkName,
+                prebookDate
 
         );
         return prebookDetailViewDTO;
@@ -87,6 +95,7 @@ public class PrebookModel {
 
     public PrebookDetailViewDTO getCheckDetailListTrans(PrebookInfoDao prebookInfoDao, String checkName) {
         PrebookDetailViewDTO prebookDetailViewDTO =null;
+        String prebookDate = DateUtils.assembleDate(prebookInfoDao.getStartDate(),prebookInfoDao.getEndDate());
 
         prebookDetailViewDTO = new PrebookDetailViewDTO(
                 prebookInfoDao.getBusinessTypeName(),
@@ -99,7 +108,8 @@ public class PrebookModel {
                 Utils.GetTime(prebookInfoDao.getSubmitDate()),
                 prebookInfoDao.getStatus(),
                 prebookInfoDao.getRejectReason(),
-                checkName
+                checkName,
+                prebookDate
 
         );
 
@@ -124,7 +134,10 @@ public class PrebookModel {
                 null,
                 dto.getStatus(),
                 dto.getRejectReason(),
-                dto.getUserOpenId()
+                dto.getUserOpenId(),
+                null,
+                null,
+                null
 
         );
 
@@ -157,6 +170,35 @@ public class PrebookModel {
         return checkerInfoDao;
     }
 
+
+    public List<CheckerViewDTO> getAllCheckersTrans(List<CheckerInfoDao> checkerInfoDaos) {
+
+        List<CheckerViewDTO> checkerViewDTOS = new ArrayList<>();
+        checkerInfoDaos.forEach(dao -> {
+            checkerViewDTOS.add(new CheckerViewDTO(
+                    dao.getId(),
+                    dao.getCheckerName(),
+                    dao.getCheckTel(),
+                    dao.getUserOpenId(),
+                    dao.getServiceHallId(),
+                    dao.getServiceHallName()
+            ));
+        });
+        return checkerViewDTOS;
+    }
+
+
+    public List<PrebookInfoDao> advanceSendMessageTrans(List<PrebookInfoDao> prebookInfoDaos, String startDate) {
+        List<PrebookInfoDao> prebookDaos = new ArrayList<>();
+        Date startTime = Utils.GetDate(startDate);
+        prebookInfoDaos.forEach(dao -> {
+            if (startTime.getTime() == dao.getStartDate().getTime()){
+                prebookDaos.add(dao);
+            }
+
+        });
+        return prebookDaos;
+    }
 
 
 

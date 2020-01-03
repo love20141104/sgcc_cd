@@ -1,9 +1,10 @@
 package com.sgcc.utils;
 
+import com.example.Utils;
+
 import javax.xml.crypto.Data;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class DateUtils {
     /**
@@ -38,5 +39,63 @@ public class DateUtils {
         long to = dateTo.getTime();
         return ((to - from) / (1000 * 60 * 60 * 24L));
     }
+
+    /**
+     * 拆分日期
+     * @param date
+     * @param repl
+     * @return
+     */
+    public static Map<String,Date> splitDate(String date, String repl) {
+        Map<String,Date> dates = new LinkedHashMap<>();
+        String[] time = date.split(repl);
+
+        System.out.println("开始时间："+Utils.GetTimeForYMD(new Date())+" "+time[0]+":00");
+        Date startDate = Utils.GetDate(Utils.GetTimeForYMD(new Date())+" "+time[0]+":00");
+        Date endDate = Utils.GetDate(Utils.GetTimeForYMD(new Date())+" "+time[1]+":00");
+        dates.put("startDate",startDate);
+        dates.put("endDate",endDate);
+        return dates;
+    }
+
+    /**
+     * 拼装日期
+     * @returna
+     */
+    public static String assembleDate(Date start, Date end) {
+        String startDate = Utils.GetTime(start);
+        String endDate = Utils.GetTime(end);
+        return startDate+"~"+endDate;
+    }
+
+
+    public static String addDate(String day, int x){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//24小时制
+        Date date = null;
+        try
+        {
+            date = format.parse(day);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        if (date == null) return "";
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.HOUR_OF_DAY, x);//24小时制
+        date = cal.getTime();
+        cal = null;
+        return format.format(date);
+    }
+
+
+    public static void main(String[] args){
+        String date1 = "2009-03-23 08:00:00";//指定时间
+        String date2= addDate(date1,1);//加1小时方法
+        System.out.println("after:"+date2);
+
+    }
+
 
 }

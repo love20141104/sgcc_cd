@@ -25,6 +25,11 @@ public class PrebookController {
         return prebooksService.getBasicInfo(openId);
     }
 
+    @ApiOperation(value = "线上预约-预约时间段", notes = "")
+    @GetMapping(value = "/open-id/timeSlot")
+    public Result getTimeSlot() {
+        return prebooksService.getTimeSlot();
+    }
 
     @ApiOperation(value = "线上预约-提交", notes = "")
     @PostMapping(value = "/open-id/bookingForm")
@@ -44,11 +49,11 @@ public class PrebookController {
         return prebooksService.getPrebookInfoDetail(id);
     }
 
-//    @ApiOperation(value = "线上预约-预约取号", notes = "")
-//    @PostMapping(value = "/open-id/takeNumber")
-//    public Result getPrebookNumber(@RequestBody TakeNumberDTO dto) {
-//        return prebooksService.getPrebookNumber(dto);
-//    }
+    @ApiOperation(value = "线上预约-线下取票信息", notes = "")
+    @PostMapping(value = "/open-id/takeTicket")
+    public Result getTicketInfo(@RequestBody TakeTicketDTO dto) {
+        return prebooksService.getTicketInfo(dto);
+    }
 
 
     /**********************************工作人员*************************************/
@@ -73,11 +78,11 @@ public class PrebookController {
 
 
 
-//    @ApiOperation(value = "线上预约-新增审核人", notes = "")
-//    @GetMapping(value = "/open-id/config/checker")
-//    public Result getChecker() {
-//        return prebooksService.getChecker();
-//    }
+    @ApiOperation(value = "线上预约-查询审核人", notes = "")
+    @GetMapping(value = "/open-id/config/checker")
+    public Result getAllCheckers() {
+        return prebooksService.getAllCheckers();
+    }
 
     @ApiOperation(value = "线上预约-新增审核人", notes = "")
     @PostMapping(value = "/open-id/config/checker")

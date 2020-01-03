@@ -27,4 +27,7 @@ public class PrebookInfoSubmitDTO implements Serializable {
 //    private String submitDate;
 //    private String status;
 
+    private String prebookDate;
+
+
 }

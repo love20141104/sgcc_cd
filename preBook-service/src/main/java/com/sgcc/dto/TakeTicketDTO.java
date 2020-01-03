@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TakeNumberDTO implements Serializable {
+public class TakeTicketDTO implements Serializable {
 
     private static final long serialVersionUID = -415700683700751480L;
 
