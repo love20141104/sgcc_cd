@@ -4,7 +4,6 @@ import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.BlacklistDao;
 import com.sgcc.dao.CheckerInfoDao;
-import com.sgcc.dao.PreBookDao;
 import com.sgcc.dao.PrebookInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -25,6 +22,12 @@ public class PreBookInfoRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+
+
+
+
+
 
 
     public int updateLineUp(PrebookInfoDao dao){
@@ -75,7 +78,7 @@ public class PreBookInfoRepository {
                 dao.getHouseholdNo(),
                 dao.getContact(),
                 dao.getContactTel(),
-                dao.getSubmitDate(),
+                Utils.GetTime(dao.getSubmitDate()),
                 dao.getStatus()
         });
 
@@ -125,7 +128,7 @@ public class PreBookInfoRepository {
     }
 
     public CheckerInfoDao getCheckerByOpenId(String openId){
-        String sql = "select id,checker_name,checker_tel,user_open_id,service_hall_name " +
+        String sql = "select id,checker_name,checker_tel,user_open_id,service_hall_id,service_hall_name " +
                 "from b_prebook_checker where user_open_id = ?";
         return jdbcTemplate.query(sql,new Object[]{openId},new CheckerInfoRowMapper()).get(0);
     }
@@ -155,16 +158,47 @@ public class PreBookInfoRepository {
     }
 
 
+    public int addChecker(CheckerInfoDao dao){
+        String sql = "insert into b_prebook_checker(id,checker_name,checker_tel,user_open_id,service_hall_id,service_hall_name) " +
+                "values(?,?,?,?,?,?)";
+
+        return jdbcTemplate.update(sql,new Object[]{
+                dao.getId(),
+                dao.getCheckerName(),
+                dao.getCheckTel(),
+                dao.getUserOpenId(),
+                dao.getServiceHallId(),
+                dao.getServiceHallName()
+        });
+    }
+
+    public int updateChecker(CheckerInfoDao dao){
+        String sql = "update b_prebook_checker set checker_name=?,checker_tel=?,user_open_id=? " +
+                "where id=?";
+
+        return jdbcTemplate.update(sql,new Object[]{
+                dao.getCheckerName(),
+                dao.getCheckTel(),
+                dao.getUserOpenId(),
+                dao.getId()
+        });
+    }
+
+    public void delChecker(List<String> ids){
+        String sql = "delete from b_prebook_checker where id in ('" + Utils.joinStrings(ids, "','")+"')";
+        jdbcTemplate.update(sql);
+    }
 
 
-
-    public CheckerInfoDao getCheckerInfo(String hallName){
-        String sql = "select id,checker_name,checker_tel,user_open_id,service_hall_name from b_prebook_checker where service_hall_name = ?";
-        return jdbcTemplate.query(sql,new Object[]{hallName},new CheckerInfoRowMapper()).get(0);
+    public CheckerInfoDao getCheckerInfo(String hallId){
+        String sql = "select id,checker_name,checker_tel,user_open_id,service_hall_id,service_hall_name " +
+                "from b_prebook_checker where service_hall_id = ?";
+        return jdbcTemplate.query(sql,new Object[]{hallId},new CheckerInfoRowMapper()).get(0);
     }
 
     public CheckerInfoDao getCheckerInfoById(String id){
-        String sql = "select id,checker_name,checker_tel,user_open_id,service_hall_name from b_prebook_checker where id = ?";
+        String sql = "select id,checker_name,checker_tel,user_open_id,service_hall_id,service_hall_name " +
+                "from b_prebook_checker where id = ?";
         return jdbcTemplate.query(sql,new Object[]{id},new CheckerInfoRowMapper()).get(0);
     }
 
@@ -186,6 +220,7 @@ public class PreBookInfoRepository {
                     rs.getString("checker_name"),
                     rs.getString("checker_tel"),
                     rs.getString("user_open_id"),
+                    rs.getString("service_hall_id"),
                     rs.getString("service_hall_name")
             );
         }

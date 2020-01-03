@@ -18,8 +18,8 @@ public class PrebookInfoQueryEntity {
         return preBookInfoRepository.getBlacklistByOpenId(openId);
     }
 
-    public CheckerInfoDao getCheckerInfo(String hallName){
-        return preBookInfoRepository.getCheckerInfo(hallName);
+    public CheckerInfoDao getCheckerInfo(String hallId){
+        return preBookInfoRepository.getCheckerInfo(hallId);
     }
 
     public List<PrebookInfoDao> getPrebookInfo(String openId, int status){

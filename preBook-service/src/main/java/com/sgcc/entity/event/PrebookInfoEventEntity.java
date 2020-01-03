@@ -1,9 +1,12 @@
 package com.sgcc.entity.event;
 
+import com.sgcc.dao.CheckerInfoDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.repository.PreBookInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class PrebookInfoEventEntity {
@@ -24,8 +27,17 @@ public class PrebookInfoEventEntity {
     }
 
 
+    public int addChecker(CheckerInfoDao dao){
+        return preBookInfoRepository.addChecker(dao);
+    }
 
+    public int updateChecker(CheckerInfoDao dao){
+        return preBookInfoRepository.updateChecker(dao);
+    }
 
+    public void delChecker(List<String> ids){
+        preBookInfoRepository.delChecker(ids);
+    }
 
 
 }

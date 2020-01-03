@@ -1,14 +1,14 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
-import com.sgcc.dto.PrebookInfoEditDTO;
-import com.sgcc.dto.PrebookInfoSubmitDTO;
-import com.sgcc.dto.TakeNumberDTO;
+import com.sgcc.dto.*;
 import com.sgcc.service.PrebooksService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(value = "", tags = "线上预约接口")
 @RestController
@@ -69,6 +69,32 @@ public class PrebookController {
     @PutMapping(value = "/open-id/checkPrebook")
     public Result updateCheckPrebook(@RequestBody PrebookInfoEditDTO prebookInfoEditDTO) {
         return prebooksService.updateCheckPrebook(prebookInfoEditDTO);
+    }
+
+
+
+//    @ApiOperation(value = "线上预约-新增审核人", notes = "")
+//    @GetMapping(value = "/open-id/config/checker")
+//    public Result getChecker() {
+//        return prebooksService.getChecker();
+//    }
+
+    @ApiOperation(value = "线上预约-新增审核人", notes = "")
+    @PostMapping(value = "/open-id/config/checker")
+    public Result addChecker(@RequestBody CheckerSubmitDTO CheckerSubmitDTO) {
+        return prebooksService.addChecker(CheckerSubmitDTO);
+    }
+
+    @ApiOperation(value = "线上预约-修改审核人", notes = "")
+    @PutMapping(value = "/open-id/config/checker")
+    public Result updateChecker(@RequestBody CheckerEditDTO checkerEditDTO) {
+        return prebooksService.updateChecker(checkerEditDTO);
+    }
+
+    @ApiOperation(value = "线上预约-删除审核人", notes = "")
+    @DeleteMapping(value = "/open-id/config/checker")
+    public Result delChecker(@RequestBody List<String> ids) {
+        return prebooksService.delChecker(ids);
     }
 
 

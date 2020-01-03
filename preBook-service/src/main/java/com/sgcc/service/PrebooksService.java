@@ -15,6 +15,7 @@ import com.sgcc.model.PrebookModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,10 +39,19 @@ public class PrebooksService {
      */
     public Result getBasicInfo(String openId) {
         try {
-            String serviceHall = "高新区";
+            boolean flag = false;
+            List<HallInfoDTO> hallInfoDTOS = new ArrayList<HallInfoDTO>();
+            HallInfoDTO hallInfoDTO = new HallInfoDTO("123456", "高新营业厅");
+            hallInfoDTOS.add(hallInfoDTO);
+
+            Map<String,String> deviceInfo = new LinkedHashMap<>();
+
             // TODO 调用心跳接口
-            String deviceStatus = "正常";
-            if (deviceStatus.equals("不正常"))
+            deviceInfo.put("deviceId","6722d35aa124a82d");
+            deviceInfo.put("deviceName","线上预约排号终端");
+            deviceInfo.put("deviceStatus","1"); // 正常
+
+            if (deviceInfo.get("deviceStatus").equals("不正常"))
                 return Result.failure(TopErrorCode.DEVICE_EXCEPTION);
 
             // TODO 需要调用排队查询接口
@@ -49,7 +59,7 @@ public class PrebooksService {
             lineUpInfoDTO.setCode("200");
             lineUpInfoDTO.setMsg("成功");
             Map<String,String> map = new LinkedHashMap<>();
-            map.put("lineUpNo","1002");
+            map.put("lineUpNo","WA1002");
             map.put("lineUpTime","2019-12-31 12:30:00");
             map.put("waitingNum","10");
             lineUpInfoDTO.setData(map);
@@ -57,10 +67,10 @@ public class PrebooksService {
             //  查询当前用户是否在黑名单中
             int count = prebookInfoQueryEntity.getBlacklistByOpenId(openId);
             if (count > 3)
-                return Result.success();
+                flag = true;
 
             PrebookModel model = new PrebookModel();
-            BasicInfoDTO basicInfoDTO = model.getBasicInfoTrans(serviceHall,lineUpInfoDTO,deviceStatus,count);
+            BasicInfoDTO basicInfoDTO = model.getBasicInfoTrans(hallInfoDTOS,lineUpInfoDTO,deviceInfo,flag);
 
             return Result.success(basicInfoDTO);
 
@@ -88,7 +98,7 @@ public class PrebooksService {
             PrebookInfoDao flag = prebookInfoEventEntity.addPrebook(prebookInfoDao);
 
             if (null != flag && !Strings.isNullOrEmpty(flag.getServiceHallName())){
-                CheckerInfoDao checkerInfoDao = prebookInfoQueryEntity.getCheckerInfo(flag.getServiceHallName());
+                CheckerInfoDao checkerInfoDao = prebookInfoQueryEntity.getCheckerInfo(flag.getServiceHallId());
                 if (null != checkerInfoDao && !Strings.isNullOrEmpty(checkerInfoDao.getId())){
                     TemplateMessage temp = new TemplateMessage();
                     temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
@@ -186,7 +196,7 @@ public class PrebooksService {
 
             BasicInputDTO basicInputDTO = new BasicInputDTO("appId",
                     "signature",
-                    new InputData(
+                    new InputDataDTO(
                             "serviceCode",
                             "appId",
                             "deviceId",
@@ -385,7 +395,60 @@ public class PrebooksService {
 
     }
 
+    /**
+     * 添加审核人
+     * @param checkerSubmitDTO
+     * @return
+     */
+    public Result addChecker(CheckerSubmitDTO checkerSubmitDTO) {
+        if (checkerSubmitDTO == null)
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
 
+        try {
+
+            PrebookModel model = new PrebookModel();
+            CheckerInfoDao checkerInfoDao = model.addCheckerTrans(checkerSubmitDTO);
+            prebookInfoEventEntity.addChecker(checkerInfoDao);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+    }
+
+    /**
+     * 修改审核人信息
+     * @param checkerEditDTO
+     * @return
+     */
+    public Result updateChecker(CheckerEditDTO checkerEditDTO) {
+        if (checkerEditDTO == null)
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+
+        try {
+            PrebookModel model = new PrebookModel();
+            CheckerInfoDao checkerInfoDao = model.updateCheckerTrans(checkerEditDTO);
+            prebookInfoEventEntity.updateChecker(checkerInfoDao);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+    public Result delChecker(List<String> ids) {
+        if (ids.size() == 0)
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
+        try {
+            prebookInfoEventEntity.delChecker(ids);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
 
 
 

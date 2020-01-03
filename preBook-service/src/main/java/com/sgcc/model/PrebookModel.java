@@ -1,22 +1,23 @@
 package com.sgcc.model;
 
 import com.example.Utils;
+import com.sgcc.dao.CheckerInfoDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.dto.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class PrebookModel {
 
 
-    public BasicInfoDTO getBasicInfoTrans(String serviceHall, LineUpInfoOutDTO lineUpInfoDTO, String deviceStatus, int count) {
+    public BasicInfoDTO getBasicInfoTrans(List<HallInfoDTO> hallInfoDTOS,
+                                          LineUpInfoOutDTO lineUpInfoDTO,
+                                          Map<String,String> deviceInfo, boolean flag) {
         BasicInfoDTO basicInfoDTO = new BasicInfoDTO();
-        basicInfoDTO.getServiceHalls().add(serviceHall);
+        basicInfoDTO.setHallInfoDTOS(hallInfoDTOS);
         basicInfoDTO.setLineup(lineUpInfoDTO.getData());
-        basicInfoDTO.setDeviceStatus(deviceStatus);
-        basicInfoDTO.setBlacklistCount(count);
+        basicInfoDTO.setDeviceInfo(deviceInfo);
+        basicInfoDTO.setBlacklistFlag(flag);
         return basicInfoDTO;
     }
 
@@ -35,7 +36,7 @@ public class PrebookModel {
                 null,
                 dto.getContact(),
                 dto.getContactTel(),
-                Utils.GetCurTime(),
+                new Date(),
                 1,
                 null,
                 null
@@ -131,6 +132,30 @@ public class PrebookModel {
     }
 
 
+    public CheckerInfoDao addCheckerTrans(CheckerSubmitDTO checkerSubmitDTO) {
+        CheckerInfoDao checkerInfoDao = new CheckerInfoDao(
+                UUID.randomUUID().toString(),
+                checkerSubmitDTO.getCheckerName(),
+                checkerSubmitDTO.getCheckerTel(),
+                checkerSubmitDTO.getUserOpenId(),
+                checkerSubmitDTO.getServiceHallId(),
+                checkerSubmitDTO.getServiceHallName()
+        );
+        return checkerInfoDao;
+    }
+
+
+    public CheckerInfoDao updateCheckerTrans(CheckerEditDTO checkerEditDTO) {
+        CheckerInfoDao checkerInfoDao = new CheckerInfoDao(
+                checkerEditDTO.getId(),
+                checkerEditDTO.getCheckerName(),
+                checkerEditDTO.getCheckerTel(),
+                checkerEditDTO.getUserOpenId(),
+                null,
+                null
+        );
+        return checkerInfoDao;
+    }
 
 
 

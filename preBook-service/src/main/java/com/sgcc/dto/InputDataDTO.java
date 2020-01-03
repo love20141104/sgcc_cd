@@ -10,7 +10,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InputData implements Serializable {
+public class InputDataDTO implements Serializable {
 
     private static final long serialVersionUID = -1458370997644552791L;
 

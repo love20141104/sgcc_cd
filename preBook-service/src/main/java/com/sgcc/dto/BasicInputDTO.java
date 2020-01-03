@@ -15,5 +15,5 @@ public class BasicInputDTO implements Serializable {
 
     private String appId;       // 渠道编号
     private String signature;   // 签名
-    private InputData data;
+    private InputDataDTO data;
 }

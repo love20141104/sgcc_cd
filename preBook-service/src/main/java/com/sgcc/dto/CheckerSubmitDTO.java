@@ -1,24 +1,21 @@
-package com.sgcc.dao;
+package com.sgcc.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-/**
- * 黑名单
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CheckerInfoDao implements Serializable {
+public class CheckerSubmitDTO implements Serializable {
 
-    private static final long serialVersionUID = 9168107979491708997L;
-    private String id;
+    private static final long serialVersionUID = 613483990344268477L;
     private String checkerName;
-    private String checkTel;
+    private String checkerTel;
     private String userOpenId;
     private String serviceHallId;
     private String serviceHallName;
