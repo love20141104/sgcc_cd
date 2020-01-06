@@ -8,7 +8,6 @@ import com.sgcc.dao.BlacklistDao;
 import com.sgcc.dao.CheckerInfoDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.dto.*;
-import com.sgcc.dtomodel.prebook.PrebookStartTimeDTO;
 import com.sgcc.dtomodel.wechat.template.TemplateData;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
 import com.sgcc.entity.event.PrebookInfoEventEntity;
@@ -56,7 +55,7 @@ public class PrebooksService {
                 TemplateMessage temp = new TemplateMessage();
                 temp.setTemplate_id("t9BlCV_CQ-K6o5tO7X68UonpWNq1YszrGgSFe0PraVU");
                 temp.setTouser( dao.getUserOpenId());              // 发送给用户
-                temp.setUrl("https://sgcc.link/approval");                      // 进入页面
+                temp.setUrl("https://sgcc.link/appointmentList");                      // 进入页面
 
                 Map<String, TemplateData> map = new LinkedHashMap<>();
                 map.put("first",new TemplateData("你好，请你及时到营业厅取票!","#000000"));
@@ -199,7 +198,7 @@ public class PrebooksService {
                     TemplateMessage temp = new TemplateMessage();
                     temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
                     temp.setTouser( checkerInfoDao.getUserOpenId() );              // 发送给审核人
-                    temp.setUrl("https://sgcc.link/approval");                      // 进入页面
+                    temp.setUrl("https://sgcc.link/appointmentBack");                      // 进入页面
 
                     Map<String, TemplateData> map = new LinkedHashMap<>();
                     map.put("first",new TemplateData("你好，有新预约信息需要审核!","#000000"));
@@ -437,7 +436,7 @@ public class PrebooksService {
                         TemplateMessage temp = new TemplateMessage();
                         temp.setTemplate_id("t9BlCV_CQ-K6o5tO7X68UonpWNq1YszrGgSFe0PraVU");
                         temp.setTouser( dao.getUserOpenId());              // 发送给用户
-                        temp.setUrl("https://sgcc.link/approval");                      // 进入页面
+                        temp.setUrl("https://sgcc.link/appointmentList");                      // 进入页面
 
                         Map<String, TemplateData> map = new LinkedHashMap<>();
                         map.put("first",new TemplateData("你好，你的预约已成功!","#000000"));
@@ -466,7 +465,7 @@ public class PrebooksService {
                         TemplateMessage temp2 = new TemplateMessage();
                         temp2.setTemplate_id("Yfv4siCzMo9MkeM9BEs61SlBf1KMTj2pHtMxn-OTYnc");
                         temp2.setTouser( dao.getCheckerId() );
-                        temp2.setUrl("https://sgcc.link/proposalList");
+                        temp2.setUrl("https://sgcc.link/appointmentBack");
                         Map<String, TemplateData> map2 = new LinkedHashMap<>();
                         map2.put("first",new TemplateData("您好，客户已预约成功，请尽快处理!","#000000"));
                         map2.put("keyword1",new TemplateData(dao.getContact(),"#000000"));
@@ -484,7 +483,7 @@ public class PrebooksService {
                     TemplateMessage temp = new TemplateMessage();
                     temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
                     temp.setTouser( dao.getUserOpenId() );
-                    temp.setUrl("https://sgcc.link/approval");
+                    temp.setUrl("https://sgcc.link/appointmentList");
 
                     Map<String, TemplateData> map = new LinkedHashMap<>();
                     map.put("first",new TemplateData("你好，有新的预约消息请查看!","#000000"));
@@ -502,7 +501,7 @@ public class PrebooksService {
                 TemplateMessage temp = new TemplateMessage();
                 temp.setTemplate_id("Yfv4siCzMo9MkeM9BEs61SlBf1KMTj2pHtMxn-OTYnc");
                 temp.setTouser( dao.getUserOpenId() );
-                temp.setUrl("https://sgcc.link/proposalList");
+                temp.setUrl("https://sgcc.link/appointmentList");
 
                 Map<String, TemplateData> map = new LinkedHashMap<>();
                 map.put("first",new TemplateData("您好，您的预约审核不通过!","#000000"));
@@ -589,8 +588,9 @@ public class PrebooksService {
         try {
             List<CheckerInfoDao> checkerInfoDaos = prebookInfoQueryEntity.getAllCheckers();
             PrebookModel model = new PrebookModel();
-            model.getAllCheckersTrans(checkerInfoDaos);
-
+            List<CheckerViewDTO> checkerViewDTOS = model.getAllCheckersTrans(checkerInfoDaos);
+            if (checkerViewDTOS.size() > 0)
+                return Result.success(checkerViewDTOS);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();

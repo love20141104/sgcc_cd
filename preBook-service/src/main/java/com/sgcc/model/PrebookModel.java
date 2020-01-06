@@ -7,7 +7,6 @@ import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.dto.*;
 import com.sgcc.utils.DateUtils;
 
-import javax.rmi.CORBA.Util;
 import java.util.*;
 
 public class PrebookModel {
