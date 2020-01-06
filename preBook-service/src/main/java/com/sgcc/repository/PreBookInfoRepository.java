@@ -266,6 +266,13 @@ public class PreBookInfoRepository {
         }
     }
 
+    public Integer getCountByOpenId(String openId) {
+        String sql = "select count(id) from b_prebook_detail where status =1 and service_hall_id in( select service_hall_id " +
+                "from b_prebook_checker where user_open_id = ?)";
+        return jdbcTemplate.queryForObject(sql, new Object[]{openId}, Integer.class);
+
+    }
+
 
     class CheckerInfoRowMapper implements RowMapper<CheckerInfoDao>{
 
