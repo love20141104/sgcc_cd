@@ -27,7 +27,7 @@ public class BusinessGuideController {
         return businessGuideService.getList(cid,title);
     }
 
-    @ApiOperation(value = "查询业务指南列表", notes = "")
+    @ApiOperation(value = "查询业务指南", notes = "")
     @GetMapping(value = "/{id}")
     public Result findBusinessGuides(@PathVariable String id) {
         return businessGuideService.getBusinessGuide(id);

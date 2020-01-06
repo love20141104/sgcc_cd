@@ -19,7 +19,8 @@ spring:
   ### Redis
   redis:
     #    database: 1
-    host: 119.23.22.176
+    #     192.168.0.108
+    host: 192.168.0.108
     port: 6379
     password:
     jedis:
@@ -34,7 +35,7 @@ spring:
     username: root
     password: Root@123
   activemq:
-    broker-url: tcp://119.23.22.176:61616
+    broker-url: tcp://192.168.0.108:61616
     in-memory: false
     pool:
       enabled: false #如果此处设置为true，需要加如下的依赖包，否则会自动配置失败，报JmsMessagingTemplate注入失败
@@ -84,3 +85,8 @@ logging:
     root: info
 
 precompile: true
+
+spring.datasource.hikari.minimum-idle: 3
+spring.datasource.hikari.maximum-pool-size: 10
+spring.datasource.hikari.max-lifetime: 30000 # 不能小于30秒，否则默认回到1800秒
+spring.datasource.hikari.connection-test-query: SELECT 1

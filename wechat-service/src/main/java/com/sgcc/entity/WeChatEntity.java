@@ -3,8 +3,10 @@ package com.sgcc.entity;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.FileUtil;
+import com.example.Utils;
 import com.example.constant.CommonConstants;
 import com.example.constant.WechatURLConstants;
+import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dto.*;
 import com.sgcc.dtomodel.wechat.*;
@@ -25,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -128,6 +132,22 @@ public class WeChatEntity {
         return tempMessageDTO;
     }
 
+
+  /*  public Result getRecharge(String openId) throws Exception {
+
+        String URL = URLConstants.GETRECHARGE;
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("openId",openId);
+        hashMap.put("date",Utils.GetTime(new Date()));
+        HttpEntity<HashMap> requestEntity = new HttpEntity<>(hashMap, requestHeaders);
+
+        JSONObject jsonObject = restTemplate.postForObject(URL, requestEntity, JSONObject.class);
+        Result result= Utils.parseRecharge(jsonObject);
+        return result;
+    }*/
 
 
 

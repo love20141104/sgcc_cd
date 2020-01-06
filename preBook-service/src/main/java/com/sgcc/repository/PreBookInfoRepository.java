@@ -255,6 +255,16 @@ public class PreBookInfoRepository {
         });
     }
 
+    public Integer getRoleByOpenId(String openId) {
+        String sql = "select count(id) " +
+                "from b_prebook_checker where user_open_id = ?";
+        Integer integer = jdbcTemplate.queryForObject(sql, new Object[]{openId}, Integer.class);
+        if(integer>0){
+            return 1;
+        }else {
+            return 0;
+        }
+    }
 
 
     class CheckerInfoRowMapper implements RowMapper<CheckerInfoDao>{

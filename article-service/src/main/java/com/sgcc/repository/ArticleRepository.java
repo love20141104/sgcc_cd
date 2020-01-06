@@ -181,7 +181,7 @@ public class ArticleRepository {
         String sql = "select id,article_title,article_desc,article_img,article_url," +
                 "article_recommended,article_type," + Utils.GetSQLDateStr("submit_time")
                 + ",order_no from d_article"
-                + " where article_title like ?";
+                + " where article_title like ? order by order_no desc";
         try {
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql, new Object[]{articleTitle}, new articleRowMapper());

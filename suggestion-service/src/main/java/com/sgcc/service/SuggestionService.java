@@ -13,10 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -302,16 +299,16 @@ public class SuggestionService {
         suggestionEventEntity.update(dao);
         return Result.success();
     }
-    public Result getRoleByOpenId(String openId){
+    public Map getRoleByOpenId(String openId){
         Integer role = suggestionQueryEntity.getRoleByOpenId(openId);
         Integer count=0;
         if(role>1){
             count= suggestionQueryEntity.getCountByOpenId(openId,role);
         }
         HashMap<String,Integer> map=new HashMap<>();
-        map.put("role",role);
-        map.put("count",count);
-        return Result.success(map);
+        map.put("suggestionRole",role);
+        map.put("suggestionCount",count);
+        return map;
     }
     public Result suggestionReplyCheckInfoList(String checkerOpenid ,Integer checkState){
         if (Strings.isNullOrEmpty(checkerOpenid))
