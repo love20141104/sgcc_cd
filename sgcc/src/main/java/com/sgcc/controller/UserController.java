@@ -309,7 +309,7 @@ public Result getRoleByOpenId(@PathVariable String openId){
 
     Map map = suggestionService.getRoleByOpenId(openId);
     Integer i=prebooksService.getRoleByOpenId(openId);
-    map.put("prebookRole",1);
+    map.put("prebookRole",i);
     return Result.success(map);
 }
 
