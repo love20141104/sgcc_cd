@@ -63,4 +63,8 @@ public class PrebookInfoQueryEntity {
     public Integer getRoleByOpenId(String openId) {
         return preBookInfoRepository.getRoleByOpenId( openId);
     }
+
+    public Integer getCountByOpenId(String openId) {
+        return preBookInfoRepository.getCountByOpenId( openId);
+    }
 }

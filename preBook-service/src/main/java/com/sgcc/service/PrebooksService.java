@@ -599,7 +599,15 @@ public class PrebooksService {
     }
 
 
-    public Integer getRoleByOpenId(String openId) {
-        return prebookInfoQueryEntity.getRoleByOpenId( openId);
+    public Map getRoleByOpenId(String openId) {
+        Integer roleByOpenId = prebookInfoQueryEntity.getRoleByOpenId(openId);
+        Integer prebookCount=0;
+        if(roleByOpenId>0){
+            prebookCount=prebookInfoQueryEntity.getCountByOpenId(openId);
+        }
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("prebookRole",roleByOpenId);
+        map.put("prebookCount",prebookCount);
+        return map;
     }
 }

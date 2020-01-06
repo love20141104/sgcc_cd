@@ -308,8 +308,9 @@ public class UserController {
 public Result getRoleByOpenId(@PathVariable String openId){
 
     Map map = suggestionService.getRoleByOpenId(openId);
-    Integer i=prebooksService.getRoleByOpenId(openId);
-    map.put("prebookRole",i);
+    Map map2=prebooksService.getRoleByOpenId(openId);
+    map.put("prebookRole",map2.get("prebookRole"));
+    map.put("prebookCount",map2.get("prebookCount"));
     return Result.success(map);
 }
 
