@@ -37,4 +37,6 @@ public class PrebookInfoDao implements Serializable {
 
     private Integer ticketStatus;
 
+    private String prebookNo;
+
 }

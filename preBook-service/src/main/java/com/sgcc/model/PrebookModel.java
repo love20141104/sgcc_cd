@@ -1,5 +1,6 @@
 package com.sgcc.model;
 
+import com.example.IDUtil;
 import com.example.Utils;
 import com.sgcc.dao.CheckerInfoDao;
 import com.sgcc.dao.PrebookInfoDao;
@@ -44,7 +45,8 @@ public class PrebookModel {
                 null,
                 startDate,
                 endDate,
-                0
+                0,
+                IDUtil.generate12NumId()
 
         );
 
@@ -59,6 +61,7 @@ public class PrebookModel {
         prebookInfoDaos.forEach(dao -> {
             prebookInfoViewDTOS.add(new PrebookInfoViewDTO(
                     dao.getId(),
+                    dao.getPrebookNo(),
                     dao.getBusinessTypeName(),
                     dao.getContact(),
                     dao.getContactTel(),
@@ -75,6 +78,7 @@ public class PrebookModel {
         String prebookDate = DateUtils.assembleDate(prebookInfoDao.getStartDate(),prebookInfoDao.getEndDate());
 
         PrebookDetailViewDTO prebookDetailViewDTO = new PrebookDetailViewDTO(
+                prebookInfoDao.getPrebookNo(),
                 prebookInfoDao.getBusinessTypeName(),
                 prebookInfoDao.getServiceHallName(),
                 prebookInfoDao.getHouseholdNo(),
@@ -98,6 +102,7 @@ public class PrebookModel {
         String prebookDate = DateUtils.assembleDate(prebookInfoDao.getStartDate(),prebookInfoDao.getEndDate());
 
         prebookDetailViewDTO = new PrebookDetailViewDTO(
+                prebookInfoDao.getPrebookNo(),
                 prebookInfoDao.getBusinessTypeName(),
                 prebookInfoDao.getServiceHallName(),
                 prebookInfoDao.getHouseholdNo(),
@@ -135,6 +140,7 @@ public class PrebookModel {
                 dto.getStatus(),
                 dto.getRejectReason(),
                 dto.getUserOpenId(),
+                null,
                 null,
                 null,
                 null

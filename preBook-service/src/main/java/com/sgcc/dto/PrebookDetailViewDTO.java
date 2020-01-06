@@ -13,6 +13,7 @@ import java.util.Date;
 public class PrebookDetailViewDTO implements Serializable {
 
     private static final long serialVersionUID = -1273986616501853935L;
+    private String prebookNo;
     private String businessTypeName;
     private String serviceHallName;
     private String householdNo;
