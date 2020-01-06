@@ -40,6 +40,11 @@ public class UserController {
 
     @Autowired
     private HouseholdService householdService;
+    @Autowired
+    private SuggestionService suggestionService;
+
+    @Autowired
+    private PrebooksService prebooksService;
 
     @ApiOperation(value = "查询月度账单", notes = "")
     @GetMapping(value = "/bill/billInfo/{userNo}")
@@ -298,6 +303,14 @@ public class UserController {
 //    public Result addIncreaseCapacityOrder(@RequestBody InhabitantIncreaseCapacityDTO dto, @PathVariable String openId) {
 //        return  sgccBusinessService.addIncreaseCapacityOrder(dto,openId);
 //    }
+@ApiOperation(value = "通过openid获取用户权限", notes = "1 普通用户；2 客户经理；3审批人；4既是客户经理也是审批人")
+@GetMapping(value = "/role/{openId}")
+public Result getRoleByOpenId(@PathVariable String openId){
 
+    Map map = suggestionService.getRoleByOpenId(openId);
+    Integer i=prebooksService.getRoleByOpenId(openId);
+    map.put("prebookRole",1);
+    return Result.success(map);
+}
 
 }

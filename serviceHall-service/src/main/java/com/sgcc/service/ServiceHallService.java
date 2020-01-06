@@ -70,7 +70,6 @@ public class ServiceHallService {
             e.printStackTrace();
             throw new  RuntimeException("新增网点失败");
         }
-
     }
 
     /**

@@ -584,10 +584,7 @@ public class PrebooksService {
     }
 
 
-
-
-
-
-
-
+    public Integer getRoleByOpenId(String openId) {
+        return prebookInfoQueryEntity.getRoleByOpenId( openId);
+    }
 }

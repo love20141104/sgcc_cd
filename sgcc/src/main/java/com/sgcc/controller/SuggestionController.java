@@ -337,11 +337,7 @@ public class SuggestionController {
     public Result findAllSuggestionsNotCheck( @RequestParam String check_openid ) {
         return Result.success( suggestionService.findNotCheck(check_openid) );
     }
-    @ApiOperation(value = "通过openid获取用户权限", notes = "1 普通用户；2 客户经理；3审批人；4既是客户经理也是审批人")
-    @GetMapping(value = "/role/{openId}")
-    public Result getRoleByOpenId(@PathVariable String openId){
-        return suggestionService.getRoleByOpenId(openId);
-    }
+
 
     /**
      * 回复人员查询所有驳回

@@ -60,5 +60,7 @@ public class PrebookInfoQueryEntity {
     }
 
 
-
+    public Integer getRoleByOpenId(String openId) {
+        return preBookInfoRepository.getRoleByOpenId( openId);
+    }
 }
