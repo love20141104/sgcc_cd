@@ -73,7 +73,7 @@ public class PrebookModel {
 
 
 
-    public PrebookDetailViewDTO getPrebookInfoDetailTrans(PrebookInfoDao prebookInfoDao,String checkName) {
+    public PrebookDetailViewDTO getPrebookInfoDetailTrans(PrebookInfoDao prebookInfoDao,String checkName,LineUpInfoOutDTO lineUpInfoDTO) {
 
         String prebookDate = DateUtils.assembleDate(prebookInfoDao.getStartDate(),prebookInfoDao.getEndDate());
 
@@ -84,6 +84,7 @@ public class PrebookModel {
                 prebookInfoDao.getHouseholdNo(),
                 prebookInfoDao.getLineupNo(),
                 prebookInfoDao.getLineupTime() == null?null:Utils.GetTime(prebookInfoDao.getLineupTime()),
+                lineUpInfoDTO == null ? 0 : Integer.parseInt(lineUpInfoDTO.getData().get("waitingNum")),
                 prebookInfoDao.getContact(),
                 prebookInfoDao.getContactTel(),
                 Utils.GetTime(prebookInfoDao.getSubmitDate()),
@@ -108,6 +109,7 @@ public class PrebookModel {
                 prebookInfoDao.getHouseholdNo(),
                 prebookInfoDao.getLineupNo(),
                 prebookInfoDao.getLineupTime() == null?null:Utils.GetTime(prebookInfoDao.getLineupTime()),
+                null,
                 prebookInfoDao.getContact(),
                 prebookInfoDao.getContactTel(),
                 Utils.GetTime(prebookInfoDao.getSubmitDate()),

@@ -20,6 +20,7 @@ public class PrebookDetailViewDTO implements Serializable {
 
     private String lineupNo;
     private String lineupTime;
+    private Integer waitingNum;
 
     private String contact;
     private String contactTel;

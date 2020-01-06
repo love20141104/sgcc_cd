@@ -140,6 +140,12 @@ public class Utils {
     }
 
 
+    public static String GetTimeForHM(Date date )
+    {
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+        return df.format(date);
+    }
+
     public static String GetMonth(Date date )
     {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

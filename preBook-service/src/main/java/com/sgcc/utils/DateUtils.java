@@ -63,9 +63,11 @@ public class DateUtils {
      * @returna
      */
     public static String assembleDate(Date start, Date end) {
-        String startDate = Utils.GetTime(start);
-        String endDate = Utils.GetTime(end);
-        return startDate+"~"+endDate;
+        String ymd = Utils.GetTimeForYMD(start);
+        String startDate = Utils.GetTimeForHM(start);
+        String endDate = Utils.GetTimeForHM(end);
+        String finalDate = ymd +" "+ startDate +"~"+ endDate;
+        return finalDate;
     }
 
 
