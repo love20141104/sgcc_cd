@@ -26,8 +26,22 @@ public class PrebookInfoQueryEntity {
         return preBookInfoRepository.getPrebookInfo(openId,status);
     }
 
+    public List<PrebookInfoDao> getAllPrebook(){
+        return preBookInfoRepository.getAllPrebook();
+    }
+
+
     public List<PrebookInfoDao> getPrebookList(){
         return preBookInfoRepository.getPrebookList();
+    }
+
+
+    public List<PrebookInfoDao> getPrebookCount(String startDate,String endDate){
+        return preBookInfoRepository.getPrebookCount(startDate,endDate);
+    }
+
+    public List<PrebookInfoDao> getPrebookSize(String openId){
+        return preBookInfoRepository.getPrebookSize(openId);
     }
 
 
@@ -40,13 +54,17 @@ public class PrebookInfoQueryEntity {
 
     }
 
+    public List<PrebookInfoDao> getNotTakeTicketList(){
+        return preBookInfoRepository.getNotTakeTicketList();
+    }
+
 
     public List<CheckerInfoDao> getAllCheckers(){
         return preBookInfoRepository.getAllCheckers();
     }
 
-    public List<PrebookInfoDao> getCheckList(String serviceHallId,int status){
-        return preBookInfoRepository.getCheckList(serviceHallId,status);
+    public List<PrebookInfoDao> getCheckList(String hallId,int status,Boolean isPrinted){
+        return preBookInfoRepository.getCheckList(hallId,status,isPrinted);
     }
 
     public CheckerInfoDao getCheckerByOpenId(String openId){

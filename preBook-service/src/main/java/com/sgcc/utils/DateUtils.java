@@ -41,21 +41,47 @@ public class DateUtils {
     }
 
     /**
-     * 拆分日期
+     * 拆分当天日期
      * @param date
      * @param repl
      * @return
      */
-    public static Map<String,Date> splitDate(String date, String repl) {
+    public static Map<String,Date> splitDate(String date, String time,String repl) {
         Map<String,Date> dates = new LinkedHashMap<>();
-        String[] time = date.split(repl);
+        String[] times = date.split(repl);
 
-        System.out.println("开始时间："+Utils.GetTimeForYMD(new Date())+" "+time[0]+":00");
-        Date startDate = Utils.GetDate(Utils.GetTimeForYMD(new Date())+" "+time[0]+":00");
-        Date endDate = Utils.GetDate(Utils.GetTimeForYMD(new Date())+" "+time[1]+":00");
+        System.out.println("开始时间："+time+" "+times[0]+":00");
+        Date startDate = Utils.GetDate(time+" "+times[0]+":00");
+        Date endDate = Utils.GetDate(time+" "+times[1]+":00");
         dates.put("startDate",startDate);
         dates.put("endDate",endDate);
         return dates;
+    }
+
+    /**
+     * 拆分明天日期
+     * @param date
+     * @param repl
+     * @return
+     */
+//    public static Map<String,Date> splitDate(String date,String repl) {
+//        Map<String,Date> dates = new LinkedHashMap<>();
+//        String[] times = date.split(repl);
+//
+//        System.out.println("开始时间："+Utils.GetTimeForYMD(tomorrow(new Date()))+" "+times[0]+":00");
+//        Date startDate = Utils.GetDate(Utils.GetTimeForYMD(tomorrow(new Date()))+" "+times[0]+":00");
+//        Date endDate = Utils.GetDate(Utils.GetTimeForYMD(tomorrow(new Date()))+" "+times[1]+":00");
+//        dates.put("startDate",startDate);
+//        dates.put("endDate",endDate);
+//        return dates;
+//    }
+
+
+    public static Date tomorrow(Date today) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
+        return calendar.getTime();
     }
 
     /**

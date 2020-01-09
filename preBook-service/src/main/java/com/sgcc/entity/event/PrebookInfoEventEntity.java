@@ -27,6 +27,14 @@ public class PrebookInfoEventEntity {
         return preBookInfoRepository.updateLineUp(dao);
     }
 
+    public int[] updatePrintStatus(List<String> ids){
+        return preBookInfoRepository.updatePrintStatus(ids);
+    }
+
+
+    public int[] updateTicketStatus(List<String> ids){
+        return preBookInfoRepository.updateTicketStatus(ids);
+    }
 
     public int addChecker(CheckerInfoDao dao){
         return preBookInfoRepository.addChecker(dao);
@@ -44,6 +52,11 @@ public class PrebookInfoEventEntity {
     public void addBlacklist(List<BlacklistDao> blacklistDaos){
         preBookInfoRepository.addBlacklist(blacklistDaos);
     }
+
+
+//    public TaxTicketBookingDao addTaxTicketBooking(TaxTicketBookingDao taxTicketBookingDao) {
+//        return preBookInfoRepository.addTaxTicketBooking(taxTicketBookingDao);
+//    }
 
 
 

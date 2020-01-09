@@ -15,6 +15,12 @@ public class IDUtil {
         return substring+substring2;
     }
 
+    public static String generateYMDHMS() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        String id = format.format(new Date());
+        return id;
+    }
+
     public static void main(String[] args) {
         System.out.println(generate12NumId());
     }

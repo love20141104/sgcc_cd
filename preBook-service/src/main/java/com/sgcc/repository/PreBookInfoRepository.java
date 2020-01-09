@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -26,16 +27,81 @@ public class PreBookInfoRepository {
     private JdbcTemplate jdbcTemplate;
 
 
-    public List<PrebookInfoDao> getPrebookList(){
+    public int[] updateTicketStatus(List<String> ids){
+        String sql = "update b_prebook_detail set ticket_status=1 where id=? and status=2 and is_printed=true ";
+
+        return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setString(1,ids.get(i));
+            }
+
+            @Override
+            public int getBatchSize() {
+                return ids.size();
+            }
+        });
+    }
+
+
+
+    public int[] updatePrintStatus(List<String> ids){
+        String sql = "update b_prebook_detail set is_printed=true where id=? and status=2";
+
+        return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setString(1,ids.get(i));
+            }
+
+            @Override
+            public int getBatchSize() {
+                return ids.size();
+            }
+        });
+    }
+
+
+
+    public List<PrebookInfoDao> getAllPrebook(){
         String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
                 "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-                "start_date,end_date,ticket_status,prebook_no from b_prebook_detail where ticket_status=0";
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail ";
 
         List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new PreBookRowMapper());
         return prebookInfoDaos;
     }
 
 
+    public List<PrebookInfoDao> getPrebookList(){
+        String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
+                "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail where ticket_status=0";
+
+        List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new PreBookRowMapper());
+        return prebookInfoDaos;
+    }
+
+    public List<PrebookInfoDao> getPrebookCount(String startDate,String endDate){
+        String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
+                "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail " +
+                "where start_date = ? and end_date = ? ";
+
+        List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{startDate,endDate},new PreBookRowMapper());
+        return prebookInfoDaos;
+    }
+
+
+    public List<PrebookInfoDao> getNotTakeTicketList(){
+        String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
+                "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail " +
+                "where ticket_status = 0 ";
+
+        List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new PreBookRowMapper());
+        return prebookInfoDaos;
+    }
 
 
 
@@ -52,18 +118,19 @@ public class PreBookInfoRepository {
 
     public PrebookInfoDao updateCheckPrebook(PrebookInfoDao dao){
 
-        String sql = "update b_prebook_detail set status=?,reject_reason=?,checker_id=? where id=?";
+        String sql = "update b_prebook_detail set status=?,reject_reason=?,checker_id=?,check_date=? where id=?";
 
         jdbcTemplate.update(sql,new Object[]{
                 dao.getStatus(),
                 dao.getRejectReason(),
                 dao.getCheckerId(),
+                Utils.GetTime(dao.getCheckDate()),
                 dao.getId()
         });
 
         String sql2 = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
                 "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-                "start_date,end_date,ticket_status,prebook_no from b_prebook_detail where id = ? ";
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail where id = ? ";
 
         List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql2,new Object[]{dao.getId()},new PreBookRowMapper());
 
@@ -75,8 +142,8 @@ public class PreBookInfoRepository {
     public PrebookInfoDao addPrebook(PrebookInfoDao dao){
 
         String sql = "insert into b_prebook_detail(id,user_open_id,business_type_id,business_type_name,service_hall_id," +
-                "service_hall_name,household_no,contact,contact_tel,submit_date,status,start_date,end_date,ticket_status,prebook_no) " +
-                "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "service_hall_name,household_no,contact,contact_tel,submit_date,status,start_date,end_date,ticket_status" +
+                ",prebook_no,is_printed) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql,new Object[]{
                 dao.getId(),
                 dao.getUserOpenId(),
@@ -92,12 +159,13 @@ public class PreBookInfoRepository {
                 Utils.GetTime(dao.getStartDate()),
                 Utils.GetTime(dao.getEndDate()),
                 dao.getTicketStatus(),
-                dao.getPrebookNo()
+                dao.getPrebookNo(),
+                dao.getIsPrinted()
         });
 
         String sql2 = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
                 "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-                "start_date,end_date,ticket_status,prebook_no from b_prebook_detail where id = ? ";
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail where id = ? ";
 
         List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql2,new Object[]{dao.getId()},new PreBookRowMapper());
 
@@ -108,43 +176,51 @@ public class PreBookInfoRepository {
     public List<PrebookInfoDao> getPrebookInfo(String openId,int status){
         String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
                 "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-                "start_date,end_date,ticket_status,prebook_no from b_prebook_detail where user_open_id = ? and status=? " +
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail where user_open_id = ? and status=? " +
                 "order by submit_date desc ";
 
         List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{openId,status},new PreBookRowMapper());
 
         return prebookInfoDaos;
-//        if (status == 1){
-//            sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
-//                    "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-//                    "start_date,end_date from b_prebook_detail where user_open_id = ? and status=1 " +
-//                    "order by submit_date desc ";
-//        }else if (status == 2){
-//            sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
-//                    "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-//                    "start_date,end_date from b_prebook_detail where user_open_id = ? and status=2 " +
-//                    "order by submit_date desc ";
-//        }else if (status == 3){
-//            sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
-//                    "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-//                    "start_date,end_date from b_prebook_detail where user_open_id = ? and status=3 " +
-//                    "order by submit_date desc ";
-//        }else {
-//            return null;
-//        }
-
-
-
     }
 
 
-    public List<PrebookInfoDao> getCheckList(String hallId,int status){
+    public List<PrebookInfoDao> getPrebookSize(String openId){
         String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
-                    "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-                    "start_date,end_date,ticket_status,prebook_no from b_prebook_detail where service_hall_id = ? and status=? " +
-                    "order by submit_date desc ";
+                "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail where user_open_id = ? ";
 
-        List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{hallId,status},new PreBookRowMapper());
+        List<PrebookInfoDao> prebookInfoDaos =
+                jdbcTemplate.query(sql,new Object[]{openId},new PreBookRowMapper());
+
+        return prebookInfoDaos;
+    }
+
+
+
+    public List<PrebookInfoDao> getCheckList(String hallId,int status,Boolean isPrinted){
+
+        String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
+                "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail";
+
+
+        List<PrebookInfoDao> prebookInfoDaos = new ArrayList<>();
+        if (isPrinted != null){
+            sql += " where service_hall_id = ? and status=? and is_printed=? order by submit_date desc ";
+            prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{hallId,status,isPrinted},new PreBookInfoRepository.PreBookRowMapper());
+        }else {
+            sql += " where service_hall_id = ? and status=? order by submit_date desc ";
+            prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{hallId,status},new PreBookInfoRepository.PreBookRowMapper());
+        }
+
+
+//        String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
+//                    "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
+//                    "start_date,end_date,ticket_status,prebook_no,is_printed from b_prebook_detail where service_hall_id = ? and status=? " +
+//                    "order by submit_date desc ";
+//
+//        List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{hallId,status},new PreBookRowMapper());
 
         return prebookInfoDaos;
     }
@@ -161,7 +237,8 @@ public class PreBookInfoRepository {
     public PrebookInfoDao getCheckDetailList(String id){
         String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
                 "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-                "start_date,end_date,ticket_status,prebook_no from b_prebook_detail where id = ? order by submit_date desc ";
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail " +
+                "where id = ? order by submit_date desc ";
 
         List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{id},new PreBookRowMapper());
 
@@ -173,7 +250,7 @@ public class PreBookInfoRepository {
     public PrebookInfoDao getPrebookInfoDetail(String id){
         String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
                     "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-                    "start_date,end_date,ticket_status,prebook_no from b_prebook_detail where id = ?";
+                    "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail where id = ?";
         List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{id},new PreBookRowMapper());
 
         return prebookInfoDaos.get(0);
@@ -233,19 +310,24 @@ public class PreBookInfoRepository {
 
     public int getBlacklistByOpenId(String openId){
 
-        String sql = "select id,user_open_id,create_date from b_prebook_blacklist where user_open_id = ?";
+        String sql = "select id,user_open_id,household_no,contact,contact_tel,create_date " +
+                "from b_prebook_blacklist where user_open_id = ?";
         List<BlacklistDao> blacklistDaos = jdbcTemplate.query(sql,new Object[]{openId},new BlacklistRowMapper());
         return blacklistDaos.size();
     }
 
 
     public void addBlacklist(List<BlacklistDao> blacklistDaos){
-        String sql = "insert into b_prebook_blacklist(user_open_id,create_date) values (?,?)";
+        String sql = "insert into b_prebook_blacklist(user_open_id,household_no,contact,contact_tel,create_date) " +
+                "values (?,?,?,?,?)";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setString(1,blacklistDaos.get(i).getUserOpenId());
-                ps.setString(2,Utils.GetTime(blacklistDaos.get(i).getCreateDate()));
+                ps.setString(2,blacklistDaos.get(i).getHouseholdNo());
+                ps.setString(3,blacklistDaos.get(i).getContact());
+                ps.setString(4,blacklistDaos.get(i).getContactTel());
+                ps.setString(5,Utils.GetTime(blacklistDaos.get(i).getCreateDate()));
             }
 
             @Override
@@ -314,7 +396,9 @@ public class PreBookInfoRepository {
                     Utils.GetDate(rs.getString("start_date")),
                     Utils.GetDate(rs.getString("end_date")),
                     rs.getInt("ticket_status"),
-                    rs.getString("prebook_no")
+                    rs.getString("prebook_no"),
+                    rs.getBoolean("is_printed"),
+                    !Strings.isNullOrEmpty(rs.getString("check_date")) ? Utils.GetDate(rs.getString("check_date")) : null
             );
         }
     }
@@ -328,7 +412,10 @@ public class PreBookInfoRepository {
             return new BlacklistDao(
                     rs.getInt("id"),
                     rs.getString("user_open_id"),
-                    Utils.GetDate(rs.getString("submit_time"))
+                    rs.getString("household_no"),
+                    rs.getString("contact"),
+                    rs.getString("contact_tel"),
+                    Utils.GetDate(rs.getString("create_date"))
             );
         }
     }

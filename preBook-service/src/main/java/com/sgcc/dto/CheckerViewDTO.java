@@ -17,7 +17,7 @@ public class CheckerViewDTO implements Serializable {
     private static final long serialVersionUID = 2224759854085611409L;
     private String id;
     private String checkerName;
-    private String checkTel;
+    private String checkerTel;
     private String userOpenId;
     private String serviceHallId;
     private String serviceHallName;

@@ -1,11 +1,14 @@
 package com.sgcc.dao;
 
+import com.sgcc.repository.PreBookInfoRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -38,5 +41,12 @@ public class PrebookInfoDao implements Serializable {
     private Integer ticketStatus;
 
     private String prebookNo;
+
+    private Boolean isPrinted;
+
+    private Date checkDate;
+
+
+
 
 }

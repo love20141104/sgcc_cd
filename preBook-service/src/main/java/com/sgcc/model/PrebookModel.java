@@ -2,10 +2,13 @@ package com.sgcc.model;
 
 import com.example.IDUtil;
 import com.example.Utils;
+import com.google.common.base.Strings;
+import com.sgcc.dao.BlacklistDao;
 import com.sgcc.dao.CheckerInfoDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.dto.*;
 import com.sgcc.utils.DateUtils;
+import org.springframework.beans.BeanUtils;
 
 import java.util.*;
 
@@ -26,6 +29,12 @@ public class PrebookModel {
 
     public PrebookInfoDao addPrebookTrans(PrebookInfoSubmitDTO dto,Date startDate,Date endDate) {
 
+        String houseHoldNumber = "";
+        for (String number : dto.getHouseholdNo() ){
+            houseHoldNumber =  houseHoldNumber + number+",";
+        }
+        houseHoldNumber = houseHoldNumber.substring(0,houseHoldNumber.length()-1);
+
         PrebookInfoDao prebookInfoDao = new PrebookInfoDao(
                 UUID.randomUUID().toString(),
                 dto.getUserOpenId(),
@@ -33,7 +42,7 @@ public class PrebookModel {
                 dto.getBusinessTypeName(),
                 dto.getServiceHallId(),
                 dto.getServiceHallName(),
-                dto.getHouseholdNo(),
+                houseHoldNumber,
                 null,
                 null,
                 dto.getContact(),
@@ -45,7 +54,9 @@ public class PrebookModel {
                 startDate,
                 endDate,
                 0,
-                IDUtil.generate12NumId()
+                IDUtil.generate12NumId(),
+                false,
+                null
 
         );
 
@@ -76,22 +87,28 @@ public class PrebookModel {
 
         String prebookDate = DateUtils.assembleDate(prebookInfoDao.getStartDate(),prebookInfoDao.getEndDate());
 
+        List<String> householdNos = new ArrayList<>();
+        String[] number = prebookInfoDao.getHouseholdNo().split(",");
+        for (String num : number){
+            householdNos.add(num);
+        }
+
         PrebookDetailViewDTO prebookDetailViewDTO = new PrebookDetailViewDTO(
                 prebookInfoDao.getPrebookNo(),
                 prebookInfoDao.getBusinessTypeName(),
                 prebookInfoDao.getServiceHallName(),
-                prebookInfoDao.getHouseholdNo(),
+                householdNos,
                 prebookInfoDao.getLineupNo(),
                 prebookInfoDao.getLineupTime() == null?null:Utils.GetTime(prebookInfoDao.getLineupTime()),
-                lineUpInfoDTO == null ? 0 : Integer.parseInt(lineUpInfoDTO.getData().get("waitingNum")),
                 prebookInfoDao.getContact(),
                 prebookInfoDao.getContactTel(),
                 Utils.GetTime(prebookInfoDao.getSubmitDate()),
                 prebookInfoDao.getStatus(),
                 prebookInfoDao.getRejectReason(),
                 checkName,
-                prebookDate
-
+                prebookDate,
+                prebookInfoDao.getIsPrinted(),
+                prebookInfoDao.getCheckDate() == null ? null : Utils.GetTime(prebookInfoDao.getCheckDate())
         );
         return prebookDetailViewDTO;
     }
@@ -100,22 +117,28 @@ public class PrebookModel {
     public PrebookDetailViewDTO getCheckDetailListTrans(PrebookInfoDao prebookInfoDao, String checkName) {
         PrebookDetailViewDTO prebookDetailViewDTO =null;
         String prebookDate = DateUtils.assembleDate(prebookInfoDao.getStartDate(),prebookInfoDao.getEndDate());
+        List<String> householdNos = new ArrayList<>();
+        String[] number = prebookInfoDao.getHouseholdNo().split(",");
+        for (String num : number){
+            householdNos.add(num);
+        }
 
         prebookDetailViewDTO = new PrebookDetailViewDTO(
                 prebookInfoDao.getPrebookNo(),
                 prebookInfoDao.getBusinessTypeName(),
                 prebookInfoDao.getServiceHallName(),
-                prebookInfoDao.getHouseholdNo(),
+                householdNos,
                 prebookInfoDao.getLineupNo(),
                 prebookInfoDao.getLineupTime() == null?null:Utils.GetTime(prebookInfoDao.getLineupTime()),
-                null,
                 prebookInfoDao.getContact(),
                 prebookInfoDao.getContactTel(),
                 Utils.GetTime(prebookInfoDao.getSubmitDate()),
                 prebookInfoDao.getStatus(),
                 prebookInfoDao.getRejectReason(),
                 checkName,
-                prebookDate
+                prebookDate,
+                prebookInfoDao.getIsPrinted(),
+                prebookInfoDao.getCheckDate() == null ? null : Utils.GetTime(prebookInfoDao.getCheckDate())
 
         );
 
@@ -144,7 +167,9 @@ public class PrebookModel {
                 null,
                 null,
                 null,
-                null
+                null,
+                null,
+                new Date()
 
         );
 
@@ -207,6 +232,69 @@ public class PrebookModel {
         return prebookDaos;
     }
 
+
+
+
+
+    public List<PrebookInfoDao> getPrebookSizeTrans(List<PrebookInfoDao> prebookInfoDaoList, Date startDate) {
+
+        List<PrebookInfoDao> prebookInfoDaos = new ArrayList<>();
+
+        prebookInfoDaoList.forEach(dao -> {
+            if (Utils.GetTimeForYMD(dao.getStartDate()).equals(Utils.GetTimeForYMD(startDate))){
+                prebookInfoDaos.add(dao);
+            }
+        });
+        return prebookInfoDaos;
+    }
+
+
+    public List<PrebookListViewDTO> getAllPrebookTrans(List<PrebookInfoDao> prebookInfoDaos) {
+        List<PrebookListViewDTO> dtos = new ArrayList<>();
+        prebookInfoDaos.forEach(dao -> {
+            dtos.add(new PrebookListViewDTO(
+                   dao.getId(),
+                    dao.getUserOpenId(),
+                    dao.getBusinessTypeId(),
+                    dao.getBusinessTypeName(),
+                    dao.getServiceHallId(),
+                    dao.getServiceHallName(),
+                    dao.getHouseholdNo(),
+                    dao.getLineupNo(),
+                    dao.getLineupTime()== null ? null : Utils.GetTime(dao.getLineupTime()),
+                    dao.getContact(),
+                    dao.getContactTel(),
+                    Utils.GetTime(dao.getSubmitDate()),
+                    dao.getStatus(),
+                    dao.getRejectReason(),
+                    dao.getCheckerId(),
+                    Utils.GetTime(dao.getStartDate()),
+                    Utils.GetTime(dao.getEndDate()),
+                    dao.getTicketStatus(),
+                    dao.getPrebookNo()
+            ));
+        });
+        return dtos;
+    }
+
+
+    public List<BlacklistDao> getNotTakeTicketListTrans(List<PrebookInfoDao> prebookInfoDaos,Date date) {
+
+        List<BlacklistDao> blacklistDaos = new ArrayList<>();
+        prebookInfoDaos.forEach(dao -> {
+            if ( Utils.GetTimeForYMD(dao.getStartDate()).equals(Utils.GetTimeForYMD(date))){
+                blacklistDaos.add(new BlacklistDao(
+                        null,
+                        dao.getUserOpenId(),
+                        dao.getHouseholdNo(),
+                        dao.getContact(),
+                        dao.getContactTel(),
+                        date
+                ));
+            }
+        });
+        return blacklistDaos;
+    }
 
 
 

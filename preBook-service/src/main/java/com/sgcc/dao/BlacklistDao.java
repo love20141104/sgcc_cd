@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 黑名单
@@ -24,9 +25,11 @@ import java.util.Date;
 public class BlacklistDao implements Serializable {
 
     private static final long serialVersionUID = 7136868697073821703L;
-
     private Integer id;
     private String userOpenId;
+    private String householdNo;
+    private String contact;
+    private String contactTel;
     private Date createDate;
 
 }
