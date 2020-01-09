@@ -111,20 +111,15 @@ public class PrebooksService {
     public Result getTimeSlot(String day) {
         try {
             List<String> timeList = PrebookStartTimeConstants.TIME_LIST;
-            List<String> times = new ArrayList<>();
-            Map<String,Object> timeMap = new LinkedHashMap<>();
-
+            List<TimeSlotDTO> timeSlotDTOS = new ArrayList<>();
             for (String str : timeList) {
-                times.add(str.substring(2,str.length()));
-                Map<String,Date> dates = DateUtils.splitDate(str.substring(2,str.length()),day,"~");
+                String time = str.substring(2,str.length());
+                Map<String,Date> dates = DateUtils.splitDate(time,day,"~");
                 List<PrebookInfoDao> prebookInfoDaos =prebookInfoQueryEntity
                         .getPrebookCount(Utils.GetTime(dates.get("startDate")),Utils.GetTime(dates.get("endDate")));
-                timeMap.put(str.substring(2,str.length()),prebookInfoDaos.size());
+                timeSlotDTOS.add(new TimeSlotDTO(time,prebookInfoDaos.size()));
             }
-
-            TimeSlotDTO timeSlotDTO = new TimeSlotDTO(times,timeMap);
-
-            return Result.success(timeSlotDTO);
+            return Result.success(timeSlotDTOS);
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);

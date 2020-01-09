@@ -16,7 +16,7 @@ import java.util.Map;
 public class TimeSlotDTO implements Serializable {
 
     private static final long serialVersionUID = 5140013309919127693L;
-    private List<String> times;
-    private Map<String,Object> timeMap;
+    private String time;
+    private Integer count;
 
 }
