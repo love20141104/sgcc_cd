@@ -400,7 +400,7 @@ public class PrebooksService {
             CheckerInfoDao checkerInfoDao = prebookInfoQueryEntity.getCheckerById(dao.getCheckerId());
             if (dao.getStatus()==2) {
 
-                dao.setLineupNo(IDUtil.generateYMDHMS());   // 通过则生成预约号
+                dao.setLineupNo(IDUtil.getRandString(4));   // 通过则生成预约号
                 dao.setLineupTime(Utils.GetCurTime());
                 int count = prebookInfoEventEntity.updateLineUp(dao);
 

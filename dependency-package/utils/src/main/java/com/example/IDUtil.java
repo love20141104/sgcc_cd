@@ -5,6 +5,7 @@ import org.bouncycastle.util.Strings;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 public class IDUtil {
     public static String generate12NumId() {
@@ -21,7 +22,20 @@ public class IDUtil {
         return id;
     }
 
+    public static String getRandString(int length)
+    {
+        String charList = "0123456789"; // ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+        String rev = "";
+        Random f = new Random();
+        for(int i=0;i<length;i++)
+        {
+            rev += charList.charAt(Math.abs(f.nextInt())%charList.length());
+        }
+        return rev;
+    }
+
+
     public static void main(String[] args) {
-        System.out.println(generate12NumId());
+        System.out.println(getRandString(4));
     }
 }

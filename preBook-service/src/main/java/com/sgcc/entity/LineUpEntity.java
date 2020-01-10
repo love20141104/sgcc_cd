@@ -15,14 +15,52 @@ public class LineUpEntity {
     @Autowired
     private RestTemplate restTemplate;
 
-
-    public LineUpInfoOutDTO onlineQueuing(){
+    /**
+     * 心跳接口
+     */
+    // heartBeat(传入参数)
+    public LineUpInfoOutDTO heartBeat(){
+        // TODO 将传入的参数进行加密
 
         EncryptedDTO encryptedDTO = new EncryptedDTO();
 
-        LineUpInfoOutDTO lineUpInfoOutDTO = restTemplate.getForObject(URL,LineUpInfoOutDTO.class,encryptedDTO);
+        LineUpInfoOutDTO lineUpInfoOutDTO =
+                restTemplate.postForObject(URL,encryptedDTO,LineUpInfoOutDTO.class);
         return lineUpInfoOutDTO;
     }
+
+
+    /**
+     * 线上排队接口
+     * @return
+     */
+    // onlineQueuing(传入参数)
+    public LineUpInfoOutDTO onlineQueuing(){
+        // TODO 将传入的参数进行加密
+
+        EncryptedDTO encryptedDTO = new EncryptedDTO();
+
+        LineUpInfoOutDTO lineUpInfoOutDTO =
+                restTemplate.postForObject(URL,encryptedDTO,LineUpInfoOutDTO.class);
+        return lineUpInfoOutDTO;
+    }
+
+
+    /**
+     * 排队查询接口
+     * @return
+     */
+    // onlineQueuing(传入参数)
+    public LineUpInfoOutDTO lineUpQuery(){
+        // TODO 将传入的参数进行加密
+
+        EncryptedDTO encryptedDTO = new EncryptedDTO();
+
+        LineUpInfoOutDTO lineUpInfoOutDTO =
+                restTemplate.postForObject(URL,encryptedDTO,LineUpInfoOutDTO.class);
+        return lineUpInfoOutDTO;
+    }
+
 
 
 
