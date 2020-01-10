@@ -292,31 +292,19 @@ public class PrebooksService {
             return Result.failure(TopErrorCode.PARAMETER_ERR);
 
         try {
-            LineUpInfoOutDTO lineUpInfoDTO = null;
-
             PrebookInfoDao prebookInfoDao = prebookInfoQueryEntity.getPrebookInfoDetail(id);
-            if (prebookInfoDao.getStatus() == 2){
-                // TODO 需要调用排队查询接口
-                lineUpInfoDTO = new LineUpInfoOutDTO();
-                lineUpInfoDTO.setCode("200");
-                lineUpInfoDTO.setMsg("成功");
-                Map<String,String> map = new LinkedHashMap<>();
-                map.put("lineUpNo","WA1002");
-                map.put("lineUpTime","2019-12-31 12:30:00");
-                map.put("waitingNum","10");
-                lineUpInfoDTO.setData(map);
-            }
 
             CheckerInfoDao checkerInfoDao;
             PrebookDetailViewDTO prebookDetailViewDTO = null;
             PrebookModel model = new PrebookModel();
+
             if (!Strings.isNullOrEmpty(prebookInfoDao.getCheckerId())){
-                checkerInfoDao = prebookInfoQueryEntity.getCheckerByOpenId(prebookInfoDao.getCheckerId());
+                checkerInfoDao = prebookInfoQueryEntity.getCheckerById(prebookInfoDao.getCheckerId());
                 if (null != checkerInfoDao && !Strings.isNullOrEmpty(checkerInfoDao.getCheckerName()))
                     prebookDetailViewDTO = model.getPrebookInfoDetailTrans(
-                            prebookInfoDao,checkerInfoDao.getCheckerName(),lineUpInfoDTO);
+                            prebookInfoDao,checkerInfoDao.getCheckerName());
             }else {
-                prebookDetailViewDTO = model.getPrebookInfoDetailTrans(prebookInfoDao,null,lineUpInfoDTO);
+                prebookDetailViewDTO = model.getPrebookInfoDetailTrans(prebookInfoDao,null);
             }
 
             return Result.success(prebookDetailViewDTO);
@@ -373,7 +361,7 @@ public class PrebooksService {
             PrebookDetailViewDTO prebookDetailViewDTO;
             PrebookModel model = new PrebookModel();
             if (!Strings.isNullOrEmpty(prebookInfoDao.getCheckerId())){
-                checkerInfoDao = prebookInfoQueryEntity.getCheckerByOpenId(prebookInfoDao.getCheckerId());
+                checkerInfoDao = prebookInfoQueryEntity.getCheckerById(prebookInfoDao.getCheckerId());
                 prebookDetailViewDTO = model.getCheckDetailListTrans(prebookInfoDao,checkerInfoDao.getCheckerName());
             }else {
                 prebookDetailViewDTO = model.getCheckDetailListTrans(prebookInfoDao,null);
@@ -399,14 +387,17 @@ public class PrebooksService {
             return Result.failure(TopErrorCode.PARAMETER_ERR);
 
         try {
+
+            CheckerInfoDao infoDao = prebookInfoQueryEntity.getCheckerByOpenId(prebookInfoEditDTO.getUserOpenId());
+
             PrebookModel model = new PrebookModel();
-            PrebookInfoDao prebookInfoDao = model.updateCheckPrebookTrans(prebookInfoEditDTO);
+            PrebookInfoDao prebookInfoDao = model.updateCheckPrebookTrans(prebookInfoEditDTO,infoDao);
             PrebookInfoDao dao = prebookInfoEventEntity.updateCheckPrebook(prebookInfoDao);
 
             if (Strings.isNullOrEmpty(dao.getCheckerId()))
                 return Result.failure(TopErrorCode.NO_DATAS);
 
-            CheckerInfoDao checkerInfoDao = prebookInfoQueryEntity.getCheckerByOpenId(dao.getCheckerId());
+            CheckerInfoDao checkerInfoDao = prebookInfoQueryEntity.getCheckerById(dao.getCheckerId());
             if (dao.getStatus()==2) {
 
                 dao.setLineupNo(IDUtil.generateYMDHMS());   // 通过则生成预约号

@@ -1,6 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
+import com.sgcc.dto.LineUpQueryInputDTO;
 import com.sgcc.dto.OnlineQueuingInputDTO;
 import com.sgcc.service.FastDFSService;
 import com.sgcc.service.LineUpService;
@@ -20,10 +21,19 @@ public class LineUpController {
     private LineUpService lineUpService;
 
     @ApiOperation(value = "线上排队", notes = "")
-    @PostMapping(value = "/user")
+    @PostMapping(value = "/user/number")
     public Result onlineQueuing(@RequestBody OnlineQueuingInputDTO dto) {
         return lineUpService.onlineQueuing(dto);
     }
+
+
+    @ApiOperation(value = "排队查询", notes = "")
+    @PostMapping(value = "/user/waitingNum")
+    public Result lineUpQuery(@RequestBody LineUpQueryInputDTO dto) {
+        return lineUpService.lineUpQuery(dto);
+    }
+
+
 
 
 }

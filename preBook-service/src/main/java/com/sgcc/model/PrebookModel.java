@@ -83,7 +83,7 @@ public class PrebookModel {
 
 
 
-    public PrebookDetailViewDTO getPrebookInfoDetailTrans(PrebookInfoDao prebookInfoDao,String checkName,LineUpInfoOutDTO lineUpInfoDTO) {
+    public PrebookDetailViewDTO getPrebookInfoDetailTrans(PrebookInfoDao prebookInfoDao,String checkName) {
 
         String prebookDate = DateUtils.assembleDate(prebookInfoDao.getStartDate(),prebookInfoDao.getEndDate());
 
@@ -147,7 +147,7 @@ public class PrebookModel {
     }
 
 
-    public PrebookInfoDao updateCheckPrebookTrans(PrebookInfoEditDTO dto) {
+    public PrebookInfoDao updateCheckPrebookTrans(PrebookInfoEditDTO dto,CheckerInfoDao infoDao) {
         PrebookInfoDao prebookInfoDao = new PrebookInfoDao(
                 dto.getId(),
                 null,
@@ -163,7 +163,7 @@ public class PrebookModel {
                 null,
                 dto.getStatus(),
                 dto.getRejectReason(),
-                dto.getUserOpenId(),
+                infoDao.getId(),
                 null,
                 null,
                 null,

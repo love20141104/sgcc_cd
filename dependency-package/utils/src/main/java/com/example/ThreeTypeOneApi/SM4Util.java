@@ -191,7 +191,7 @@ public class SM4Util {
 
             System.out.println(json);
 
-            System.out.println("key=====>:"+new String(generateKey()));
+            System.out.println("key=====>:"+generateKey());
         } catch (Exception e) {
             e.printStackTrace();
         }

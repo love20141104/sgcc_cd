@@ -233,6 +233,12 @@ public class PreBookInfoRepository {
 
 
 
+    public CheckerInfoDao getCheckerById(String id){
+        String sql = "select id,checker_name,checker_tel,user_open_id,service_hall_id,service_hall_name " +
+                "from b_prebook_checker where id = ?";
+        return jdbcTemplate.query(sql,new Object[]{id},new CheckerInfoRowMapper()).get(0);
+    }
+
 
     public PrebookInfoDao getCheckDetailList(String id){
         String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +

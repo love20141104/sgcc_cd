@@ -67,10 +67,13 @@ public class PrebookInfoQueryEntity {
         return preBookInfoRepository.getCheckList(hallId,status,isPrinted);
     }
 
+    public CheckerInfoDao getCheckerById(String id){
+        return preBookInfoRepository.getCheckerById(id);
+    }
+
     public CheckerInfoDao getCheckerByOpenId(String openId){
         return preBookInfoRepository.getCheckerByOpenId(openId);
     }
-
 
 
     public PrebookInfoDao getCheckDetailList(String id){

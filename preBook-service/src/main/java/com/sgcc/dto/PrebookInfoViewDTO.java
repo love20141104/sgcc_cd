@@ -20,4 +20,6 @@ public class PrebookInfoViewDTO implements Serializable {
     private String contactTel;
     private String submitDate;
 
+//    private String checkerId;
+
 }
