@@ -1,6 +1,7 @@
 package com.sgcc.controller;
 
 import com.example.result.Result;
+import com.sgcc.dto.BasicInputDTO;
 import com.sgcc.dto.LineUpQueryInputDTO;
 import com.sgcc.dto.OnlineQueuingInputDTO;
 import com.sgcc.service.FastDFSService;
@@ -17,8 +18,16 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping(value = "/lineUp")
 @Controller
 public class LineUpController {
+
     @Autowired
     private LineUpService lineUpService;
+
+    @ApiOperation(value = "", notes = "")
+    @PostMapping(value = "/user/test")
+    public BasicInputDTO test() {
+        return lineUpService.test();
+    }
+
 
     @ApiOperation(value = "线上排队", notes = "")
     @PostMapping(value = "/user/number")

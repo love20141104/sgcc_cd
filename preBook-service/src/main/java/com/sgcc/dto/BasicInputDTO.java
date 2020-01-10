@@ -14,6 +14,6 @@ public class BasicInputDTO implements Serializable {
     private static final long serialVersionUID = -7688530321312953104L;
 
     private String appId;       // 渠道编号
-    private String signature;   // 签名
     private InputDataDTO data;
+    private String signature;   // 签名
 }

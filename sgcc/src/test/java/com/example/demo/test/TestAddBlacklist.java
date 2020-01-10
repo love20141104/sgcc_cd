@@ -1,9 +1,13 @@
 package com.example.demo.test;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.example.ThreeTypeOneApi.SM4Util;
 import com.example.result.Result;
 import com.sgcc.DemoApplication;
 import com.sgcc.dao.PrebookInfoDao;
+import com.sgcc.dto.BasicInputDTO;
+import com.sgcc.dto.InputDataDTO;
 import com.sgcc.entity.query.PrebookInfoQueryEntity;
 import com.sgcc.service.HouseholdService;
 import com.sgcc.sgccenum.SubscribeCateEnum;
@@ -24,9 +28,24 @@ public class TestAddBlacklist {
     private PrebookInfoQueryEntity prebookInfoQueryEntity;
 
     @Test
-    public void testAddBlacklist(){
-        List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getNotTakeTicketList();
-        System.out.println(prebookInfoDaos.size());
+    public void testAddBlacklist() throws Exception {
+        InputDataDTO inputDataDTO = new InputDataDTO();
+        inputDataDTO.setServiceCode("464646");
+        inputDataDTO.setAppId("123123");
+        inputDataDTO.setDeviceId("44644");
+
+        BasicInputDTO basicInputDTO = new BasicInputDTO();
+//        basicInputDTO.setAppId("123123");
+        basicInputDTO.setData(inputDataDTO);
+//        basicInputDTO.setSignature("dfqd");
+
+        System.out.println(JSONObject.toJSONString(basicInputDTO));
+
+        String json = JSONObject.toJSONString(basicInputDTO);
+        String cipher = SM4Util.encryptEcb("009322d3d8d62e018ff688c7226f9719eeade1371b95a00825676c1822d370a4ab", json);
+
+//        List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getNotTakeTicketList();
+//        System.out.println(prebookInfoDaos.size());
     }
 
 }

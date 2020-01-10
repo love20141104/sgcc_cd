@@ -2,10 +2,7 @@ package com.sgcc.service;
 
 import com.example.result.Result;
 import com.sgcc.dao.LineUpDao;
-import com.sgcc.dto.BasicInputDTO;
-import com.sgcc.dto.LineUpInfoOutDTO;
-import com.sgcc.dto.LineUpQueryInputDTO;
-import com.sgcc.dto.OnlineQueuingInputDTO;
+import com.sgcc.dto.*;
 import com.sgcc.entity.LineUpEntity;
 import com.sgcc.entity.event.LineUpEventEntity;
 import com.sgcc.exception.TopErrorCode;
@@ -21,6 +18,23 @@ public class LineUpService {
 
     @Autowired
     private LineUpEventEntity lineUpEventEntity;
+
+    public BasicInputDTO test() {
+        BasicInputDTO lineUpInfoOutDTO = null;
+        try {
+
+            lineUpInfoOutDTO = new BasicInputDTO();
+            lineUpInfoOutDTO.setData(new InputDataDTO());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return lineUpInfoOutDTO;
+    }
+
+
+
+
 
     /**
      * 检查设备是否正常运行

@@ -207,10 +207,10 @@ public class PreBookInfoRepository {
 
         List<PrebookInfoDao> prebookInfoDaos = new ArrayList<>();
         if (isPrinted != null){
-            sql += " where service_hall_id = ? and status=? and is_printed=? order by submit_date desc ";
+            sql += " where service_hall_id = ? and status=? and is_printed=? and ticket_status = 0 order by submit_date desc ";
             prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{hallId,status,isPrinted},new PreBookInfoRepository.PreBookRowMapper());
         }else {
-            sql += " where service_hall_id = ? and status=? order by submit_date desc ";
+            sql += " where service_hall_id = ? and status=? and ticket_status = 0 order by submit_date desc ";
             prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{hallId,status},new PreBookInfoRepository.PreBookRowMapper());
         }
 

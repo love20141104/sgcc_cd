@@ -25,7 +25,7 @@ public class SM4Util {
     // 定义分组加密模式使用：PKCS5Padding
     public static final String ALGORITHM_NAME_ECB_PADDING = "SM4/ECB/PKCS5Padding";
     // 128-32位16进制；256-64位16进制
-    public static final int DEFAULT_KEY_SIZE = 128;
+    public static final int DEFAULT_KEY_SIZE = 256;
 
     /**
      * 生成ECB暗号
@@ -181,7 +181,7 @@ public class SM4Util {
 
     public static void main(String[] args) {
         try {
-            String json = "{\"name\":\"Marydon\",\"website\":\"http://www.cnblogs.com/Marydon20170307\"}";
+            String json = "{\"serviceCode\":\"on\",\"website\":\"http://www.cnblogs.com/Marydon20170307\"}";
             // 自定义的32位16进制密钥
             String key = "86C63180C2806ED1F47B859DE501215B";
             String cipher = SM4Util.encryptEcb(key, json);
