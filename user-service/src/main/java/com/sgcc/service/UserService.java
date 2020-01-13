@@ -56,7 +56,6 @@ public class UserService {
             SubscribeDao dao = userQueryEntity.findSubscribe(openId);
             UserModel model = new UserModel();
             List<UserSubDTO> userSubDTOS = model.findSubscribeTransform(dao);
-
             return Result.success(userSubDTOS);
         }catch (Exception e){
             e.printStackTrace();

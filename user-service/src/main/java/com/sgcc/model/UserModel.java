@@ -353,12 +353,12 @@ public class UserModel {
         UserSubDTO userSubDTO1 = new UserSubDTO("is_sub_bill","月度账单",dao.getIs_sub_bill());
         UserSubDTO userSubDTO2 = new UserSubDTO("is_sub_pay","缴费通知",dao.getIs_sub_pay());
         UserSubDTO userSubDTO3 = new UserSubDTO("is_sub_notice_pay","欠费提醒",dao.getIs_sub_notice_pay());
-        UserSubDTO userSubDTO4 = new UserSubDTO("is_sub_analysis","用能分析",dao.getIs_sub_analysis());
+//        UserSubDTO userSubDTO4 = new UserSubDTO("is_sub_analysis","用能分析",dao.getIs_sub_analysis());
 
         list.add(userSubDTO1);
         list.add(userSubDTO2);
         list.add(userSubDTO3);
-        list.add(userSubDTO4);
+//        list.add(userSubDTO4);
         return list;
 
     }
