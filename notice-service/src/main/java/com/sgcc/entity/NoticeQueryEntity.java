@@ -13,8 +13,8 @@ public class NoticeQueryEntity {
     @Autowired
     private NoticeRepository noticeRepository;
 
-    public List<NoticeDao> findNoticeInfoByDistrict(String district){
-        return noticeRepository.findNoticeList(district);
+    public List<NoticeDao> findNoticeInfoByDistrict(String district,String keyword){
+        return noticeRepository.findNoticeList(district,keyword);
     }
 
 
@@ -39,5 +39,8 @@ public class NoticeQueryEntity {
     public Boolean noticeOverdue(String noticeId){
         return noticeRepository.noticeOverdue( noticeId);
     }
+
+
+
 
 }

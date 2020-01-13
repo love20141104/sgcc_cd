@@ -32,11 +32,18 @@ public class NoticeRepository {
      * @param district
      * @return
      */
-    public List<NoticeDao> findNoticeList(String district){
+    public List<NoticeDao> findNoticeList(String district,String keyword){
         if (precompile) {
             String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
                     +"from b_blackout_notice "
                     +"where notice_district=? ";
+
+            if (!Strings.isNullOrEmpty(keyword)){
+                sql += "and notice_range like ?";
+                logger.info("SQL:" + sql);
+                return jdbcTemplate.query(sql,new Object[]{district,"%"+keyword+"%"}, new NoticeRowMapper());
+            }
+
             logger.info("SQL:" + sql);
             return jdbcTemplate.query(sql,new Object[]{district}, new NoticeRowMapper());
         }else {
@@ -224,6 +231,17 @@ public class NoticeRepository {
             return true;
         }
     }
+
+//    public List<NoticeDao> getNoticeByTime(String distr,int time) {
+//
+//        String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
+//                +"from b_blackout_notice where DATE_SUB(CURDATE(), INTERVAL ? DAY) <= date(notice_date)";
+//        logger.info("SQL:" + sql);
+//        return jdbcTemplate.query(sql,new Object[]{time}, new NoticeRowMapper());
+//    }
+
+
+
 
     class NoticeRowMapper implements RowMapper<NoticeDao> {
         @Override

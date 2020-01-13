@@ -361,6 +361,13 @@ public class PreBookInfoRepository {
 
     }
 
+    public List<BlacklistDao> getBlacklist() {
+        String sql = "select id,user_open_id,household_no,contact,contact_tel,create_date " +
+                "from b_prebook_blacklist";
+        List<BlacklistDao> blacklistDaos = jdbcTemplate.query(sql,new BlacklistRowMapper());
+        return blacklistDaos;
+    }
+
 
     class CheckerInfoRowMapper implements RowMapper<CheckerInfoDao>{
 

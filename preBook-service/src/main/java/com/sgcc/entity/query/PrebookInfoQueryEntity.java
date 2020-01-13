@@ -1,5 +1,6 @@
 package com.sgcc.entity.query;
 
+import com.sgcc.dao.BlacklistDao;
 import com.sgcc.dao.CheckerInfoDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.repository.PreBookInfoRepository;
@@ -87,5 +88,9 @@ public class PrebookInfoQueryEntity {
 
     public Integer getCountByOpenId(String openId) {
         return preBookInfoRepository.getCountByOpenId( openId);
+    }
+
+    public List<BlacklistDao> getBlacklist() {
+        return preBookInfoRepository.getBlacklist();
     }
 }

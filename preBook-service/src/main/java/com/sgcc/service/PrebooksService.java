@@ -619,7 +619,21 @@ public class PrebooksService {
         }
     }
 
-
+    /**
+     * 查询所有黑名单信息
+     * @return
+     */
+    public Result getBlacklist() {
+        try {
+            List<BlacklistDao> blacklistDaos = prebookInfoQueryEntity.getBlacklist();
+            PrebookModel model = new PrebookModel();
+            List<BlacklistViewDTO> blacklistViewDTOS = model.getBlacklistTrans(blacklistDaos);
+            return Result.success(blacklistViewDTOS);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
 
 
 

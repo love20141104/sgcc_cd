@@ -32,6 +32,13 @@ public class PrebookController {
         return prebooksService.getBlacklistByOpenId(openId);
     }
 
+    @ApiOperation(value = "税票预约-黑名单查询", notes = "")
+    @GetMapping(value = "/admin/blacklist")
+    public Result getBlacklist() {
+        return prebooksService.getBlacklist();
+    }
+
+
     @ApiOperation(value = "税票预约-预约时间段", notes = "")
     @GetMapping(value = "/open-id/timeSlot/{day}")
     public Result getTimeSlot(@PathVariable String day) {

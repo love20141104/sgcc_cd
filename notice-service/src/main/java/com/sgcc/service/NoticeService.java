@@ -11,6 +11,7 @@ import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.NoticeDomainModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -25,13 +26,12 @@ public class NoticeService {
      * @param district
      * @return
      */
-    public Result queryNoticeInfo(String district){
+    public Result queryNoticeInfo(String district,String keyword){
 
         try {
             if (Strings.isNullOrEmpty(district))
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
-
-            List<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeInfoByDistrict(district);
+            List<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeInfoByDistrict(district,keyword);
 
             NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos);
             noticeDomainModel.selectByDistrictTransform();
@@ -136,6 +136,9 @@ public class NoticeService {
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
+
+
+
 
 
 

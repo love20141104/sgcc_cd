@@ -72,8 +72,9 @@ public class NoticeController {
     /*****************************************停电公告***********************************************/
     @ApiOperation(value = "停电公告-查询", notes = "")
     @GetMapping(value = "/noticeInfo/{district}")
-    public Result queryNoticeInfo(@PathVariable(required = true) String district) {
-        return noticeService.queryNoticeInfo(district);
+    public Result queryNoticeInfo(@PathVariable(required = true) String district,
+                                  @RequestParam(required = false) String keyword) {
+        return noticeService.queryNoticeInfo(district,keyword);
     }
 
     @ApiOperation(value = "停电公告-查询", notes = "")
@@ -99,6 +100,7 @@ public class NoticeController {
     public Result delNoticeInfo(@RequestBody List<String> ids) {
         return noticeService.delNoticeInfo(ids);
     }
+
 
     @ApiOperation(value ="短信群法接口",notes = "")
     @PostMapping(value = "/messageNotification")

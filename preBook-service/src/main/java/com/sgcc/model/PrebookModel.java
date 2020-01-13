@@ -297,5 +297,17 @@ public class PrebookModel {
     }
 
 
+    public List<BlacklistViewDTO> getBlacklistTrans(List<BlacklistDao> blacklistDaos) {
+        List<BlacklistViewDTO> blacklistViewDTOS = new ArrayList<>();
+        blacklistDaos.forEach(dao->{
+            BlacklistViewDTO blacklistViewDTO = new BlacklistViewDTO();
+            BeanUtils.copyProperties(dao,blacklistViewDTO);
+            blacklistViewDTO.setCreateDate(Utils.GetTime(dao.getCreateDate()));
+            blacklistViewDTOS.add(blacklistViewDTO);
+        });
+        return blacklistViewDTOS;
+    }
+
+
 
 }
