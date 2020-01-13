@@ -64,8 +64,13 @@ public class ReplierAndCheckerRepository {
 
     public String getReplyOpenId(String userLocation) {
         String sql = "select replier_openid from d_customer_service_staff where major_region like ? ";
+        try{
         String s = jdbcTemplate.queryForObject(sql, new Object[]{"%" + userLocation + "%"}, String.class);
         return s;
+        }
+        catch (Exception e){
+            return null;
+        }
     }
 
     public Integer getCountByOpenId(String openId, Integer role) {

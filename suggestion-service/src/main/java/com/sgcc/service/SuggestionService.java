@@ -142,7 +142,7 @@ public class SuggestionService {
         // 创建回复单据
         //现已异步
         //CreateSuggestionReply( new SuggestionMidDTO(dao.getId() , submitDTO.getUserLocation()) );
-        Result ret = Result.success( getSuggestions(openId) );
+        Result ret = Result.success(getSuggestionsByUserId(openId) );
         ret.setMsg( dao.getSuggestionId() );
         return ret;
     }
