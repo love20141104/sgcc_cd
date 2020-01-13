@@ -9,6 +9,8 @@ import com.sgcc.DemoApplication;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.dto.BasicInputDTO;
 import com.sgcc.dto.InputDataDTO;
+import com.sgcc.dto.LineUpQueryInputDTO;
+import com.sgcc.dto.OnlineQueuingInputDTO;
 import com.sgcc.entity.LineUpEntity;
 import com.sgcc.entity.query.PrebookInfoQueryEntity;
 import com.sgcc.service.HouseholdService;
@@ -63,7 +65,20 @@ public class TestAddBlacklist {
     }
 
 
+    @Test
+    public void testOnlineQueuing(){
+        OnlineQueuingInputDTO onlineQueuingInputDTO = new OnlineQueuingInputDTO(
+                "123123",
+                "张三年",
+                "18582106276"
+        );
+        System.out.println(lineUpService.onlineQueuing(onlineQueuingInputDTO));
+    }
 
+    @Test
+    public void testLineUpQuery(){
+        System.out.println(lineUpService.lineUpQuery(new LineUpQueryInputDTO("WA003")));
+    }
 
 
 }

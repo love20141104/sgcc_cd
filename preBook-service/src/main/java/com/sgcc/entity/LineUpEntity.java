@@ -12,56 +12,18 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class LineUpEntity {
 
-    private static final String URL = "http://120.27.51.118:8080/ThreeTypeOneApi/currency";
+    private static final String URL = "http://120.27.51.118:8081/ThreeTypeOneApi/currency";
 
     @Autowired
     private RestTemplate restTemplate;
 
-    /**
-     * 心跳接口
-     */
-    // heartBeat(传入参数)
-    public LineUpInfoOutDTO heartBeat(BasicInputDTO basicInputDTO){
-        // TODO 将传入的参数进行加密
-//        EncryptedDTO encryptedDTO = new EncryptedDTO();
+
+    public LineUpInfoOutDTO operatePost(BasicInputDTO basicInputDTO){
         System.out.println(JSONObject.toJSONString(basicInputDTO));
         LineUpInfoOutDTO lineUpInfoOutDTO =
-                restTemplate.postForObject(URL,JSONObject.toJSONString(basicInputDTO),LineUpInfoOutDTO.class);
+                restTemplate.postForObject(URL,basicInputDTO,LineUpInfoOutDTO.class);
         return lineUpInfoOutDTO;
     }
-
-
-    /**
-     * 线上排队接口
-     * @return
-     */
-    // onlineQueuing(传入参数)
-    public LineUpInfoOutDTO onlineQueuing(){
-        // TODO 将传入的参数进行加密
-
-        EncryptedDTO encryptedDTO = new EncryptedDTO();
-
-        LineUpInfoOutDTO lineUpInfoOutDTO =
-                restTemplate.postForObject(URL,encryptedDTO,LineUpInfoOutDTO.class);
-        return lineUpInfoOutDTO;
-    }
-
-
-    /**
-     * 排队查询接口
-     * @return
-     */
-    // onlineQueuing(传入参数)
-    public LineUpInfoOutDTO lineUpQuery(){
-        // TODO 将传入的参数进行加密
-
-        EncryptedDTO encryptedDTO = new EncryptedDTO();
-
-        LineUpInfoOutDTO lineUpInfoOutDTO =
-                restTemplate.postForObject(URL,encryptedDTO,LineUpInfoOutDTO.class);
-        return lineUpInfoOutDTO;
-    }
-
 
 
 

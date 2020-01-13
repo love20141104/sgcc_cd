@@ -45,5 +45,16 @@ public class LineUpController {
 
 
 
+    @ApiOperation(value = "排号记录查询", notes = "")
+    @GetMapping(value = "/admin/allRecords")
+    public Result getAllRecords() {
+        return lineUpService.getAllRecords();
+    }
+
+
+
+
+
+
 
 }

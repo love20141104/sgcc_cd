@@ -1,14 +1,18 @@
 package com.sgcc.service;
 
 import com.example.result.Result;
+import com.google.common.base.Strings;
 import com.sgcc.dao.LineUpDao;
 import com.sgcc.dto.*;
 import com.sgcc.entity.LineUpEntity;
 import com.sgcc.entity.event.LineUpEventEntity;
+import com.sgcc.entity.query.LineUpQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.LineUpModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class LineUpService {
@@ -18,6 +22,11 @@ public class LineUpService {
 
     @Autowired
     private LineUpEventEntity lineUpEventEntity;
+
+    @Autowired
+    private LineUpQueryEntity lineUpQueryEntity;
+
+
 
     public BasicInputDTO test() {
         BasicInputDTO lineUpInfoOutDTO = null;
@@ -42,13 +51,11 @@ public class LineUpService {
      */
     public Result heartBeat() {
         try {
-            // TODO 调用心跳接口
             boolean flag = false;
-
             LineUpModel model = new LineUpModel();
             BasicInputDTO basicInputDTO = model.heartBeatTrans();
-            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeat(basicInputDTO);
-            if (lineUpInfoOutDTO.getCode().equals("200")){
+            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.operatePost(basicInputDTO);
+            if (lineUpInfoOutDTO.getCode().equals("1")){
                 flag = true;
             }else {
                 flag = false;
@@ -68,18 +75,22 @@ public class LineUpService {
      */
     public Result onlineQueuing(OnlineQueuingInputDTO dto) {
         try {
-            // TODO 调用心跳接口
-            LineUpModel lineUpModel = new LineUpModel();
-            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeat(lineUpModel.heartBeatTrans());
-            if (lineUpInfoOutDTO.getCode().equals("200")){
-                // TODO 调用线上排队接口
-                BasicInputDTO basicInputDTO = new BasicInputDTO();
+            LineUpModel model = new LineUpModel();
+            List<LineUpDao> lineUpDaos = lineUpQueryEntity.getLineUpByOpenId(dto.getUserOpenId());
+            List<LineUpDao> daos = model.getLineUpByOpenIdTrans(lineUpDaos);
+            if (daos.size() == 1 || daos.size() > 1)
+                return Result.failure(TopErrorCode.LINE_UP);
+            // 调用心跳接口
+            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.operatePost(model.heartBeatTrans());
+            if (lineUpInfoOutDTO.getCode().equals("1")){
 
+                BasicInputDTO basicInputDTO = model.onlineQueuingTrans(dto);
 
-                LineUpInfoOutDTO lineUpDTO = lineUpEntity.onlineQueuing();
-                LineUpModel model = new LineUpModel();
-                LineUpDao lineUpDao = model.addLineUpTrans(lineUpDTO.getData(),dto);
-                lineUpEventEntity.addLineUp(lineUpDao);
+                LineUpInfoOutDTO lineUpDTO = lineUpEntity.operatePost(basicInputDTO);
+                if (lineUpDTO.getCode().equals("1")){
+                    LineUpDao lineUpDao = model.addLineUpTrans(lineUpDTO.getData(),dto);
+                    lineUpEventEntity.addLineUp(lineUpDao);
+                }
                 return Result.success(lineUpDTO.getData());
             }else {
                 return Result.failure(TopErrorCode.DEVICE_EXCEPTION);
@@ -98,16 +109,21 @@ public class LineUpService {
      * @return
      */
     public Result lineUpQuery(LineUpQueryInputDTO dto) {
+        if (Strings.isNullOrEmpty(dto.getLineUpNo()))
+            return Result.failure(TopErrorCode.PARAMETER_ERR);
 
         try {
-            // TODO 调用心跳接口
+            // 调用心跳接口
             LineUpModel model = new LineUpModel();
-            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeat(model.heartBeatTrans());
-            if (lineUpInfoOutDTO.getCode().equals("200")){
-                // TODO 调用排队查询接口
-
-                LineUpInfoOutDTO lineUpDTO = lineUpEntity.lineUpQuery();
-                return Result.success(lineUpDTO.getData());
+            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.operatePost(model.heartBeatTrans());
+            if (lineUpInfoOutDTO.getCode().equals("1")){
+                BasicInputDTO basicInputDTO = model.lineUpQueryTrans(dto);
+                LineUpInfoOutDTO lineUpDTO = lineUpEntity.operatePost(basicInputDTO);
+                if (lineUpDTO.getCode().equals("1")){
+                    return Result.success(lineUpDTO.getData());
+                }else {
+                    return Result.failure(TopErrorCode.DEVICE_EXCEPTION);
+                }
             }else {
                 return Result.failure(TopErrorCode.DEVICE_EXCEPTION);
             }
@@ -116,6 +132,24 @@ public class LineUpService {
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
+
+
+    /**
+     * 查询所有排号记录
+     * @return
+     */
+    public Result getAllRecords(){
+        try {
+            LineUpModel model = new LineUpModel();
+            List<LineUpDao> daos = lineUpQueryEntity.getAllRecords();
+            List<LineUpViewDao> lineUpViewDao = model.getAllRecordsTrans(daos);
+            return Result.success(lineUpViewDao);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
 
 
 
