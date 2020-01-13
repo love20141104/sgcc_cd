@@ -1,5 +1,7 @@
 package com.sgcc.entity;
 
+import com.alibaba.fastjson.JSONObject;
+import com.sgcc.dto.BasicInputDTO;
 import com.sgcc.dto.EncryptedDTO;
 import com.sgcc.dto.LineUpInfoOutDTO;
 import com.sgcc.repository.PreBooksRepository;
@@ -19,13 +21,12 @@ public class LineUpEntity {
      * 心跳接口
      */
     // heartBeat(传入参数)
-    public LineUpInfoOutDTO heartBeat(){
+    public LineUpInfoOutDTO heartBeat(BasicInputDTO basicInputDTO){
         // TODO 将传入的参数进行加密
-
-        EncryptedDTO encryptedDTO = new EncryptedDTO();
-
+//        EncryptedDTO encryptedDTO = new EncryptedDTO();
+        System.out.println(JSONObject.toJSONString(basicInputDTO));
         LineUpInfoOutDTO lineUpInfoOutDTO =
-                restTemplate.postForObject(URL,encryptedDTO,LineUpInfoOutDTO.class);
+                restTemplate.postForObject(URL,JSONObject.toJSONString(basicInputDTO),LineUpInfoOutDTO.class);
         return lineUpInfoOutDTO;
     }
 

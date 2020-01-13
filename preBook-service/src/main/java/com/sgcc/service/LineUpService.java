@@ -44,7 +44,10 @@ public class LineUpService {
         try {
             // TODO 调用心跳接口
             boolean flag = false;
-            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeat();
+
+            LineUpModel model = new LineUpModel();
+            BasicInputDTO basicInputDTO = model.heartBeatTrans();
+            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeat(basicInputDTO);
             if (lineUpInfoOutDTO.getCode().equals("200")){
                 flag = true;
             }else {
@@ -66,7 +69,8 @@ public class LineUpService {
     public Result onlineQueuing(OnlineQueuingInputDTO dto) {
         try {
             // TODO 调用心跳接口
-            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeat();
+            LineUpModel lineUpModel = new LineUpModel();
+            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeat(lineUpModel.heartBeatTrans());
             if (lineUpInfoOutDTO.getCode().equals("200")){
                 // TODO 调用线上排队接口
                 BasicInputDTO basicInputDTO = new BasicInputDTO();
@@ -97,7 +101,8 @@ public class LineUpService {
 
         try {
             // TODO 调用心跳接口
-            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeat();
+            LineUpModel model = new LineUpModel();
+            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeat(model.heartBeatTrans());
             if (lineUpInfoOutDTO.getCode().equals("200")){
                 // TODO 调用排队查询接口
 

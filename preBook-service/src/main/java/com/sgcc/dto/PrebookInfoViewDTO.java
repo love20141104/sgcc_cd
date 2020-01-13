@@ -14,8 +14,8 @@ public class PrebookInfoViewDTO implements Serializable {
 
     private static final long serialVersionUID = 2795856741230473606L;
     private String id;
-    private String prebookNo;
-    private String businessTypeName;
+    private String prebookNo;   // 工单号
+    private String lineUpNo;    // 预约号
     private String contact;
     private String contactTel;
     private String submitDate;

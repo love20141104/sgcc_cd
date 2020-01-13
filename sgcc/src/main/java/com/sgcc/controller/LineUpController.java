@@ -22,10 +22,11 @@ public class LineUpController {
     @Autowired
     private LineUpService lineUpService;
 
-    @ApiOperation(value = "", notes = "")
-    @PostMapping(value = "/user/test")
-    public BasicInputDTO test() {
-        return lineUpService.test();
+
+    @ApiOperation(value = "心跳", notes = "")
+    @PostMapping(value = "/user/heartBeat")
+    public Result heartBeat() {
+        return lineUpService.heartBeat();
     }
 
 

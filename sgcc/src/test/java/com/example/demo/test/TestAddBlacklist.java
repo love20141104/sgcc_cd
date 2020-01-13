@@ -9,8 +9,10 @@ import com.sgcc.DemoApplication;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.dto.BasicInputDTO;
 import com.sgcc.dto.InputDataDTO;
+import com.sgcc.entity.LineUpEntity;
 import com.sgcc.entity.query.PrebookInfoQueryEntity;
 import com.sgcc.service.HouseholdService;
+import com.sgcc.service.LineUpService;
 import com.sgcc.sgccenum.SubscribeCateEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +29,8 @@ import java.util.logging.Logger;
 public class TestAddBlacklist {
     @Autowired
     private PrebookInfoQueryEntity prebookInfoQueryEntity;
+    @Autowired
+    private LineUpService lineUpService;
 
     @Test
     public void testAddBlacklist() throws Exception {
@@ -51,5 +55,15 @@ public class TestAddBlacklist {
 //        List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getNotTakeTicketList();
 //        System.out.println(prebookInfoDaos.size());
     }
+
+
+    @Test
+    public void testHeartBeant(){
+        System.out.println(lineUpService.heartBeat());
+    }
+
+
+
+
 
 }

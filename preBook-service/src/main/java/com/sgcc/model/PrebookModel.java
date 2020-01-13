@@ -72,7 +72,7 @@ public class PrebookModel {
             prebookInfoViewDTOS.add(new PrebookInfoViewDTO(
                     dao.getId(),
                     dao.getPrebookNo(),
-                    dao.getBusinessTypeName(),
+                    Strings.isNullOrEmpty(dao.getLineupNo()) ? null : dao.getLineupNo(),
                     dao.getContact(),
                     dao.getContactTel(),
                     Utils.GetTime(dao.getSubmitDate())
