@@ -104,7 +104,9 @@ public class SM3Util {
 
     public static void main(String[] args) {
 
-        String json = "{\"name\":\"Marydon\",\"website\":\"http://www.cnblogs.com/Marydon20170307\"}";
+        String json = "ZImB/IrkfYdfyOUkQiZicK6vGFDMXdEjhYC5/Gz+XW0BZXx4DDj9puCjCO+2TF91ZOeVvffoWUAB6TxptxhYd6P0LE2/" +
+                "lyM7JVo/KWECdmSOJpc578QHb4xoALXABIfkghm51eoZhNSEGFAP/XMHbwaS03biDXSzm4fQX5KiFCY="+"axlz9zv2p02v03t4ks"+
+                "009322d3d8d62e018ff688c7226f9719eeade1371b95a00825676c1822d370a4ab";
         String hex = SM3Util.encrypt(json);
         System.out.println(hex);
 

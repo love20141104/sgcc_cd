@@ -25,7 +25,7 @@ public class SM4Util {
     // 定义分组加密模式使用：PKCS5Padding
     public static final String ALGORITHM_NAME_ECB_PADDING = "SM4/ECB/PKCS5Padding";
     // 128-32位16进制；256-64位16进制
-    public static final int DEFAULT_KEY_SIZE = 256;
+    public static final int DEFAULT_KEY_SIZE = 128;
 
     /**
      * 生成ECB暗号

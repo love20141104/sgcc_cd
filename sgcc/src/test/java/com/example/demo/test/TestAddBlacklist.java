@@ -2,6 +2,7 @@ package com.example.demo.test;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.example.ThreeTypeOneApi.SM3Util;
 import com.example.ThreeTypeOneApi.SM4Util;
 import com.example.result.Result;
 import com.sgcc.DemoApplication;
@@ -43,6 +44,9 @@ public class TestAddBlacklist {
 
         String json = JSONObject.toJSONString(basicInputDTO);
         String cipher = SM4Util.encryptEcb("009322d3d8d62e018ff688c7226f9719eeade1371b95a00825676c1822d370a4ab", json);
+        String s = SM3Util.encrypt(json);
+        System.out.println("sm3加密===>"+SM3Util.encrypt(json));
+        System.out.println("sm3解密===>"+SM3Util.verify(json,s));
 
 //        List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getNotTakeTicketList();
 //        System.out.println(prebookInfoDaos.size());
