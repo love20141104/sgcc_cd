@@ -276,7 +276,8 @@ public class ConsumerManagerService {
             Map<String, List<ConsumerManagerDTO>> gourpMap = dto.getGourpMap();
             HashMap<String, List<ConsumerManagerDTO>> map = new HashMap<>();
             map.put(area,gourpMap.get(area));
-            return Result.success(map);
+            dto.setGourpMap(map);
+            return Result.success(dto);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.SQL_ERR);
