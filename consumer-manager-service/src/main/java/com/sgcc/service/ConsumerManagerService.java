@@ -3,6 +3,7 @@ package com.sgcc.service;
 import com.google.common.base.Strings;
 import com.sgcc.dao.ConsumerManagerDao;
 import com.sgcc.dto.ConsumerManagerDTO;
+import com.sgcc.dto.ConsumerManagerGroupDTO;
 import com.sgcc.dto.ConsumerManagerInsertDTO;
 import com.sgcc.entity.event.ConsumerManagerEventEntity;
 import com.sgcc.entity.query.ConsumerManagerQueryEntity;
@@ -12,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.result.Result;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLException;
+import java.util.*;
 
 @Service
 public class ConsumerManagerService {
@@ -238,6 +239,88 @@ public class ConsumerManagerService {
             ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerDaos);
             consumerManagerDomainModel.selectAllTransform();
             return Result.success(consumerManagerDomainModel.getConsumerManagerGroupDTO());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.SQL_ERR);
+        }
+    }
+
+    public Result selectConsumerManagerByArea(String area) {
+        if (Strings.isNullOrEmpty(area)){
+            area="高新";
+        }
+        if(area.contains("市")){
+            area=area.replaceAll("市","");
+        }
+        if(area.contains("县")){
+            area=area.replaceAll("县","");
+        }
+        if(area.contains("区")){
+            area=area.replaceAll("区","");
+        }
+        try {
+            List<ConsumerManagerDao> consumerManagerDaos = new ArrayList<>(consumerManagerQueryEntity.findAllConsumerManagerInRedis());
+            if (null == consumerManagerDaos || consumerManagerDaos.size() == 0 || null == consumerManagerDaos.get(0)) {
+                //从mysql中查询所有客户经理信息，加载到redis中
+                consumerManagerDaos = new ArrayList<>(consumerManagerQueryEntity.findAllConsumerManager());
+                if (null != consumerManagerDaos && consumerManagerDaos.size() > 0) {
+                    consumerManagerEventEntity.saveAllInRedis(consumerManagerDaos);
+                } else {
+                    return Result.failure(TopErrorCode.NO_DATAS);
+                }
+            }
+            //清洗
+            ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerDaos);
+            consumerManagerDomainModel.selectAllTransform();
+            ConsumerManagerGroupDTO dto = consumerManagerDomainModel.getConsumerManagerGroupDTO();
+            Map<String, List<ConsumerManagerDTO>> gourpMap = dto.getGourpMap();
+            HashMap<String, List<ConsumerManagerDTO>> map = new HashMap<>();
+            map.put(area,gourpMap.get(area));
+            return Result.success(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.SQL_ERR);
+        }
+    }
+    public void  initRedis(){
+        List<ConsumerManagerDao> consumerManagerDaos  = null;
+        try {
+            consumerManagerDaos = new ArrayList<>(consumerManagerQueryEntity.findAllConsumerManager());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (null != consumerManagerDaos && consumerManagerDaos.size() > 0) {
+                consumerManagerEventEntity.saveAllInRedis(consumerManagerDaos);
+        }
+    }
+
+    public Result selectConsumerManagerByKey(String area, String key) {
+        if(area.contains("市")){
+            area=area.replaceAll("市","");
+        }
+        if(area.contains("县")){
+            area=area.replaceAll("县","");
+        }
+        if(area.contains("区")){
+            area=area.replaceAll("区","");
+        }
+        try {
+            List<ConsumerManagerDao> consumerManagerDaos = consumerManagerQueryEntity.findConsumerManagerBykey(key);
+            //清洗
+            ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerDaos);
+            consumerManagerDomainModel.selectAllTransform();
+            ConsumerManagerGroupDTO groupDTO = consumerManagerDomainModel.getConsumerManagerGroupDTO();
+            Map<String, List<ConsumerManagerDTO>> gourpMap = groupDTO.getGourpMap();
+            HashMap<String, List<ConsumerManagerDTO>> hashMap = new LinkedHashMap<>();
+            if(gourpMap.get(area)!=null&&gourpMap.get(area).size()>0){
+                hashMap.put(area,gourpMap.get(area));
+
+                gourpMap.keySet().forEach(k->{
+                    hashMap.put(k,gourpMap.get(k));
+                });
+                groupDTO.setGourpMap(hashMap);
+            }
+            return Result.success(groupDTO);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.SQL_ERR);

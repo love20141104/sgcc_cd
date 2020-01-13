@@ -28,6 +28,17 @@ public class ConsumerManagerController {
     public Result selectConsumerManager() {
         return consumerManagerService.selectConsumerManager();
     }
+    @ApiOperation(value = "根据地区查询客户经理", notes = "")
+    @GetMapping(value = "/ConsumerManager/area")
+    public Result selectConsumerManagerByArea(String area) {
+        return consumerManagerService.selectConsumerManagerByArea(area);
+    }
+
+    @ApiOperation(value = "根据地区查询客户经理", notes = "")
+    @GetMapping(value = "/ConsumerManager/key")
+    public Result selectConsumerManagerByKey(String area,String key) {
+        return consumerManagerService.selectConsumerManagerByKey(area,key);
+    }
 
     @ApiOperation(value = "查询用户对应的客户经理", notes = "")
     @GetMapping(value = "/ConsumerManager/openId/{openId}")

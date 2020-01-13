@@ -3,6 +3,7 @@ package com.sgcc;
 import com.sgcc.Service.QuestionService;
 import com.sgcc.service.ArticleService;
 import com.sgcc.service.BusinessGuideService;
+import com.sgcc.service.ConsumerManagerService;
 import com.sgcc.service.ServiceHallService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -26,6 +27,10 @@ public class ApplicationStartup implements ApplicationListener<ContextRefreshedE
 
         BusinessGuideService businessGuideService = contextRefreshedEvent.getApplicationContext().getBean(BusinessGuideService.class);
         businessGuideService.initRedisBusinessGuide();
+
+        ConsumerManagerService consumerManagerService = contextRefreshedEvent.getApplicationContext().getBean(ConsumerManagerService.class);
+        consumerManagerService.initRedis();
+
         System.out.println("Redis初始化成功");
     }
 }

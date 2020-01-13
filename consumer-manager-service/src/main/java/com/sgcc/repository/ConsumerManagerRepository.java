@@ -266,6 +266,25 @@ public class ConsumerManagerRepository {
         }
     }
 
+    public List<ConsumerManagerDao> findConsumerManagerBykey(String key) {
+        String sql = "select id"
+                +", consumer_manager_id"
+                +", consumer_manager_name"
+                +", consumer_manager_tel"
+                +", consumer_manager_service_area"
+                +", consumer_manager_administrative_region"
+                +", consumer_manager_duty"
+                +", consumer_manager_work_time"
+                +", consumer_manager_emergency_tel"
+                +", consumer_manager_work_unit"
+                +", consumer_manager_category"
+                +", consumer_manager_img"
+                + " from d_consumer_manager " +
+                " where consumer_manager_name like ? or consumer_manager_service_area like ?";
+        key="%"+key+"%";
+        logger.info("查询客户经理列表："+sql);
+        return jdbcTemplate.query(sql,new Object[]{key,key},new ConsumerManagerRowMapper());
+    }
 
 
     class ConsumerManagerRowMapper implements RowMapper<ConsumerManagerDao> {

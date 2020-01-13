@@ -65,4 +65,7 @@ public class ConsumerManagerQueryEntity {
     }
 
 
+    public List<ConsumerManagerDao> findConsumerManagerBykey(String key) {
+        return consumerManagerRepository.findConsumerManagerBykey(key);
+    }
 }
