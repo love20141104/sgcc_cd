@@ -1,6 +1,5 @@
 package com.sgcc.model;
 
-import com.alibaba.fastjson.JSONObject;
 import com.example.Utils;
 import com.sgcc.dao.LineUpDao;
 import com.sgcc.dto.*;
@@ -118,17 +117,28 @@ public class LineUpModel {
     }
 
 
-    public List<LineUpViewDao> getAllRecordsTrans(List<LineUpDao> daos) {
-        List<LineUpViewDao> lineUpViewDaos = new ArrayList<>();
+    public List<LineUpViewDTO> getAllRecordsTrans(List<LineUpDao> daos) {
+        List<LineUpViewDTO> lineUpViewDTOS = new ArrayList<>();
         daos.forEach(dao->{
-            LineUpViewDao lineUpViewDao = new LineUpViewDao();
-            BeanUtils.copyProperties(dao,lineUpViewDao);
-            lineUpViewDao.setLineUpTime(Utils.GetTime(dao.getLineUpTime()));
-            lineUpViewDao.setSubmitDate(Utils.GetTime(dao.getSubmitDate()));
-            lineUpViewDaos.add(lineUpViewDao);
+            LineUpViewDTO lineUpViewDTO = new LineUpViewDTO();
+            BeanUtils.copyProperties(dao, lineUpViewDTO);
+            lineUpViewDTO.setLineUpTime(Utils.GetTime(dao.getLineUpTime()));
+            lineUpViewDTO.setSubmitDate(Utils.GetTime(dao.getSubmitDate()));
+            lineUpViewDTOS.add(lineUpViewDTO);
         });
-        return lineUpViewDaos;
+        return lineUpViewDTOS;
     }
+
+
+//    public String getLineUpNoByOpenIdTrans(List<LineUpDao> daos) {
+//        String lineUpNo = "";
+//        daos.forEach(dao->{
+//            if ( Utils.GetTimeForYMD(dao.getSubmitDate()).equals(Utils.GetTimeForYMD(new Date()))){
+//                lineUpNo += dao.getLineUpNo();
+//            }
+//        });
+//        return lineUpNo;
+//    }
 
 
 

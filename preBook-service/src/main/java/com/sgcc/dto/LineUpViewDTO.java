@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LineUpViewDao implements Serializable {
+public class LineUpViewDTO implements Serializable {
 
     private static final long serialVersionUID = 7548784504327102339L;
 

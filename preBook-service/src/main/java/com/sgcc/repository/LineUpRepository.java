@@ -49,6 +49,12 @@ public class LineUpRepository {
         return jdbcTemplate.query(sql,new Object[]{openId},new LineUpRowMapper());
     }
 
+    public List<LineUpDao> getLineUpNoByOpenId(String openId){
+        String sql = "select id,user_open_id,service_hall_id,business_id,contact,phone,line_up_no,line_up_time,submit_date " +
+                "from b_line_up where user_open_id = ? and to_days(submit_date) = to_days(now())";
+        return jdbcTemplate.query(sql,new Object[]{openId},new LineUpRowMapper());
+    }
+
 
     class LineUpRowMapper implements RowMapper<LineUpDao>{
 

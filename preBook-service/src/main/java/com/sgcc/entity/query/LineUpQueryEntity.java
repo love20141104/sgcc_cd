@@ -22,7 +22,9 @@ public class LineUpQueryEntity {
         return lineUpRepository.getLineUpByOpenId(openId);
     }
 
-
+    public List<LineUpDao> getLineUpNoByOpenId(String openId){
+        return lineUpRepository.getLineUpNoByOpenId(openId);
+    }
 
 
 }

@@ -44,6 +44,12 @@ public class LineUpController {
     }
 
 
+    @ApiOperation(value = "排队号码查询", notes = "")
+    @GetMapping(value = "/user/lineUpNo")
+    public Result getLineUpNoByOpenId(@RequestParam String openId) {
+        return lineUpService.getLineUpNoByOpenId(openId);
+    }
+
 
     @ApiOperation(value = "排号记录查询", notes = "")
     @GetMapping(value = "/admin/allRecords")

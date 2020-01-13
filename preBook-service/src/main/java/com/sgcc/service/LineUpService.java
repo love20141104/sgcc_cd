@@ -142,16 +142,29 @@ public class LineUpService {
         try {
             LineUpModel model = new LineUpModel();
             List<LineUpDao> daos = lineUpQueryEntity.getAllRecords();
-            List<LineUpViewDao> lineUpViewDao = model.getAllRecordsTrans(daos);
-            return Result.success(lineUpViewDao);
+            List<LineUpViewDTO> lineUpViewDTO = model.getAllRecordsTrans(daos);
+            return Result.success(lineUpViewDTO);
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
 
-
-
+    /**
+     *根据openId查询排队号码
+     * @return
+     */
+    public Result getLineUpNoByOpenId(String openId){
+        try {
+            LineUpModel model = new LineUpModel();
+            List<LineUpDao> daos = lineUpQueryEntity.getLineUpNoByOpenId(openId);
+            LineUpQueryInputDTO lineUpQueryInputDTO = new LineUpQueryInputDTO(daos.get(0).getLineUpNo());
+            return Result.success(lineUpQueryInputDTO);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
 
 
 }
