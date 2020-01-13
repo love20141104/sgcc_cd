@@ -66,9 +66,6 @@ public class ConsumerManagerDomainModel {
               )
             );
         });
-        //list按照距离排序
-
-
         Map<String,List<ConsumerManagerDTO>> hmap = new HashMap<>();
         consumerManagerDTOList.forEach(consumerManagerDTO -> {
             if( !hmap.containsKey(consumerManagerDTO.getConsumerManagerAdministrativeRegion()) )
@@ -79,7 +76,6 @@ public class ConsumerManagerDomainModel {
             if( list == null )
                 list = new ArrayList<>();
             list.add(consumerManagerDTO);
-            //todo list按照距离排序
         });
         //排序
         //Collections.sort(consumerManagerDTOList);
