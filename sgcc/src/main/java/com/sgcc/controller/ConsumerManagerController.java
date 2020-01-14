@@ -30,8 +30,8 @@ public class ConsumerManagerController {
     }
     @ApiOperation(value = "根据地区查询客户经理", notes = "")
     @GetMapping(value = "/ConsumerManager/area")
-    public Result selectConsumerManagerByArea(String area) {
-        return consumerManagerService.selectConsumerManagerByArea(area);
+    public Result selectConsumerManagerByArea(String area,String street) {
+        return consumerManagerService.selectConsumerManagerByArea(area,street);
     }
 
     @ApiOperation(value = "根据关键字查询客户经理", notes = "")

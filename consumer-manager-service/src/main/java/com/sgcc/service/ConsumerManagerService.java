@@ -9,6 +9,7 @@ import com.sgcc.entity.event.ConsumerManagerEventEntity;
 import com.sgcc.entity.query.ConsumerManagerQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.ConsumerManagerDomainModel;
+import com.sgcc.util.StreetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.result.Result;
@@ -245,9 +246,9 @@ public class ConsumerManagerService {
         }
     }
 
-    public Result selectConsumerManagerByArea(String area) {
+    public Result selectConsumerManagerByArea( String area,String street) {
         if (Strings.isNullOrEmpty(area)){
-            area="高新";
+            area="";
         }
         if(area.contains("市")){
             area=area.replaceAll("市","");
@@ -272,12 +273,36 @@ public class ConsumerManagerService {
             //清洗
             ConsumerManagerDomainModel consumerManagerDomainModel = new ConsumerManagerDomainModel(consumerManagerDaos);
             consumerManagerDomainModel.selectAllTransform();
-            ConsumerManagerGroupDTO dto = consumerManagerDomainModel.getConsumerManagerGroupDTO();
-            Map<String, List<ConsumerManagerDTO>> gourpMap = dto.getGourpMap();
-            HashMap<String, List<ConsumerManagerDTO>> map = new HashMap<>();
-            map.put(area,gourpMap.get(area));
-            dto.setGourpMap(map);
-            return Result.success(dto);
+            ConsumerManagerGroupDTO groupDTO = consumerManagerDomainModel.getConsumerManagerGroupDTO();
+            Map<String, List<ConsumerManagerDTO>> gourpMap = groupDTO.getGourpMap();
+            ArrayList<Map> mapList = new ArrayList<>();
+            if(gourpMap.get(area)!=null&&gourpMap.get(area).size()>0){
+                List<ConsumerManagerDTO> list = gourpMap.get(area);
+                ArrayList<ConsumerManagerDTO> has = new ArrayList<>();
+                ArrayList<ConsumerManagerDTO> nothas = new ArrayList<>();
+                String street1 = StreetUtil.subStreet(street);
+                list.forEach(dto->{
+                    if(dto.getConsumerManagerServiceArea().contains(street1)){
+                        has.add(dto);
+                    }else {
+                        nothas.add(dto);
+                    }
+                });
+                has.addAll(nothas);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("area",area);
+                map.put("data",has);
+                mapList.add(map);
+                return Result.success(mapList);
+            }
+            gourpMap.keySet().forEach(k->{
+                List<ConsumerManagerDTO> list = gourpMap.get(k);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("area",k);
+                map.put("data",list);
+                mapList.add(map);
+            });
+            return Result.success(mapList);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.SQL_ERR);
@@ -324,7 +349,17 @@ public class ConsumerManagerService {
                 });
                 groupDTO.setGourpMap(hashMap);
             }
-            return Result.success(groupDTO);
+            Map<String, List<ConsumerManagerDTO>> dtoGourpMap = groupDTO.getGourpMap();
+            ArrayList<Map> mapList = new ArrayList<>();
+            dtoGourpMap.keySet().forEach(k->{
+                List<ConsumerManagerDTO> list = dtoGourpMap.get(k);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("area",k);
+                map.put("data",list);
+                mapList.add(map);
+            });
+
+            return Result.success(mapList);
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(TopErrorCode.SQL_ERR);
