@@ -4,6 +4,7 @@ import com.example.Utils;
 import com.sgcc.service.PrebooksService;
 import com.sgcc.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,6 @@ public class PrebookSchedule {
 
     @Scheduled(cron = "0 30 9-14 * * ? ")
     public void processSendMessage1(){
-
         String startDate = DateUtils.addDate(Utils.GetTime(new Date()),1);
         prebooksService.advanceSendMessage(startDate);
         System.out.println("提前最后一小时提醒用户取票");
@@ -42,7 +42,11 @@ public class PrebookSchedule {
         System.out.println("提前半小时提醒用户取票");
     }
 
-
+    @Scheduled(cron = "0 0 9 * * 1/5 ")
+    public void processSendMessage3(){
+        prebooksService.advanceSendMessageToChecker();
+        System.out.println("提醒审核人审核");
+    }
 
 
 }

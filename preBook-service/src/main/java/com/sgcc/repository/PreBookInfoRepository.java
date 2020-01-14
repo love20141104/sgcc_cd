@@ -76,7 +76,8 @@ public class PreBookInfoRepository {
     public List<PrebookInfoDao> getPrebookList(){
         String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
                 "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail where ticket_status=0";
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail " +
+                "where ticket_status=0 and status = 1";
 
         List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new PreBookRowMapper());
         return prebookInfoDaos;
@@ -188,7 +189,8 @@ public class PreBookInfoRepository {
     public List<PrebookInfoDao> getPrebookSize(String openId){
         String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
                 "household_no,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
-                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail where user_open_id = ? ";
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date from b_prebook_detail " +
+                "where user_open_id = ? and status <> 3";
 
         List<PrebookInfoDao> prebookInfoDaos =
                 jdbcTemplate.query(sql,new Object[]{openId},new PreBookRowMapper());
@@ -260,6 +262,13 @@ public class PreBookInfoRepository {
         List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new Object[]{id},new PreBookRowMapper());
 
         return prebookInfoDaos.get(0);
+    }
+
+
+    public List<CheckerInfoDao> getCheckerByServcieHallId(String hallId){
+        String sql = "select id,checker_name,checker_tel,user_open_id,service_hall_id,service_hall_name " +
+                "from b_prebook_checker where service_hall_id = ?";
+        return jdbcTemplate.query(sql,new Object[]{hallId},new CheckerInfoRowMapper());
     }
 
 

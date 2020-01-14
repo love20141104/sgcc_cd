@@ -2,7 +2,6 @@ package com.sgcc.controller;
 
 import com.example.result.Result;
 import com.sgcc.dto.*;
-import com.sgcc.dtomodel.prebook.PrebookDTO;
 import com.sgcc.service.PrebooksService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +24,21 @@ public class PrebookController {
 //    public Result getBasicInfo(@PathVariable String openId) {
 //        return prebooksService.getBasicInfo(openId);
 //    }
+
+    @ApiOperation(value = "提醒用户准时赴约", notes = "")
+    @GetMapping(value = "/remind/appointment")
+    public Result remindAppointment(@RequestParam boolean flag) {
+        return prebooksService.advanceSendMessage(flag);
+    }
+
+    @ApiOperation(value = "提醒审核人审核", notes = "")
+    @GetMapping(value = "/remind/check")
+    public Result remindCheck() {
+        return prebooksService.advanceSendMessageToChecker();
+    }
+
+
+
 
     @ApiOperation(value = "税票预约-黑名单限制预约", notes = "")
     @GetMapping(value = "/open-id/blacklist")

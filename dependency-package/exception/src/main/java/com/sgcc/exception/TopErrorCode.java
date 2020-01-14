@@ -34,7 +34,8 @@ public enum TopErrorCode {
     DECRYPTION_FAILED(20006,"解密失败"),
     HOUSEHOLD_NUM_ERR(20007,"户号长度错误"),
     DEVICE_EXCEPTION(20008,"设备正在维护"),
-    LINE_UP(30001,"排号次数已达上限");
+    LINE_UP(30001,"排号次数已达上限"),
+    IS_EXIST_CHECKER(30001,"该营业厅审核人已存在");
 
     //错误码
     private Integer errcode;

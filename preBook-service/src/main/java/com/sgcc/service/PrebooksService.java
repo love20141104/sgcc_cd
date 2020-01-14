@@ -5,6 +5,7 @@ import com.example.Utils;
 import com.example.constant.PrebookStartTimeConstants;
 import com.example.result.Result;
 import com.google.common.base.Strings;
+import com.sgcc.Schedule.PrebookSchedule;
 import com.sgcc.dao.BlacklistDao;
 import com.sgcc.dao.CheckerInfoDao;
 import com.sgcc.dao.PrebookInfoDao;
@@ -17,8 +18,8 @@ import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.PrebookModel;
 import com.sgcc.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.*;
 
@@ -35,6 +36,19 @@ public class PrebooksService {
     private PrebookInfoEventEntity prebookInfoEventEntity;
 
     /**********************************用户*************************************/
+
+//    public Result setTimingTask(boolean flag){
+//        try {
+//
+//
+//            return Result.success();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return Result.failure(TopErrorCode.GENERAL_ERR);
+//        }
+//    }
+
+
 
     /**
      * 提前一小时提醒客户取票
@@ -68,7 +82,6 @@ public class PrebooksService {
                 temp.setData( map );
 
                 weChatService.SimpleSendMsg( temp );
-
             }
 
             return Result.success();
@@ -78,6 +91,74 @@ public class PrebooksService {
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
+
+    /**
+     * 测试
+     * @return
+     */
+    public Result advanceSendMessage(boolean flag) {
+        try {
+            if (flag){
+                List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getPrebookList();
+                for (PrebookInfoDao dao : prebookInfoDaos) {
+                    String time = Utils.GetTimeForYMD(dao.getStartDate())+" "+
+                            Utils.GetTimeForHMS(dao.getStartDate())+
+                            "~"+Utils.GetTimeForHMS(dao.getEndDate());
+                    TemplateMessage temp = new TemplateMessage();
+                    temp.setTemplate_id("t9BlCV_CQ-K6o5tO7X68UonpWNq1YszrGgSFe0PraVU");
+                    temp.setTouser( dao.getUserOpenId());              // 发送给用户
+                    temp.setUrl("https://sgcc.link/appointmentList");                      // 进入页面
+                    Map<String, TemplateData> map = new LinkedHashMap<>();
+                    map.put("first",new TemplateData("你好，请你及时到营业厅取票!","#000000"));
+                    map.put("keyword1",new TemplateData(dao.getContact(),"#000000"));
+                    map.put("keyword2",new TemplateData(dao.getContactTel(),"#000000"));
+                    map.put("keyword3",new TemplateData(time,"#000000"));
+                    map.put("keyword4",new TemplateData("预约成功","#000000"));
+                    map.put("remark",new TemplateData("请尽快赴约，谢谢!","#000000"));
+                    temp.setData( map );
+                    weChatService.SimpleSendMsg( temp );
+                }
+            }
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+
+    public Result advanceSendMessageToChecker() {
+        try {
+            List<CheckerInfoDao> checkerInfoDaos = prebookInfoQueryEntity.getAllCheckers();
+            for (CheckerInfoDao dao : checkerInfoDaos){
+                List<PrebookInfoDao> prebookInfoDaos =
+                        prebookInfoQueryEntity.getCheckList(dao.getServiceHallId(),1,null);
+                if (prebookInfoDaos.size() > 0){
+                    TemplateMessage temp = new TemplateMessage();
+                    temp.setTemplate_id("AmIrZpXB1wgKG9mrqDd0KWSAT9ML8l18Mhx-6n18ZgE");
+                    temp.setTouser( dao.getUserOpenId() );                      // 发送给审核人
+                    temp.setUrl("https://sgcc.link/appointmentBack");                      // 进入页面
+
+                    Map<String, TemplateData> map = new LinkedHashMap<>();
+                    map.put("first",new TemplateData("你好，有新预约信息需要审核!","#000000"));
+                    map.put("keyword1",new TemplateData(dao.getCheckerName(),"#000000"));
+                    map.put("keyword2",new TemplateData(Utils.GetCurrentTime(),"#000000"));
+                    map.put("keyword3",new TemplateData("有新的预约需要处理！","#000000"));
+                    map.put("remark",new TemplateData("请尽快审核，谢谢!","#000000"));
+                    temp.setData( map );
+
+                    weChatService.SimpleSendMsg( temp );
+                }
+            }
+            return Result.success();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
 
 
     /**
@@ -476,10 +557,14 @@ public class PrebooksService {
      * @return
      */
     public Result addChecker(CheckerSubmitDTO checkerSubmitDTO) {
-        if (checkerSubmitDTO == null)
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-
         try {
+            if (checkerSubmitDTO == null)
+                return Result.failure(TopErrorCode.PARAMETER_ERR);
+
+            List<CheckerInfoDao> checkerInfoDaos =
+                    prebookInfoQueryEntity.getCheckerByServcieHallId(checkerSubmitDTO.getServiceHallId());
+            if (checkerInfoDaos.size() == 1 || checkerInfoDaos.size() > 1)
+                return Result.failure(TopErrorCode.IS_EXIST_CHECKER);
 
             PrebookModel model = new PrebookModel();
             CheckerInfoDao checkerInfoDao = model.addCheckerTrans(checkerSubmitDTO);
