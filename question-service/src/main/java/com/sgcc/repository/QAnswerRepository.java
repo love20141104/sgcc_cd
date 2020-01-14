@@ -55,9 +55,12 @@ public class QAnswerRepository {
      */
     public List<QuestionAnswerDao> findAllQAnswer(String keyword){
         String sql = "select id,category_id,question_desc,answer,available from d_question_answer where available = 1 ";
-        if (!Strings.isNullOrEmpty(keyword))
+        if (!Strings.isNullOrEmpty(keyword)){
             sql += " and answer like ?";
-        List<QuestionAnswerDao> answerDaoList = jdbcTemplate.query(sql,new Object[]{"%"+keyword+"%"},new answerRowMapper());
+            return jdbcTemplate.query(sql,new Object[]{"%"+keyword+"%"},new answerRowMapper());
+        }
+
+        List<QuestionAnswerDao> answerDaoList = jdbcTemplate.query(sql,new answerRowMapper());
         return answerDaoList;
     }
 
