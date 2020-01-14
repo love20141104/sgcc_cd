@@ -296,6 +296,9 @@ public class ConsumerManagerService {
     }
 
     public Result selectConsumerManagerByKey(String area, String key) {
+        if (Strings.isNullOrEmpty(area)){
+            area="";
+        }
         if(area.contains("市")){
             area=area.replaceAll("市","");
         }
