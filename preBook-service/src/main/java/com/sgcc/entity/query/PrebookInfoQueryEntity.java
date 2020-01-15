@@ -54,6 +54,14 @@ public class PrebookInfoQueryEntity {
         return preBookInfoRepository.getCheckerByServcieHallId(hallId);
     }
 
+    public PrebookInfoDao getPrebooklListById(String id){
+        return preBookInfoRepository.getPrebooklListById(id);
+    }
+
+    public List<PrebookInfoDao> getPrebooklListByIds(List<String> ids){
+        return preBookInfoRepository.getPrebooklListByIds(ids);
+    }
+
 
     public CheckerInfoDao getCheckerInfoById(String id){
         return preBookInfoRepository.getCheckerInfoById(id);

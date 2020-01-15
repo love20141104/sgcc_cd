@@ -46,6 +46,7 @@ public class PrebookInfoDao implements Serializable {
 
     private Date checkDate;
 
+    private Boolean isBlackList;
 
 
 

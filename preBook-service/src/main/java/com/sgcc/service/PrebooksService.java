@@ -96,29 +96,25 @@ public class PrebooksService {
      * 测试
      * @return
      */
-    public Result advanceSendMessage(boolean flag) {
+    public Result advanceSendMessageBackstage(String id) {
         try {
-            if (flag){
-                List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getPrebookList();
-                for (PrebookInfoDao dao : prebookInfoDaos) {
-                    String time = Utils.GetTimeForYMD(dao.getStartDate())+" "+
-                            Utils.GetTimeForHMS(dao.getStartDate())+
-                            "~"+Utils.GetTimeForHMS(dao.getEndDate());
-                    TemplateMessage temp = new TemplateMessage();
-                    temp.setTemplate_id("t9BlCV_CQ-K6o5tO7X68UonpWNq1YszrGgSFe0PraVU");
-                    temp.setTouser( dao.getUserOpenId());              // 发送给用户
-                    temp.setUrl("https://sgcc.link/appointmentList");                      // 进入页面
-                    Map<String, TemplateData> map = new LinkedHashMap<>();
-                    map.put("first",new TemplateData("你好，请你及时到营业厅取票!","#000000"));
-                    map.put("keyword1",new TemplateData(dao.getContact(),"#000000"));
-                    map.put("keyword2",new TemplateData(dao.getContactTel(),"#000000"));
-                    map.put("keyword3",new TemplateData(time,"#000000"));
-                    map.put("keyword4",new TemplateData("预约成功","#000000"));
-                    map.put("remark",new TemplateData("请尽快赴约，谢谢!","#000000"));
-                    temp.setData( map );
-                    weChatService.SimpleSendMsg( temp );
-                }
-            }
+            PrebookInfoDao dao = prebookInfoQueryEntity.getPrebooklListById(id);
+            String time = Utils.GetTimeForYMD(dao.getStartDate())+" "+
+                    Utils.GetTimeForHMS(dao.getStartDate())+
+                    "~"+Utils.GetTimeForHMS(dao.getEndDate());
+            TemplateMessage temp = new TemplateMessage();
+            temp.setTemplate_id("t9BlCV_CQ-K6o5tO7X68UonpWNq1YszrGgSFe0PraVU");
+            temp.setTouser( dao.getUserOpenId() );              // 发送给用户
+            temp.setUrl("https://sgcc.link/appointmentList");                      // 进入页面
+            Map<String, TemplateData> map = new LinkedHashMap<>();
+            map.put("first",new TemplateData("你好，请你及时到营业厅取票!","#000000"));
+            map.put("keyword1",new TemplateData(dao.getContact(),"#000000"));
+            map.put("keyword2",new TemplateData(dao.getContactTel(),"#000000"));
+            map.put("keyword3",new TemplateData(time,"#000000"));
+            map.put("keyword4",new TemplateData("预约成功","#000000"));
+            map.put("remark",new TemplateData("请尽快赴约，谢谢!","#000000"));
+            temp.setData( map );
+            weChatService.SimpleSendMsg( temp );
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
@@ -165,6 +161,23 @@ public class PrebooksService {
      * 批量加入黑名单
      * @return
      */
+    public Result addBlackListBackstage(List<String> ids) {
+        try {
+            List<PrebookInfoDao> dao = prebookInfoQueryEntity.getPrebooklListByIds(ids);
+            PrebookModel model = new PrebookModel();
+            List<BlacklistDao> daos = model.getNotTakeTicketListTrans(dao);
+            if (daos.size() < 1)
+                return Result.success();
+            prebookInfoEventEntity.addBlacklist(daos);
+            prebookInfoEventEntity.updatePrebookBlacklist(ids);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
     public Result addBlackList(Date date) {
         try {
             List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getNotTakeTicketList();
@@ -172,8 +185,11 @@ public class PrebooksService {
             List<BlacklistDao> daos = model.getNotTakeTicketListTrans(prebookInfoDaos,date);
             if (daos.size() < 1 || prebookInfoDaos.size() < 1 )
                 return Result.success();
-
+            // 加入黑名单
             prebookInfoEventEntity.addBlacklist(daos);
+            // 修改工单中黑名单状态
+            List<String> ids = model.updatePrebookBlacklistTrans(prebookInfoDaos);
+            prebookInfoEventEntity.updatePrebookBlacklist(ids);
             return Result.success();
 
         }catch (Exception e){

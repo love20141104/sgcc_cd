@@ -27,15 +27,22 @@ public class PrebookController {
 
     @ApiOperation(value = "提醒用户准时赴约", notes = "")
     @GetMapping(value = "/remind/appointment")
-    public Result remindAppointment(@RequestParam boolean flag) {
-        return prebooksService.advanceSendMessage(flag);
+    public Result remindAppointment(@RequestParam String id) {
+        return prebooksService.advanceSendMessageBackstage(id);
     }
 
-    @ApiOperation(value = "提醒审核人审核", notes = "")
-    @GetMapping(value = "/remind/check")
-    public Result remindCheck() {
-        return prebooksService.advanceSendMessageToChecker();
+
+    @ApiOperation(value = "加入黑名单", notes = "")
+    @PostMapping(value = "/admin/blacklist")
+    public Result addBlackList(@RequestBody List<String> ids) {
+        return prebooksService.addBlackListBackstage(ids);
     }
+
+//    @ApiOperation(value = "提醒审核人审核", notes = "")
+//    @GetMapping(value = "/remind/check")
+//    public Result remindCheck() {
+//        return prebooksService.advanceSendMessageToChecker();
+//    }
 
 
 

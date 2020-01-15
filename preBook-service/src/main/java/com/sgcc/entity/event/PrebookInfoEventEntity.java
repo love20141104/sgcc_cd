@@ -54,6 +54,12 @@ public class PrebookInfoEventEntity {
     }
 
 
+    public int[] updatePrebookBlacklist(List<String> ids){
+        return preBookInfoRepository.updatePrebookBlacklist(ids);
+    }
+
+
+
 //    public TaxTicketBookingDao addTaxTicketBooking(TaxTicketBookingDao taxTicketBookingDao) {
 //        return preBookInfoRepository.addTaxTicketBooking(taxTicketBookingDao);
 //    }

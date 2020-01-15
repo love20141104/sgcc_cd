@@ -4,11 +4,9 @@ import com.example.Utils;
 import com.sgcc.service.PrebooksService;
 import com.sgcc.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component

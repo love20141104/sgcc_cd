@@ -29,6 +29,12 @@ public class LineUpController {
         return lineUpService.heartBeat();
     }
 
+    @ApiOperation(value = "是否可以排号", notes = "")
+    @GetMapping(value = "/check/isLineUp")
+    public Result checkLineUp(@RequestParam String openId) {
+        return  lineUpService.checkLineUp(openId);
+    }
+
 
     @ApiOperation(value = "线上排队", notes = "")
     @PostMapping(value = "/user/number")

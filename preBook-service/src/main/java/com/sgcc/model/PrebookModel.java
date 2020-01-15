@@ -56,8 +56,8 @@ public class PrebookModel {
                 0,
                 IDUtil.generate12NumId(),
                 false,
-                null
-
+                null,
+                false
         );
 
         return prebookInfoDao;
@@ -169,7 +169,8 @@ public class PrebookModel {
                 null,
                 null,
                 null,
-                new Date()
+                new Date(),
+                null
 
         );
 
@@ -296,6 +297,22 @@ public class PrebookModel {
         return blacklistDaos;
     }
 
+    public List<BlacklistDao> getNotTakeTicketListTrans(List<PrebookInfoDao> prebookInfoDaos) {
+        List<BlacklistDao> blacklistDaos = new ArrayList<>();
+        prebookInfoDaos.forEach(dao -> {
+            blacklistDaos.add(new BlacklistDao(
+                    null,
+                    dao.getUserOpenId(),
+                    dao.getHouseholdNo(),
+                    dao.getContact(),
+                    dao.getContactTel(),
+                    new Date()
+            ));
+
+        });
+        return blacklistDaos;
+    }
+
 
     public List<BlacklistViewDTO> getBlacklistTrans(List<BlacklistDao> blacklistDaos) {
         List<BlacklistViewDTO> blacklistViewDTOS = new ArrayList<>();
@@ -306,6 +323,15 @@ public class PrebookModel {
             blacklistViewDTOS.add(blacklistViewDTO);
         });
         return blacklistViewDTOS;
+    }
+
+
+    public List<String> updatePrebookBlacklistTrans(List<PrebookInfoDao> prebookInfoDaos) {
+        List<String> ids = new ArrayList<>();
+        prebookInfoDaos.forEach(dao -> {
+            ids.add(dao.getId());
+        });
+        return ids;
     }
 
 

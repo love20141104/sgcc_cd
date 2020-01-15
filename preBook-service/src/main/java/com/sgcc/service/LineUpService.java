@@ -68,6 +68,24 @@ public class LineUpService {
     }
 
 
+    public Result checkLineUp(String openId) {
+        try {
+            boolean flag = false;
+            LineUpModel model = new LineUpModel();
+            List<LineUpDao> lineUpDaos = lineUpQueryEntity.getLineUpByOpenId(openId);
+            List<LineUpDao> daos = model.getLineUpByOpenIdTrans(lineUpDaos);
+            if (daos.size() < 1){
+                flag = true;
+            }else {
+                flag = false;
+            }
+            return Result.success(flag);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
     /**
      * 线上排队
      * @param dto
@@ -156,7 +174,6 @@ public class LineUpService {
      */
     public Result getLineUpNoByOpenId(String openId){
         try {
-            LineUpModel model = new LineUpModel();
             List<LineUpDao> daos = lineUpQueryEntity.getLineUpNoByOpenId(openId);
             LineUpQueryInputDTO lineUpQueryInputDTO = new LineUpQueryInputDTO(daos.get(0).getLineUpNo());
             return Result.success(lineUpQueryInputDTO);
