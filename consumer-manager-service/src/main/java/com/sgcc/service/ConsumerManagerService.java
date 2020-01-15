@@ -246,19 +246,12 @@ public class ConsumerManagerService {
         }
     }
 
-    public Result selectConsumerManagerByArea( String area,String street) {
+    public Result selectConsumerManagerByArea( String area) {
         if (Strings.isNullOrEmpty(area)){
             area="";
         }
-        if(area.contains("市")){
-            area=area.replaceAll("市","");
-        }
-        if(area.contains("县")){
-            area=area.replaceAll("县","");
-        }
-        if(area.contains("区")){
-            area=area.replaceAll("区","");
-        }
+        String street = StreetUtil.subStreet(area);
+        area = StreetUtil.city(area);
         try {
             List<ConsumerManagerDao> consumerManagerDaos = new ArrayList<>(consumerManagerQueryEntity.findAllConsumerManagerInRedis());
             if (null == consumerManagerDaos || consumerManagerDaos.size() == 0 || null == consumerManagerDaos.get(0)) {
@@ -280,9 +273,8 @@ public class ConsumerManagerService {
                 List<ConsumerManagerDTO> list = gourpMap.get(area);
                 ArrayList<ConsumerManagerDTO> has = new ArrayList<>();
                 ArrayList<ConsumerManagerDTO> nothas = new ArrayList<>();
-                String street1 = StreetUtil.subStreet(street);
                 list.forEach(dto->{
-                    if(dto.getConsumerManagerServiceArea().contains(street1)){
+                    if(dto.getConsumerManagerServiceArea().contains(street)){
                         has.add(dto);
                     }else {
                         nothas.add(dto);
