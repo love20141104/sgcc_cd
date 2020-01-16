@@ -252,6 +252,9 @@ public class ConsumerManagerService {
         }
         String street = StreetUtil.subStreet(area);
         area = StreetUtil.city(area);
+        if(street.contains(area)){
+            street=street.replaceAll(area,"");
+        }
         try {
             List<ConsumerManagerDao> consumerManagerDaos = new ArrayList<>(consumerManagerQueryEntity.findAllConsumerManagerInRedis());
             if (null == consumerManagerDaos || consumerManagerDaos.size() == 0 || null == consumerManagerDaos.get(0)) {
@@ -273,8 +276,9 @@ public class ConsumerManagerService {
                 List<ConsumerManagerDTO> list = gourpMap.get(area);
                 ArrayList<ConsumerManagerDTO> has = new ArrayList<>();
                 ArrayList<ConsumerManagerDTO> nothas = new ArrayList<>();
+                String finalStreet = street;
                 list.forEach(dto->{
-                    if(dto.getConsumerManagerServiceArea().contains(street)){
+                    if(dto.getConsumerManagerServiceArea().contains(finalStreet)){
                         has.add(dto);
                     }else {
                         nothas.add(dto);

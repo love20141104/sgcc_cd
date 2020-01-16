@@ -199,6 +199,9 @@ public class StreetUtil {
         if (Strings.isNullOrEmpty(street)){
             street="";
         }
+        if(street.contains("高新")){
+            return "高新";
+        }
         if(street.contains("武侯")){
             return "武侯";
         }
