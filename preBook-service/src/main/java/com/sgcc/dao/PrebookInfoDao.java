@@ -48,6 +48,8 @@ public class PrebookInfoDao implements Serializable {
 
     private Boolean isBlackList;
 
+    private Boolean isCancel;
+    private Date cancelDate;
 
 
 }

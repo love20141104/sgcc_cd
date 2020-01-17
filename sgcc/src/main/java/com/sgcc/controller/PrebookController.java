@@ -85,6 +85,12 @@ public class PrebookController {
         return prebooksService.getPrebookInfoDetail(id);
     }
 
+    @ApiOperation(value = "税票预约-取消预约", notes = "")
+    @PutMapping(value = "/open-id/cancel")
+    public Result cancelPrebook(@RequestParam String id) {
+        return prebooksService.cancelPrebook(id);
+    }
+
 
     /**********************************工作人员*************************************/
 

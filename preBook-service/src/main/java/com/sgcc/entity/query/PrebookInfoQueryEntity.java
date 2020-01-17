@@ -112,4 +112,9 @@ public class PrebookInfoQueryEntity {
     public List<BlacklistDao> getBlacklist() {
         return preBookInfoRepository.getBlacklist();
     }
+
+
+
+
+
 }

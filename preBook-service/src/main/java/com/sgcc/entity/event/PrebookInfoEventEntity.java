@@ -8,6 +8,7 @@ import com.sgcc.repository.PreBookInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -61,6 +62,10 @@ public class PrebookInfoEventEntity {
 
     public void addHouseHold(List<PreBookHouseholdDao> daos){
         preBookInfoRepository.addHouseHold(daos);
+    }
+
+    public int cancelPrebook(String id, Date date){
+        return preBookInfoRepository.cancelPrebook(id,date);
     }
 
 //    public TaxTicketBookingDao addTaxTicketBooking(TaxTicketBookingDao taxTicketBookingDao) {

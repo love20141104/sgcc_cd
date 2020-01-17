@@ -52,7 +52,9 @@ public class PrebookModel {
                 IDUtil.generate12NumId(),
                 false,
                 null,
-                false
+                false,
+                false,
+                null
         );
 
         return prebookInfoDao;
@@ -175,6 +177,8 @@ public class PrebookModel {
                 null,
                 null,
                 new Date(),
+                null,
+                null,
                 null
 
         );

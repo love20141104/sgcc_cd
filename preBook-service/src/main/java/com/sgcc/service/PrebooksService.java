@@ -16,6 +16,7 @@ import com.sgcc.entity.event.PrebookInfoEventEntity;
 import com.sgcc.entity.query.PrebookInfoQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.PrebookModel;
+import com.sgcc.producer.PrebookProducer;
 import com.sgcc.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,9 @@ public class PrebooksService {
 
     @Autowired
     private PrebookInfoEventEntity prebookInfoEventEntity;
+
+    @Autowired
+    private PrebookProducer prebookProducer;
 
     /**********************************用户*************************************/
 
@@ -735,6 +739,57 @@ public class PrebooksService {
             PrebookModel model = new PrebookModel();
             List<BlacklistViewDTO> blacklistViewDTOS = model.getBlacklistTrans(blacklistDaos);
             return Result.success(blacklistViewDTOS);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+    /**
+     * 取消预约
+     * @param id
+     * @return
+     */
+    public Result cancelPrebook(String id) {
+        try {
+            PrebookInfoDao prebookInfoDao = prebookInfoQueryEntity.getPrebooklListById(id);
+            if (prebookInfoDao.getStatus() != 3 &&
+                    prebookInfoDao.getIsPrinted()==false &&
+                    prebookInfoDao.getTicketStatus()==0){
+                Date date = new Date();
+                int count = prebookInfoEventEntity.cancelPrebook(id,date);
+                if (count > 0){
+                    // 推送消息给客户
+                    TemplateMessage temp = new TemplateMessage();
+                    temp.setTemplate_id("Ng58N4cns1ekU9KVMh_MxThDJHQHVLGhSIsUWHnPoV4");
+                    temp.setTouser( prebookInfoDao.getUserOpenId() );
+                    temp.setUrl("https://sgcc.link/appointmentList");
+                    Map<String, TemplateData> map = new LinkedHashMap<>();
+                    map.put("first",new TemplateData("您的预约已取消!","#000000"));
+                    map.put("keyword1",new TemplateData(prebookInfoDao.getContact(),"#000000"));
+                    map.put("keyword2",new TemplateData(Utils.GetTime(date),"#000000"));
+                    map.put("remark",new TemplateData("谢谢使用!","#000000"));
+                    temp.setData( map );
+                    weChatService.SimpleSendMsg( temp );
+
+                   if (!Strings.isNullOrEmpty(prebookInfoDao.getCheckerId())){
+                       CheckerInfoDao checkerInfoDao =
+                               prebookInfoQueryEntity.getCheckerInfoById(prebookInfoDao.getCheckerId());
+                       SendMsgMQDTO sendMsgMQDTO = new SendMsgMQDTO(
+                               checkerInfoDao.getUserOpenId(),
+                               prebookInfoDao.getContact(),
+                               Utils.GetTime(prebookInfoDao.getCancelDate())
+                       );
+
+                       prebookProducer.sendMessage(sendMsgMQDTO);
+                   }
+                }
+
+                return Result.success();
+            }else {
+                return Result.success(false);
+            }
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
