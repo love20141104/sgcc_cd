@@ -182,7 +182,6 @@ public class PreBookInfoRepository {
 
 
     public PrebookInfoDao addPrebook(PrebookInfoDao dao){
-
         String sql = "insert into b_prebook_detail(id,user_open_id,business_type_id,business_type_name,service_hall_id," +
                 "service_hall_name,ticket_month,contact,contact_tel,submit_date,status,start_date,end_date,ticket_status" +
                 ",prebook_no,is_printed,is_blacklist,is_cancel) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -234,7 +233,7 @@ public class PreBookInfoRepository {
         String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
                 "ticket_month,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
                 "start_date,end_date,ticket_status,prebook_no,is_printed,check_date,is_blacklist,is_cancel,cancel_date " +
-                "from b_prebook_detail where user_open_id = ? and status <> 3";
+                "from b_prebook_detail where user_open_id = ? and status <> 3 and is_cancel=false ";
 
         List<PrebookInfoDao> prebookInfoDaos =
                 jdbcTemplate.query(sql,new Object[]{openId},new PreBookRowMapper());

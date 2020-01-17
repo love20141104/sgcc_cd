@@ -779,9 +779,8 @@ public class PrebooksService {
                        SendMsgMQDTO sendMsgMQDTO = new SendMsgMQDTO(
                                checkerInfoDao.getUserOpenId(),
                                prebookInfoDao.getContact(),
-                               Utils.GetTime(prebookInfoDao.getCancelDate())
+                               Utils.GetTime(date)
                        );
-
                        prebookProducer.sendMessage(sendMsgMQDTO);
                    }
                 }
