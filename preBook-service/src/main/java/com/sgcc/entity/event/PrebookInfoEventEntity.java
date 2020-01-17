@@ -2,6 +2,7 @@ package com.sgcc.entity.event;
 
 import com.sgcc.dao.BlacklistDao;
 import com.sgcc.dao.CheckerInfoDao;
+import com.sgcc.dao.PreBookHouseholdDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.repository.PreBookInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,9 @@ public class PrebookInfoEventEntity {
         return preBookInfoRepository.updatePrebookBlacklist(ids);
     }
 
-
+    public void addHouseHold(List<PreBookHouseholdDao> daos){
+        preBookInfoRepository.addHouseHold(daos);
+    }
 
 //    public TaxTicketBookingDao addTaxTicketBooking(TaxTicketBookingDao taxTicketBookingDao) {
 //        return preBookInfoRepository.addTaxTicketBooking(taxTicketBookingDao);

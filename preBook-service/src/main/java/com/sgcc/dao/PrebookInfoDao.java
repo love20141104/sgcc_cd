@@ -23,7 +23,7 @@ public class PrebookInfoDao implements Serializable {
     private String businessTypeName;
     private String serviceHallId;
     private String serviceHallName;
-    private String householdNo;
+    private String ticketMonth;
 
     private String lineupNo;
     private Date lineupTime;

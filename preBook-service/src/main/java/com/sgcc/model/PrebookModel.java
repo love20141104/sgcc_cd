@@ -5,6 +5,7 @@ import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.BlacklistDao;
 import com.sgcc.dao.CheckerInfoDao;
+import com.sgcc.dao.PreBookHouseholdDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.dto.*;
 import com.sgcc.utils.DateUtils;
@@ -28,21 +29,15 @@ public class PrebookModel {
 
 
     public PrebookInfoDao addPrebookTrans(PrebookInfoSubmitDTO dto,Date startDate,Date endDate) {
-
-        String houseHoldNumber = "";
-        for (String number : dto.getHouseholdNo() ){
-            houseHoldNumber =  houseHoldNumber + number+",";
-        }
-        houseHoldNumber = houseHoldNumber.substring(0,houseHoldNumber.length()-1);
-
+        String uuid = UUID.randomUUID().toString();
         PrebookInfoDao prebookInfoDao = new PrebookInfoDao(
-                UUID.randomUUID().toString(),
+                uuid,
                 dto.getUserOpenId(),
                 dto.getBusinessTypeId(),
                 dto.getBusinessTypeName(),
                 dto.getServiceHallId(),
                 dto.getServiceHallName(),
-                houseHoldNumber,
+                dto.getTicketMonth(),
                 null,
                 null,
                 dto.getContact(),
@@ -83,17 +78,20 @@ public class PrebookModel {
 
 
 
-    public PrebookDetailViewDTO getPrebookInfoDetailTrans(PrebookInfoDao prebookInfoDao,String checkName) {
+    public PrebookDetailViewDTO getPrebookInfoDetailTrans(PrebookInfoDao prebookInfoDao,
+                                                          String checkName,
+                                                          List<PreBookHouseholdDao> daos) {
 
         String prebookDate = DateUtils.assembleDate(prebookInfoDao.getStartDate(),prebookInfoDao.getEndDate());
-
-        List<String> householdNos = new ArrayList<>();
-        String[] number = prebookInfoDao.getHouseholdNo().split(",");
-        for (String num : number){
-            householdNos.add(num);
-        }
-
+        List<HouseHoldDTO> householdNos = new ArrayList<>();
+        daos.forEach(dao->{
+            householdNos.add(new HouseHoldDTO(
+                    dao.getHouseHoldName(),
+                    dao.getHouseHoldNumber()
+            ));
+        });
         PrebookDetailViewDTO prebookDetailViewDTO = new PrebookDetailViewDTO(
+                prebookInfoDao.getTicketMonth(),
                 prebookInfoDao.getPrebookNo(),
                 prebookInfoDao.getBusinessTypeName(),
                 prebookInfoDao.getServiceHallName(),
@@ -114,16 +112,21 @@ public class PrebookModel {
     }
 
 
-    public PrebookDetailViewDTO getCheckDetailListTrans(PrebookInfoDao prebookInfoDao, String checkName) {
+    public PrebookDetailViewDTO getCheckDetailListTrans(PrebookInfoDao prebookInfoDao,
+                                                        String checkName,
+                                                        List<PreBookHouseholdDao> daos) {
         PrebookDetailViewDTO prebookDetailViewDTO =null;
         String prebookDate = DateUtils.assembleDate(prebookInfoDao.getStartDate(),prebookInfoDao.getEndDate());
-        List<String> householdNos = new ArrayList<>();
-        String[] number = prebookInfoDao.getHouseholdNo().split(",");
-        for (String num : number){
-            householdNos.add(num);
-        }
+        List<HouseHoldDTO> householdNos = new ArrayList<>();
+        daos.forEach(dao->{
+            householdNos.add(new HouseHoldDTO(
+                    dao.getHouseHoldName(),
+                    dao.getHouseHoldNumber()
+            ));
+        });
 
         prebookDetailViewDTO = new PrebookDetailViewDTO(
+                prebookInfoDao.getTicketMonth(),
                 prebookInfoDao.getPrebookNo(),
                 prebookInfoDao.getBusinessTypeName(),
                 prebookInfoDao.getServiceHallName(),
@@ -250,33 +253,33 @@ public class PrebookModel {
     }
 
 
-    public List<PrebookListViewDTO> getAllPrebookTrans(List<PrebookInfoDao> prebookInfoDaos) {
-        List<PrebookListViewDTO> dtos = new ArrayList<>();
-        prebookInfoDaos.forEach(dao -> {
-            dtos.add(new PrebookListViewDTO(
-                   dao.getId(),
-                    dao.getUserOpenId(),
-                    dao.getBusinessTypeId(),
-                    dao.getBusinessTypeName(),
-                    dao.getServiceHallId(),
-                    dao.getServiceHallName(),
-                    dao.getHouseholdNo(),
-                    dao.getLineupNo(),
-                    dao.getLineupTime()== null ? null : Utils.GetTime(dao.getLineupTime()),
-                    dao.getContact(),
-                    dao.getContactTel(),
-                    Utils.GetTime(dao.getSubmitDate()),
-                    dao.getStatus(),
-                    dao.getRejectReason(),
-                    dao.getCheckerId(),
-                    Utils.GetTime(dao.getStartDate()),
-                    Utils.GetTime(dao.getEndDate()),
-                    dao.getTicketStatus(),
-                    dao.getPrebookNo()
-            ));
-        });
-        return dtos;
-    }
+//    public List<PrebookListViewDTO> getAllPrebookTrans(List<PrebookInfoDao> prebookInfoDaos) {
+//        List<PrebookListViewDTO> dtos = new ArrayList<>();
+//        prebookInfoDaos.forEach(dao -> {
+//            dtos.add(new PrebookListViewDTO(
+//                   dao.getId(),
+//                    dao.getUserOpenId(),
+//                    dao.getBusinessTypeId(),
+//                    dao.getBusinessTypeName(),
+//                    dao.getServiceHallId(),
+//                    dao.getServiceHallName(),
+//                    dao.getHouseholdNo(),
+//                    dao.getLineupNo(),
+//                    dao.getLineupTime()== null ? null : Utils.GetTime(dao.getLineupTime()),
+//                    dao.getContact(),
+//                    dao.getContactTel(),
+//                    Utils.GetTime(dao.getSubmitDate()),
+//                    dao.getStatus(),
+//                    dao.getRejectReason(),
+//                    dao.getCheckerId(),
+//                    Utils.GetTime(dao.getStartDate()),
+//                    Utils.GetTime(dao.getEndDate()),
+//                    dao.getTicketStatus(),
+//                    dao.getPrebookNo()
+//            ));
+//        });
+//        return dtos;
+//    }
 
 
     public List<BlacklistDao> getNotTakeTicketListTrans(List<PrebookInfoDao> prebookInfoDaos,Date date) {
@@ -287,7 +290,7 @@ public class PrebookModel {
                 blacklistDaos.add(new BlacklistDao(
                         null,
                         dao.getUserOpenId(),
-                        dao.getHouseholdNo(),
+                        dao.getId(),
                         dao.getContact(),
                         dao.getContactTel(),
                         date
@@ -303,7 +306,7 @@ public class PrebookModel {
             blacklistDaos.add(new BlacklistDao(
                     null,
                     dao.getUserOpenId(),
-                    dao.getHouseholdNo(),
+                    dao.getId(),
                     dao.getContact(),
                     dao.getContactTel(),
                     new Date()
@@ -333,6 +336,21 @@ public class PrebookModel {
         });
         return ids;
     }
+
+
+    public List<PreBookHouseholdDao> addHouseHoldTrans(PrebookInfoDao prebookInfoDao,PrebookInfoSubmitDTO dto) {
+        List<PreBookHouseholdDao>  householdDaos = new ArrayList<>();
+        dto.getHouseholdNos().forEach(no->{
+            householdDaos.add(new PreBookHouseholdDao(
+                    UUID.randomUUID().toString(),
+                    prebookInfoDao.getId(),
+                    no.getHouseholdName(),
+                    no.getHouseholdNumber()
+            ));
+        });
+        return householdDaos;
+    }
+
 
 
 

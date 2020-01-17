@@ -2,6 +2,7 @@ package com.sgcc.entity.query;
 
 import com.sgcc.dao.BlacklistDao;
 import com.sgcc.dao.CheckerInfoDao;
+import com.sgcc.dao.PreBookHouseholdDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.repository.PreBookInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,11 @@ public class PrebookInfoQueryEntity {
 
     @Autowired
     private PreBookInfoRepository preBookInfoRepository;
+
+
+    public List<PreBookHouseholdDao> getHouseHoldByPrebookId(String id){
+        return preBookInfoRepository.getHouseHoldByPrebookId(id);
+    }
 
     public int getBlacklistByOpenId(String openId){
         return preBookInfoRepository.getBlacklistByOpenId(openId);

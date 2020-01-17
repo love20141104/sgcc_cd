@@ -27,6 +27,8 @@ public class UserRepository {
     private Boolean precompile;
 
 
+
+
     public SubscribeDao findSubscribe(String openId){
 
         String sql = "select id,user_open_id,nick_name,sex,city,head_img_url,is_sub_bill,is_sub_pay,is_sub_notice_pay,is_sub_analysis " +

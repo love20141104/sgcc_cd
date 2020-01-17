@@ -5,9 +5,9 @@ import com.example.Utils;
 import com.example.constant.PrebookStartTimeConstants;
 import com.example.result.Result;
 import com.google.common.base.Strings;
-import com.sgcc.Schedule.PrebookSchedule;
 import com.sgcc.dao.BlacklistDao;
 import com.sgcc.dao.CheckerInfoDao;
+import com.sgcc.dao.PreBookHouseholdDao;
 import com.sgcc.dao.PrebookInfoDao;
 import com.sgcc.dto.*;
 import com.sgcc.dtomodel.wechat.template.TemplateData;
@@ -18,7 +18,6 @@ import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.PrebookModel;
 import com.sgcc.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -323,6 +322,10 @@ public class PrebooksService {
                 PrebookInfoDao prebookInfoDao = model.addPrebookTrans(dto,dates.get("startDate"),dates.get("endDate"));
                 PrebookInfoDao flag = prebookInfoEventEntity.addPrebook(prebookInfoDao);
 
+                List<PreBookHouseholdDao> householdDaos = model.addHouseHoldTrans(prebookInfoDao,dto);
+                prebookInfoEventEntity.addHouseHold(householdDaos);
+
+
                 if (null != flag && !Strings.isNullOrEmpty(flag.getServiceHallName())){
                     CheckerInfoDao checkerInfoDao = prebookInfoQueryEntity.getCheckerInfo(flag.getServiceHallId());
                     if (null != checkerInfoDao && !Strings.isNullOrEmpty(checkerInfoDao.getId())){
@@ -390,6 +393,7 @@ public class PrebooksService {
 
         try {
             PrebookInfoDao prebookInfoDao = prebookInfoQueryEntity.getPrebookInfoDetail(id);
+            List<PreBookHouseholdDao> daos = prebookInfoQueryEntity.getHouseHoldByPrebookId(id);
 
             CheckerInfoDao checkerInfoDao;
             PrebookDetailViewDTO prebookDetailViewDTO = null;
@@ -399,9 +403,9 @@ public class PrebooksService {
                 checkerInfoDao = prebookInfoQueryEntity.getCheckerById(prebookInfoDao.getCheckerId());
                 if (null != checkerInfoDao && !Strings.isNullOrEmpty(checkerInfoDao.getCheckerName()))
                     prebookDetailViewDTO = model.getPrebookInfoDetailTrans(
-                            prebookInfoDao,checkerInfoDao.getCheckerName());
+                            prebookInfoDao,checkerInfoDao.getCheckerName(),daos);
             }else {
-                prebookDetailViewDTO = model.getPrebookInfoDetailTrans(prebookInfoDao,null);
+                prebookDetailViewDTO = model.getPrebookInfoDetailTrans(prebookInfoDao,null,daos);
             }
 
             return Result.success(prebookDetailViewDTO);
@@ -454,14 +458,15 @@ public class PrebooksService {
 
         try {
             PrebookInfoDao prebookInfoDao = prebookInfoQueryEntity.getCheckDetailList(id);
+            List<PreBookHouseholdDao> daos = prebookInfoQueryEntity.getHouseHoldByPrebookId(id);
             CheckerInfoDao checkerInfoDao;
             PrebookDetailViewDTO prebookDetailViewDTO;
             PrebookModel model = new PrebookModel();
             if (!Strings.isNullOrEmpty(prebookInfoDao.getCheckerId())){
                 checkerInfoDao = prebookInfoQueryEntity.getCheckerById(prebookInfoDao.getCheckerId());
-                prebookDetailViewDTO = model.getCheckDetailListTrans(prebookInfoDao,checkerInfoDao.getCheckerName());
+                prebookDetailViewDTO = model.getCheckDetailListTrans(prebookInfoDao,checkerInfoDao.getCheckerName(),daos);
             }else {
-                prebookDetailViewDTO = model.getCheckDetailListTrans(prebookInfoDao,null);
+                prebookDetailViewDTO = model.getCheckDetailListTrans(prebookInfoDao,null,daos);
             }
 
             return Result.success(prebookDetailViewDTO);
@@ -685,19 +690,19 @@ public class PrebooksService {
      * 获取所有税票预约信息
      * @return
      */
-    public Result getAllPrebook(){
-
-        try {
-            List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getAllPrebook();
-            PrebookModel model = new PrebookModel();
-            List<PrebookListViewDTO> prebookListViewDTOS = model.getAllPrebookTrans(prebookInfoDaos);
-            return Result.success(prebookListViewDTOS);
-        }catch (Exception e){
-            e.printStackTrace();
-            return Result.failure(TopErrorCode.GENERAL_ERR);
-        }
-
-    }
+//    public Result getAllPrebook(){
+//
+//        try {
+//            List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getAllPrebook();
+//            PrebookModel model = new PrebookModel();
+//            List<PrebookListViewDTO> prebookListViewDTOS = model.getAllPrebookTrans(prebookInfoDaos);
+//            return Result.success(prebookListViewDTOS);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return Result.failure(TopErrorCode.GENERAL_ERR);
+//        }
+//
+//    }
 
     /**
      * 修改是否到营业厅取票的状态

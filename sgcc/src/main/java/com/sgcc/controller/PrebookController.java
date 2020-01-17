@@ -146,11 +146,11 @@ public class PrebookController {
         return prebooksService.updateTicketStatus(ids);
     }
 
-    @ApiOperation(value = "税票预约-后台查询", notes = "")
-    @GetMapping(value = "/backstage")
-    public Result getAllPrebook() {
-        return prebooksService.getAllPrebook();
-    }
+//    @ApiOperation(value = "税票预约-后台查询", notes = "")
+//    @GetMapping(value = "/backstage")
+//    public Result getAllPrebook() {
+//        return prebooksService.getAllPrebook();
+//    }
 
 
 

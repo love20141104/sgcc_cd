@@ -46,6 +46,7 @@
         <module>repair-service</module>
         <module>message-notification-service</module>
         <module>household-management-service</module>
+        <module>timing-task-service</module>
     </modules>
 
 

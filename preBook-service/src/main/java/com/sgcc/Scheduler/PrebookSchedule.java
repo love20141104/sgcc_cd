@@ -1,4 +1,4 @@
-package com.sgcc.Schedule;
+package com.sgcc.Scheduler;
 
 import com.example.Utils;
 import com.sgcc.service.PrebooksService;
@@ -40,11 +40,11 @@ public class PrebookSchedule {
         System.out.println("提前半小时提醒用户取票");
     }
 
-    @Scheduled(cron = "0 0 9 * * 1/5 ")
-    public void processSendMessage3(){
-        prebooksService.advanceSendMessageToChecker();
-        System.out.println("提醒审核人审核");
-    }
+//    @Scheduled(cron = "0 0 9 * * 1/5 ")
+//    public void processSendMessage3(){
+//        prebooksService.advanceSendMessageToChecker();
+//        System.out.println("提醒审核人审核");
+//    }
 
 
 }

@@ -23,6 +23,11 @@ public class WechatUserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    public void delWechatUsers(){
+        String sql = "truncate table t_wechat_users";
+        jdbcTemplate.execute(sql);
+    }
+
 
     public Integer findUsersByOpenID(String openId,String temp){
         String sql = "select "+temp+" from t_wechat_users " +

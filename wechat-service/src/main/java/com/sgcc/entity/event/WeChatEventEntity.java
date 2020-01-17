@@ -34,4 +34,9 @@ public class WeChatEventEntity {
         wechatUserRepository.saveUsers(userDaos);
     }
 
+
+    public void delWechatUsers(){
+        wechatUserRepository.delWechatUsers();
+    }
+
 }

@@ -4,13 +4,9 @@ import com.example.CurrentPage;
 import com.example.Utils;
 import com.example.constant.WechatURLConstants;
 import com.example.result.Result;
-import com.google.common.base.Converter;
 import com.google.common.base.Strings;
 import com.sgcc.dao.UserDao;
 import com.sgcc.dto.*;
-import com.sgcc.dto.MsgDTO;
-import com.sgcc.dto.TempDTO;
-import com.sgcc.dto.TempDetail;
 import com.sgcc.dtomodel.wechat.JSAPITicketDTO;
 import com.sgcc.dtomodel.wechat.template.TemplateData;
 import com.sgcc.dtomodel.wechat.template.TemplateMessage;
@@ -25,10 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.*;
 
 @Service
@@ -288,6 +280,8 @@ public class WeChatService {
         String nextOpenID = "";
         try
         {
+            weChatEventEntity.delWechatUsers();
+
             UserIDListDTO dto = weChatEntity.getOpenIds( nextOpenID );      // openID一次最多获取10000
             if( dto.getCount() < 1 )
                 return Result.failure(TopErrorCode.NO_DATAS);

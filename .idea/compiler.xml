@@ -31,6 +31,7 @@
         <module name="suggestion-service" />
         <module name="sys-settings" />
         <module name="test-service" />
+        <module name="timing-task-service" />
         <module name="user-service" />
         <module name="util-service" />
         <module name="utils" />
@@ -64,6 +65,7 @@
       <module name="suggestion-service" target="1.8" />
       <module name="sys-settings" target="1.8" />
       <module name="test-service" target="1.8" />
+      <module name="timing-task-service" target="1.8" />
       <module name="user-service" target="1.8" />
       <module name="util-service" target="1.8" />
       <module name="utils" target="1.8" />
@@ -95,6 +97,7 @@
       <module name="suggestion-service" options="-parameters" />
       <module name="sys-settings" options="-parameters" />
       <module name="test-service" options="-parameters" />
+      <module name="timing-task-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
       <module name="util-service" options="-parameters" />
       <module name="utils" options="-parameters" />
