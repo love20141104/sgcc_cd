@@ -291,6 +291,9 @@ public class ConsumerManagerService {
                 mapList.add(map);
                 return Result.success(mapList);
             }
+            if (!Strings.isNullOrEmpty(area)&&(gourpMap.get(area)==null||gourpMap.get(area).size()<1)){
+                return Result.failure(TopErrorCode.NO_DATAS);
+            }
             gourpMap.keySet().forEach(k->{
                 List<ConsumerManagerDTO> list = gourpMap.get(k);
                 HashMap<String, Object> map = new HashMap<>();

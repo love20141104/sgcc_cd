@@ -221,7 +221,7 @@ public class StreetUtil {
             return "锦江";
         }
         if(street.contains("青羊")){
-            return "锦江";
+            return "青羊";
         }
         if(street.contains("金牛")){
             return "金牛";
