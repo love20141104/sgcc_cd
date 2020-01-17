@@ -17,5 +17,6 @@ public class HouseHoldDTO implements Serializable {
     private static final long serialVersionUID = -676415209789413402L;
     private String householdName;
     private String householdNumber;
+    private Boolean isBatchNumber;
 
 }

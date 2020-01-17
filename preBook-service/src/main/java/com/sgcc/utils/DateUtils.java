@@ -60,8 +60,6 @@ public class DateUtils {
 
     /**
      * 拆分明天日期
-     * @param date
-     * @param repl
      * @return
      */
 //    public static Map<String,Date> splitDate(String date,String repl) {
@@ -118,12 +116,26 @@ public class DateUtils {
     }
 
 
-    public static void main(String[] args){
-        String date1 = "2009-03-23 08:00:00";//指定时间
-        String date2= addDate(date1,1);//加1小时方法
-        System.out.println("after:"+date2);
-
+    public static String assembleMonth(List<String> months){
+        String finalMonth = "";
+        for (String month : months){
+            finalMonth = month+",";
+        }
+        finalMonth = finalMonth.substring(0,finalMonth.length()-1);
+        return finalMonth;
     }
 
+    public static List<String> splitMonth(String months){
+        List<String> monthList = new ArrayList<>();
+        String[] str = months.split(",");
+        for (String s : str){
+            monthList.add(s);
+        }
+        return monthList;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(splitMonth("2020-01"));
+    }
 
 }

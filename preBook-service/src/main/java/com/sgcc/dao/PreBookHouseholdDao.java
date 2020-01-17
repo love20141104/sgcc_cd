@@ -15,5 +15,6 @@ public class PreBookHouseholdDao implements Serializable {
     private String jobId;
     private String houseHoldName;
     private String houseHoldNumber;
+    private Boolean isBatchNumber;
 
 }

@@ -28,7 +28,8 @@ public class PreBookInfoRepository {
     private JdbcTemplate jdbcTemplate;
 
     public void addHouseHold(List<PreBookHouseholdDao> daos){
-        String sql = "insert into b_prebook_household(id,job_id,household_name,household_number) values (?,?,?,?)";
+        String sql = "insert into b_prebook_household(id,job_id,household_name,household_number,is_batch_number) " +
+                "values (?,?,?,?,?)";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -36,8 +37,8 @@ public class PreBookInfoRepository {
                 ps.setString(2,daos.get(i).getJobId());
                 ps.setString(3,daos.get(i).getHouseHoldName());
                 ps.setString(4,daos.get(i).getHouseHoldNumber());
+                ps.setBoolean(5,daos.get(i).getIsBatchNumber());
             }
-
             @Override
             public int getBatchSize() {
                 return daos.size();
@@ -47,7 +48,7 @@ public class PreBookInfoRepository {
 
 
     public List<PreBookHouseholdDao> getHouseHoldByPrebookId(String id){
-        String sql = "select id,job_id,household_name,household_number from b_prebook_household " +
+        String sql = "select id,job_id,household_name,household_number,is_batch_number from b_prebook_household " +
                 "where job_id = ?";
         return jdbcTemplate.query(sql,new Object[]{id},new householdRowMapper());
     }
@@ -517,7 +518,8 @@ public class PreBookInfoRepository {
                     rs.getString("id"),
                     rs.getString("job_id"),
                     rs.getString("household_name"),
-                    rs.getString("household_number")
+                    rs.getString("household_number"),
+                    rs.getBoolean("is_batch_number")
             );
         }
     }

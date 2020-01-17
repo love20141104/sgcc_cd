@@ -37,7 +37,7 @@ public class PrebookModel {
                 dto.getBusinessTypeName(),
                 dto.getServiceHallId(),
                 dto.getServiceHallName(),
-                dto.getTicketMonth(),
+                DateUtils.assembleMonth(dto.getTicketMonth()),
                 null,
                 null,
                 dto.getContact(),
@@ -87,11 +87,12 @@ public class PrebookModel {
         daos.forEach(dao->{
             householdNos.add(new HouseHoldDTO(
                     dao.getHouseHoldName(),
-                    dao.getHouseHoldNumber()
+                    dao.getHouseHoldNumber(),
+                    dao.getIsBatchNumber()
             ));
         });
         PrebookDetailViewDTO prebookDetailViewDTO = new PrebookDetailViewDTO(
-                prebookInfoDao.getTicketMonth(),
+                DateUtils.splitMonth(prebookInfoDao.getTicketMonth()),
                 prebookInfoDao.getPrebookNo(),
                 prebookInfoDao.getBusinessTypeName(),
                 prebookInfoDao.getServiceHallName(),
@@ -121,12 +122,13 @@ public class PrebookModel {
         daos.forEach(dao->{
             householdNos.add(new HouseHoldDTO(
                     dao.getHouseHoldName(),
-                    dao.getHouseHoldNumber()
+                    dao.getHouseHoldNumber(),
+                    dao.getIsBatchNumber()
             ));
         });
 
         prebookDetailViewDTO = new PrebookDetailViewDTO(
-                prebookInfoDao.getTicketMonth(),
+                DateUtils.splitMonth(prebookInfoDao.getTicketMonth()),
                 prebookInfoDao.getPrebookNo(),
                 prebookInfoDao.getBusinessTypeName(),
                 prebookInfoDao.getServiceHallName(),
@@ -345,7 +347,8 @@ public class PrebookModel {
                     UUID.randomUUID().toString(),
                     prebookInfoDao.getId(),
                     no.getHouseholdName(),
-                    no.getHouseholdNumber()
+                    no.getHouseholdNumber(),
+                    no.getIsBatchNumber()
             ));
         });
         return householdDaos;

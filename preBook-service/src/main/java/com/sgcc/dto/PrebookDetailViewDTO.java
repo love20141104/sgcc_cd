@@ -14,7 +14,7 @@ import java.util.List;
 public class PrebookDetailViewDTO implements Serializable {
 
     private static final long serialVersionUID = -1273986616501853935L;
-    private String ticketMonth;
+    private List<String> ticketMonth;
     private String prebookNo;
     private String businessTypeName;
     private String serviceHallName;

@@ -14,7 +14,7 @@ public class PrebookInfoSubmitDTO implements Serializable {
 
     private static final long serialVersionUID = -4050132859628546270L;
     private String userOpenId;
-    private String ticketMonth;
+    private List<String> ticketMonth;
     private String businessTypeId;
     private String businessTypeName;
     private String serviceHallId;
