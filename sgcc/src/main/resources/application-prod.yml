@@ -1,16 +1,14 @@
-#### 开发环境配置
-#spring:
-#  profiles: dev
+#### 生产环境配置
 ##### Basic
 server:
   port: 18624
-#  ssl:
-#    #    证书路径
-#    key-store: 0_sgcc.link.jks
-#    key-store-type: JKS
-#    #      key-alias: tomcat
-#    #    配置密码，就是在生成证书的时候输入的密码
-#    key-store-password: bt.cn
+  ssl:
+    #    证书路径
+    key-store: 0_sgcc.link.jks
+    key-store-type: JKS
+    #      key-alias: tomcat
+    #    配置密码，就是在生成证书的时候输入的密码
+    key-store-password: bt.cn
 
 ##### Spring
 spring:
@@ -19,7 +17,7 @@ spring:
   ### Redis
   redis:
     #    database: 1
-    host: 119.23.22.176
+    host: 127.0.0.1
     port: 6379
     password:
     jedis:
@@ -30,15 +28,15 @@ spring:
   ### mysql
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://119.23.22.176:3306/sgcc_cd
+    url: jdbc:mysql://127.0.0.1:3306/sgcc_cd
     username: root
     password: Root@123
   activemq:
-    broker-url: tcp://119.23.22.176:61616
+    broker-url: tcp://127.0.0.1:61616
     in-memory: false
     pool:
       enabled: false #如果此处设置为true，需要加如下的依赖包，否则会自动配置失败，报JmsMessagingTemplate注入失败
-  ###fdfs
+###fdfs
 fdfs:
   so-timeout: 1501
   connect-timeout: 601
@@ -50,24 +48,24 @@ fdfs:
   web-server-url: https://www.sgcc.link:18625/
   tracker-list: 119.23.22.176:22122
 
-  ### Data
-  ### postgresql
-#  datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://192.168.1.71:5432/fangsheng0705
-#    username: fp
-#    password: fp@123
-  ### Data
-#  data:
+    ### Data
+    ### postgresql
+    #  datasource:
+    #    driver-class-name: org.postgresql.Driver
+    #    url: jdbc:postgresql://192.168.1.71:5432/fangsheng0705
+    #    username: fp
+    #    password: fp@123
+    ### Data
+    #  data:
     # Cassandra
-#    cassandra:
-#      keyspace-name: newfront
-#      contact-points: 192.168.1.101
-#      port: 9042
-#      repositories:
-#        type: auto
-#      schema-action: create_if_not_exists
-    # Elasticsearch
+    #    cassandra:
+    #      keyspace-name: newfront
+    #      contact-points: 192.168.1.101
+    #      port: 9042
+    #      repositories:
+    #        type: auto
+  #      schema-action: create_if_not_exists
+  # Elasticsearch
 #    elasticsearch:
 #      cluster-nodes: 192.168.1.97:9300
 #      # 不加 cluster-name 属性会报错:
@@ -82,3 +80,10 @@ fdfs:
 logging:
   level:
     root: info
+
+precompile: true
+
+spring.datasource.hikari.minimum-idle: 3
+spring.datasource.hikari.maximum-pool-size: 10
+spring.datasource.hikari.max-lifetime: 30000 # 不能小于30秒，否则默认回到1800秒
+spring.datasource.hikari.connection-test-query: SELECT 1
