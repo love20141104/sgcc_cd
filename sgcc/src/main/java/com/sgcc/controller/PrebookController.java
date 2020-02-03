@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Api(value = "", tags = "税票预约接口")
@@ -19,12 +20,6 @@ public class PrebookController {
     private PrebooksService prebooksService;
 
     /**********************************用户*****************************************/
-//    @ApiOperation(value = "线上预约-基础信息", notes = "")
-//    @GetMapping(value = "/open-id/{openId}")
-//    public Result getBasicInfo(@PathVariable String openId) {
-//        return prebooksService.getBasicInfo(openId);
-//    }
-
     @ApiOperation(value = "提醒用户准时赴约", notes = "")
     @GetMapping(value = "/remind/appointment")
     public Result remindAppointment(@RequestParam String id) {
@@ -96,8 +91,11 @@ public class PrebookController {
 
     @ApiOperation(value = "税票预约-审核列表", notes = "")
     @GetMapping(value = "/open-id/checkList")
-    public Result getCheckList(@RequestParam String openId,@RequestParam int status,@RequestParam(required = false) Boolean isPrinted) {
-        return prebooksService.getCheckList(openId,status,isPrinted);
+    public Result getCheckList(@RequestParam String openId,
+                               @RequestParam int status,
+                               @RequestParam(required = false) Boolean isPrinted,
+                               @RequestParam(required = false) String condition) {
+        return prebooksService.getCheckList(openId,status,isPrinted,condition);
     }
 
 
@@ -152,12 +150,11 @@ public class PrebookController {
         return prebooksService.updateTicketStatus(ids);
     }
 
-//    @ApiOperation(value = "税票预约-后台查询", notes = "")
-//    @GetMapping(value = "/backstage")
-//    public Result getAllPrebook() {
-//        return prebooksService.getAllPrebook();
-//    }
-
+    @ApiOperation(value = "税票预约-导出excel", notes = "")
+    @GetMapping("/exportMultiExcel")
+    public void exportMultiExcel(@RequestParam String date, HttpServletResponse response){
+        prebooksService.exportMultiExcel(date,response);
+    }
 
 
 

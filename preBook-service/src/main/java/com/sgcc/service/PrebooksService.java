@@ -18,9 +18,12 @@ import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.PrebookModel;
 import com.sgcc.producer.PrebookProducer;
 import com.sgcc.utils.DateUtils;
+import com.sgcc.utils.EasyPoiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -39,19 +42,6 @@ public class PrebooksService {
     private PrebookProducer prebookProducer;
 
     /**********************************用户*************************************/
-
-//    public Result setTimingTask(boolean flag){
-//        try {
-//
-//
-//            return Result.success();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return Result.failure(TopErrorCode.GENERAL_ERR);
-//        }
-//    }
-
-
 
     /**
      * 提前一小时提醒客户取票
@@ -74,7 +64,6 @@ public class PrebooksService {
                 temp.setTemplate_id("t9BlCV_CQ-K6o5tO7X68UonpWNq1YszrGgSFe0PraVU");
                 temp.setTouser( dao.getUserOpenId());              // 发送给用户
                 temp.setUrl("https://sgcc.link/appointmentList");                      // 进入页面
-
                 Map<String, TemplateData> map = new LinkedHashMap<>();
                 map.put("first",new TemplateData("你好，请你及时到营业厅取票!","#000000"));
                 map.put("keyword1",new TemplateData(dao.getContact(),"#000000"));
@@ -83,12 +72,9 @@ public class PrebooksService {
                 map.put("keyword4",new TemplateData("预约成功","#000000"));
                 map.put("remark",new TemplateData("请尽快赴约，谢谢!","#000000"));
                 temp.setData( map );
-
                 weChatService.SimpleSendMsg( temp );
             }
-
             return Result.success();
-
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -151,7 +137,6 @@ public class PrebooksService {
                 }
             }
             return Result.success();
-
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -431,16 +416,19 @@ public class PrebooksService {
      * @param status
      * @return
      */
-    public Result getCheckList(String openId, int status,Boolean isPrinted) {
-        if (Strings.isNullOrEmpty(openId) || (status < 0 && status > 3))
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-
+    public Result getCheckList(String openId, int status,Boolean isPrinted,String condition) {
         try {
+            if (Strings.isNullOrEmpty(openId) || (status < 0 && status > 3))
+                return Result.failure(TopErrorCode.PARAMETER_ERR);
             CheckerInfoDao checkerInfoDao = prebookInfoQueryEntity.getCheckerByOpenId(openId);
             if (Strings.isNullOrEmpty(checkerInfoDao.getId()))
                 return Result.failure(TopErrorCode.NO_DATAS);
-
-            List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getCheckList(checkerInfoDao.getServiceHallId(),status,isPrinted);
+            List<PrebookInfoDao> prebookInfoDaos = null;
+            if (Strings.isNullOrEmpty(condition)){
+                prebookInfoDaos = prebookInfoQueryEntity.getCheckList(checkerInfoDao.getServiceHallId(),status,isPrinted);
+            }else {
+                prebookInfoDaos = prebookInfoQueryEntity.getCheckList(checkerInfoDao.getServiceHallId(),status,isPrinted,condition);
+            }
             PrebookModel model = new PrebookModel();
             List<PrebookInfoViewDTO> prebookInfoViewDTOS = model.getPrebookInfoTrans(prebookInfoDaos);
             return Result.success(prebookInfoViewDTOS);
@@ -448,7 +436,6 @@ public class PrebooksService {
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
-
     }
 
     /**
@@ -795,6 +782,30 @@ public class PrebooksService {
         }
     }
 
+    /**
+     *  导出excel
+     * @param date
+     * @param response
+     * @return
+     */
+    public Result exportMultiExcel(String date, HttpServletResponse response) {
+        try {
+            if (Strings.isNullOrEmpty(date))
+                return Result.failure(TopErrorCode.PARAMETER_ERR);
+            PrebookModel model= new PrebookModel();
+            List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getPrebookByDate(date);
+            List<PreBookHouseholdDao> daos = prebookInfoQueryEntity.getAllHouseHold();
+            List<List<?>> excelDTOList = model.getPrebookByDateTrans(prebookInfoDaos,daos);
+            String fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            EasyPoiUtil.exportMultipleSheetExcel(excelDTOList,new String[]{"税票预约-已完成","税票预约-未完成"},ExportExcelDTO.class,fileName,response);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+
+    }
 
 
 }
