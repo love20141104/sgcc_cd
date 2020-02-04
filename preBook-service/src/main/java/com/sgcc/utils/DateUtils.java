@@ -119,7 +119,7 @@ public class DateUtils {
     public static String assembleMonth(List<String> months){
         String finalMonth = "";
         for (String month : months){
-            finalMonth = month+",";
+            finalMonth += month+",";
         }
         finalMonth = finalMonth.substring(0,finalMonth.length()-1);
         return finalMonth;
@@ -134,8 +134,5 @@ public class DateUtils {
         return monthList;
     }
 
-    public static void main(String[] args) {
-        System.out.println(splitMonth("2020-01"));
-    }
 
 }

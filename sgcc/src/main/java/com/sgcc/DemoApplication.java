@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableCaching
-@EnableScheduling
+//@EnableScheduling
 @Configuration
 @SpringBootApplication
 @ComponentScan(basePackages = "com.sgcc")
