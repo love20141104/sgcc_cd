@@ -3,6 +3,7 @@ package com.sgcc.repository;
 import com.example.Utils;
 import com.google.common.base.Strings;
 import com.sgcc.dao.NoticeDao;
+import com.sgcc.dao.RushRepairProgressDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -26,6 +27,65 @@ public class NoticeRepository {
 
     @Value("${precompile}")
     private Boolean precompile;
+
+    public void delNoticeProgress(String id){
+        String sql = "delete from b_rush_repair_progress where id = ?";
+        jdbcTemplate.update(sql,new Object[]{id});
+    }
+
+
+    public void addNoticeProgress(List<RushRepairProgressDao> daos){
+
+        String addSql = "insert into b_rush_repair_progress(id,notice_id,progress_state,repair_personnel,cause_of_failure," +
+                "progress_img1,progress_img2,progress_img3,submit_date) values(?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.batchUpdate(addSql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setString(1,daos.get(i).getId());
+                ps.setString(2,daos.get(i).getNotice_id());
+                ps.setInt(3,daos.get(i).getProgress_state());
+                ps.setString(4,daos.get(i).getRepair_personnel());
+                ps.setString(5,daos.get(i).getCause_of_failure());
+                ps.setString(6,daos.get(i).getProgressImg1());
+                ps.setString(7,daos.get(i).getProgressImg2());
+                ps.setString(8,daos.get(i).getProgressImg3());
+                ps.setString(9, Utils.GetTime(daos.get(i).getSubmit_date()));
+            }
+
+            @Override
+            public int getBatchSize() {
+                return daos.size();
+            }
+        });
+
+//        jdbcTemplate.update(addSql,new Object[]{
+//                dao.getId(),
+//                dao.getNotice_id(),
+//                dao.getProgress_state(),
+//                dao.getRepair_personnel(),
+//                dao.getCause_of_failure(),
+//                dao.getProgressImg1(),
+//                dao.getProgressImg2(),
+//                dao.getProgressImg3(),
+//                Utils.GetTime(dao.getSubmit_date())
+//        });
+    }
+
+    public List<RushRepairProgressDao> findNoticeProgressByState(Integer state){
+        String sql = "select id,notice_id,progress_state,repair_personnel,cause_of_failure,progress_img1,progress_img2," +
+                "progress_img3,submit_date from b_rush_repair_progress where progress_state = ?";
+        return jdbcTemplate.query(sql,new Object[]{state},new RushRepairProgressRowMapper());
+    }
+
+
+    public List<RushRepairProgressDao> findNoticeProgress(){
+        String sql = "select id,notice_id,progress_state,repair_personnel,cause_of_failure,progress_img1,progress_img2," +
+                "progress_img3,submit_date from b_rush_repair_progress";
+        return jdbcTemplate.query(sql,new RushRepairProgressRowMapper());
+    }
+
+
+
 
     /**
      * 根据区域查询停电公告信息
@@ -258,6 +318,23 @@ public class NoticeRepository {
 
     }
 
+    class RushRepairProgressRowMapper implements RowMapper<RushRepairProgressDao>{
+
+        @Override
+        public RushRepairProgressDao mapRow(ResultSet rs, int i) throws SQLException {
+            return new RushRepairProgressDao(
+                    rs.getString("id"),
+                    rs.getString("notice_id"),
+                    rs.getInt("progress_state"),
+                    rs.getString("repair_personnel"),
+                    rs.getString("cause_of_failure"),
+                    rs.getString("progress_img1"),
+                    rs.getString("progress_img2"),
+                    rs.getString("progress_img3"),
+                    Utils.GetDate(rs.getString("submit_date"))
+            );
+        }
+    }
 
 
 }

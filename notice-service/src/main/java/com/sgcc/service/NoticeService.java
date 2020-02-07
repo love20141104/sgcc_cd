@@ -3,8 +3,10 @@ package com.sgcc.service;
 import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.NoticeDao;
+import com.sgcc.dao.RushRepairProgressDao;
 import com.sgcc.dto.AddFormDTO;
 import com.sgcc.dto.NoticeFormDTO;
+import com.sgcc.dto.NoticeListDTO;
 import com.sgcc.dto.UpdateFormDTO;
 import com.sgcc.entity.NoticeQueryEntity;
 import com.sgcc.exception.TopErrorCode;
@@ -32,17 +34,40 @@ public class NoticeService {
             if (Strings.isNullOrEmpty(district))
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
             List<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeInfoByDistrict(district,keyword);
-
-            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos);
-            noticeDomainModel.selectByDistrictTransform();
-
-            return Result.success(noticeDomainModel.getNoticeFormDTOS());
+            List<RushRepairProgressDao> rushRepairProgressDaos = noticeQueryEntity.findNoticeProgress();
+            NoticeDomainModel noticeDomainModel = new NoticeDomainModel();
+            List<NoticeListDTO> noticeListDTOS =
+                    noticeDomainModel.selectByDistrictTransform(noticeDaos,rushRepairProgressDaos);
+            return Result.success(noticeListDTOS);
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
         }
 
     }
+
+//    public Result queryNoticeInfo(String district,String keyword){
+//
+//        try {
+//            if (Strings.isNullOrEmpty(district))
+//                return Result.failure(TopErrorCode.PARAMETER_ERR);
+//            List<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeInfoByDistrict(district,keyword);
+//
+//            noticeQueryEntity.findNoticeProgress();
+//
+//            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos);
+//            noticeDomainModel.selectByDistrictTransform();
+//
+//            return Result.success(noticeDomainModel.getNoticeFormDTOS());
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return Result.failure(TopErrorCode.GENERAL_ERR);
+//        }
+//
+//    }
+
+
+
 
 
     public Result findNoticeListAll(){

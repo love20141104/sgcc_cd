@@ -1,18 +1,15 @@
 package com.sgcc.model;
 
 import com.example.Utils;
+import com.google.common.base.Strings;
 import com.sgcc.dao.NoticeDao;
-import com.sgcc.dto.AddFormDTO;
-import com.sgcc.dto.NoticeFormDTO;
-import com.sgcc.dto.QueryFormDTO;
-import com.sgcc.dto.UpdateFormDTO;
+import com.sgcc.dao.RushRepairProgressDao;
+import com.sgcc.dto.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -41,6 +38,63 @@ public class NoticeDomainModel {
     public NoticeDomainModel(AddFormDTO addFormDTO) {
         this.addFormDTO = addFormDTO;
     }
+
+
+    public List<NoticeListDTO> selectByDistrictTransform(List<NoticeDao> noticeDaos, List<RushRepairProgressDao> rushRepairProgressDaos){
+        List<NoticeListDTO> noticeListDTOS = new ArrayList<>();
+
+        noticeDaos.forEach(noticeDao -> {
+            List<ProgressDTO> progressDTOS = new ArrayList<>();
+            String dateUtil = noticeDao.getNoticeDate();
+            Date date = Utils.GetDate(dateUtil.substring(dateUtil.indexOf("至")+1,dateUtil.length())+":59");
+            System.out.println("DATE："+date);
+            rushRepairProgressDaos.forEach(progressDao->{
+                List<String> imgs = new ArrayList<>();
+                if (!Strings.isNullOrEmpty(progressDao.getProgressImg1())) {
+                    imgs.add(progressDao.getProgressImg1());
+                }else if (!Strings.isNullOrEmpty(progressDao.getProgressImg2())){
+                    imgs.add(progressDao.getProgressImg2());
+                }else if (!Strings.isNullOrEmpty(progressDao.getProgressImg3())){
+                    imgs.add(progressDao.getProgressImg3());
+                }
+
+                if (progressDao.getNotice_id().equals(noticeDao.getId())){
+                    progressDTOS.add(new ProgressDTO(
+                            new SimpleDateFormat("MM/dd").format(progressDao.getSubmit_date()),
+                            new SimpleDateFormat("HH:mm").format(progressDao.getSubmit_date()),
+                            progressDao.getProgress_state(),
+                            progressDao.getRepair_personnel(),
+                            progressDao.getCause_of_failure(),
+                            imgs
+                    ));
+                }
+            });
+
+            // 排序
+            Collections.sort(progressDTOS, new Comparator<ProgressDTO>() {
+                @Override
+                public int compare(ProgressDTO o1, ProgressDTO o2) {
+                    // 升序
+                    return o1.getProgressState().compareTo(o2.getProgressState());
+                    // 降序
+                    // return o2.getProgressState().compareTo(o1.getProgressState());
+                }
+            });
+
+            if(Utils.GetCurTime().getTime() < date.getTime()) {
+                noticeListDTOS.add(new NoticeListDTO(
+                        noticeDao.getTypeName(),
+                        noticeDao.getNoticeDate(),
+                        noticeDao.getRange(),
+                        progressDTOS
+                        )
+                );
+            }
+        });
+
+        return noticeListDTOS;
+    }
+
 
     /**
      * 根据区域查询停电公告dao转dto

@@ -65,6 +65,17 @@ public class NoticeController {
         return jobService.addProgress(openId,repairProgressSubmitDTO);
     }
 
+    @ApiOperation(value = "抢修进度-新增", notes = "")
+    @PostMapping(value = "/backstage/progress")
+    public Result addNoticeProgress(@RequestBody RushRepairProgressSubmitDTO dto) {
+        return jobService.addNoticeProgress(dto);
+    }
+
+    @ApiOperation(value = "抢修进度-删除", notes = "")
+    @DeleteMapping(value = "/backstage/progress")
+    public Result delNoticeProgress(@RequestParam String id) {
+        return jobService.delNoticeProgress(id);
+    }
 
 
 
