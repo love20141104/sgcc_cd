@@ -49,16 +49,17 @@ public class NoticeDomainModel {
             Date date = Utils.GetDate(dateUtil.substring(dateUtil.indexOf("至")+1,dateUtil.length())+":59");
             System.out.println("DATE："+date);
             rushRepairProgressDaos.forEach(progressDao->{
-                List<String> imgs = new ArrayList<>();
-                if (!Strings.isNullOrEmpty(progressDao.getProgressImg1())) {
-                    imgs.add(progressDao.getProgressImg1());
-                }else if (!Strings.isNullOrEmpty(progressDao.getProgressImg2())){
-                    imgs.add(progressDao.getProgressImg2());
-                }else if (!Strings.isNullOrEmpty(progressDao.getProgressImg3())){
-                    imgs.add(progressDao.getProgressImg3());
-                }
-
                 if (progressDao.getNotice_id().equals(noticeDao.getId())){
+                    List<String> imgs = new ArrayList<>();
+                    if (!Strings.isNullOrEmpty(progressDao.getProgressImg1())) {
+                        imgs.add(progressDao.getProgressImg1());
+                    }
+                    if (!Strings.isNullOrEmpty(progressDao.getProgressImg2())){
+                        imgs.add(progressDao.getProgressImg2());
+                    }
+                    if (!Strings.isNullOrEmpty(progressDao.getProgressImg3())){
+                        imgs.add(progressDao.getProgressImg3());
+                    }
                     progressDTOS.add(new ProgressDTO(
                             new SimpleDateFormat("MM/dd").format(progressDao.getSubmit_date()),
                             new SimpleDateFormat("HH:mm").format(progressDao.getSubmit_date()),
