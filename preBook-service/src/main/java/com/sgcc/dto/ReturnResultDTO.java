@@ -6,19 +6,13 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class MessageReminderDTO implements Serializable {
-
-    private static final long serialVersionUID = -4716052371882773228L;
-
-    private String con;
-
-
-
-
+@NoArgsConstructor
+public class ReturnResultDTO extends BasicOutDTO implements Serializable {
+    private static final long serialVersionUID = -2344493957331367989L;
+    private String data;
+    private String signature;
 }

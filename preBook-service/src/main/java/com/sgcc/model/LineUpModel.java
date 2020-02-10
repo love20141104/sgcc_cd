@@ -3,17 +3,12 @@ package com.sgcc.model;
 import com.example.Utils;
 import com.sgcc.dao.LineUpDao;
 import com.sgcc.dto.*;
+import com.sgcc.utils.Constant;
 import org.springframework.beans.BeanUtils;
 
 import java.util.*;
 
 public class LineUpModel {
-
-    private static final String APP_ID="axlz9zv2p02v03t4ks";
-    private static final String DEVICE_ID="6722d35aa124a82d";
-    private static final String HALL_ID="123456";
-    private static final String BUSINESS_ID="11111";
-    private static final String PRIVATE_KEY="009322d3d8d62e018ff688c7226f9719eeade1371b95a00825676c1822d370a4ab";
 
 
     /**
@@ -26,8 +21,8 @@ public class LineUpModel {
         LineUpDao lineUpDao = new LineUpDao(
                 UUID.randomUUID().toString(),
                 dto.getUserOpenId(),
-                HALL_ID,
-                BUSINESS_ID,
+                Constant.HALL_ID,
+                Constant.BUSINESS_ID,
                 dto.getContact(),
                 dto.getPhone(),
                 data.get("lineUpNo"),
@@ -44,13 +39,13 @@ public class LineUpModel {
     public BasicInputDTO heartBeatTrans() {
         InputDataDTO inputDataDTO = new InputDataDTO(
                 "heartbeat",
-                APP_ID,
-                DEVICE_ID,
+                Constant.APPID,
+                Constant.DEVICE_ID,
                 null
         );
 
         BasicInputDTO basicInputDTO = new BasicInputDTO(
-                APP_ID,
+                Constant.APPID,
                 inputDataDTO,
                 ""
         );
@@ -64,19 +59,19 @@ public class LineUpModel {
      */
     public BasicInputDTO onlineQueuingTrans(OnlineQueuingInputDTO dto){
         Map<String,String> data = new LinkedHashMap<>();
-        data.put("hallId",HALL_ID);
-        data.put("busiId",BUSINESS_ID);
+        data.put("hallId",Constant.HALL_ID);
+        data.put("busiId",Constant.BUSINESS_ID);
         data.put("phone",dto.getPhone());
 
         InputDataDTO inputDataDTO = new InputDataDTO(
                 "onlineQueuing",
-                APP_ID,
-                DEVICE_ID,
+                Constant.APPID,
+                Constant.DEVICE_ID,
                 data
         );
 
         BasicInputDTO basicInputDTO = new BasicInputDTO(
-                APP_ID,
+                Constant.APPID,
                 inputDataDTO,
                 ""
         );
@@ -90,14 +85,14 @@ public class LineUpModel {
      */
     public BasicInputDTO lineUpQueryTrans(LineUpQueryInputDTO dto){
         Map<String,String> data = new LinkedHashMap<>();
-        data.put("hallId",HALL_ID);
+        data.put("hallId",Constant.HALL_ID);
         data.put("lineUpNo",dto.getLineUpNo());
 
         BasicInputDTO basicInputDTO = new BasicInputDTO(
-                APP_ID,
+                Constant.APPID,
                 new InputDataDTO("lineUpQuery",
-                        APP_ID,
-                        DEVICE_ID,
+                        Constant.APPID,
+                        Constant.DEVICE_ID,
                         data),
                 ""
         );

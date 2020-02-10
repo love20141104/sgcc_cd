@@ -7,15 +7,13 @@ import com.example.ThreeTypeOneApi.SM4Util;
 import com.example.result.Result;
 import com.sgcc.DemoApplication;
 import com.sgcc.dao.PrebookInfoDao;
-import com.sgcc.dto.BasicInputDTO;
-import com.sgcc.dto.InputDataDTO;
-import com.sgcc.dto.LineUpQueryInputDTO;
-import com.sgcc.dto.OnlineQueuingInputDTO;
+import com.sgcc.dto.*;
 import com.sgcc.entity.LineUpEntity;
 import com.sgcc.entity.query.PrebookInfoQueryEntity;
 import com.sgcc.service.HouseholdService;
 import com.sgcc.service.LineUpService;
 import com.sgcc.sgccenum.SubscribeCateEnum;
+import com.sgcc.utils.Constant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @RunWith(SpringRunner.class)
@@ -34,28 +34,45 @@ public class TestAddBlacklist {
     @Autowired
     private LineUpService lineUpService;
 
+    @Autowired
+    private LineUpEntity lineUpEntity;
+
+
     @Test
-    public void testAddBlacklist() throws Exception {
+    public void testlineUp() throws Exception {
+        Map<String,String> data = new LinkedHashMap<>();
+        data.put("hallId","123456");
+        data.put("busiId","11111");
+        data.put("phone","13094494386");
+
         InputDataDTO inputDataDTO = new InputDataDTO();
-        inputDataDTO.setServiceCode("464646");
-        inputDataDTO.setAppId("123123");
-        inputDataDTO.setDeviceId("44644");
+        inputDataDTO.setServiceCode("onlineQueuing");
+        inputDataDTO.setAppId("axlz9zv2p02v03t4ks");
+        inputDataDTO.setDeviceId("6722d35aa124a82d");
+        inputDataDTO.setData(data);
 
         BasicInputDTO basicInputDTO = new BasicInputDTO();
-//        basicInputDTO.setAppId("123123");
         basicInputDTO.setData(inputDataDTO);
-//        basicInputDTO.setSignature("dfqd");
-
         System.out.println(JSONObject.toJSONString(basicInputDTO));
 
-        String json = JSONObject.toJSONString(basicInputDTO);
-        String cipher = SM4Util.encryptEcb("009322d3d8d62e018ff688c7226f9719eeade1371b95a00825676c1822d370a4ab", json);
-        String s = SM3Util.encrypt(json);
-        System.out.println("sm3加密===>"+SM3Util.encrypt(json));
-        System.out.println("sm3解密===>"+SM3Util.verify(json,s));
+//        String JSONObject = lineUpEntity.test(basicInputDTO);
+//        System.out.println(JSONObject);
+    }
 
-//        List<PrebookInfoDao> prebookInfoDaos = prebookInfoQueryEntity.getNotTakeTicketList();
-//        System.out.println(prebookInfoDaos.size());
+
+    @Test
+    public void testHeartBeat() throws Exception {
+//        InputDataDTO inputDataDTO = new InputDataDTO();
+//        inputDataDTO.setServiceCode("heartbeat");
+//        inputDataDTO.setAppId("axlz9zv2p02v03t4ks");
+//        inputDataDTO.setDeviceId("6722d35aa124a82d");
+//
+//        BasicInputDTO basicInputDTO = new BasicInputDTO();
+//        basicInputDTO.setData(inputDataDTO);
+//        System.out.println(JSONObject.toJSONString(basicInputDTO));
+//
+//        ReturnResultDTO JSONObject = lineUpEntity.test(basicInputDTO);
+//        System.out.println(JSONObject.toString());
     }
 
 

@@ -18,4 +18,10 @@ public class LineUpInfoOutDTO extends BasicOutDTO implements Serializable {
 //    private InputData data;
 
     private Map<String,String> data = new LinkedHashMap<>();
+
+    public LineUpInfoOutDTO(String code,String msg,Map<String, String> data) {
+        super.setCode(code);
+        super.setMsg(msg);
+        this.data = data;
+    }
 }

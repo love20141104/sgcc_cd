@@ -107,21 +107,6 @@ public class JobModel {
 
     public List<RushRepairProgressDao> addNoticeProgressTrans(RushRepairProgressSubmitDTO dto) {
         List<RushRepairProgressDao> daos = new ArrayList<>();
-        if (dto.getProgress_state() == 1){
-            RushRepairProgressDao repairProgressDao = new RushRepairProgressDao(
-                    UUID.randomUUID().toString(),
-                    dto.getNotice_id(),
-                    0,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    new Date()
-            );
-            daos.add(repairProgressDao);
-        }
-
         RushRepairProgressDao rushRepairProgressDao = new RushRepairProgressDao(
                 UUID.randomUUID().toString(),
                 dto.getNotice_id(),
@@ -134,7 +119,6 @@ public class JobModel {
                 new Date()
         );
         daos.add(rushRepairProgressDao);
-
         return daos;
     }
 
