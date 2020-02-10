@@ -18,8 +18,8 @@ public class NoticeQueryEntity {
         return noticeRepository.findNoticeProgress();
     }
 
-    public List<RushRepairProgressDao> findNoticeProgressByState(Integer state){
-        return noticeRepository.findNoticeProgressByState(state);
+    public List<RushRepairProgressDao> findNoticeProgressByState(Integer state,String noticeId){
+        return noticeRepository.findNoticeProgressByState(state,noticeId);
     }
 
     public List<NoticeDao> findNoticeInfoByDistrict(String district,String keyword){

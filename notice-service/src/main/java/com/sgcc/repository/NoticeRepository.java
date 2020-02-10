@@ -71,10 +71,10 @@ public class NoticeRepository {
 //        });
     }
 
-    public List<RushRepairProgressDao> findNoticeProgressByState(Integer state){
+    public List<RushRepairProgressDao> findNoticeProgressByState(Integer state,String noticeId){
         String sql = "select id,notice_id,progress_state,repair_personnel,cause_of_failure,progress_img1,progress_img2," +
-                "progress_img3,submit_date from b_rush_repair_progress where progress_state = ?";
-        return jdbcTemplate.query(sql,new Object[]{state},new RushRepairProgressRowMapper());
+                "progress_img3,submit_date from b_rush_repair_progress where progress_state = ? and notice_id = ?";
+        return jdbcTemplate.query(sql,new Object[]{state,noticeId},new RushRepairProgressRowMapper());
     }
 
 

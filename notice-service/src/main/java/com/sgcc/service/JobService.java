@@ -145,7 +145,7 @@ public class JobService {
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
 
             List<RushRepairProgressDao> rushRepairProgressDaos =
-                    noticeQueryEntity.findNoticeProgressByState(dto.getProgress_state());
+                    noticeQueryEntity.findNoticeProgressByState(dto.getProgress_state(),dto.getNotice_id());
             if (rushRepairProgressDaos.size() == 1)
                 return Result.failure(TopErrorCode.IS_EXIST_STATE);
 
