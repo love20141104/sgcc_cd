@@ -27,8 +27,11 @@ public class NoticeDomainModel {
 
     private List<QueryFormDTO> queryFormDTOS = new ArrayList<>();
 
-    public NoticeDomainModel(List<NoticeDao> noticeDaos) {
+    private List<RushRepairProgressDao> rushRepairProgressDaos = new ArrayList<>();
+
+    public NoticeDomainModel(List<NoticeDao> noticeDaos,List<RushRepairProgressDao> rushRepairProgressDaos) {
         this.noticeDaos = noticeDaos;
+        this.rushRepairProgressDaos = rushRepairProgressDaos;
     }
 
     public NoticeDomainModel(UpdateFormDTO updateFormDTO) {
@@ -149,25 +152,62 @@ public class NoticeDomainModel {
     }
 
 
-    public void selectAllTransform() {
+    public List<QueryFormDTO> selectAllTransform() {
         this.noticeDaos.forEach(noticeDao -> {
+            List<ProgressDTO> progressDTOS = new ArrayList<>();
+            this.rushRepairProgressDaos.forEach(progressDao->{
+                if (progressDao.getNotice_id().equals(noticeDao.getId())){
+                    List<String> imgs = new ArrayList<>();
+                    if (!Strings.isNullOrEmpty(progressDao.getProgressImg1())) {
+                        imgs.add(progressDao.getProgressImg1());
+                    }
+                    if (!Strings.isNullOrEmpty(progressDao.getProgressImg2())){
+                        imgs.add(progressDao.getProgressImg2());
+                    }
+                    if (!Strings.isNullOrEmpty(progressDao.getProgressImg3())){
+                        imgs.add(progressDao.getProgressImg3());
+                    }
+                    progressDTOS.add(new ProgressDTO(
+                            new SimpleDateFormat("MM/dd").format(progressDao.getSubmit_date()),
+                            new SimpleDateFormat("HH:mm").format(progressDao.getSubmit_date()),
+                            progressDao.getProgress_state(),
+                            progressDao.getRepair_personnel(),
+                            progressDao.getCause_of_failure(),
+                            imgs
+                    ));
+                }
+            });
+
+            // 排序
+            Collections.sort(progressDTOS, new Comparator<ProgressDTO>() {
+                @Override
+                public int compare(ProgressDTO o1, ProgressDTO o2) {
+                    // 升序
+                    return o1.getProgressState().compareTo(o2.getProgressState());
+                    // 降序
+                    // return o2.getProgressState().compareTo(o1.getProgressState());
+                }
+            });
+
             this.queryFormDTOS.add(new QueryFormDTO(
                             noticeDao.getId(),
                             noticeDao.getNoticeId(),
                             noticeDao.getNoticeDistrict(),
                             noticeDao.getTypeName(),
                             noticeDao.getRange(),
-                            noticeDao.getNoticeDate()
+                            noticeDao.getNoticeDate(),
+                            progressDTOS
                     )
             );
         });
+        return queryFormDTOS;
     }
 
 
-    public static void main(String[] args) {
-        String str = "2019-12-12 05:00至2019-12-12 07:30";
-        System.out.println(""+str.substring(str.indexOf("至")+1,str.length())+":59");
-    }
+//    public static void main(String[] args) {
+//        String str = "2019-12-12 05:00至2019-12-12 07:30";
+//        System.out.println(""+str.substring(str.indexOf("至")+1,str.length())+":59");
+//    }
 
 
 }

@@ -4,10 +4,7 @@ import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.NoticeDao;
 import com.sgcc.dao.RushRepairProgressDao;
-import com.sgcc.dto.AddFormDTO;
-import com.sgcc.dto.NoticeFormDTO;
-import com.sgcc.dto.NoticeListDTO;
-import com.sgcc.dto.UpdateFormDTO;
+import com.sgcc.dto.*;
 import com.sgcc.entity.NoticeQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.NoticeDomainModel;
@@ -71,13 +68,12 @@ public class NoticeService {
 
 
     public Result findNoticeListAll(){
-
         try {
             List<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeListAll();
-
-            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos);
-            noticeDomainModel.selectAllTransform();
-            return Result.success(noticeDomainModel.getQueryFormDTOS());
+            List<RushRepairProgressDao> rushRepairProgressDaos = noticeQueryEntity.findNoticeProgress();
+            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos,rushRepairProgressDaos);
+            List<QueryFormDTO> queryFormDTOS = noticeDomainModel.selectAllTransform();
+            return Result.success(queryFormDTOS);
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);

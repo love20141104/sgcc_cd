@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -24,5 +25,7 @@ public class QueryFormDTO implements Serializable {
     private String range;       // 抢修范围
 
     private String noticeDate;  // 停电时间
+
+    private List<ProgressDTO> progressList;
 
 }
