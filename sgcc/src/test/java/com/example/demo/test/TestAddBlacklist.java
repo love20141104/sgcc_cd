@@ -55,8 +55,8 @@ public class TestAddBlacklist {
         basicInputDTO.setData(inputDataDTO);
         System.out.println(JSONObject.toJSONString(basicInputDTO));
 
-        LineUpInfoOutDTO JSONObject = lineUpEntity.lineUpQuery(basicInputDTO);
-        System.out.println(JSONObject.toString());
+//        LineUpInfoOutDTO JSONObject = lineUpEntity.lineUpQuery(basicInputDTO);
+//        System.out.println(JSONObject.toString());
     }
 
 
