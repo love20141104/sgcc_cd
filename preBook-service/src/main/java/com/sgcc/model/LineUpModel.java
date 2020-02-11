@@ -1,6 +1,7 @@
 package com.sgcc.model;
 
 import com.example.Utils;
+import com.google.common.base.Strings;
 import com.sgcc.dao.LineUpDao;
 import com.sgcc.dto.*;
 import com.sgcc.utils.Constant;
@@ -85,8 +86,13 @@ public class LineUpModel {
      */
     public BasicInputDTO lineUpQueryTrans(LineUpQueryInputDTO dto){
         Map<String,String> data = new LinkedHashMap<>();
-        data.put("hallId",Constant.HALL_ID);
-        data.put("lineUpNo",dto.getLineUpNo());
+        if (!Strings.isNullOrEmpty(dto.getLineUpNo())){
+            data.put("hallId",Constant.HALL_ID);
+            data.put("lineUpNo",dto.getLineUpNo());
+        }else {
+            data.put("hallId",Constant.HALL_ID);
+            data.put("busiId",Constant.BUSINESS_ID);
+        }
 
         BasicInputDTO basicInputDTO = new BasicInputDTO(
                 Constant.APPID,
