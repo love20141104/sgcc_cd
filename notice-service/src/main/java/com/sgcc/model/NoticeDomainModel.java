@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.NoticeDao;
 import com.sgcc.dao.RushRepairProgressDao;
 import com.sgcc.dto.*;
+import com.sgcc.enums.RushRepairProgressEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -44,13 +45,12 @@ public class NoticeDomainModel {
 
 
     public List<NoticeListDTO> selectByDistrictTransform(List<NoticeDao> noticeDaos, List<RushRepairProgressDao> rushRepairProgressDaos){
-        List<NoticeListDTO> noticeListDTOS = new ArrayList<>();
-
+        List<NoticeListDTO> noticeListDTOList = new ArrayList<>();
         noticeDaos.forEach(noticeDao -> {
-            List<ProgressDTO> progressDTOS = new ArrayList<>();
             String dateUtil = noticeDao.getNoticeDate();
             Date date = Utils.GetDate(dateUtil.substring(dateUtil.indexOf("至")+1,dateUtil.length())+":59");
             System.out.println("DATE："+date);
+            List<ProgressDTO> progressDTOS = new ArrayList<>();
             rushRepairProgressDaos.forEach(progressDao->{
                 if (progressDao.getNotice_id().equals(noticeDao.getId())){
                     List<String> imgs = new ArrayList<>();
@@ -67,6 +67,7 @@ public class NoticeDomainModel {
                             new SimpleDateFormat("MM/dd").format(progressDao.getSubmit_date()),
                             new SimpleDateFormat("HH:mm").format(progressDao.getSubmit_date()),
                             progressDao.getProgress_state(),
+                            RushRepairProgressEnum.getVal(progressDao.getProgress_state()),
                             progressDao.getRepair_personnel(),
                             progressDao.getCause_of_failure(),
                             imgs
@@ -75,28 +76,29 @@ public class NoticeDomainModel {
             });
 
             // 排序
-            Collections.sort(progressDTOS, new Comparator<ProgressDTO>() {
-                @Override
-                public int compare(ProgressDTO o1, ProgressDTO o2) {
-                    // 升序
-                    return o1.getProgressState().compareTo(o2.getProgressState());
-                    // 降序
-                    // return o2.getProgressState().compareTo(o1.getProgressState());
-                }
-            });
+            if (progressDTOS.size() > 1){
+                Collections.sort(progressDTOS, new Comparator<ProgressDTO>() {
+                    @Override
+                    public int compare(ProgressDTO o1, ProgressDTO o2) {
+                        // 升序
+                        return o1.getProgressState().compareTo(o2.getProgressState());
+                        // 降序
+                        // return o2.getProgressState().compareTo(o1.getProgressState());
+                    }
+                });
+            }
 
             if(Utils.GetCurTime().getTime() < date.getTime()) {
-                noticeListDTOS.add(new NoticeListDTO(
+                noticeListDTOList.add(new NoticeListDTO(
                         noticeDao.getTypeName(),
                         noticeDao.getNoticeDate(),
                         noticeDao.getRange(),
-                        progressDTOS
+                        progressDTOS.size()==0?null:progressDTOS
                         )
                 );
             }
         });
-
-        return noticeListDTOS;
+        return noticeListDTOList;
     }
 
 
@@ -171,6 +173,7 @@ public class NoticeDomainModel {
                             new SimpleDateFormat("MM/dd").format(progressDao.getSubmit_date()),
                             new SimpleDateFormat("HH:mm").format(progressDao.getSubmit_date()),
                             progressDao.getProgress_state(),
+                            RushRepairProgressEnum.getVal(progressDao.getProgress_state()),
                             progressDao.getRepair_personnel(),
                             progressDao.getCause_of_failure(),
                             imgs

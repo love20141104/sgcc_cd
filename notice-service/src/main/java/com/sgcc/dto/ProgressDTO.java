@@ -16,6 +16,7 @@ public class ProgressDTO implements Serializable {
     private String day;
     private String time;
     private Integer progressState;
+    private String title;
     private String rushRepairPerson;
     private String causeOfFailure;
     private List<String> photo;
