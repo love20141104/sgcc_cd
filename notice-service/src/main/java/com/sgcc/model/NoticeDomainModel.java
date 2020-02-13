@@ -206,6 +206,22 @@ public class NoticeDomainModel {
         return queryFormDTOS;
     }
 
+    public List<NoticeDao> addNoticeInfoBatchTrans(List<AddFormDTO> dtos) {
+        List<NoticeDao> noticeDaos = new ArrayList<>();
+        String id = UUID.randomUUID().toString();
+        dtos.forEach(dto->{
+            noticeDaos.add(new NoticeDao(
+                    UUID.randomUUID().toString(),
+                    UUID.randomUUID().toString(),
+                    dto.getNoticeDistrict(),
+                    dto.getTypeName(),
+                    dto.getRange(),
+                    dto.getNoticeDate()
+            ));
+        });
+        return noticeDaos;
+    }
+
 
 //    public static void main(String[] args) {
 //        String str = "2019-12-12 05:00至2019-12-12 07:30";

@@ -8,9 +8,11 @@ import com.sgcc.dto.*;
 import com.sgcc.entity.NoticeQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.NoticeDomainModel;
+import com.sgcc.utils.EasyPoiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -158,7 +160,23 @@ public class NoticeService {
         }
     }
 
-
+    /**
+     * excel导入批量新增
+     * @param file
+     * @return
+     */
+    public Result addNoticeInfoBatch(MultipartFile file) {
+        try {
+            List<AddFormDTO> dtos = EasyPoiUtil.importExcel(file,0,2,AddFormDTO.class);
+            NoticeDomainModel noticeDomainModel = new NoticeDomainModel();
+            List<NoticeDao> noticeDaos = noticeDomainModel.addNoticeInfoBatchTrans(dtos);
+            noticeQueryEntity.addNoticeInfoBatch(noticeDaos);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
 
 
 

@@ -22,10 +22,6 @@ public class NoticeDao implements Serializable {
     private String typeName;    // 停电类型
 
     private String range;       // 抢修范围
-//
-//    private String progress;    // 抢修进度
-//
-//    private String progressTime;    //抢修进度对应时间
 
     private String noticeDate;  // 停电时间
 

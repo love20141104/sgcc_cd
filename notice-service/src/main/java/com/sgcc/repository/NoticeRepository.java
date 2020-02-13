@@ -1,6 +1,7 @@
 package com.sgcc.repository;
 
 import com.example.Utils;
+import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.NoticeDao;
 import com.sgcc.dao.RushRepairProgressDao;
@@ -10,6 +11,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -201,6 +203,28 @@ public class NoticeRepository {
             return findNoticeById(noticeDao.getNoticeId()).size();
         }
     }
+
+
+    public void addNoticeInfoBatch(List<NoticeDao> noticeDaos) {
+        String sql = "insert into b_blackout_notice(id,notice_id,notice_district,notice_type,notice_range,notice_date) values(?,?,?,?,? ,?)";
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setString(1,noticeDaos.get(i).getId());
+                ps.setString(2,noticeDaos.get(i).getNoticeId());
+                ps.setString(3,noticeDaos.get(i).getNoticeDistrict());
+                ps.setString(4,noticeDaos.get(i).getTypeName());
+                ps.setString(5,noticeDaos.get(i).getRange());
+                ps.setString(6,noticeDaos.get(i).getNoticeDate());
+            }
+            @Override
+            public int getBatchSize() {
+                return noticeDaos.size();
+            }
+        });
+    }
+
+
 
     /**
      * 修改停电公告

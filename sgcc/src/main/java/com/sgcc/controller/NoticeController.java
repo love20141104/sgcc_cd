@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -98,6 +99,12 @@ public class NoticeController {
     @PostMapping(value = "/noticeInfo")
     public Result addNoticeInfo(@RequestBody AddFormDTO addFormDTO) {
         return noticeService.insertNoticeInfo(addFormDTO);
+    }
+
+    @ApiOperation(value = "停电公告-excel导入批量新增", notes = "")
+    @PostMapping(value = "/excel/noticeInfo")
+    public Result addNoticeInfoBatch(@RequestParam MultipartFile file) {
+        return noticeService.addNoticeInfoBatch(file);
     }
 
     @ApiOperation(value = "停电公告-修改", notes = "")

@@ -35,6 +35,10 @@ public class NoticeQueryEntity {
         return noticeRepository.insertNotice(noticeDao);
     }
 
+    public void addNoticeInfoBatch(List<NoticeDao> noticeDaos) {
+        noticeRepository.addNoticeInfoBatch(noticeDaos);
+    }
+
     public void addNoticeProgress(List<RushRepairProgressDao> daos){
         noticeRepository.addNoticeProgress(daos);
     }
