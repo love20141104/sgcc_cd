@@ -32,12 +32,13 @@ public class PaginationHelper<E> {
         page.setPageNo(pageNo);
         page.setPageSize(pageSize);
         page.setPagesAvailable(pageCount);
-        int relPageNo = pageNo - 1;
+        int relPageNo = (pageNo - 1)*pageSize;
         sqlFetchRows += " LIMIT " + pageSize + " OFFSET " + relPageNo;
         page.setPageItems(jt.query(sqlFetchRows, args, rowMapper));
 
         return page;
     }
+
 
     public CurrentPage<E> fetchPage(final JdbcTemplate jt, final String sqlCountRows, String sqlFetchRows,
                                     final int pageNo, final int pageSize, final RowMapper<E> rowMapper) {

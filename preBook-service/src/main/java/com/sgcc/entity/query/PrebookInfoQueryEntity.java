@@ -50,6 +50,10 @@ public class PrebookInfoQueryEntity {
         return preBookInfoRepository.getPrebookList();
     }
 
+    public List<PrebookInfoDao> getAllPrebook(){
+        return preBookInfoRepository.getAllPrebook();
+    }
+
 
     public List<PrebookInfoDao> getPrebookCount(String startDate,String endDate){
         return preBookInfoRepository.getPrebookCount(startDate,endDate);

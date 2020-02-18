@@ -721,8 +721,9 @@ public class PrebooksService {
     public Result getBlacklist() {
         try {
             List<BlacklistDao> blacklistDaos = prebookInfoQueryEntity.getBlacklist();
+            List<PreBookHouseholdDao> preBookHouseholdDaos = prebookInfoQueryEntity.getAllHouseHold();
             PrebookModel model = new PrebookModel();
-            List<BlacklistViewDTO> blacklistViewDTOS = model.getBlacklistTrans(blacklistDaos);
+            List<BlacklistViewDTO> blacklistViewDTOS = model.getBlacklistTrans(blacklistDaos,preBookHouseholdDaos);
             return Result.success(blacklistViewDTOS);
         }catch (Exception e){
             e.printStackTrace();

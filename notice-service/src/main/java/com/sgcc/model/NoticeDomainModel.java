@@ -52,7 +52,7 @@ public class NoticeDomainModel {
             System.out.println("DATE："+date);
             List<ProgressDTO> progressDTOS = new ArrayList<>();
             rushRepairProgressDaos.forEach(progressDao->{
-                if (progressDao.getNotice_id().equals(noticeDao.getId())){
+                if (progressDao.getNotice_id().equals(noticeDao.getNoticeId())){
                     List<String> imgs = new ArrayList<>();
                     if (!Strings.isNullOrEmpty(progressDao.getProgressImg1())) {
                         imgs.add(progressDao.getProgressImg1());
@@ -158,7 +158,7 @@ public class NoticeDomainModel {
         this.noticeDaos.forEach(noticeDao -> {
             List<ProgressDTO> progressDTOS = new ArrayList<>();
             this.rushRepairProgressDaos.forEach(progressDao->{
-                if (progressDao.getNotice_id().equals(noticeDao.getId())){
+                if (progressDao.getNotice_id().equals(noticeDao.getNoticeId())){
                     List<String> imgs = new ArrayList<>();
                     if (!Strings.isNullOrEmpty(progressDao.getProgressImg1())) {
                         imgs.add(progressDao.getProgressImg1());

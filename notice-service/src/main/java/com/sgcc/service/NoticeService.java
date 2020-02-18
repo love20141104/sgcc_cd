@@ -1,5 +1,6 @@
 package com.sgcc.service;
 
+import com.example.CurrentPage;
 import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.NoticeDao;
@@ -69,13 +70,19 @@ public class NoticeService {
 
 
 
-    public Result findNoticeListAll(){
+    public Result findNoticeListAll(int getPageNo, int getPageSize){
         try {
-            List<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeListAll();
+            CurrentPage<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeListAll(getPageNo, getPageSize);
             List<RushRepairProgressDao> rushRepairProgressDaos = noticeQueryEntity.findNoticeProgress();
-            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos,rushRepairProgressDaos);
+            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos.getPageItems(),rushRepairProgressDaos);
             List<QueryFormDTO> queryFormDTOS = noticeDomainModel.selectAllTransform();
-            return Result.success(queryFormDTOS);
+            CurrentPage<QueryFormDTO> queryFormDTOCurrentPage = new CurrentPage<QueryFormDTO>(
+                    noticeDaos.getPageNo(),
+                    noticeDaos.getPageSize(),
+                    noticeDaos.getPagesAvailable(),
+                    noticeDaos.getTotal(),
+                    queryFormDTOS);
+            return Result.success(queryFormDTOCurrentPage);
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -148,11 +155,11 @@ public class NoticeService {
      * @return
      */
     public Result delNoticeInfo(List<String> ids){
-
         try {
             if (ids.size() <= 0)
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
             noticeQueryEntity.delNotice(ids);
+            noticeQueryEntity.delNoticeProgressBynoticeIds(ids);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();

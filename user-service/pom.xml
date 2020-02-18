@@ -13,6 +13,16 @@
     <artifactId>user-service</artifactId>
 
     <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-security</artifactId>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash;JWT&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>io.jsonwebtoken</groupId>-->
+            <!--<artifactId>jjwt</artifactId>-->
+            <!--<version>0.9.0</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.sgcc</groupId>
             <artifactId>utils</artifactId>

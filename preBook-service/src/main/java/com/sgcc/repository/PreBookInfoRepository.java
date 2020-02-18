@@ -118,6 +118,15 @@ public class PreBookInfoRepository {
     }
 
 
+    public List<PrebookInfoDao> getAllPrebook(){
+        String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
+                "ticket_month,lineup_no,lineup_time,contact,contact_tel,submit_date,status,reject_reason,checker_id," +
+                "start_date,end_date,ticket_status,prebook_no,is_printed,check_date,is_blacklist,is_cancel,cancel_date " +
+                "from b_prebook_detail";
+
+        List<PrebookInfoDao> prebookInfoDaos = jdbcTemplate.query(sql,new PreBookRowMapper());
+        return prebookInfoDaos;
+    }
 
     public List<PrebookInfoDao> getPrebookList(){
         String sql = "select id,user_open_id,business_type_id,business_type_name,service_hall_id,service_hall_name," +
@@ -419,7 +428,7 @@ public class PreBookInfoRepository {
 
     public int getBlacklistByOpenId(String openId){
 
-        String sql = "select id,user_open_id,ticket_month,contact,contact_tel,create_date " +
+        String sql = "select id,user_open_id,job_id,contact,contact_tel,create_date " +
                 "from b_prebook_blacklist where user_open_id = ?";
         List<BlacklistDao> blacklistDaos = jdbcTemplate.query(sql,new Object[]{openId},new BlacklistRowMapper());
         return blacklistDaos.size();
@@ -427,13 +436,13 @@ public class PreBookInfoRepository {
 
 
     public void addBlacklist(List<BlacklistDao> blacklistDaos){
-        String sql = "insert into b_prebook_blacklist(user_open_id,ticket_month,contact,contact_tel,create_date) " +
+        String sql = "insert into b_prebook_blacklist(user_open_id,job_id,contact,contact_tel,create_date) " +
                 "values (?,?,?,?,?)";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setString(1,blacklistDaos.get(i).getUserOpenId());
-                ps.setString(2,blacklistDaos.get(i).getHouseholdNo());
+                ps.setString(2,blacklistDaos.get(i).getJobId());
                 ps.setString(3,blacklistDaos.get(i).getContact());
                 ps.setString(4,blacklistDaos.get(i).getContactTel());
                 ps.setString(5,Utils.GetTime(blacklistDaos.get(i).getCreateDate()));
@@ -465,7 +474,7 @@ public class PreBookInfoRepository {
     }
 
     public List<BlacklistDao> getBlacklist() {
-        String sql = "select id,user_open_id,ticket_month,contact,contact_tel,create_date " +
+        String sql = "select id,user_open_id,job_id,contact,contact_tel,create_date " +
                 "from b_prebook_blacklist";
         List<BlacklistDao> blacklistDaos = jdbcTemplate.query(sql,new BlacklistRowMapper());
         return blacklistDaos;
@@ -541,7 +550,7 @@ public class PreBookInfoRepository {
             return new BlacklistDao(
                     rs.getInt("id"),
                     rs.getString("user_open_id"),
-                    rs.getString("ticket_month"),
+                    rs.getString("job_id"),
                     rs.getString("contact"),
                     rs.getString("contact_tel"),
                     Utils.GetDate(rs.getString("create_date"))

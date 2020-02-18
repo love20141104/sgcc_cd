@@ -1,10 +1,14 @@
 package com.sgcc.repository;
 
+import com.example.CurrentPage;
+import com.example.PaginationHelper;
 import com.example.Utils;
 import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.NoticeDao;
 import com.sgcc.dao.RushRepairProgressDao;
+import com.sgcc.dao.UserDao;
+import com.sgcc.dto.QueryFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -117,19 +121,32 @@ public class NoticeRepository {
         }
     }
 
-    public List<NoticeDao> findNoticeListAll(){
+    public CurrentPage<NoticeDao> findNoticeListAll(int getPageNo, int getPageSize){
+        PaginationHelper<NoticeDao> ph = new PaginationHelper<>();
+        String countSql = "SELECT Count(id) FROM b_blackout_notice;";
         if (precompile) {
             String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
                     +"from b_blackout_notice ";
             logger.info("SQL:" + sql);
-            return jdbcTemplate.query(sql,new Object[]{}, new NoticeRowMapper());
+            try {
+                return ph.fetchPage(jdbcTemplate,countSql,sql,new Object[]{},getPageNo,getPageSize, new NoticeRowMapper());
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
         }else {
             String sql = "select id,notice_id,notice_district,notice_type,notice_range,notice_date "
                     +"from b_blackout_notice ";
             logger.info("SQL:" + sql);
-            return jdbcTemplate.query(sql, new NoticeRowMapper());
+            try {
+                return ph.fetchPage(jdbcTemplate,countSql,sql,getPageNo,getPageSize,new NoticeRowMapper());
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
         }
     }
+
 
 
     /**
@@ -267,6 +284,19 @@ public class NoticeRepository {
         }
     }
 
+
+    public void delNoticeProgressBynoticeIds(List<String> ids){
+        String progressSql = "delete from b_rush_repair_progress where notice_id =? ";
+        jdbcTemplate.batchUpdate(progressSql,new BatchPreparedStatementSetter() {
+            public int getBatchSize() {
+                return ids.size();
+            }
+            public void setValues(PreparedStatement ps, int i)
+                    throws SQLException {
+                ps.setString(1,ids.get(i));
+            }
+        });
+    }
 
     /**
      * 删除停电公告信息

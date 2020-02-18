@@ -40,23 +40,23 @@ public class TestAddBlacklist {
 
     @Test
     public void testOrgGetData() throws Exception {
-        Map<String,String> data = new LinkedHashMap<>();
-        data.put("hallId","123456");
-        data.put("busiId","11111");
+//        Map<String,String> data = new LinkedHashMap<>();
+//        data.put("hallId","123456");
+//        data.put("busiId","11111");
 //        data.put("phone","13094494386");
 
         InputDataDTO inputDataDTO = new InputDataDTO();
-        inputDataDTO.setServiceCode("lineUpQuery");
+        inputDataDTO.setServiceCode("heartbeat");
         inputDataDTO.setAppId("axlz9zv2p02v03t4ks");
         inputDataDTO.setDeviceId("6722d35aa124a82d");
-        inputDataDTO.setData(data);
+        inputDataDTO.setData(null);
 
         BasicInputDTO basicInputDTO = new BasicInputDTO();
         basicInputDTO.setData(inputDataDTO);
         System.out.println(JSONObject.toJSONString(basicInputDTO));
 
-//        LineUpInfoOutDTO JSONObject = lineUpEntity.lineUpQuery(basicInputDTO);
-//        System.out.println(JSONObject.toString());
+        LineUpInfoOutDTO JSONObject = lineUpEntity.heartBeatAndOnlineQueuingAndLineUpQuery(basicInputDTO);
+        System.out.println(JSONObject.toString());
     }
 
 

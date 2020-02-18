@@ -323,13 +323,22 @@ public class PrebookModel {
     }
 
 
-    public List<BlacklistViewDTO> getBlacklistTrans(List<BlacklistDao> blacklistDaos) {
+    public List<BlacklistViewDTO> getBlacklistTrans(List<BlacklistDao> blacklistDaos, List<PreBookHouseholdDao> preBookHouseholdDaos) {
         List<BlacklistViewDTO> blacklistViewDTOS = new ArrayList<>();
         blacklistDaos.forEach(dao->{
-            BlacklistViewDTO blacklistViewDTO = new BlacklistViewDTO();
-            BeanUtils.copyProperties(dao,blacklistViewDTO);
-            blacklistViewDTO.setCreateDate(Utils.GetTime(dao.getCreateDate()));
-            blacklistViewDTOS.add(blacklistViewDTO);
+            preBookHouseholdDaos.forEach(household->{
+                if (dao.getJobId().equals(household.getJobId())){
+                    BlacklistViewDTO blacklistViewDTO = new BlacklistViewDTO(
+                            dao.getId(),
+                            dao.getUserOpenId(),
+                            household.getHouseHoldNumber(),
+                            dao.getContact(),
+                            dao.getContactTel(),
+                            Utils.GetTime(dao.getCreateDate())
+                    );
+                    blacklistViewDTOS.add(blacklistViewDTO);
+                }
+            });
         });
         return blacklistViewDTOS;
     }

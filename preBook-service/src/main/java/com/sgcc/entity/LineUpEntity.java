@@ -57,7 +57,7 @@ public class LineUpEntity {
             // 加密签名
             String encryptSign = SM3Util.encrypt(signature.trim());
             EncryptedDTO encryptedDTO = new EncryptedDTO(Constant.APPID,encryptData,encryptSign);
-            dto = restTemplate.postForObject(Constant.URL,encryptedDTO,ReturnResultDTO.class);
+            dto = restTemplate.postForObject(Constant.URL_TWO,encryptedDTO,ReturnResultDTO.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -8,6 +8,8 @@ import com.sgcc.service.JobService;
 import com.sgcc.service.MessageNotificationService;
 import com.sgcc.service.NoticeService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -90,9 +92,13 @@ public class NoticeController {
     }
 
     @ApiOperation(value = "停电公告-查询", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "getPageNo",value = "页数",dataType = "Integer"),
+            @ApiImplicitParam(name = "getPageSize",value = "条数",dataType = "Integer")
+    })
     @GetMapping(value = "/noticeInfo")
-    public Result queryNoticeInfo() {
-        return noticeService.findNoticeListAll();
+    public Result queryNoticeInfo(@RequestParam int getPageNo, @RequestParam int getPageSize) {
+        return noticeService.findNoticeListAll(getPageNo,getPageSize);
     }
 
     @ApiOperation(value = "停电公告-新增", notes = "")

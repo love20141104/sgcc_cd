@@ -1,5 +1,6 @@
 package com.sgcc.entity;
 
+import com.example.CurrentPage;
 import com.sgcc.dao.NoticeDao;
 import com.sgcc.dao.RushRepairProgressDao;
 import com.sgcc.repository.NoticeRepository;
@@ -27,8 +28,8 @@ public class NoticeQueryEntity {
     }
 
 
-    public List<NoticeDao> findNoticeListAll(){
-        return noticeRepository.findNoticeListAll();
+    public CurrentPage<NoticeDao> findNoticeListAll(int getPageNo, int getPageSize){
+        return noticeRepository.findNoticeListAll(getPageNo, getPageSize);
     }
 
     public int insertNotice(NoticeDao noticeDao){
@@ -54,6 +55,10 @@ public class NoticeQueryEntity {
 
     public void delNotice(List<String> ids){
         noticeRepository.delNoticeById(ids);
+    }
+
+    public void delNoticeProgressBynoticeIds(List<String> ids){
+        noticeRepository.delNoticeProgressBynoticeIds(ids);
     }
 
     public Boolean noticeOverdue(String noticeId){
