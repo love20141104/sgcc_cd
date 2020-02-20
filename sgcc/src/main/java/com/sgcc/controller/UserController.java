@@ -11,6 +11,7 @@ import com.sgcc.sgccenum.SubscribeCateEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,18 @@ public class UserController {
 
     @Autowired
     private PrebooksService prebooksService;
+
+
+    /**
+     * 登录
+     */
+    @PostMapping(value = "/auth/login")
+    public Result login(@RequestParam String username,@RequestParam String password ){
+        // 登录成功会返回Token给用户
+        return userService.login( username, password );
+    }
+
+
 
     @ApiOperation(value = "查询月度账单", notes = "")
     @GetMapping(value = "/bill/billInfo/{userNo}")

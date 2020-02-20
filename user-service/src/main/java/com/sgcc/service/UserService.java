@@ -21,7 +21,15 @@ import com.sgcc.entity.query.InhabitantQueryEntity;
 import com.sgcc.entity.query.UserQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.UserModel;
+import com.sgcc.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -46,6 +54,15 @@ public class UserService {
 
     @Autowired
     private UserEventEntity userEventEntity;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
 
 
@@ -404,6 +421,21 @@ public class UserService {
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("查询月度账单失败!");
+        }
+    }
+
+
+    public Result login(String username, String password) {
+        try {
+            UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken( username, password );
+            Authentication authentication = authenticationManager.authenticate(upToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails userDetails = userDetailsService.loadUserByUsername( username );
+            String token = jwtTokenUtil.generateToken(userDetails);
+            return Result.success(token);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
 

@@ -2,10 +2,9 @@ package com.sgcc.repository;
 
 import com.example.Utils;
 import com.google.common.base.Strings;
-import com.sgcc.dao.CommerceInfoCorrectDao;
-import com.sgcc.dao.InhabitantInfoCorrectDao;
-import com.sgcc.dao.SubscribeDao;
+import com.sgcc.dao.*;
 import com.sgcc.dto.HouseholdInfosDTO;
+import com.sgcc.dto.RolePermissionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -26,7 +25,40 @@ public class UserRepository {
     @Value("${precompile}")
     private Boolean precompile;
 
+    public List<RolePermissionDTO> getRolePermissions(){
+        String sql = "select r.`code` as roleCode ,p.url from sys_role r,sys_permission p,sys_role_permission rp " +
+                "where r.id=rp.role_id and p.id=rp.permission_id";
+        List<RolePermissionDTO> rolePermissionDTOS = jdbcTemplate.query(sql, new RowMapper<RolePermissionDTO>() {
+            @Override
+            public RolePermissionDTO mapRow(ResultSet rs, int i) throws SQLException {
+                return new RolePermissionDTO(
+                        rs.getString("roleCode"),
+                        rs.getString("url")
+                );
+            }
+        });
+        if (rolePermissionDTOS.size() > 0)
+            return rolePermissionDTOS;
+        return null;
+    }
 
+    public User getUserByName(String username){
+        String sql = "select id,username,password,last_login_ip,last_login_time,create_time,is_delete from sys_user " +
+                "where username = ?";
+        List<User> users = jdbcTemplate.query(sql, new Object[]{username},new UserRowMapper());
+        if (users.size() > 0)
+            return users.get(0);
+        return null;
+    }
+
+    public List<Role> getRolesByUserId(String userId) {
+        String sql = "select r.id,r.`code`,r.`name`,r.description,r.available from sys_user_role ur,sys_role r " +
+                "where ur.role_id = r.id and ur.user_id = ?";
+        List<Role> roles = jdbcTemplate.query(sql,new Object[]{userId},new RoleRowMapper());
+        if (roles.size() > 0)
+            return roles;
+        return null;
+    }
 
 
     public SubscribeDao findSubscribe(String openId){
@@ -37,24 +69,7 @@ public class UserRepository {
 
     }
 
-    class SubscribeRowMapper implements RowMapper<SubscribeDao>{
 
-        @Override
-        public SubscribeDao mapRow(ResultSet rs, int i) throws SQLException {
-            return new SubscribeDao(
-                   rs.getString("id"),
-                    rs.getString("user_open_id"),
-                    rs.getString("nick_name"),
-                    rs.getInt("sex"),
-                    rs.getString("city"),
-                    rs.getString("head_img_url"),
-                    rs.getInt("is_sub_bill"),
-                    rs.getInt("is_sub_pay"),
-                    rs.getInt("is_sub_notice_pay"),
-                    rs.getInt("is_sub_analysis")
-            );
-        }
-    }
 
 
     public int updateSubscribe(SubscribeDao dao){
@@ -455,6 +470,52 @@ public class UserRepository {
         }
     }
 
+    class RoleRowMapper implements RowMapper<Role>{
 
+        @Override
+        public Role mapRow(ResultSet rs, int i) throws SQLException {
+            return new Role(
+                    rs.getInt("id"),
+                    rs.getString("code"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getInt("available")
+            );
+        }
+    }
+
+    class SubscribeRowMapper implements RowMapper<SubscribeDao>{
+
+        @Override
+        public SubscribeDao mapRow(ResultSet rs, int i) throws SQLException {
+            return new SubscribeDao(
+                    rs.getString("id"),
+                    rs.getString("user_open_id"),
+                    rs.getString("nick_name"),
+                    rs.getInt("sex"),
+                    rs.getString("city"),
+                    rs.getString("head_img_url"),
+                    rs.getInt("is_sub_bill"),
+                    rs.getInt("is_sub_pay"),
+                    rs.getInt("is_sub_notice_pay"),
+                    rs.getInt("is_sub_analysis")
+            );
+        }
+    }
+
+    class UserRowMapper implements RowMapper<User>{
+        @Override
+        public User mapRow(ResultSet rs, int i) throws SQLException {
+            return new User(
+                    rs.getString("id"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("last_login_ip"),
+                    Utils.GetDate(rs.getString("last_login_time")),
+                    Utils.GetDate(rs.getString("create_time")),
+                    rs.getInt("is_delete")
+            );
+        }
+    }
 
 }
