@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
 import com.sgcc.dao.SubscribeDao;
+import com.sgcc.dao.User;
 import com.sgcc.des.DesUtil;
 import com.sgcc.dto.*;
 import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
@@ -31,6 +32,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import java.util.*;
 
@@ -427,6 +429,16 @@ public class UserService {
 
     public Result login(String username, String password) {
         try {
+            String pwd = DigestUtils.md5DigestAsHex(password.getBytes());
+            List<User> users = userQueryEntity.getUserByName(username);
+            // 判断用户名和密码都不能为空
+            if(Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password))
+                return Result.failure(TopErrorCode.USERNAME_OR_PWD_IS_EMPTY);
+            if (users.size() < 1){ // 判断用户是否存在
+                return Result.failure(TopErrorCode.USERNAME_OR_PWD_INCORRECT);
+            }else if (!pwd.equals(users.get(0).getPassword())){ // 判断密码是否正确
+                return Result.failure(TopErrorCode.USERNAME_OR_PWD_INCORRECT);
+            }
             UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken( username, password );
             Authentication authentication = authenticationManager.authenticate(upToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);

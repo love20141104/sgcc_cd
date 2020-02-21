@@ -36,7 +36,9 @@ public enum TopErrorCode {
     DEVICE_EXCEPTION(20008,"设备正在维护"),
     LINE_UP(30001,"排号次数已达上限"),
     IS_EXIST_CHECKER(30002,"该营业厅审核人已存在"),
-    IS_EXIST_STATE(30003,"该状态已存在已存在");
+    IS_EXIST_STATE(30003,"该状态已存在已存在"),
+    USERNAME_OR_PWD_IS_EMPTY(30004,"用户名或密码不能为空"),
+    USERNAME_OR_PWD_INCORRECT(30005,"用户名或密码错误");
 
     //错误码
     private Integer errcode;

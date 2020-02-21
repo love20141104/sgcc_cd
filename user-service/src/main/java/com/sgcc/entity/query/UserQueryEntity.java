@@ -25,7 +25,7 @@ public class UserQueryEntity {
         return userRepository.findSubscribe(openId);
     }
 
-    public User getUserByName(String username){
+    public List<User> getUserByName(String username){
         return userRepository.getUserByName(username);
     }
 

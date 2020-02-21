@@ -42,13 +42,11 @@ public class UserRepository {
         return null;
     }
 
-    public User getUserByName(String username){
+    public List<User> getUserByName(String username){
         String sql = "select id,username,password,last_login_ip,last_login_time,create_time,is_delete from sys_user " +
                 "where username = ?";
         List<User> users = jdbcTemplate.query(sql, new Object[]{username},new UserRowMapper());
-        if (users.size() > 0)
-            return users.get(0);
-        return null;
+        return users;
     }
 
     public List<Role> getRolesByUserId(String userId) {

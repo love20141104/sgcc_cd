@@ -27,7 +27,7 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         JwtUser user = new JwtUser();
         List<JwtRole> roleList = new ArrayList<>();
-        User result = userQueryEntity.getUserByName(username);
+        User result = userQueryEntity.getUserByName(username).get(0);
         user.setUserId(result.getUserId());
         user.setUsername(result.getUsername());
         user.setPassword(result.getPassword());
