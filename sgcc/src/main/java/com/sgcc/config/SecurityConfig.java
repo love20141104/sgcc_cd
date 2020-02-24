@@ -25,7 +25,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
         //校验用户
         auth.userDetailsService( userService ).passwordEncoder( new PasswordEncoder() {
             //对密码进行加密
