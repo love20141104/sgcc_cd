@@ -316,7 +316,8 @@ public class UserController {
 //    public Result addIncreaseCapacityOrder(@RequestBody InhabitantIncreaseCapacityDTO dto, @PathVariable String openId) {
 //        return  sgccBusinessService.addIncreaseCapacityOrder(dto,openId);
 //    }
-@ApiOperation(value = "通过openid获取用户权限", notes = "1 普通用户；2 客户经理；3审批人；4既是客户经理也是审批人")
+@ApiOperation(value = "通过openid获取用户权限", notes = "suggestionRole： 1 普通用户；2 客户经理；3审批人；4既是客户经理也是审批人" +
+        "prebookRole ：1 审批人，0普通用户")
 @GetMapping(value = "/role/{openId}")
 public Result getRoleByOpenId(@PathVariable String openId){
 
