@@ -10,8 +10,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LineUpQueryInputDTO implements Serializable {
-
     private static final long serialVersionUID = -2126199813378292954L;
     private String lineUpNo;
-
 }

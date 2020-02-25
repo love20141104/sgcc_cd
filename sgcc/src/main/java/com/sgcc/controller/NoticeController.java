@@ -8,10 +8,13 @@ import com.sgcc.service.JobService;
 import com.sgcc.service.MessageNotificationService;
 import com.sgcc.service.NoticeService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -65,6 +68,17 @@ public class NoticeController {
         return jobService.addProgress(openId,repairProgressSubmitDTO);
     }
 
+    @ApiOperation(value = "抢修进度-新增", notes = "")
+    @PostMapping(value = "/backstage/progress")
+    public Result addNoticeProgress(@RequestBody RushRepairProgressSubmitDTO dto) {
+        return jobService.addNoticeProgress(dto);
+    }
+
+    @ApiOperation(value = "抢修进度-删除", notes = "")
+    @DeleteMapping(value = "/backstage/progress")
+    public Result delNoticeProgress(@RequestParam String id) {
+        return jobService.delNoticeProgress(id);
+    }
 
 
 
@@ -78,15 +92,25 @@ public class NoticeController {
     }
 
     @ApiOperation(value = "停电公告-查询", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "getPageNo",value = "页数",dataType = "Integer"),
+            @ApiImplicitParam(name = "getPageSize",value = "条数",dataType = "Integer")
+    })
     @GetMapping(value = "/noticeInfo")
-    public Result queryNoticeInfo() {
-        return noticeService.findNoticeListAll();
+    public Result queryNoticeInfo(@RequestParam int getPageNo, @RequestParam int getPageSize) {
+        return noticeService.findNoticeListAll(getPageNo,getPageSize);
     }
 
     @ApiOperation(value = "停电公告-新增", notes = "")
     @PostMapping(value = "/noticeInfo")
     public Result addNoticeInfo(@RequestBody AddFormDTO addFormDTO) {
         return noticeService.insertNoticeInfo(addFormDTO);
+    }
+
+    @ApiOperation(value = "停电公告-excel导入批量新增", notes = "")
+    @PostMapping(value = "/excel/noticeInfo")
+    public Result addNoticeInfoBatch(@RequestParam MultipartFile file) {
+        return noticeService.addNoticeInfoBatch(file);
     }
 
     @ApiOperation(value = "停电公告-修改", notes = "")

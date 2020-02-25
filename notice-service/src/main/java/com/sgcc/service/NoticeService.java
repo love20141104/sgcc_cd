@@ -1,17 +1,19 @@
 package com.sgcc.service;
 
+import com.example.CurrentPage;
 import com.example.result.Result;
 import com.google.common.base.Strings;
 import com.sgcc.dao.NoticeDao;
-import com.sgcc.dto.AddFormDTO;
-import com.sgcc.dto.NoticeFormDTO;
-import com.sgcc.dto.UpdateFormDTO;
+import com.sgcc.dao.RushRepairProgressDao;
+import com.sgcc.dto.*;
 import com.sgcc.entity.NoticeQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.NoticeDomainModel;
+import com.sgcc.utils.EasyPoiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,11 +34,11 @@ public class NoticeService {
             if (Strings.isNullOrEmpty(district))
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
             List<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeInfoByDistrict(district,keyword);
-
-            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos);
-            noticeDomainModel.selectByDistrictTransform();
-
-            return Result.success(noticeDomainModel.getNoticeFormDTOS());
+            List<RushRepairProgressDao> rushRepairProgressDaos = noticeQueryEntity.findNoticeProgress();
+            NoticeDomainModel noticeDomainModel = new NoticeDomainModel();
+            List<NoticeListDTO> noticeListDTOS =
+                    noticeDomainModel.selectByDistrictTransform(noticeDaos,rushRepairProgressDaos);
+            return Result.success(noticeListDTOS);
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -44,15 +46,43 @@ public class NoticeService {
 
     }
 
+//    public Result queryNoticeInfo(String district,String keyword){
+//
+//        try {
+//            if (Strings.isNullOrEmpty(district))
+//                return Result.failure(TopErrorCode.PARAMETER_ERR);
+//            List<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeInfoByDistrict(district,keyword);
+//
+//            noticeQueryEntity.findNoticeProgress();
+//
+//            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos);
+//            noticeDomainModel.selectByDistrictTransform();
+//
+//            return Result.success(noticeDomainModel.getNoticeFormDTOS());
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return Result.failure(TopErrorCode.GENERAL_ERR);
+//        }
+//
+//    }
 
-    public Result findNoticeListAll(){
 
+
+
+
+    public Result findNoticeListAll(int getPageNo, int getPageSize){
         try {
-            List<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeListAll();
-
-            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos);
-            noticeDomainModel.selectAllTransform();
-            return Result.success(noticeDomainModel.getQueryFormDTOS());
+            CurrentPage<NoticeDao> noticeDaos = noticeQueryEntity.findNoticeListAll(getPageNo, getPageSize);
+            List<RushRepairProgressDao> rushRepairProgressDaos = noticeQueryEntity.findNoticeProgress();
+            NoticeDomainModel noticeDomainModel = new NoticeDomainModel(noticeDaos.getPageItems(),rushRepairProgressDaos);
+            List<QueryFormDTO> queryFormDTOS = noticeDomainModel.selectAllTransform();
+            CurrentPage<QueryFormDTO> queryFormDTOCurrentPage = new CurrentPage<QueryFormDTO>(
+                    noticeDaos.getPageNo(),
+                    noticeDaos.getPageSize(),
+                    noticeDaos.getPagesAvailable(),
+                    noticeDaos.getTotal(),
+                    queryFormDTOS);
+            return Result.success(queryFormDTOCurrentPage);
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(TopErrorCode.GENERAL_ERR);
@@ -125,11 +155,11 @@ public class NoticeService {
      * @return
      */
     public Result delNoticeInfo(List<String> ids){
-
         try {
             if (ids.size() <= 0)
                 return Result.failure(TopErrorCode.PARAMETER_ERR);
             noticeQueryEntity.delNotice(ids);
+            noticeQueryEntity.delNoticeProgressBynoticeIds(ids);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
@@ -137,7 +167,23 @@ public class NoticeService {
         }
     }
 
-
+    /**
+     * excel导入批量新增
+     * @param file
+     * @return
+     */
+    public Result addNoticeInfoBatch(MultipartFile file) {
+        try {
+            List<AddFormDTO> dtos = EasyPoiUtil.importExcel(file,0,2,AddFormDTO.class);
+            NoticeDomainModel noticeDomainModel = new NoticeDomainModel();
+            List<NoticeDao> noticeDaos = noticeDomainModel.addNoticeInfoBatchTrans(dtos);
+            noticeQueryEntity.addNoticeInfoBatch(noticeDaos);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
 
 
 

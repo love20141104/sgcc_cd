@@ -6,9 +6,11 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.JobAndRepairProgressDao;
 import com.sgcc.dao.NoticeAndJobDao;
 import com.sgcc.dao.RepairProgressDao;
+import com.sgcc.dao.RushRepairProgressDao;
 import com.sgcc.dto.JobEditDTO;
 import com.sgcc.dto.NewJobSubmitDTO;
 import com.sgcc.dto.RepairProgressSubmitDTO;
+import com.sgcc.dto.RushRepairProgressSubmitDTO;
 import com.sgcc.entity.JobEntity;
 import com.sgcc.entity.NoticeQueryEntity;
 import com.sgcc.entity.RepairProgressEntity;
@@ -133,4 +135,43 @@ public class JobService {
         }
 
     }
+
+
+
+
+    public Result addNoticeProgress(RushRepairProgressSubmitDTO dto) {
+        try {
+            if (dto==null)
+                return Result.failure(TopErrorCode.PARAMETER_ERR);
+
+            List<RushRepairProgressDao> rushRepairProgressDaos =
+                    noticeQueryEntity.findNoticeProgressByState(dto.getProgress_state(),dto.getNotice_id());
+            if (rushRepairProgressDaos.size() == 1)
+                return Result.failure(TopErrorCode.IS_EXIST_STATE);
+
+            JobModel model = new JobModel();
+            List<RushRepairProgressDao> daos = model.addNoticeProgressTrans(dto);
+            noticeQueryEntity.addNoticeProgress(daos);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+    }
+
+
+    public Result delNoticeProgress(String id) {
+        try {
+            if (Strings.isNullOrEmpty(id))
+                return Result.failure(TopErrorCode.PARAMETER_ERR);
+            noticeQueryEntity.delNoticeProgress(id);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
+        }
+
+    }
+
+
 }

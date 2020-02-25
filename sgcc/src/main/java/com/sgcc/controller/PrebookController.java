@@ -4,10 +4,13 @@ import com.example.result.Result;
 import com.sgcc.dto.*;
 import com.sgcc.service.PrebooksService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Api(value = "", tags = "税票预约接口")
@@ -19,12 +22,6 @@ public class PrebookController {
     private PrebooksService prebooksService;
 
     /**********************************用户*****************************************/
-//    @ApiOperation(value = "线上预约-基础信息", notes = "")
-//    @GetMapping(value = "/open-id/{openId}")
-//    public Result getBasicInfo(@PathVariable String openId) {
-//        return prebooksService.getBasicInfo(openId);
-//    }
-
     @ApiOperation(value = "提醒用户准时赴约", notes = "")
     @GetMapping(value = "/remind/appointment")
     public Result remindAppointment(@RequestParam String id) {
@@ -86,6 +83,7 @@ public class PrebookController {
     }
 
     @ApiOperation(value = "税票预约-取消预约", notes = "")
+    @ApiImplicitParam(name = "id",value = "预约工单标识",required = true,paramType = "query",dataType = "String")
     @PutMapping(value = "/open-id/cancel")
     public Result cancelPrebook(@RequestParam String id) {
         return prebooksService.cancelPrebook(id);
@@ -95,9 +93,20 @@ public class PrebookController {
     /**********************************工作人员*************************************/
 
     @ApiOperation(value = "税票预约-审核列表", notes = "")
+    @ApiImplicitParams(
+        {
+            @ApiImplicitParam(name = "openId",value = "公众号用户标识",required = true,paramType = "query",dataType = "String"),
+            @ApiImplicitParam(name = "status", value = "预约状态", required = true, paramType = "query", dataType = "int",example = "1"),
+            @ApiImplicitParam(name = "isPrinted",value = "是否打印",required = false,paramType = "query",dataType = "boolean"),
+            @ApiImplicitParam(name = "condition",value = "搜索条件",required = false,paramType = "query",dataType = "String")
+        }
+    )
     @GetMapping(value = "/open-id/checkList")
-    public Result getCheckList(@RequestParam String openId,@RequestParam int status,@RequestParam(required = false) Boolean isPrinted) {
-        return prebooksService.getCheckList(openId,status,isPrinted);
+    public Result getCheckList(@RequestParam String openId,
+                               @RequestParam int status,
+                               @RequestParam(required = false) Boolean isPrinted,
+                               @RequestParam(required = false) String condition) {
+        return prebooksService.getCheckList(openId,status,isPrinted,condition);
     }
 
 
@@ -152,12 +161,12 @@ public class PrebookController {
         return prebooksService.updateTicketStatus(ids);
     }
 
-//    @ApiOperation(value = "税票预约-后台查询", notes = "")
-//    @GetMapping(value = "/backstage")
-//    public Result getAllPrebook() {
-//        return prebooksService.getAllPrebook();
-//    }
-
+    @ApiOperation(value = "税票预约-导出excel", notes = "")
+    @ApiImplicitParam(name = "date",value = "导出需要的时间段数据",required = true,paramType = "query",dataType = "String")
+    @GetMapping("/exportMultiExcel")
+    public void exportMultiExcel(@RequestParam String date, HttpServletResponse response){
+        prebooksService.exportMultiExcel(date,response);
+    }
 
 
 

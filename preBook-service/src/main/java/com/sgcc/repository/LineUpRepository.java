@@ -38,7 +38,7 @@ public class LineUpRepository {
 
     public List<LineUpDao> getAllRecords(){
         String sql = "select id,user_open_id,service_hall_id,business_id,contact,phone,line_up_no,line_up_time,submit_date " +
-                "from b_line_up";
+                "from b_line_up order by submit_date desc";
         return jdbcTemplate.query(sql,new LineUpRowMapper());
     }
 

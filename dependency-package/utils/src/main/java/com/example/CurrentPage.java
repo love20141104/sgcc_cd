@@ -19,7 +19,6 @@ import java.util.List;
 public class CurrentPage<E> implements Serializable {
 
     private static final long serialVersionUID = -4354920168995602471L;
-
     private int pageNo;
     private int pageSize;
     private int pagesAvailable;

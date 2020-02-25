@@ -31,7 +31,6 @@ public class LineUpService {
     public BasicInputDTO test() {
         BasicInputDTO lineUpInfoOutDTO = null;
         try {
-
             lineUpInfoOutDTO = new BasicInputDTO();
             lineUpInfoOutDTO.setData(new InputDataDTO());
         }catch (Exception e){
@@ -40,9 +39,6 @@ public class LineUpService {
 
         return lineUpInfoOutDTO;
     }
-
-
-
 
 
     /**
@@ -54,7 +50,7 @@ public class LineUpService {
             boolean flag = false;
             LineUpModel model = new LineUpModel();
             BasicInputDTO basicInputDTO = model.heartBeatTrans();
-            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.operatePost(basicInputDTO);
+            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeatAndOnlineQueuingAndLineUpQuery(basicInputDTO);
             if (lineUpInfoOutDTO.getCode().equals("1")){
                 flag = true;
             }else {
@@ -99,12 +95,10 @@ public class LineUpService {
             if (daos.size() == 1 || daos.size() > 1)
                 return Result.failure(TopErrorCode.LINE_UP);
             // 调用心跳接口
-            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.operatePost(model.heartBeatTrans());
+            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeatAndOnlineQueuingAndLineUpQuery(model.heartBeatTrans());
             if (lineUpInfoOutDTO.getCode().equals("1")){
-
                 BasicInputDTO basicInputDTO = model.onlineQueuingTrans(dto);
-
-                LineUpInfoOutDTO lineUpDTO = lineUpEntity.operatePost(basicInputDTO);
+                LineUpInfoOutDTO lineUpDTO = lineUpEntity.heartBeatAndOnlineQueuingAndLineUpQuery(basicInputDTO);
                 if (lineUpDTO.getCode().equals("1")){
                     LineUpDao lineUpDao = model.addLineUpTrans(lineUpDTO.getData(),dto);
                     lineUpEventEntity.addLineUp(lineUpDao);
@@ -127,16 +121,13 @@ public class LineUpService {
      * @return
      */
     public Result lineUpQuery(LineUpQueryInputDTO dto) {
-        if (Strings.isNullOrEmpty(dto.getLineUpNo()))
-            return Result.failure(TopErrorCode.PARAMETER_ERR);
-
         try {
             // 调用心跳接口
             LineUpModel model = new LineUpModel();
-            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.operatePost(model.heartBeatTrans());
+            LineUpInfoOutDTO lineUpInfoOutDTO = lineUpEntity.heartBeatAndOnlineQueuingAndLineUpQuery(model.heartBeatTrans());
             if (lineUpInfoOutDTO.getCode().equals("1")){
                 BasicInputDTO basicInputDTO = model.lineUpQueryTrans(dto);
-                LineUpInfoOutDTO lineUpDTO = lineUpEntity.operatePost(basicInputDTO);
+                LineUpInfoOutDTO lineUpDTO = lineUpEntity.heartBeatAndOnlineQueuingAndLineUpQuery(basicInputDTO);
                 if (lineUpDTO.getCode().equals("1")){
                     return Result.success(lineUpDTO.getData());
                 }else {

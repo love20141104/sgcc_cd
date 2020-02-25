@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 import com.sgcc.dao.CommerceInfoCorrectDao;
 import com.sgcc.dao.InhabitantInfoCorrectDao;
 import com.sgcc.dao.SubscribeDao;
+import com.sgcc.dao.User;
 import com.sgcc.des.DesUtil;
 import com.sgcc.dto.*;
 import com.sgcc.dto.commerce.CommerceInfoCorrectEditDTO;
@@ -21,8 +22,17 @@ import com.sgcc.entity.query.InhabitantQueryEntity;
 import com.sgcc.entity.query.UserQueryEntity;
 import com.sgcc.exception.TopErrorCode;
 import com.sgcc.model.UserModel;
+import com.sgcc.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import java.util.*;
 
@@ -46,6 +56,15 @@ public class UserService {
 
     @Autowired
     private UserEventEntity userEventEntity;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
 
 
@@ -404,6 +423,31 @@ public class UserService {
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("查询月度账单失败!");
+        }
+    }
+
+
+    public Result login(String username, String password) {
+        try {
+            String pwd = DigestUtils.md5DigestAsHex(password.getBytes());
+            List<User> users = userQueryEntity.getUserByName(username);
+            // 判断用户名和密码都不能为空
+            if(Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password))
+                return Result.failure(TopErrorCode.USERNAME_OR_PWD_IS_EMPTY);
+            if (users.size() < 1){ // 判断用户是否存在
+                return Result.failure(TopErrorCode.USERNAME_OR_PWD_INCORRECT);
+            }else if (!pwd.equals(users.get(0).getPassword())){ // 判断密码是否正确
+                return Result.failure(TopErrorCode.USERNAME_OR_PWD_INCORRECT);
+            }
+            UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken( username, password );
+            Authentication authentication = authenticationManager.authenticate(upToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails userDetails = userDetailsService.loadUserByUsername( username );
+            String token = jwtTokenUtil.generateToken(userDetails);
+            return Result.success(token);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(TopErrorCode.GENERAL_ERR);
         }
     }
 

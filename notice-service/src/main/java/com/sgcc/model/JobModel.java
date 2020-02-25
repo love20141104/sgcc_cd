@@ -1,17 +1,12 @@
 package com.sgcc.model;
 
 import com.example.Utils;
-import com.sgcc.dao.JobAndRepairProgressDao;
-import com.sgcc.dao.JobDao;
-import com.sgcc.dao.NoticeAndJobDao;
-import com.sgcc.dao.RepairProgressDao;
-import com.sgcc.dto.JobViewDTO;
-import com.sgcc.dto.NewJobSubmitDTO;
-import com.sgcc.dto.RepairProgressSubmitDTO;
-import com.sgcc.dto.RepairProgressViewDTO;
+import com.sgcc.dao.*;
+import com.sgcc.dto.*;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -110,6 +105,22 @@ public class JobModel {
     }
 
 
+    public List<RushRepairProgressDao> addNoticeProgressTrans(RushRepairProgressSubmitDTO dto) {
+        List<RushRepairProgressDao> daos = new ArrayList<>();
+        RushRepairProgressDao rushRepairProgressDao = new RushRepairProgressDao(
+                UUID.randomUUID().toString(),
+                dto.getNotice_id(),
+                dto.getProgress_state(),
+                dto.getRepair_personnel(),
+                dto.getCause_of_failure(),
+                dto.getProgressImg1(),
+                dto.getProgressImg2(),
+                dto.getProgressImg3(),
+                new Date()
+        );
+        daos.add(rushRepairProgressDao);
+        return daos;
+    }
 
 
 }

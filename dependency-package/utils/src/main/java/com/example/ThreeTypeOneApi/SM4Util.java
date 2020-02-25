@@ -1,5 +1,6 @@
 package com.example.ThreeTypeOneApi;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 
@@ -10,6 +11,8 @@ import java.security.Key;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SM4Util {
 
@@ -179,22 +182,58 @@ public class SM4Util {
     }
 
 
-    public static void main(String[] args) {
-        try {
-            String json = "{\"serviceCode\":\"on\",\"website\":\"http://www.cnblogs.com/Marydon20170307\"}";
-            // 自定义的32位16进制密钥
-            String key = "86C63180C2806ED1F47B859DE501215B";
-            String cipher = SM4Util.encryptEcb(key, json);
-            System.out.println(cipher);//05a087dc798bb0b3e80553e6a2e73c4ccc7651035ea056e43bea9d125806bf41c45b4263109c8770c48c5da3c6f32df444f88698c5c9fdb5b0055b8d042e3ac9d4e3f7cc67525139b64952a3508a7619
-            System.out.println(SM4Util.verifyEcb(key, cipher, json));// true
-            json = SM4Util.decryptEcb(key, cipher);
 
-            System.out.println(json);
-
-            System.out.println("key=====>:"+generateKey());
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void analysisJson(String json){
+//                {
+//                    waitingNum = 9, lineUpNo = WA009, lineUpTime = 2020-02 - 10 18: 14: 36
+//                }
+        String finalVal = "{";
+        // 去掉{}
+        String str = StringUtils.strip(json,"{}");
+        String[] array = str.split(",");
+        for (String s : array) {
+            String Intercept = s.substring(0, s.indexOf("="));
+            String val = s.substring(Intercept.length() + 1, s.length());
+            if (isNumeric(val)){
+                finalVal += s;
+            }else {
+                finalVal = finalVal + Intercept+'"'+val+'"';
+            }
         }
+    }
+
+    /**
+     * 利用正则表达式判断字符串是否是数字
+     * @param str
+     * @return
+     */
+    public static boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        if( !isNum.matches() ){
+            return false;
+        }
+        return true;
+    }
+
+
+    public static void main(String[] args) {
+
+        System.out.println(isNumeric("200"));
+
+//        try {
+//            String json = "{\"serviceCode\":\"on\",\"website\":\"http://www.cnblogs.com/Marydon20170307\"}";
+//            // 自定义的32位16进制密钥
+//            String key = "7e27bd95ecce14bc5432ddf67b749fec";
+//            String cipher = SM4Util.encryptEcb(key, json);
+//            System.out.println(cipher);
+//            System.out.println(SM4Util.verifyEcb(key, cipher, json));// true
+//            json = SM4Util.decryptEcb(key, cipher);
+//
+//            System.out.println(json);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 

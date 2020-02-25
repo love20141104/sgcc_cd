@@ -323,13 +323,22 @@ public class PrebookModel {
     }
 
 
-    public List<BlacklistViewDTO> getBlacklistTrans(List<BlacklistDao> blacklistDaos) {
+    public List<BlacklistViewDTO> getBlacklistTrans(List<BlacklistDao> blacklistDaos, List<PreBookHouseholdDao> preBookHouseholdDaos) {
         List<BlacklistViewDTO> blacklistViewDTOS = new ArrayList<>();
         blacklistDaos.forEach(dao->{
-            BlacklistViewDTO blacklistViewDTO = new BlacklistViewDTO();
-            BeanUtils.copyProperties(dao,blacklistViewDTO);
-            blacklistViewDTO.setCreateDate(Utils.GetTime(dao.getCreateDate()));
-            blacklistViewDTOS.add(blacklistViewDTO);
+            preBookHouseholdDaos.forEach(household->{
+                if (dao.getJobId().equals(household.getJobId())){
+                    BlacklistViewDTO blacklistViewDTO = new BlacklistViewDTO(
+                            dao.getId(),
+                            dao.getUserOpenId(),
+                            household.getHouseHoldNumber(),
+                            dao.getContact(),
+                            dao.getContactTel(),
+                            Utils.GetTime(dao.getCreateDate())
+                    );
+                    blacklistViewDTOS.add(blacklistViewDTO);
+                }
+            });
         });
         return blacklistViewDTOS;
     }
@@ -358,6 +367,70 @@ public class PrebookModel {
         return householdDaos;
     }
 
+
+    public List<List<?>> getPrebookByDateTrans(List<PrebookInfoDao> prebookInfoDaos,List<PreBookHouseholdDao> daos) {
+        List<List<?>> lists = new ArrayList<>();
+        List<ExportExcelDTO> completedDTOs = new ArrayList<>();
+        List<ExportExcelDTO> incompletedDTOs = new ArrayList<>();
+
+        prebookInfoDaos.forEach(dao->{
+            String prebookDate = DateUtils.assembleDate(dao.getStartDate(),dao.getEndDate());
+            List<HouseHoldDTO> dtos = new ArrayList<>();
+            daos.forEach(d->{
+                if (d.getJobId().equals(dao.getId())){
+                    dtos.add(new HouseHoldDTO(
+                            d.getHouseHoldName(),
+                            d.getHouseHoldNumber(),
+                            d.getIsBatchNumber()
+                    ));
+                }
+            });
+            if (dao.getTicketStatus() == 1){
+                completedDTOs.add(new ExportExcelDTO(
+                        dao.getPrebookNo(),
+                        dao.getBusinessTypeName(),
+                        dao.getServiceHallName(),
+                        dao.getTicketMonth(),
+                        dao.getLineupNo(),
+                        prebookDate,
+                        dao.getContact(),
+                        dao.getContactTel(),
+                        dao.getSubmitDate(),
+                        dao.getStatus(),
+                        dao.getCheckerId(),
+                        dao.getCheckDate(),
+                        dao.getRejectReason(),
+                        dao.getIsPrinted(),
+                        dao.getIsBlackList(),
+                        dao.getTicketStatus(),
+                        dtos
+                ));
+            }else {
+                incompletedDTOs.add(new ExportExcelDTO(
+                        dao.getPrebookNo(),
+                        dao.getBusinessTypeName(),
+                        dao.getServiceHallName(),
+                        dao.getTicketMonth(),
+                        dao.getLineupNo(),
+                        prebookDate,
+                        dao.getContact(),
+                        dao.getContactTel(),
+                        dao.getSubmitDate(),
+                        dao.getStatus(),
+                        dao.getCheckerId(),
+                        dao.getCheckDate(),
+                        dao.getRejectReason(),
+                        dao.getIsPrinted(),
+                        dao.getIsBlackList(),
+                        dao.getTicketStatus(),
+                        dtos
+                ));
+            }
+        });
+        lists.add(completedDTOs);
+        lists.add(incompletedDTOs);
+        return lists;
+    }
 
 
 

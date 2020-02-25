@@ -16,9 +16,17 @@ public class PrebookInfoQueryEntity {
     @Autowired
     private PreBookInfoRepository preBookInfoRepository;
 
+    public List<PrebookInfoDao> getPrebookByDate(String date){
+        return preBookInfoRepository.getPrebookByDate(date);
+    }
+
 
     public List<PreBookHouseholdDao> getHouseHoldByPrebookId(String id){
         return preBookInfoRepository.getHouseHoldByPrebookId(id);
+    }
+
+    public List<PreBookHouseholdDao> getAllHouseHold(){
+        return preBookInfoRepository.getAllHouseHold();
     }
 
     public int getBlacklistByOpenId(String openId){
@@ -33,13 +41,17 @@ public class PrebookInfoQueryEntity {
         return preBookInfoRepository.getPrebookInfo(openId,status);
     }
 
-    public List<PrebookInfoDao> getAllPrebook(){
-        return preBookInfoRepository.getAllPrebook();
+    public List<PrebookInfoDao> getCheckList(String hallId,int status,Boolean isPrinted,String condition){
+        return preBookInfoRepository.getCheckList(hallId,status,isPrinted,condition);
     }
 
 
     public List<PrebookInfoDao> getPrebookList(){
         return preBookInfoRepository.getPrebookList();
+    }
+
+    public List<PrebookInfoDao> getAllPrebook(){
+        return preBookInfoRepository.getAllPrebook();
     }
 
 
