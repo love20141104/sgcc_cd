@@ -58,7 +58,7 @@ fdfs:
 #    username: fp
 #    password: fp@123
   ### Data
-#  data:
+#  InputData:
     # Cassandra
 #    cassandra:
 #      keyspace-name: newfront
